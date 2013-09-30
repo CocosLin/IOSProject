@@ -1,0 +1,30 @@
+//
+//  LoginStatueSingal.h
+//  GitomAPP
+//
+//  Created by jiawei on 13-7-15.
+//  Copyright (c) 2013年 GitomLJYU. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+//-----------------------------------单例
+//用于记录用户的登入状态
+@interface LoginStatueSingal : NSObject
+
+@property (strong, nonatomic)NSMutableArray *saveCustomIfoAr;//存放企业按钮信息的数组
+
+
+@property (assign, nonatomic) int logStatu;//判断用户是否登入
+@property (strong, nonatomic) NSString *userName;
+@property (strong, nonatomic) NSString *userNumber;
+@property (assign, nonatomic) int showLogStatu;//切换ChoosView头部的状态
+
+@property (strong, nonatomic) NSData *userImgData;//用户头像数据
+
+@property (strong, nonatomic) NSString *casUrl;//全局登入网页
+
+@property (assign, nonatomic) int shiftStatu;//切换用户时候要用到的判断符号
+
++ (id) shareLogStatu;
+
+@end

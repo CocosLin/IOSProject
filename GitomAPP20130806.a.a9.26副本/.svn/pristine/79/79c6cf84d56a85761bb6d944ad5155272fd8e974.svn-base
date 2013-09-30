@@ -1,0 +1,273 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no"/>
+<title>产品列表</title>
+<script type="text/javascript" src="../jquery.all.js"></script>
+<script type="text/javascript" src="../holder.js"></script>
+<script type="text/javascript" src="../config.js"></script>
+<style>
+/* skip (inspired by okcupid iphone interface)
+*******************************************************************************/
+button.skip {
+	background-color: #8c9cbf;
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #8c9cbf), color-stop(50%, #546a9e), color-stop(50%, #36518f), color-stop(100%, #3d5691));
+	background-image: -webkit-linear-gradient(top, #8c9cbf 0%, #546a9e 50%, #36518f 50%, #3d5691 100%);
+	background-image: -moz-linear-gradient(top, #8c9cbf 0%, #546a9e 50%, #36518f 50%, #3d5691 100%);
+	background-image: -ms-linear-gradient(top, #8c9cbf 0%, #546a9e 50%, #36518f 50%, #3d5691 100%);
+	background-image: -o-linear-gradient(top, #8c9cbf 0%, #546a9e 50%, #36518f 50%, #3d5691 100%);
+	background-image: linear-gradient(top, #8c9cbf 0%, #546a9e 50%, #36518f 50%, #3d5691 100%);
+	border: 1px solid #172d6e;
+	border-bottom: 1px solid #0e1d45;
+	border-radius: 5px;
+	-webkit-box-shadow: inset 0 1px 0 0 #b1b9cb;
+	box-shadow: inset 0 1px 0 0 #b1b9cb;
+	color: #fff;
+	font: bold 16px/1 "helvetica neue", helvetica, arial, sans-serif;
+	padding: 7px 0 8px 0;
+	text-decoration: none;
+	text-align: center;
+	text-shadow: 0 -1px 1px #000f4d;
+	width: 150px;
+}
+button.skip:hover {
+	background-color: #7f8dad;
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #7f8dad), color-stop(50%, #4a5e8c), color-stop(50%, #2f477d), color-stop(100%, #364c80));
+	background-image: -webkit-linear-gradient(top, #7f8dad 0%, #4a5e8c 50%, #2f477d 50%, #364c80 100%);
+	background-image: -moz-linear-gradient(top, #7f8dad 0%, #4a5e8c 50%, #2f477d 50%, #364c80 100%);
+	background-image: -ms-linear-gradient(top, #7f8dad 0%, #4a5e8c 50%, #2f477d 50%, #364c80 100%);
+	background-image: -o-linear-gradient(top, #7f8dad 0%, #4a5e8c 50%, #2f477d 50%, #364c80 100%);
+	background-image: linear-gradient(top, #7f8dad 0%, #4a5e8c 50%, #2f477d 50%, #364c80 100%);
+	cursor: pointer;
+}
+button.skip:active {
+	-webkit-box-shadow: inset 0 0 20px 0 #1d2845, 0 1px 0 white;
+	box-shadow: inset 0 0 20px 0 #1d2845, 0 1px 0 white;
+}
+
+.a_demo_one {
+	background-color:#3bb3e0;
+	padding:10px;
+	position:relative;
+	font-family: 'Open Sans', sans-serif;
+	font-size:1em;
+	text-decoration:none;
+	color:#fff;
+	border: solid 1px #186f8f;
+	background-image: linear-gradient(bottom, rgb(44,160,202) 0%, rgb(62,184,229) 100%);
+	background-image: -o-linear-gradient(bottom, rgb(44,160,202) 0%, rgb(62,184,229) 100%);
+	background-image: -moz-linear-gradient(bottom, rgb(44,160,202) 0%, rgb(62,184,229) 100%);
+	background-image: -webkit-linear-gradient(bottom, rgb(44,160,202) 0%, rgb(62,184,229) 100%);
+	background-image: -ms-linear-gradient(bottom, rgb(44,160,202) 0%, rgb(62,184,229) 100%);
+	background-image: -webkit-gradient(
+	linear,
+	left bottom,
+	left top,
+	color-stop(0, rgb(44,160,202)),
+	color-stop(1, rgb(62,184,229))
+	);
+	-webkit-box-shadow: inset 0px 1px 0px #7fd2f1, 0px 1px 0px #fff;
+	-moz-box-shadow: inset 0px 1px 0px #7fd2f1, 0px 1px 0px #fff;
+	box-shadow: inset 0px 1px 0px #7fd2f1, 0px 1px 0px #fff;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.a_demo_one::before {
+	background-color:#ccd0d5;
+	content:"";
+	display:block;
+	position:absolute;
+	width:100%;
+	height:100%;
+	padding:8px;
+	left:-8px;
+	top:-8px;
+	z-index:-1;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-shadow: inset 0px 1px 1px #909193, 0px 1px 0px #fff;
+	-moz-box-shadow: inset 0px 1px 1px #909193, 0px 1px 0px #fff;
+	-o-box-shadow: inset 0px 1px 1px #909193, 0px 1px 0px #fff;
+	box-shadow: inset 0px 1px 1px #909193, 0px 1px 0px #fff;
+}
+
+.a_demo_one:active {
+	padding-bottom:9px;
+	padding-left:10px;
+	padding-right:10px;
+	padding-top:11px;
+	top:1px;
+	background-image: linear-gradient(bottom, rgb(62,184,229) 0%, rgb(44,160,202) 100%);
+	background-image: -o-linear-gradient(bottom, rgb(62,184,229) 0%, rgb(44,160,202) 100%);
+	background-image: -moz-linear-gradient(bottom, rgb(62,184,229) 0%, rgb(44,160,202) 100%);
+	background-image: -webkit-linear-gradient(bottom, rgb(62,184,229) 0%, rgb(44,160,202) 100%);
+	background-image: -ms-linear-gradient(bottom, rgb(62,184,229) 0%, rgb(44,160,202) 100%);
+	background-image: -webkit-gradient(
+	linear,
+	left bottom,
+	left top,
+	color-stop(0, rgb(62,184,229)),
+	color-stop(1, rgb(44,160,202))
+	);
+}
+.postBtn {
+	font-size: .8em !important;
+	width: 8em !important;
+}
+.img{position:absolute; left:3px; top:3px; width:50px; border:#CCC solid 1px; padding:2px; background-color:#fff; height:50px; overflow:hidden;}
+.box{margin:.5em .5em;  padding:5px; background:#fff; border-radius:5px; padding-bottom:50px; position:relative;}
+</style>
+</head>
+
+<body style="background-color: #E9E9E9;">
+<p>          此页面功能尚未开放</p>
+<div id="errbox" style="display:none; padding-top: 100px; text-align: center;">
+<script type="text/javascript">
+function reload(){
+	try{
+		window.myjs.runOnAndroidJavaScript("WEB_RELOAD")
+	}catch(e){
+	}
+}
+</script>
+<p style="line-height: 3em;">您似乎没有登录?点击下面的按钮重试看看吧.</p>
+<a onclick="reload();" class="a_demo_one" style="margin: 0 auto;" href="javascript:void(0);">点击重试</a>
+</div>
+
+<div id="emptybox" style="display:none; padding-top: 100px; text-align: center;">
+<p style="line-height: 3em;">您没有在微站上发布过产品哦.所以这里是空的...</p>
+</div>
+
+
+<div id="listContainer"></div>
+
+
+<script type="text/x-jquery-tmpl" id="productListTmpl">
+
+<div class="box">
+  <div style="position:relative; padding-left:65px;">
+    <div class="img"> <img class="imgx" data-mobile="${Pic}" data-src="holder.js/50x50" style="width:50px;"> </div>
+    <div>
+      <div stype="margin-bottom:5px;"><b>${Product_Name}</b></div>
+      <div style="min-height:80px;">${Description}</div>
+    </div>
+  </div>
+  <div style="position:absolute; right:5px; bottom:5px;">
+	<button class="skip postBtn" val="${Url}" onClick="postWx(event)">发送到微信</button>
+	<button class="skip postBtn toFriends" val="${Url}" onClick="postWxs(event)">发送到朋友圈</button>
+  </div>
+</div>
+</script> 
+
+<script type="text/javascript">
+$.extend({
+	putAccountIntoApp:function(js){
+		//ACCOUNT_INFO{name:"",fileupload_path:"",fileupload_sid:""}
+		try{
+			window.myjs.runOnAndroidJavaScript("ACCOUNT_INFO"+JSON.stringify(js))
+		}catch(e){}
+	}
+})
+
+
+var fromwx=(window.location.href.indexOf("type=sendResp")>-1)?true:false;
+var dataList;
+
+
+loadUserInfo(function(data){
+	var user_info={name:"guest"};
+	if(data.name){
+		user_info = data;
+		
+		$.ajax({
+			type: 'GET',
+			cache : false,
+			url: "http://3g.gitom.com/api/site/getproductlist.htm",
+			data:{
+				uno:user_info.name,
+				page:1,
+				pn:100
+			},
+			dataType: 'jsonp',
+			error: function(){
+				console.log("获取数据异常")
+				$("#emptybox").show();
+			},
+			success: function(data) {
+				console.log(JSON.stringify(data))
+				dataList=data.siteDynamic;
+				productListTmpl
+				$("#listContainer").empty().append($("#productListTmpl").tmpl(dataList))
+				if(fromwx){
+					$(".toFriends").hide()
+				}
+				Holder.run()
+				$(".imgx").lazyload({
+					threshold : 200 ,
+					effect : 'fadeIn',
+					data_attribute : 'mobile'
+			  });
+				if(dataList.length==0){
+						$("#emptybox").show();
+				}
+			}
+		})
+	}else{
+		$("#errbox").show();
+		try{
+			window.myjs.runOnAndroidJavaScript("ACCOUNT_LOGIN")
+		}catch(e){
+		}
+	}
+})
+
+
+
+function getItem(url){
+	for(var i=0;i<dataList.length;i++){
+		if(dataList[i].Url == url){
+			return dataList[i];
+			break;
+		}
+	}
+}
+function postWx(event){
+	var tiem = getItem($(event.currentTarget).attr("val"))
+	var js = {
+			type:"webpage",
+			title:tiem.Product_Name,
+			description:tiem.Description,
+			url:tiem.Url,
+			img:tiem.Pic,
+			toFriends:false,
+			fromWX:fromwx
+	}
+	try{
+		window.myjs.runOnAndroidJavaScript("SENDWX"+JSON.stringify(js));
+	}catch(e){}
+}
+function postWxs(event){
+	var tiem = getItem($(event.currentTarget).attr("val"))
+	var js = {
+			type:"webpage",
+			title:tiem.Product_Name,
+			description:tiem.Description,
+			url:tiem.Url,
+			img:tiem.Pic,
+			toFriends:true,
+			fromWX:fromwx
+	}
+	try{
+		window.myjs.runOnAndroidJavaScript("SENDWX"+JSON.stringify(js));
+	}catch(e){}
+}
+window.myjs.runOnAndroidJavaScript("CUSTOMBAR{}");
+</script>
+</body>
+</html>
