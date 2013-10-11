@@ -1,0 +1,19 @@
+//
+//  AttendanceWorktimeModel.h
+//  GitomNetLjw
+//
+//  Created by jiawei on 13-7-5.
+//  Copyright (c) 2013年 Gitom. All rights reserved.
+//
+
+#import "WBaseModel.h"
+
+@interface AttendanceWorktimeModel : WBaseModel
+
+@property(nonatomic,assign)NSInteger ordinal;
+@property(nonatomic,assign)long inTime;
+@property(nonatomic,assign)long outTime;
+@property(nonatomic,assign)BOOL voidFlag;
+
+
+@end

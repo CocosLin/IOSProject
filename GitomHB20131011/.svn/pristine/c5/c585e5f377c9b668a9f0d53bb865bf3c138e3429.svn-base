@@ -1,0 +1,34 @@
+//
+//  AttendanceWorktimeModel.m
+//  GitomNetLjw
+//
+//  Created by jiawei on 13-7-5.
+//  Copyright (c) 2013年 Gitom. All rights reserved.
+//
+
+#import "AttendanceWorktimeModel.h"
+
+@implementation AttendanceWorktimeModel
+-(id)initForAllJsonDataTypeWithDicFromJson:(NSDictionary *)dicFromJson
+{
+    if (self = [super initForAllJsonDataTypeWithDicFromJson:dicFromJson])
+    {
+        self.ordinal = [[dicFromJson objectForKey:@"ordinal"] integerValue];
+        self.inTime = [[dicFromJson objectForKey:@"inTime"] longValue];
+        self.outTime = [[dicFromJson objectForKey:@"outTime"] longValue];
+        self.voidFlag = [[dicFromJson objectForKey:@"voidFlag"] boolValue];
+    }return self;
+}
+
+-(NSDictionary *)getDicJsonForAllJsonDataType
+{
+    NSMutableDictionary * dicForJson = [NSMutableDictionary dictionaryWithDictionary:[super getDicJsonForAllJsonDataType]];
+    [dicForJson setObject:[NSNumber numberWithInteger:self.ordinal] forKey:@"ordinal"];
+    [dicForJson setObject:[NSNumber numberWithLong:self.inTime] forKey:@"inTime"];
+    [dicForJson setObject:[NSNumber numberWithLong:self.outTime] forKey:@"outTime"];
+    [dicForJson setObject:[NSNumber numberWithBool:self.voidFlag] forKey:@"voidFlag"];
+    return dicForJson;
+}
+
+
+@end

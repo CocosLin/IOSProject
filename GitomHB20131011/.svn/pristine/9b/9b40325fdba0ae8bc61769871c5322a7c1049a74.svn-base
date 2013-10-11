@@ -1,0 +1,824 @@
+\hypertarget{_b_m_k_geometry_8h}{\section{B\-M\-K\-Geometry.\-h File Reference}
+\label{_b_m_k_geometry_8h}\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}}
+}
+{\ttfamily \#import $<$Core\-Graphics/\-Core\-Graphics.\-h$>$}\\*
+{\ttfamily \#import $<$Core\-Location/\-Core\-Location.\-h$>$}\\*
+{\ttfamily \#import $<$U\-I\-Kit/\-U\-I\-Kit.\-h$>$}\\*
+\subsection*{类}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct_b_m_k_coordinate_span}{B\-M\-K\-Coordinate\-Span}
+\begin{DoxyCompactList}\small\item\em 表示一个经纬度范围 \end{DoxyCompactList}\item 
+struct \hyperlink{struct_b_m_k_coordinate_region}{B\-M\-K\-Coordinate\-Region}
+\begin{DoxyCompactList}\small\item\em 表示一个经纬度区域 \end{DoxyCompactList}\item 
+struct \hyperlink{struct_b_m_k_geo_point}{B\-M\-K\-Geo\-Point}
+\begin{DoxyCompactList}\small\item\em 表示一个经纬度坐标点 \end{DoxyCompactList}\item 
+struct \hyperlink{struct_b_m_k_map_point}{B\-M\-K\-Map\-Point}
+\begin{DoxyCompactList}\small\item\em 地理坐标点，用直角地理坐标表示 \end{DoxyCompactList}\item 
+struct \hyperlink{struct_b_m_k_map_size}{B\-M\-K\-Map\-Size}
+\begin{DoxyCompactList}\small\item\em 矩形大小，用直角地理坐标表示 \end{DoxyCompactList}\item 
+struct \hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect}
+\begin{DoxyCompactList}\small\item\em 矩形，用直角地理坐标表示 \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{类型定义}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{_b_m_k_geometry_8h_abed0f3dd0db6f682408ae9a6593c7cc8}{typedef C\-G\-Float \hyperlink{_b_m_k_geometry_8h_abed0f3dd0db6f682408ae9a6593c7cc8}{B\-M\-K\-Zoom\-Scale}}\label{_b_m_k_geometry_8h_abed0f3dd0db6f682408ae9a6593c7cc8}
+
+\begin{DoxyCompactList}\small\item\em 地图缩放比例 \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{方法}
+\begin{DoxyCompactItemize}
+\item 
+U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E \\*
+\hyperlink{struct_b_m_k_coordinate_span}{B\-M\-K\-Coordinate\-Span} \hyperlink{_b_m_k_geometry_8h_a252ea0a1948b9c7a595bd2b650aeae6d}{B\-M\-K\-Coordinate\-Span\-Make} (C\-L\-Location\-Degrees latitude\-Delta, C\-L\-Location\-Degrees longitude\-Delta)
+\item 
+U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E \\*
+\hyperlink{struct_b_m_k_coordinate_region}{B\-M\-K\-Coordinate\-Region} \hyperlink{_b_m_k_geometry_8h_a4c055c14d6a80d14ada771f062916394}{B\-M\-K\-Coordinate\-Region\-Make} (C\-L\-Location\-Coordinate2\-D center\-Coordinate, \hyperlink{struct_b_m_k_coordinate_span}{B\-M\-K\-Coordinate\-Span} span)
+\item 
+U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N \hyperlink{struct_b_m_k_coordinate_region}{B\-M\-K\-Coordinate\-Region} \hyperlink{_b_m_k_geometry_8h_a30878e885fa02a2605bb194645736a36}{B\-M\-K\-Coordinate\-Region\-Make\-With\-Distance} (C\-L\-Location\-Coordinate2\-D center\-Coordinate, C\-L\-Location\-Distance latitudinal\-Meters, C\-L\-Location\-Distance longitudinal\-Meters)
+\item 
+U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N \hyperlink{struct_b_m_k_map_point}{B\-M\-K\-Map\-Point} \hyperlink{_b_m_k_geometry_8h_a8cdb8447bff118ee28d8de511faf32a7}{B\-M\-K\-Map\-Point\-For\-Coordinate} (C\-L\-Location\-Coordinate2\-D coordinate)
+\item 
+U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N C\-L\-Location\-Coordinate2\-D \hyperlink{_b_m_k_geometry_8h_a82e1819974df12b83c0f899b27f1e1cd}{B\-M\-K\-Coordinate\-For\-Map\-Point} (\hyperlink{struct_b_m_k_map_point}{B\-M\-K\-Map\-Point} map\-Point)
+\item 
+U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N C\-L\-Location\-Distance \hyperlink{_b_m_k_geometry_8h_acd9d69e5e899ef5acad884002c83eda5}{B\-M\-K\-Meters\-Per\-Map\-Point\-At\-Latitude} (C\-L\-Location\-Degrees latitude)
+\item 
+U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N double \hyperlink{_b_m_k_geometry_8h_a3766563510b0551c4304fa06562e54a2}{B\-M\-K\-Map\-Points\-Per\-Meter\-At\-Latitude} (C\-L\-Location\-Degrees latitude)
+\item 
+U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N C\-L\-Location\-Distance \hyperlink{_b_m_k_geometry_8h_a6051f3027c1960e53101fa95357ce068}{B\-M\-K\-Meters\-Between\-Map\-Points} (\hyperlink{struct_b_m_k_map_point}{B\-M\-K\-Map\-Point} a, \hyperlink{struct_b_m_k_map_point}{B\-M\-K\-Map\-Point} b)
+\item 
+U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E \hyperlink{struct_b_m_k_map_point}{B\-M\-K\-Map\-Point} \hyperlink{_b_m_k_geometry_8h_a1afb640d3e67cb96e0f5e0cf878becee}{B\-M\-K\-Map\-Point\-Make} (double x, double y)
+\item 
+U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E \hyperlink{struct_b_m_k_map_size}{B\-M\-K\-Map\-Size} \hyperlink{_b_m_k_geometry_8h_afc821309dd42822252fb54c1fa484bd8}{B\-M\-K\-Map\-Size\-Make} (double width, double height)
+\item 
+U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E \hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} \hyperlink{_b_m_k_geometry_8h_ae36b2f884d73d7e119bb224b33e70eff}{B\-M\-K\-Map\-Rect\-Make} (double x, double y, double width, double height)
+\item 
+U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E double \hyperlink{_b_m_k_geometry_8h_a294cad295bdd1f4108e18993b425eb87}{B\-M\-K\-Map\-Rect\-Get\-Min\-X} (\hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect)
+\item 
+U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E double \hyperlink{_b_m_k_geometry_8h_a45df48e78b212b924723cb16f8b68e24}{B\-M\-K\-Map\-Rect\-Get\-Min\-Y} (\hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect)
+\item 
+U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E double \hyperlink{_b_m_k_geometry_8h_ae0dfe0ab0cdde7d492e408f564fe9358}{B\-M\-K\-Map\-Rect\-Get\-Mid\-X} (\hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect)
+\item 
+U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E double \hyperlink{_b_m_k_geometry_8h_ac5c23791f6c1eaddc2d625b059c88c54}{B\-M\-K\-Map\-Rect\-Get\-Mid\-Y} (\hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect)
+\item 
+U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E double \hyperlink{_b_m_k_geometry_8h_a4e30d4345cd56ca13f6e882836ffa9ce}{B\-M\-K\-Map\-Rect\-Get\-Max\-X} (\hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect)
+\item 
+U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E double \hyperlink{_b_m_k_geometry_8h_ac8d52fde1866ea9c3d19c33371c5c0d8}{B\-M\-K\-Map\-Rect\-Get\-Max\-Y} (\hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect)
+\item 
+U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E double \hyperlink{_b_m_k_geometry_8h_a2c1a5ec9570711e8524827fa9a395d0d}{B\-M\-K\-Map\-Rect\-Get\-Width} (\hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect)
+\item 
+U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E double \hyperlink{_b_m_k_geometry_8h_ab5ea9c49c319a9ae494a7da167be6189}{B\-M\-K\-Map\-Rect\-Get\-Height} (\hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect)
+\item 
+U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E B\-O\-O\-L \hyperlink{_b_m_k_geometry_8h_ade1aa48d7c452c6aae008fe2890fe05b}{B\-M\-K\-Map\-Point\-Equal\-To\-Point} (\hyperlink{struct_b_m_k_map_point}{B\-M\-K\-Map\-Point} point1, \hyperlink{struct_b_m_k_map_point}{B\-M\-K\-Map\-Point} point2)
+\item 
+U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E B\-O\-O\-L \hyperlink{_b_m_k_geometry_8h_adc307cf3a5707b82e78265ba6be1ffc4}{B\-M\-K\-Map\-Size\-Equal\-To\-Size} (\hyperlink{struct_b_m_k_map_size}{B\-M\-K\-Map\-Size} size1, \hyperlink{struct_b_m_k_map_size}{B\-M\-K\-Map\-Size} size2)
+\item 
+U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E B\-O\-O\-L \hyperlink{_b_m_k_geometry_8h_aa64e3dd2b0333ddadda311abb367fc39}{B\-M\-K\-Map\-Rect\-Equal\-To\-Rect} (\hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect1, \hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect2)
+\item 
+U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E B\-O\-O\-L \hyperlink{_b_m_k_geometry_8h_a2abc95ac03215aad58b7a02f54264605}{B\-M\-K\-Map\-Rect\-Is\-Null} (\hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect)
+\item 
+U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E B\-O\-O\-L \hyperlink{_b_m_k_geometry_8h_a6a49884fe83e2aeb08b6827bf9361ef9}{B\-M\-K\-Map\-Rect\-Is\-Empty} (\hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect)
+\item 
+U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E N\-S\-String $\ast$ \hyperlink{_b_m_k_geometry_8h_a6f2b502558d61983e911e77b02f86166}{B\-M\-K\-String\-From\-Map\-Point} (\hyperlink{struct_b_m_k_map_point}{B\-M\-K\-Map\-Point} point)
+\item 
+U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E N\-S\-String $\ast$ \hyperlink{_b_m_k_geometry_8h_a687e957bfdaee6c3e7ef97c3831127d2}{B\-M\-K\-String\-From\-Map\-Size} (\hyperlink{struct_b_m_k_map_size}{B\-M\-K\-Map\-Size} size)
+\item 
+U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E N\-S\-String $\ast$ \hyperlink{_b_m_k_geometry_8h_a07c0dc35e145b24828d11e20e8d1456e}{B\-M\-K\-String\-From\-Map\-Rect} (\hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect)
+\item 
+U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N \hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} \hyperlink{_b_m_k_geometry_8h_aca2a7535ee5bfbd1204f48d2536f11ba}{B\-M\-K\-Map\-Rect\-Union} (\hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect1, \hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect2)
+\item 
+U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N \hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} \hyperlink{_b_m_k_geometry_8h_af46516f57d0abfd6d8aa902bc50060a6}{B\-M\-K\-Map\-Rect\-Intersection} (\hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect1, \hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect2)
+\item 
+U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N \hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} \hyperlink{_b_m_k_geometry_8h_a717e60a9798195b716d083f3e8da1d54}{B\-M\-K\-Map\-Rect\-Inset} (\hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect, double dx, double dy)
+\item 
+U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N \hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} \hyperlink{_b_m_k_geometry_8h_a895de18577c2de7a4d0843d61be5d948}{B\-M\-K\-Map\-Rect\-Offset} (\hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect, double dx, double dy)
+\item 
+U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N void \hyperlink{_b_m_k_geometry_8h_a32fb4cbbc882aefdffb1981b2a445621}{B\-M\-K\-Map\-Rect\-Divide} (\hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect, \hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} $\ast$slice, \hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} $\ast$remainder, double amount, C\-G\-Rect\-Edge edge)
+\item 
+U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N B\-O\-O\-L \hyperlink{_b_m_k_geometry_8h_a756802dc5d51b9e783f9d83711b2972f}{B\-M\-K\-Map\-Rect\-Contains\-Point} (\hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect, \hyperlink{struct_b_m_k_map_point}{B\-M\-K\-Map\-Point} point)
+\item 
+U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N B\-O\-O\-L \hyperlink{_b_m_k_geometry_8h_a3bf9df0b02a9c78e5daa7862c3c197e5}{B\-M\-K\-Map\-Rect\-Contains\-Rect} (\hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect1, \hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect2)
+\item 
+U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N B\-O\-O\-L \hyperlink{_b_m_k_geometry_8h_ad8fc8d14cda123242c551db6c820e0a1}{B\-M\-K\-Map\-Rect\-Intersects\-Rect} (\hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect1, \hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect2)
+\item 
+U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N \hyperlink{struct_b_m_k_coordinate_region}{B\-M\-K\-Coordinate\-Region} \hyperlink{_b_m_k_geometry_8h_a779ad65709d575145d839d1d7e972064}{B\-M\-K\-Coordinate\-Region\-For\-Map\-Rect} (\hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect)
+\item 
+U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N B\-O\-O\-L \hyperlink{_b_m_k_geometry_8h_a2fa044766e6c2c56e831a552c1b25d7b}{B\-M\-K\-Map\-Rect\-Spans180th\-Meridian} (\hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect)
+\item 
+U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N \hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} \hyperlink{_b_m_k_geometry_8h_acdf6820a550a4c953020fc136a17e4b1}{B\-M\-K\-Map\-Rect\-Remainder} (\hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} rect)
+\item 
+U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N N\-S\-Dictionary $\ast$ \hyperlink{_b_m_k_geometry_8h_ac0042bf0c14fb602653c632fe0744bca}{B\-M\-K\-Baidu\-Coor\-For\-Wgs84} (C\-L\-Location\-Coordinate2\-D coor\-Wgs84)
+\item 
+U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N N\-S\-Dictionary $\ast$ \hyperlink{_b_m_k_geometry_8h_abb548b27e546ef88ad8d8a6aef9912fc}{B\-M\-K\-Baidu\-Coor\-For\-Gcj} (C\-L\-Location\-Coordinate2\-D coor\-Gcj)
+\item 
+U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N C\-L\-Location\-Coordinate2\-D \hyperlink{_b_m_k_geometry_8h_ac75142905f8c4cd5e3bf63e2b01f5b06}{B\-M\-K\-Coor\-Dictionary\-Decode} (N\-S\-Dictionary $\ast$dictionary)
+\end{DoxyCompactItemize}
+\subsection*{变量}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{_b_m_k_geometry_8h_ac9bf7216ae963df0e287280d418fa514}{U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N const \hyperlink{struct_b_m_k_map_size}{B\-M\-K\-Map\-Size} \hyperlink{_b_m_k_geometry_8h_ac9bf7216ae963df0e287280d418fa514}{B\-M\-K\-Map\-Size\-World}}\label{_b_m_k_geometry_8h_ac9bf7216ae963df0e287280d418fa514}
+
+\begin{DoxyCompactList}\small\item\em 经过投影后的世界范围大小，与经纬度（-\/85，180）投影后的坐标值对应 \end{DoxyCompactList}\item 
+\hypertarget{_b_m_k_geometry_8h_a9b78f5781da65e22ac697e10716653f7}{U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N const \hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} \hyperlink{_b_m_k_geometry_8h_a9b78f5781da65e22ac697e10716653f7}{B\-M\-K\-Map\-Rect\-World}}\label{_b_m_k_geometry_8h_a9b78f5781da65e22ac697e10716653f7}
+
+\begin{DoxyCompactList}\small\item\em 经过投影后的世界矩形范围 \end{DoxyCompactList}\item 
+\hypertarget{_b_m_k_geometry_8h_ac7981ded0b24ec5028a079760e207698}{U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N const \hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} \hyperlink{_b_m_k_geometry_8h_ac7981ded0b24ec5028a079760e207698}{B\-M\-K\-Map\-Rect\-Null}}\label{_b_m_k_geometry_8h_ac7981ded0b24ec5028a079760e207698}
+
+\begin{DoxyCompactList}\small\item\em 空的直角坐标矩形 \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{详细描述}
+B\-Map\-Kit
+
+Copyright 2011 Baidu Inc. All rights reserved. 
+
+\subsection{Function Documentation}
+\hypertarget{_b_m_k_geometry_8h_abb548b27e546ef88ad8d8a6aef9912fc}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Baidu\-Coor\-For\-Gcj@{B\-M\-K\-Baidu\-Coor\-For\-Gcj}}
+\index{B\-M\-K\-Baidu\-Coor\-For\-Gcj@{B\-M\-K\-Baidu\-Coor\-For\-Gcj}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Baidu\-Coor\-For\-Gcj}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N N\-S\-Dictionary$\ast$ B\-M\-K\-Baidu\-Coor\-For\-Gcj (
+\begin{DoxyParamCaption}
+\item[{C\-L\-Location\-Coordinate2\-D}]{coor\-Gcj}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_abb548b27e546ef88ad8d8a6aef9912fc}
+坐标转换函数，从google坐标，51地图坐标，mapabc坐标转换为百度坐标（51地图坐标需要显出10000） 
+\begin{DoxyParams}{参数}
+{\em coor\-Gcj} & 待转换的google坐标，51地图坐标，mapabc坐标 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+返回的\-N\-S\-Dictionry中包含“x”，“y”字段，各自对应经过base64加密之后的x，y坐标 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_ac0042bf0c14fb602653c632fe0744bca}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Baidu\-Coor\-For\-Wgs84@{B\-M\-K\-Baidu\-Coor\-For\-Wgs84}}
+\index{B\-M\-K\-Baidu\-Coor\-For\-Wgs84@{B\-M\-K\-Baidu\-Coor\-For\-Wgs84}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Baidu\-Coor\-For\-Wgs84}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N N\-S\-Dictionary$\ast$ B\-M\-K\-Baidu\-Coor\-For\-Wgs84 (
+\begin{DoxyParamCaption}
+\item[{C\-L\-Location\-Coordinate2\-D}]{coor\-Wgs84}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_ac0042bf0c14fb602653c632fe0744bca}
+坐标转换函数，从原始\-G\-P\-S坐标，mapbar坐标转换成百度坐标 
+\begin{DoxyParams}{参数}
+{\em coor\-Wgs84} & 待转换的原始\-G\-P\-S坐标，或者mapbar的坐标 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+返回的\-N\-S\-Dictionry中包含“x”，“y”字段，各自对应经过base64加密之后的x，y坐标 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_ac75142905f8c4cd5e3bf63e2b01f5b06}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Coor\-Dictionary\-Decode@{B\-M\-K\-Coor\-Dictionary\-Decode}}
+\index{B\-M\-K\-Coor\-Dictionary\-Decode@{B\-M\-K\-Coor\-Dictionary\-Decode}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Coor\-Dictionary\-Decode}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N C\-L\-Location\-Coordinate2\-D B\-M\-K\-Coor\-Dictionary\-Decode (
+\begin{DoxyParamCaption}
+\item[{N\-S\-Dictionary $\ast$}]{dictionary}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_ac75142905f8c4cd5e3bf63e2b01f5b06}
+base64加密后的坐标字典解密函数 
+\begin{DoxyParams}{参数}
+{\em dictionary} & 带解密的\-N\-S\-Dictionry，该\-N\-S\-Dictionry中应包含“x”，“y”字段，各自对应经过base64加密之后的x，y坐标 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+解密之后的坐标 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_a82e1819974df12b83c0f899b27f1e1cd}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Coordinate\-For\-Map\-Point@{B\-M\-K\-Coordinate\-For\-Map\-Point}}
+\index{B\-M\-K\-Coordinate\-For\-Map\-Point@{B\-M\-K\-Coordinate\-For\-Map\-Point}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Coordinate\-For\-Map\-Point}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N C\-L\-Location\-Coordinate2\-D B\-M\-K\-Coordinate\-For\-Map\-Point (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Point}}]{map\-Point}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_a82e1819974df12b83c0f899b27f1e1cd}
+将投影后的直角地理坐标转换为经纬度坐标 
+\begin{DoxyParams}{参数}
+{\em map\-Point} & 投影后的直角地理坐标 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+转换后的经纬度坐标 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_a779ad65709d575145d839d1d7e972064}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Coordinate\-Region\-For\-Map\-Rect@{B\-M\-K\-Coordinate\-Region\-For\-Map\-Rect}}
+\index{B\-M\-K\-Coordinate\-Region\-For\-Map\-Rect@{B\-M\-K\-Coordinate\-Region\-For\-Map\-Rect}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Coordinate\-Region\-For\-Map\-Rect}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N {\bf B\-M\-K\-Coordinate\-Region} B\-M\-K\-Coordinate\-Region\-For\-Map\-Rect (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_a779ad65709d575145d839d1d7e972064}
+将投影后的直角坐标矩形转换为泳经纬度表示的范围 
+\begin{DoxyParams}{参数}
+{\em rect} & 待转换的直角坐标矩形 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+转换后的经纬度范围 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_a4c055c14d6a80d14ada771f062916394}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Coordinate\-Region\-Make@{B\-M\-K\-Coordinate\-Region\-Make}}
+\index{B\-M\-K\-Coordinate\-Region\-Make@{B\-M\-K\-Coordinate\-Region\-Make}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Coordinate\-Region\-Make}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E {\bf B\-M\-K\-Coordinate\-Region} B\-M\-K\-Coordinate\-Region\-Make (
+\begin{DoxyParamCaption}
+\item[{C\-L\-Location\-Coordinate2\-D}]{center\-Coordinate, }
+\item[{{\bf B\-M\-K\-Coordinate\-Span}}]{span}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_a4c055c14d6a80d14ada771f062916394}
+构造\-B\-M\-K\-Coordinate\-Region对象 
+\begin{DoxyParams}{参数}
+{\em center\-Coordinate} & 中心点经纬度坐标 \\
+\hline
+{\em span} & 经纬度的范围 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+根据指定参数生成的\-B\-M\-K\-Coordinate\-Region对象 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_a30878e885fa02a2605bb194645736a36}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Coordinate\-Region\-Make\-With\-Distance@{B\-M\-K\-Coordinate\-Region\-Make\-With\-Distance}}
+\index{B\-M\-K\-Coordinate\-Region\-Make\-With\-Distance@{B\-M\-K\-Coordinate\-Region\-Make\-With\-Distance}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Coordinate\-Region\-Make\-With\-Distance}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N {\bf B\-M\-K\-Coordinate\-Region} B\-M\-K\-Coordinate\-Region\-Make\-With\-Distance (
+\begin{DoxyParamCaption}
+\item[{C\-L\-Location\-Coordinate2\-D}]{center\-Coordinate, }
+\item[{C\-L\-Location\-Distance}]{latitudinal\-Meters, }
+\item[{C\-L\-Location\-Distance}]{longitudinal\-Meters}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_a30878e885fa02a2605bb194645736a36}
+根据中心点和距离生成\-B\-M\-K\-Coordinate\-Region 
+\begin{DoxyParams}{参数}
+{\em center\-Coordinate} & 中心点坐标 \\
+\hline
+{\em latitudinal\-Meters} & 纬度方向的距离范围，单位：米 \\
+\hline
+{\em longitudinal\-Meters} & 经度方向的距离范围，单位：米 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+根据中心点和距离生成\-B\-M\-K\-Coordinate\-Region 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_a252ea0a1948b9c7a595bd2b650aeae6d}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Coordinate\-Span\-Make@{B\-M\-K\-Coordinate\-Span\-Make}}
+\index{B\-M\-K\-Coordinate\-Span\-Make@{B\-M\-K\-Coordinate\-Span\-Make}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Coordinate\-Span\-Make}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E {\bf B\-M\-K\-Coordinate\-Span} B\-M\-K\-Coordinate\-Span\-Make (
+\begin{DoxyParamCaption}
+\item[{C\-L\-Location\-Degrees}]{latitude\-Delta, }
+\item[{C\-L\-Location\-Degrees}]{longitude\-Delta}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_a252ea0a1948b9c7a595bd2b650aeae6d}
+构造\-B\-M\-K\-Coordinate\-Span对象 
+\begin{DoxyParams}{参数}
+{\em latitude\-Delta} & 纬度方向的变化量 \\
+\hline
+{\em longitude\-Delta} & 经度方向的变化量 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+根据指定参数生成的\-B\-M\-K\-Coordinate\-Span对象 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_ade1aa48d7c452c6aae008fe2890fe05b}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Point\-Equal\-To\-Point@{B\-M\-K\-Map\-Point\-Equal\-To\-Point}}
+\index{B\-M\-K\-Map\-Point\-Equal\-To\-Point@{B\-M\-K\-Map\-Point\-Equal\-To\-Point}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Point\-Equal\-To\-Point}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E B\-O\-O\-L B\-M\-K\-Map\-Point\-Equal\-To\-Point (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Point}}]{point1, }
+\item[{{\bf B\-M\-K\-Map\-Point}}]{point2}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_ade1aa48d7c452c6aae008fe2890fe05b}
+判断两个点是否相等 
+\begin{DoxyParams}{参数}
+{\em point1} & 第一个点 \\
+\hline
+{\em point2} & 第二个点 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+如果两点相等，返回\-Y\-E\-S，否则返回\-N\-O 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_a8cdb8447bff118ee28d8de511faf32a7}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Point\-For\-Coordinate@{B\-M\-K\-Map\-Point\-For\-Coordinate}}
+\index{B\-M\-K\-Map\-Point\-For\-Coordinate@{B\-M\-K\-Map\-Point\-For\-Coordinate}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Point\-For\-Coordinate}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N {\bf B\-M\-K\-Map\-Point} B\-M\-K\-Map\-Point\-For\-Coordinate (
+\begin{DoxyParamCaption}
+\item[{C\-L\-Location\-Coordinate2\-D}]{coordinate}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_a8cdb8447bff118ee28d8de511faf32a7}
+将经纬度坐标转换为投影后的直角地理坐标 
+\begin{DoxyParams}{参数}
+{\em coordinate} & 待转换的经纬度坐标 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+转换后的直角地理坐标 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_a1afb640d3e67cb96e0f5e0cf878becee}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Point\-Make@{B\-M\-K\-Map\-Point\-Make}}
+\index{B\-M\-K\-Map\-Point\-Make@{B\-M\-K\-Map\-Point\-Make}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Point\-Make}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E {\bf B\-M\-K\-Map\-Point} B\-M\-K\-Map\-Point\-Make (
+\begin{DoxyParamCaption}
+\item[{double}]{x, }
+\item[{double}]{y}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_a1afb640d3e67cb96e0f5e0cf878becee}
+构造\-B\-M\-K\-Map\-Point对象 
+\begin{DoxyParams}{参数}
+{\em x} & 水平方向的坐标值 \\
+\hline
+{\em y} & 垂直方向的坐标值 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+根据指定参数生成的\-B\-M\-K\-Map\-Point对象 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_a3766563510b0551c4304fa06562e54a2}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Points\-Per\-Meter\-At\-Latitude@{B\-M\-K\-Map\-Points\-Per\-Meter\-At\-Latitude}}
+\index{B\-M\-K\-Map\-Points\-Per\-Meter\-At\-Latitude@{B\-M\-K\-Map\-Points\-Per\-Meter\-At\-Latitude}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Points\-Per\-Meter\-At\-Latitude}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N double B\-M\-K\-Map\-Points\-Per\-Meter\-At\-Latitude (
+\begin{DoxyParamCaption}
+\item[{C\-L\-Location\-Degrees}]{latitude}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_a3766563510b0551c4304fa06562e54a2}
+计算在指定纬度下一米对应的\-M\-K\-Map\-Point的单位数 
+\begin{DoxyParams}{参数}
+{\em latitude} & 指定的纬度 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+在指定纬度下一米对应的\-M\-K\-Map\-Point的单位数 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_a756802dc5d51b9e783f9d83711b2972f}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Rect\-Contains\-Point@{B\-M\-K\-Map\-Rect\-Contains\-Point}}
+\index{B\-M\-K\-Map\-Rect\-Contains\-Point@{B\-M\-K\-Map\-Rect\-Contains\-Point}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Rect\-Contains\-Point}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N B\-O\-O\-L B\-M\-K\-Map\-Rect\-Contains\-Point (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect, }
+\item[{{\bf B\-M\-K\-Map\-Point}}]{point}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_a756802dc5d51b9e783f9d83711b2972f}
+判断指定点是否在某矩形内 
+\begin{DoxyParams}{参数}
+{\em rect} & 指定的矩形 \\
+\hline
+{\em point} & 指定的点 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+如果包含，返回\-Y\-E\-S，否则，返回\-N\-O 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_a3bf9df0b02a9c78e5daa7862c3c197e5}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Rect\-Contains\-Rect@{B\-M\-K\-Map\-Rect\-Contains\-Rect}}
+\index{B\-M\-K\-Map\-Rect\-Contains\-Rect@{B\-M\-K\-Map\-Rect\-Contains\-Rect}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Rect\-Contains\-Rect}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N B\-O\-O\-L B\-M\-K\-Map\-Rect\-Contains\-Rect (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect1, }
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect2}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_a3bf9df0b02a9c78e5daa7862c3c197e5}
+判断矩形rect1是否包含矩形rect2 
+\begin{DoxyParams}{参数}
+{\em rect1} & 矩形1 \\
+\hline
+{\em rect2} & 矩形2 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+如果包含，返回\-Y\-E\-S，否则，返回\-N\-O 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_a32fb4cbbc882aefdffb1981b2a445621}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Rect\-Divide@{B\-M\-K\-Map\-Rect\-Divide}}
+\index{B\-M\-K\-Map\-Rect\-Divide@{B\-M\-K\-Map\-Rect\-Divide}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Rect\-Divide}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N void B\-M\-K\-Map\-Rect\-Divide (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect, }
+\item[{{\bf B\-M\-K\-Map\-Rect} $\ast$}]{slice, }
+\item[{{\bf B\-M\-K\-Map\-Rect} $\ast$}]{remainder, }
+\item[{double}]{amount, }
+\item[{C\-G\-Rect\-Edge}]{edge}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_a32fb4cbbc882aefdffb1981b2a445621}
+矩形分割，将一个矩形分割为两个矩形 
+\begin{DoxyParams}{参数}
+{\em rect} & 待分割的矩形 \\
+\hline
+{\em slice} & 指针，用来保存分割后被移除的矩形 \\
+\hline
+{\em remainder} & 指针，用来保存分割后剩下的矩形 \\
+\hline
+{\em amount} & 指定分割的大小，如果设置为负数，则将自动调整为0 \\
+\hline
+{\em edge} & 用来指定要从那条边开始分割 \\
+\hline
+\end{DoxyParams}
+\hypertarget{_b_m_k_geometry_8h_aa64e3dd2b0333ddadda311abb367fc39}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Rect\-Equal\-To\-Rect@{B\-M\-K\-Map\-Rect\-Equal\-To\-Rect}}
+\index{B\-M\-K\-Map\-Rect\-Equal\-To\-Rect@{B\-M\-K\-Map\-Rect\-Equal\-To\-Rect}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Rect\-Equal\-To\-Rect}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E B\-O\-O\-L B\-M\-K\-Map\-Rect\-Equal\-To\-Rect (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect1, }
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect2}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_aa64e3dd2b0333ddadda311abb367fc39}
+判断两个矩形是否相等 
+\begin{DoxyParams}{参数}
+{\em rect1} & 矩形1 \\
+\hline
+{\em rect2} & 矩形2 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+如果相等，返回\-Y\-E\-S，否则返回\-N\-O 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_ab5ea9c49c319a9ae494a7da167be6189}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Rect\-Get\-Height@{B\-M\-K\-Map\-Rect\-Get\-Height}}
+\index{B\-M\-K\-Map\-Rect\-Get\-Height@{B\-M\-K\-Map\-Rect\-Get\-Height}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Rect\-Get\-Height}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E double B\-M\-K\-Map\-Rect\-Get\-Height (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_ab5ea9c49c319a9ae494a7da167be6189}
+获取指定矩形的高度 
+\begin{DoxyParams}{参数}
+{\em rect} & 指定的矩形 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+指定矩形的高度 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_a4e30d4345cd56ca13f6e882836ffa9ce}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Rect\-Get\-Max\-X@{B\-M\-K\-Map\-Rect\-Get\-Max\-X}}
+\index{B\-M\-K\-Map\-Rect\-Get\-Max\-X@{B\-M\-K\-Map\-Rect\-Get\-Max\-X}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Rect\-Get\-Max\-X}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E double B\-M\-K\-Map\-Rect\-Get\-Max\-X (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_a4e30d4345cd56ca13f6e882836ffa9ce}
+获取指定矩形的x轴坐标最大值 
+\begin{DoxyParams}{参数}
+{\em rect} & 指定的矩形 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+x轴坐标最大值 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_ac8d52fde1866ea9c3d19c33371c5c0d8}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Rect\-Get\-Max\-Y@{B\-M\-K\-Map\-Rect\-Get\-Max\-Y}}
+\index{B\-M\-K\-Map\-Rect\-Get\-Max\-Y@{B\-M\-K\-Map\-Rect\-Get\-Max\-Y}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Rect\-Get\-Max\-Y}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E double B\-M\-K\-Map\-Rect\-Get\-Max\-Y (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_ac8d52fde1866ea9c3d19c33371c5c0d8}
+获取指定矩形的y轴坐标最大值 
+\begin{DoxyParams}{参数}
+{\em rect} & 指定的矩形 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+y轴坐标最大值 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_ae0dfe0ab0cdde7d492e408f564fe9358}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Rect\-Get\-Mid\-X@{B\-M\-K\-Map\-Rect\-Get\-Mid\-X}}
+\index{B\-M\-K\-Map\-Rect\-Get\-Mid\-X@{B\-M\-K\-Map\-Rect\-Get\-Mid\-X}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Rect\-Get\-Mid\-X}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E double B\-M\-K\-Map\-Rect\-Get\-Mid\-X (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_ae0dfe0ab0cdde7d492e408f564fe9358}
+获取指定矩形在x轴中点的坐标值 
+\begin{DoxyParams}{参数}
+{\em rect} & 指定的矩形 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+x轴中点的坐标值 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_ac5c23791f6c1eaddc2d625b059c88c54}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Rect\-Get\-Mid\-Y@{B\-M\-K\-Map\-Rect\-Get\-Mid\-Y}}
+\index{B\-M\-K\-Map\-Rect\-Get\-Mid\-Y@{B\-M\-K\-Map\-Rect\-Get\-Mid\-Y}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Rect\-Get\-Mid\-Y}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E double B\-M\-K\-Map\-Rect\-Get\-Mid\-Y (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_ac5c23791f6c1eaddc2d625b059c88c54}
+获取指定矩形在y轴中点的坐标值 
+\begin{DoxyParams}{参数}
+{\em rect} & 指定的矩形 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+y轴中点的坐标值 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_a294cad295bdd1f4108e18993b425eb87}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Rect\-Get\-Min\-X@{B\-M\-K\-Map\-Rect\-Get\-Min\-X}}
+\index{B\-M\-K\-Map\-Rect\-Get\-Min\-X@{B\-M\-K\-Map\-Rect\-Get\-Min\-X}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Rect\-Get\-Min\-X}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E double B\-M\-K\-Map\-Rect\-Get\-Min\-X (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_a294cad295bdd1f4108e18993b425eb87}
+获取指定矩形的x轴坐标最小值 
+\begin{DoxyParams}{参数}
+{\em rect} & 指定的矩形 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+x轴坐标最小值 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_a45df48e78b212b924723cb16f8b68e24}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Rect\-Get\-Min\-Y@{B\-M\-K\-Map\-Rect\-Get\-Min\-Y}}
+\index{B\-M\-K\-Map\-Rect\-Get\-Min\-Y@{B\-M\-K\-Map\-Rect\-Get\-Min\-Y}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Rect\-Get\-Min\-Y}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E double B\-M\-K\-Map\-Rect\-Get\-Min\-Y (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_a45df48e78b212b924723cb16f8b68e24}
+获取指定矩形的y轴坐标最小值 
+\begin{DoxyParams}{参数}
+{\em rect} & 指定的矩形 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+y轴坐标最小值 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_a2c1a5ec9570711e8524827fa9a395d0d}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Rect\-Get\-Width@{B\-M\-K\-Map\-Rect\-Get\-Width}}
+\index{B\-M\-K\-Map\-Rect\-Get\-Width@{B\-M\-K\-Map\-Rect\-Get\-Width}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Rect\-Get\-Width}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E double B\-M\-K\-Map\-Rect\-Get\-Width (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_a2c1a5ec9570711e8524827fa9a395d0d}
+获取指定矩形的宽度 
+\begin{DoxyParams}{参数}
+{\em rect} & 指定的矩形 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+指定矩形的宽度 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_a717e60a9798195b716d083f3e8da1d54}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Rect\-Inset@{B\-M\-K\-Map\-Rect\-Inset}}
+\index{B\-M\-K\-Map\-Rect\-Inset@{B\-M\-K\-Map\-Rect\-Inset}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Rect\-Inset}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N {\bf B\-M\-K\-Map\-Rect} B\-M\-K\-Map\-Rect\-Inset (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect, }
+\item[{double}]{dx, }
+\item[{double}]{dy}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_a717e60a9798195b716d083f3e8da1d54}
+将矩形向内缩小dx，dy大小 
+\begin{DoxyParams}{参数}
+{\em rect} & 指定的矩形 \\
+\hline
+{\em dx} & x轴的变化量 \\
+\hline
+{\em dy} & y轴的变化量 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+调整后的矩形 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_af46516f57d0abfd6d8aa902bc50060a6}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Rect\-Intersection@{B\-M\-K\-Map\-Rect\-Intersection}}
+\index{B\-M\-K\-Map\-Rect\-Intersection@{B\-M\-K\-Map\-Rect\-Intersection}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Rect\-Intersection}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N {\bf B\-M\-K\-Map\-Rect} B\-M\-K\-Map\-Rect\-Intersection (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect1, }
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect2}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_af46516f57d0abfd6d8aa902bc50060a6}
+计算两个矩形的交集 
+\begin{DoxyParams}{参数}
+{\em rect1} & 矩形1 \\
+\hline
+{\em rect2} & 矩形2 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+两个矩形的交集 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_ad8fc8d14cda123242c551db6c820e0a1}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Rect\-Intersects\-Rect@{B\-M\-K\-Map\-Rect\-Intersects\-Rect}}
+\index{B\-M\-K\-Map\-Rect\-Intersects\-Rect@{B\-M\-K\-Map\-Rect\-Intersects\-Rect}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Rect\-Intersects\-Rect}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N B\-O\-O\-L B\-M\-K\-Map\-Rect\-Intersects\-Rect (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect1, }
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect2}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_ad8fc8d14cda123242c551db6c820e0a1}
+判断两矩形是否相交 
+\begin{DoxyParams}{参数}
+{\em rect1} & 矩形1 \\
+\hline
+{\em rect2} & 矩形2 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+如果相交，返回\-Y\-E\-S，否则，返回\-N\-O 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_a6a49884fe83e2aeb08b6827bf9361ef9}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Rect\-Is\-Empty@{B\-M\-K\-Map\-Rect\-Is\-Empty}}
+\index{B\-M\-K\-Map\-Rect\-Is\-Empty@{B\-M\-K\-Map\-Rect\-Is\-Empty}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Rect\-Is\-Empty}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E B\-O\-O\-L B\-M\-K\-Map\-Rect\-Is\-Empty (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_a6a49884fe83e2aeb08b6827bf9361ef9}
+判断一个矩形是否为空矩形 
+\begin{DoxyParams}{参数}
+{\em rect} & 指定矩形 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+如果矩形为空矩形，返回\-Y\-E\-S，否则返回\-N\-O 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_a2abc95ac03215aad58b7a02f54264605}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Rect\-Is\-Null@{B\-M\-K\-Map\-Rect\-Is\-Null}}
+\index{B\-M\-K\-Map\-Rect\-Is\-Null@{B\-M\-K\-Map\-Rect\-Is\-Null}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Rect\-Is\-Null}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E B\-O\-O\-L B\-M\-K\-Map\-Rect\-Is\-Null (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_a2abc95ac03215aad58b7a02f54264605}
+判断指定矩形是否为\-N\-U\-L\-L 
+\begin{DoxyParams}{参数}
+{\em rect} & 指定矩形 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+如果矩形为\-N\-U\-L\-L，返回\-Y\-E\-S，否则返回\-N\-O 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_ae36b2f884d73d7e119bb224b33e70eff}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Rect\-Make@{B\-M\-K\-Map\-Rect\-Make}}
+\index{B\-M\-K\-Map\-Rect\-Make@{B\-M\-K\-Map\-Rect\-Make}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Rect\-Make}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E {\bf B\-M\-K\-Map\-Rect} B\-M\-K\-Map\-Rect\-Make (
+\begin{DoxyParamCaption}
+\item[{double}]{x, }
+\item[{double}]{y, }
+\item[{double}]{width, }
+\item[{double}]{height}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_ae36b2f884d73d7e119bb224b33e70eff}
+构造\-B\-M\-K\-Map\-Rect对象 
+\begin{DoxyParams}{参数}
+{\em x} & 矩形左上顶点的x坐标值 \\
+\hline
+{\em y} & 矩形左上顶点的y坐标值 \\
+\hline
+{\em width} & 矩形宽度 \\
+\hline
+{\em height} & 矩形高度 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+根据指定参数生成的\-B\-M\-K\-Map\-Rect对象 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_a895de18577c2de7a4d0843d61be5d948}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Rect\-Offset@{B\-M\-K\-Map\-Rect\-Offset}}
+\index{B\-M\-K\-Map\-Rect\-Offset@{B\-M\-K\-Map\-Rect\-Offset}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Rect\-Offset}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N {\bf B\-M\-K\-Map\-Rect} B\-M\-K\-Map\-Rect\-Offset (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect, }
+\item[{double}]{dx, }
+\item[{double}]{dy}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_a895de18577c2de7a4d0843d61be5d948}
+将矩形原点偏移指定大小 
+\begin{DoxyParams}{参数}
+{\em rect} & 指定的矩形 \\
+\hline
+{\em dx} & x轴的偏移量 \\
+\hline
+{\em dy} & y轴的偏移量 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+调整后的矩形 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_acdf6820a550a4c953020fc136a17e4b1}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Rect\-Remainder@{B\-M\-K\-Map\-Rect\-Remainder}}
+\index{B\-M\-K\-Map\-Rect\-Remainder@{B\-M\-K\-Map\-Rect\-Remainder}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Rect\-Remainder}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N {\bf B\-M\-K\-Map\-Rect} B\-M\-K\-Map\-Rect\-Remainder (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_acdf6820a550a4c953020fc136a17e4b1}
+对于跨越了180经线的矩形，本函数将世界之外的部分进行分割，并将分割下来的矩形转换到地球对面，例如将-\/185度经线对应的区域转换到5度经线对应的区域，并将转换后的矩形返回 
+\begin{DoxyParams}{参数}
+{\em rect} & 待处理的矩形 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+返回转换后的矩形 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_a2fa044766e6c2c56e831a552c1b25d7b}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Rect\-Spans180th\-Meridian@{B\-M\-K\-Map\-Rect\-Spans180th\-Meridian}}
+\index{B\-M\-K\-Map\-Rect\-Spans180th\-Meridian@{B\-M\-K\-Map\-Rect\-Spans180th\-Meridian}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Rect\-Spans180th\-Meridian}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N B\-O\-O\-L B\-M\-K\-Map\-Rect\-Spans180th\-Meridian (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_a2fa044766e6c2c56e831a552c1b25d7b}
+判断指定的直角坐标矩形是否跨越了180度经线 
+\begin{DoxyParams}{参数}
+{\em rect} & 待判断的矩形 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+如果跨越，返回\-Y\-E\-S，否则返回\-N\-O 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_aca2a7535ee5bfbd1204f48d2536f11ba}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Rect\-Union@{B\-M\-K\-Map\-Rect\-Union}}
+\index{B\-M\-K\-Map\-Rect\-Union@{B\-M\-K\-Map\-Rect\-Union}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Rect\-Union}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N {\bf B\-M\-K\-Map\-Rect} B\-M\-K\-Map\-Rect\-Union (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect1, }
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect2}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_aca2a7535ee5bfbd1204f48d2536f11ba}
+计算两个矩形的并集 
+\begin{DoxyParams}{参数}
+{\em rect1} & 矩形1 \\
+\hline
+{\em rect2} & 矩形2 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+两个矩形的并集 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_adc307cf3a5707b82e78265ba6be1ffc4}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Size\-Equal\-To\-Size@{B\-M\-K\-Map\-Size\-Equal\-To\-Size}}
+\index{B\-M\-K\-Map\-Size\-Equal\-To\-Size@{B\-M\-K\-Map\-Size\-Equal\-To\-Size}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Size\-Equal\-To\-Size}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E B\-O\-O\-L B\-M\-K\-Map\-Size\-Equal\-To\-Size (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Size}}]{size1, }
+\item[{{\bf B\-M\-K\-Map\-Size}}]{size2}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_adc307cf3a5707b82e78265ba6be1ffc4}
+判断两个矩形范围是否相等 
+\begin{DoxyParams}{参数}
+{\em size1} & 范围1 \\
+\hline
+{\em size2} & 范围2 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+如果相等，返回\-Y\-E\-S，否则返回\-N\-O 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_afc821309dd42822252fb54c1fa484bd8}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Map\-Size\-Make@{B\-M\-K\-Map\-Size\-Make}}
+\index{B\-M\-K\-Map\-Size\-Make@{B\-M\-K\-Map\-Size\-Make}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Map\-Size\-Make}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E {\bf B\-M\-K\-Map\-Size} B\-M\-K\-Map\-Size\-Make (
+\begin{DoxyParamCaption}
+\item[{double}]{width, }
+\item[{double}]{height}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_afc821309dd42822252fb54c1fa484bd8}
+构造\-B\-M\-K\-Map\-Size对象 
+\begin{DoxyParams}{参数}
+{\em width} & 宽度 \\
+\hline
+{\em height} & 高度 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+根据指定参数生成的\-B\-M\-K\-Map\-Size对象 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_a6051f3027c1960e53101fa95357ce068}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Meters\-Between\-Map\-Points@{B\-M\-K\-Meters\-Between\-Map\-Points}}
+\index{B\-M\-K\-Meters\-Between\-Map\-Points@{B\-M\-K\-Meters\-Between\-Map\-Points}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Meters\-Between\-Map\-Points}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N C\-L\-Location\-Distance B\-M\-K\-Meters\-Between\-Map\-Points (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Point}}]{a, }
+\item[{{\bf B\-M\-K\-Map\-Point}}]{b}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_a6051f3027c1960e53101fa95357ce068}
+计算指定两点之间的距离 
+\begin{DoxyParams}{参数}
+{\em a} & 第一个坐标点 \\
+\hline
+{\em b} & 第二个坐标点 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+两点之间的距离，单位：米 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_acd9d69e5e899ef5acad884002c83eda5}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-Meters\-Per\-Map\-Point\-At\-Latitude@{B\-M\-K\-Meters\-Per\-Map\-Point\-At\-Latitude}}
+\index{B\-M\-K\-Meters\-Per\-Map\-Point\-At\-Latitude@{B\-M\-K\-Meters\-Per\-Map\-Point\-At\-Latitude}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-Meters\-Per\-Map\-Point\-At\-Latitude}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-E\-X\-T\-E\-R\-N C\-L\-Location\-Distance B\-M\-K\-Meters\-Per\-Map\-Point\-At\-Latitude (
+\begin{DoxyParamCaption}
+\item[{C\-L\-Location\-Degrees}]{latitude}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_acd9d69e5e899ef5acad884002c83eda5}
+计算在指定纬度下一个\-B\-M\-K\-Map\-Point单位对应的米数 
+\begin{DoxyParams}{参数}
+{\em latitude} & 指定的纬度 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+在指定纬度下一个\-B\-M\-K\-Map\-Point单位对应的米数 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_a6f2b502558d61983e911e77b02f86166}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-String\-From\-Map\-Point@{B\-M\-K\-String\-From\-Map\-Point}}
+\index{B\-M\-K\-String\-From\-Map\-Point@{B\-M\-K\-String\-From\-Map\-Point}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-String\-From\-Map\-Point}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E N\-S\-String$\ast$ B\-M\-K\-String\-From\-Map\-Point (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Point}}]{point}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_a6f2b502558d61983e911e77b02f86166}
+将\-B\-M\-K\-Map\-Point格式化为字符串 
+\begin{DoxyParams}{参数}
+{\em point} & 指定的标点 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+返回转换后的字符串 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_a07c0dc35e145b24828d11e20e8d1456e}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-String\-From\-Map\-Rect@{B\-M\-K\-String\-From\-Map\-Rect}}
+\index{B\-M\-K\-String\-From\-Map\-Rect@{B\-M\-K\-String\-From\-Map\-Rect}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-String\-From\-Map\-Rect}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E N\-S\-String$\ast$ B\-M\-K\-String\-From\-Map\-Rect (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Rect}}]{rect}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_a07c0dc35e145b24828d11e20e8d1456e}
+将\-B\-M\-K\-Map\-Rect格式化为字符串 
+\begin{DoxyParams}{参数}
+{\em rect} & 指定的rect \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+返回转换后的字符串 
+\end{DoxyReturn}
+\hypertarget{_b_m_k_geometry_8h_a687e957bfdaee6c3e7ef97c3831127d2}{\index{B\-M\-K\-Geometry.\-h@{B\-M\-K\-Geometry.\-h}!B\-M\-K\-String\-From\-Map\-Size@{B\-M\-K\-String\-From\-Map\-Size}}
+\index{B\-M\-K\-String\-From\-Map\-Size@{B\-M\-K\-String\-From\-Map\-Size}!BMKGeometry.h@{B\-M\-K\-Geometry.\-h}}
+\subsubsection[{B\-M\-K\-String\-From\-Map\-Size}]{\setlength{\rightskip}{0pt plus 5cm}U\-I\-K\-I\-T\-\_\-\-S\-T\-A\-T\-I\-C\-\_\-\-I\-N\-L\-I\-N\-E N\-S\-String$\ast$ B\-M\-K\-String\-From\-Map\-Size (
+\begin{DoxyParamCaption}
+\item[{{\bf B\-M\-K\-Map\-Size}}]{size}
+\end{DoxyParamCaption}
+)}}\label{_b_m_k_geometry_8h_a687e957bfdaee6c3e7ef97c3831127d2}
+将\-B\-M\-K\-Map\-Size格式化为字符串 
+\begin{DoxyParams}{参数}
+{\em size} & 指定的size \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+返回转换后的字符串 
+\end{DoxyReturn}

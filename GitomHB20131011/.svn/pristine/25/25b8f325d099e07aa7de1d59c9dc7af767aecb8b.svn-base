@@ -1,0 +1,58 @@
+\hypertarget{interface_b_m_k_map_manager}{\section{B\-M\-K\-Map\-Manager 类参考}
+\label{interface_b_m_k_map_manager}\index{B\-M\-K\-Map\-Manager@{B\-M\-K\-Map\-Manager}}
+}
+
+
+主引擎类  
+
+
+
+
+{\ttfamily \#import $<$B\-M\-K\-Map\-Manager.\-h$>$}
+
+继承关系图 B\-M\-K\-Map\-Manager\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{interface_b_m_k_map_manager}
+\end{center}
+\end{figure}
+\subsection*{实例方法}
+\begin{DoxyCompactItemize}
+\item 
+(B\-O\-O\-L) -\/ \hyperlink{interface_b_m_k_map_manager_a95edf9c8fea4c61a79098641c4e9a50f}{start\-:general\-Delegate\-:}
+\item 
+(B\-O\-O\-L) -\/ \hyperlink{interface_b_m_k_map_manager_ac53850202f5017ff35c8933c171be0f1}{stop}
+\end{DoxyCompactItemize}
+
+
+\subsection{详细描述}
+主引擎类 
+
+\subsection{方法文档}
+\hypertarget{interface_b_m_k_map_manager_a95edf9c8fea4c61a79098641c4e9a50f}{\index{B\-M\-K\-Map\-Manager@{B\-M\-K\-Map\-Manager}!start\-:general\-Delegate\-:@{start\-:general\-Delegate\-:}}
+\index{start\-:general\-Delegate\-:@{start\-:general\-Delegate\-:}!BMKMapManager@{B\-M\-K\-Map\-Manager}}
+\subsubsection[{start\-:general\-Delegate\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (B\-O\-O\-L) start\-: 
+\begin{DoxyParamCaption}
+\item[{(N\-S\-String $\ast$)}]{key}
+\item[{generalDelegate:(id$<$ {\bf B\-M\-K\-General\-Delegate} $>$)}]{delegate}
+\end{DoxyParamCaption}
+}}\label{interface_b_m_k_map_manager_a95edf9c8fea4c61a79098641c4e9a50f}
+启动引擎 
+\begin{DoxyParams}{参数}
+{\em key} & 申请的有效key \\
+\hline
+{\em delegate} & \\
+\hline
+\end{DoxyParams}
+\hypertarget{interface_b_m_k_map_manager_ac53850202f5017ff35c8933c171be0f1}{\index{B\-M\-K\-Map\-Manager@{B\-M\-K\-Map\-Manager}!stop@{stop}}
+\index{stop@{stop}!BMKMapManager@{B\-M\-K\-Map\-Manager}}
+\subsubsection[{stop}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (B\-O\-O\-L) stop 
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+}}\label{interface_b_m_k_map_manager_ac53850202f5017ff35c8933c171be0f1}
+停止引擎 
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+B\-M\-K\-Map\-Manager.\-h\end{DoxyCompactItemize}

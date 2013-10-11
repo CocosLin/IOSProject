@@ -1,0 +1,76 @@
+\hypertarget{protocol_b_m_k_annotation-p}{\section{$<$B\-M\-K\-Annotation$>$ 协议参考}
+\label{protocol_b_m_k_annotation-p}\index{$<$\-B\-M\-K\-Annotation$>$@{$<$\-B\-M\-K\-Annotation$>$}}
+}
+
+
+该类为标注点的protocol，提供了标注类的基本信息函数  
+
+
+
+
+{\ttfamily \#import $<$B\-M\-K\-Annotation.\-h$>$}
+
+继承关系图 $<$B\-M\-K\-Annotation$>$\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.456790cm]{protocol_b_m_k_annotation-p}
+\end{center}
+\end{figure}
+\subsection*{实例方法}
+\begin{DoxyCompactItemize}
+\item 
+(N\-S\-String $\ast$) -\/ \hyperlink{protocol_b_m_k_annotation-p_a249e1b880f8ded8541a0fe59ef4abb12}{title}
+\item 
+(N\-S\-String $\ast$) -\/ \hyperlink{protocol_b_m_k_annotation-p_a62aea71f4631251330e8a6fc3d3bdf11}{subtitle}
+\item 
+(void) -\/ \hyperlink{protocol_b_m_k_annotation-p_a86db1788af78d273e1e155d3aa3d978f}{set\-Coordinate\-:}
+\end{DoxyCompactItemize}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{protocol_b_m_k_annotation-p_ab7ed7fd80fc518acf82cf0048490f9be}{C\-L\-Location\-Coordinate2\-D \hyperlink{protocol_b_m_k_annotation-p_ab7ed7fd80fc518acf82cf0048490f9be}{coordinate}}\label{protocol_b_m_k_annotation-p_ab7ed7fd80fc518acf82cf0048490f9be}
+
+\begin{DoxyCompactList}\small\item\em 标注view中心坐标. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{详细描述}
+该类为标注点的protocol，提供了标注类的基本信息函数 
+
+\subsection{方法文档}
+\hypertarget{protocol_b_m_k_annotation-p_a86db1788af78d273e1e155d3aa3d978f}{\index{B\-M\-K\-Annotation-\/p@{B\-M\-K\-Annotation-\/p}!set\-Coordinate\-:@{set\-Coordinate\-:}}
+\index{set\-Coordinate\-:@{set\-Coordinate\-:}!BMKAnnotation-p@{B\-M\-K\-Annotation-\/p}}
+\subsubsection[{set\-Coordinate\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (void) set\-Coordinate\-: 
+\begin{DoxyParamCaption}
+\item[{(C\-L\-Location\-Coordinate2\-D)}]{new\-Coordinate}
+\end{DoxyParamCaption}
+\hspace{0.3cm}{\ttfamily [optional]}}}\label{protocol_b_m_k_annotation-p_a86db1788af78d273e1e155d3aa3d978f}
+设置标注的坐标，在拖拽时会被调用. 
+\begin{DoxyParams}{参数}
+{\em new\-Coordinate} & 新的坐标值 \\
+\hline
+\end{DoxyParams}
+\hypertarget{protocol_b_m_k_annotation-p_a62aea71f4631251330e8a6fc3d3bdf11}{\index{B\-M\-K\-Annotation-\/p@{B\-M\-K\-Annotation-\/p}!subtitle@{subtitle}}
+\index{subtitle@{subtitle}!BMKAnnotation-p@{B\-M\-K\-Annotation-\/p}}
+\subsubsection[{subtitle}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (N\-S\-String $\ast$) subtitle 
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+\hspace{0.3cm}{\ttfamily [optional]}}}\label{protocol_b_m_k_annotation-p_a62aea71f4631251330e8a6fc3d3bdf11}
+获取annotation副标题 \begin{DoxyReturn}{返回}
+返回annotation的副标题信息 
+\end{DoxyReturn}
+\hypertarget{protocol_b_m_k_annotation-p_a249e1b880f8ded8541a0fe59ef4abb12}{\index{B\-M\-K\-Annotation-\/p@{B\-M\-K\-Annotation-\/p}!title@{title}}
+\index{title@{title}!BMKAnnotation-p@{B\-M\-K\-Annotation-\/p}}
+\subsubsection[{title}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (N\-S\-String $\ast$) title 
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+\hspace{0.3cm}{\ttfamily [optional]}}}\label{protocol_b_m_k_annotation-p_a249e1b880f8ded8541a0fe59ef4abb12}
+获取annotation标题 \begin{DoxyReturn}{返回}
+返回annotation的标题信息 
+\end{DoxyReturn}
+
+
+The documentation for this protocol was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+B\-M\-K\-Annotation.\-h\end{DoxyCompactItemize}

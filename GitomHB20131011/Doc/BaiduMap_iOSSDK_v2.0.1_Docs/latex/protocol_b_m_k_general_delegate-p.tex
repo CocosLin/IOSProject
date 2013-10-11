@@ -1,0 +1,60 @@
+\hypertarget{protocol_b_m_k_general_delegate-p}{\section{$<$B\-M\-K\-General\-Delegate$>$ 协议参考}
+\label{protocol_b_m_k_general_delegate-p}\index{$<$\-B\-M\-K\-General\-Delegate$>$@{$<$\-B\-M\-K\-General\-Delegate$>$}}
+}
+
+
+通知\-Delegate  
+
+
+
+
+{\ttfamily \#import $<$B\-M\-K\-General\-Delegate.\-h$>$}
+
+继承关系图 $<$B\-M\-K\-General\-Delegate$>$\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{protocol_b_m_k_general_delegate-p}
+\end{center}
+\end{figure}
+\subsection*{实例方法}
+\begin{DoxyCompactItemize}
+\item 
+(void) -\/ \hyperlink{protocol_b_m_k_general_delegate-p_ad30d0a4dc9bb54cda10cb892ed769491}{on\-Get\-Network\-State\-:}
+\item 
+(void) -\/ \hyperlink{protocol_b_m_k_general_delegate-p_ab0c34f007a8be34196fc81f2c7b3cddb}{on\-Get\-Permission\-State\-:}
+\end{DoxyCompactItemize}
+
+
+\subsection{详细描述}
+通知\-Delegate 
+
+\subsection{方法文档}
+\hypertarget{protocol_b_m_k_general_delegate-p_ad30d0a4dc9bb54cda10cb892ed769491}{\index{B\-M\-K\-General\-Delegate-\/p@{B\-M\-K\-General\-Delegate-\/p}!on\-Get\-Network\-State\-:@{on\-Get\-Network\-State\-:}}
+\index{on\-Get\-Network\-State\-:@{on\-Get\-Network\-State\-:}!BMKGeneralDelegate-p@{B\-M\-K\-General\-Delegate-\/p}}
+\subsubsection[{on\-Get\-Network\-State\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (void) on\-Get\-Network\-State\-: 
+\begin{DoxyParamCaption}
+\item[{(int)}]{i\-Error}
+\end{DoxyParamCaption}
+\hspace{0.3cm}{\ttfamily [optional]}}}\label{protocol_b_m_k_general_delegate-p_ad30d0a4dc9bb54cda10cb892ed769491}
+返回网络错误 
+\begin{DoxyParams}{参数}
+{\em i\-Error} & 错误号 \\
+\hline
+\end{DoxyParams}
+\hypertarget{protocol_b_m_k_general_delegate-p_ab0c34f007a8be34196fc81f2c7b3cddb}{\index{B\-M\-K\-General\-Delegate-\/p@{B\-M\-K\-General\-Delegate-\/p}!on\-Get\-Permission\-State\-:@{on\-Get\-Permission\-State\-:}}
+\index{on\-Get\-Permission\-State\-:@{on\-Get\-Permission\-State\-:}!BMKGeneralDelegate-p@{B\-M\-K\-General\-Delegate-\/p}}
+\subsubsection[{on\-Get\-Permission\-State\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (void) on\-Get\-Permission\-State\-: 
+\begin{DoxyParamCaption}
+\item[{(int)}]{i\-Error}
+\end{DoxyParamCaption}
+\hspace{0.3cm}{\ttfamily [optional]}}}\label{protocol_b_m_k_general_delegate-p_ab0c34f007a8be34196fc81f2c7b3cddb}
+返回授权验证错误 
+\begin{DoxyParams}{参数}
+{\em i\-Error} & 错误号 \-: B\-M\-K\-Error\-Permission\-Check\-Failure 验证失败 \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this protocol was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+B\-M\-K\-General\-Delegate.\-h\end{DoxyCompactItemize}

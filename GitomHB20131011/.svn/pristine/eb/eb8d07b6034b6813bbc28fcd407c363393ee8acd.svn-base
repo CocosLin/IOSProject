@@ -1,0 +1,56 @@
+\hypertarget{interface_b_m_k_polyline_view}{\section{B\-M\-K\-Polyline\-View 类参考}
+\label{interface_b_m_k_polyline_view}\index{B\-M\-K\-Polyline\-View@{B\-M\-K\-Polyline\-View}}
+}
+
+
+此类用于定义一个折线\-View  
+
+
+
+
+{\ttfamily \#import $<$B\-M\-K\-Polyline\-View.\-h$>$}
+
+继承关系图 B\-M\-K\-Polyline\-View\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{interface_b_m_k_polyline_view}
+\end{center}
+\end{figure}
+\subsection*{实例方法}
+\begin{DoxyCompactItemize}
+\item 
+(id) -\/ \hyperlink{interface_b_m_k_polyline_view_a9e771508504ccb0fdf491dcb406e23ed}{init\-With\-Polyline\-:}
+\end{DoxyCompactItemize}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{interface_b_m_k_polyline_view_a780ecfc589530cc4514e790422730e5f}{\hyperlink{interface_b_m_k_polyline}{B\-M\-K\-Polyline} $\ast$ \hyperlink{interface_b_m_k_polyline_view_a780ecfc589530cc4514e790422730e5f}{polyline}}\label{interface_b_m_k_polyline_view_a780ecfc589530cc4514e790422730e5f}
+
+\begin{DoxyCompactList}\small\item\em 该\-View对应的折线数据对象 \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{附加继承成员}
+
+
+\subsection{详细描述}
+此类用于定义一个折线\-View 
+
+\subsection{方法文档}
+\hypertarget{interface_b_m_k_polyline_view_a9e771508504ccb0fdf491dcb406e23ed}{\index{B\-M\-K\-Polyline\-View@{B\-M\-K\-Polyline\-View}!init\-With\-Polyline\-:@{init\-With\-Polyline\-:}}
+\index{init\-With\-Polyline\-:@{init\-With\-Polyline\-:}!BMKPolylineView@{B\-M\-K\-Polyline\-View}}
+\subsubsection[{init\-With\-Polyline\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (id) init\-With\-Polyline\-: 
+\begin{DoxyParamCaption}
+\item[{({\bf B\-M\-K\-Polyline} $\ast$)}]{polyline}
+\end{DoxyParamCaption}
+}}\label{interface_b_m_k_polyline_view_a9e771508504ccb0fdf491dcb406e23ed}
+根据指定的折线生成一个折线\-View 
+\begin{DoxyParams}{参数}
+{\em polyline} & 指定的折线数据对象 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+新生成的折线\-View 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+B\-M\-K\-Polyline\-View.\-h\end{DoxyCompactItemize}
