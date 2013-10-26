@@ -82,6 +82,13 @@ typedef  void(^WbReportSave)(BOOL isReportOk,WError * myError);
                          Title:(NSString *)title
                                Content:(NSString *)content
                   GotIsSaveReportOk:(WbReportSave)callback;
+
+#pragma mark -- 编辑主管权限
+- (void)saveRolePrivilegeWithOrganizationId:(NSInteger)organizationId
+                                  andRoleId:(NSInteger)roleId
+                              andOperations:(NSString *)operations
+                              andUpdateUser:(NSString *)updateUser;
+
 #pragma mark -- 删除部门
 - (void)deleteOrgunitWithOrganizationId:(NSInteger)organizationId
                            andOrgunitId:(NSInteger)orgunitId

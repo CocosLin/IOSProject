@@ -140,6 +140,8 @@
 		9762D2D817799E60001CB047 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9762D2D717799E5F001CB047 /* SystemConfiguration.framework */; };
 		9762D2DA17799E8C001CB047 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9762D2D917799E8B001CB047 /* MobileCoreServices.framework */; };
 		9762D2DC17799E97001CB047 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9762D2DB17799E96001CB047 /* libz.1.2.5.dylib */; };
+		976573E2181B510300342C93 /* RolePrivilegeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 976573DF181B510300342C93 /* RolePrivilegeVC.m */; };
+		976573E3181B510300342C93 /* SetMapPositionVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 976573E1181B510300342C93 /* SetMapPositionVC.m */; };
 		9765E6A1177A7C8600175B56 /* ServerBaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9765E6A0177A7C8600175B56 /* ServerBaseModel.m */; };
 		9765E6A2177A7C8600175B56 /* ServerBaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9765E6A0177A7C8600175B56 /* ServerBaseModel.m */; };
 		9765E6A5177A8C4300175B56 /* HBServerKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 9765E6A4177A8C4300175B56 /* HBServerKit.m */; };
@@ -519,6 +521,10 @@
 		9762D2D717799E5F001CB047 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		9762D2D917799E8B001CB047 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		9762D2DB17799E96001CB047 /* libz.1.2.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.1.2.5.dylib; path = usr/lib/libz.1.2.5.dylib; sourceTree = SDKROOT; };
+		976573DE181B510300342C93 /* RolePrivilegeVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RolePrivilegeVC.h; sourceTree = "<group>"; };
+		976573DF181B510300342C93 /* RolePrivilegeVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RolePrivilegeVC.m; sourceTree = "<group>"; };
+		976573E0181B510300342C93 /* SetMapPositionVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetMapPositionVC.h; sourceTree = "<group>"; };
+		976573E1181B510300342C93 /* SetMapPositionVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetMapPositionVC.m; sourceTree = "<group>"; };
 		9765E69F177A7C8600175B56 /* ServerBaseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerBaseModel.h; sourceTree = "<group>"; };
 		9765E6A0177A7C8600175B56 /* ServerBaseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerBaseModel.m; sourceTree = "<group>"; };
 		9765E6A3177A8C4300175B56 /* HBServerKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBServerKit.h; sourceTree = "<group>"; };
@@ -1515,6 +1521,10 @@
 				97EAF05817DF06D400CDFE46 /* ManageDepartmentVC.m */,
 				97671A13180CD4E800E3A5E3 /* ManageAttendanceConfigVC.h */,
 				97671A14180CD4E800E3A5E3 /* ManageAttendanceConfigVC.m */,
+				976573DE181B510300342C93 /* RolePrivilegeVC.h */,
+				976573DF181B510300342C93 /* RolePrivilegeVC.m */,
+				976573E0181B510300342C93 /* SetMapPositionVC.h */,
+				976573E1181B510300342C93 /* SetMapPositionVC.m */,
 				975EA2AF180B84A60091051D /* ApplyViewController.h */,
 				975EA2B0180B84A60091051D /* ApplyViewController.m */,
 			);
@@ -2063,6 +2073,8 @@
 				975EA2B4180B87590091051D /* ApplyModel.m in Sources */,
 				97671A15180CD4E800E3A5E3 /* ManageAttendanceConfigVC.m in Sources */,
 				97671A18180D37DA00E3A5E3 /* AttendanceModel.m in Sources */,
+				976573E2181B510300342C93 /* RolePrivilegeVC.m in Sources */,
+				976573E3181B510300342C93 /* SetMapPositionVC.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

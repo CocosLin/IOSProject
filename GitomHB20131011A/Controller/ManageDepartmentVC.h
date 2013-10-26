@@ -9,7 +9,7 @@
 #import "VcWithNavBar.h"
 
 @interface ManageDepartmentVC : VcWithNavBar<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate>{
-    BOOL delectOrg;
+    int configType;
 }
 
 @property (nonatomic, retain) NSArray *arrSet;

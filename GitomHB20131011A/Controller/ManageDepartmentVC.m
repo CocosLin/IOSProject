@@ -11,6 +11,7 @@
 #import "ManageAttendanceConfigVC.h"
 #import "HBServerKit.h"
 #import "WTool.h"
+#import "RolePrivilegeVC.h"
 
 @interface ManageDepartmentVC (){
     UITableView *_settingTableView;
@@ -160,7 +161,7 @@
     HBServerKit *hbKit = [[HBServerKit alloc]init];
     if (indexPath.row == 0) {
         NSLog(@"修改部门名称");
-        delectOrg = NO;
+        configType = 0;
         GetCommonDataModel;
         //http://hb.m.gitom.com/3.0/organization/updateOrgunit?organizationId=204&orgunitId=16&username=58200&name=WTO&cookie=5533098A-43F1-4AFC-8641-E64875461345
         UIAlertView *changeOrgNameAler = [[UIAlertView alloc]initWithTitle:@"修改部门名称" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
@@ -219,13 +220,19 @@
         [SVProgressHUD showErrorWithStatus:@"无该功能,期待下一版本"];
     }if (indexPath.row ==3) {
         NSLog(@"修改上传时间间隔");
-        [SVProgressHUD showErrorWithStatus:@"无该功能,期待下一版本"];
+        configType = 3;
+        UIAlertView *changeOrgNameAler = [[UIAlertView alloc]initWithTitle:@"间隔时长（1-30）分钟" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        changeOrgNameAler.alertViewStyle = UIAlertViewStylePlainTextInput;
+        [changeOrgNameAler show];
+        [changeOrgNameAler release];
     }if (indexPath.row == 4) {
         NSLog(@"编辑主管权限");
-        [SVProgressHUD showErrorWithStatus:@"无该功能,期待下一版本"];
+        RolePrivilegeVC *nv = [[RolePrivilegeVC alloc]init];
+        [self.navigationController pushViewController:nv animated:YES];
+        //[SVProgressHUD showErrorWithStatus:@"无该功能,期待下一版本"];
     }if (indexPath.row == 5) {
         NSLog(@"删除部门");
-        delectOrg = YES;
+        configType = 5;
         UIAlertView *changeOrgNameAler = [[UIAlertView alloc]initWithTitle:@"提示" message:@"确定要删除部门？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
         [changeOrgNameAler show];
         [changeOrgNameAler release];
@@ -239,7 +246,7 @@
     GetCommonDataModel;
     HBServerKit *hbKit = [[HBServerKit alloc]init];
     UITextField *tf = [[UITextField alloc]init];
-    if (delectOrg == YES) {
+    if (configType == 5) {
         nil;
     }else{
         //得到输入框
@@ -250,9 +257,20 @@
     switch (buttonIndex) {
         case 1:
         {
-            if (delectOrg == YES) {
+            if (configType == 5) {
                 [hbKit deleteOrgunitWithOrganizationId:comData.organization.organizationId andOrgunitId:comData.organization.orgunitId andUpdateUser:comData.userModel.username];
-            }else{
+            }else if (configType == 3){
+                if (tf.text.length > 0) {
+                    NSString *changeRoleUrlStr = [NSString stringWithFormat:@"http://hb.m.gitom.com/3.0/util/saveUploadLocationTime?organizationId=%ld&orgunitId=%ld&time==%@&updateUser=%@&cookie=%@",(long)comData.organization.organizationId,(long)comData.organization.orgunitId,orgNameString,comData.userModel.username,comData.cookie];
+                    NSLog(@"ManageDepartmentVC url = %@ ||ManageDepartmentVC UrlStr %@",changeRoleUrlStr,tf.text);
+                    NSURL *releaseUrl = [NSURL URLWithString:changeRoleUrlStr];
+                    NSURLRequest *req = [NSURLRequest requestWithURL:releaseUrl];
+                    [NSURLConnection sendAsynchronousRequest:req queue:nil completionHandler:nil];
+                }else{
+                    [SVProgressHUD showErrorWithStatus:@"时间间隔不能为空!"];
+                }
+            }
+            else{
                 if (tf.text.length > 0) {
                     NSString *changeRoleUrlStr = [NSString stringWithFormat:@"http://hb.m.gitom.com/3.0/organization/updateOrgunit?organizationId=%ld&orgunitId=%ld&username=%@&name=%@&cookie=%@",(long)comData.organization.organizationId,(long)comData.organization.orgunitId,comData.userModel.username,orgNameString,comData.cookie];
                     NSLog(@"ManageDepartmentVC url = %@ ||ManageDepartmentVC UrlStr %@",changeRoleUrlStr,tf.text);

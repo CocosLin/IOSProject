@@ -885,7 +885,25 @@
          }
      }];
 }
-
+//http://hb.m.gitom.com/3.0/userRole/saveRolePrivilege?organizationId=204&roleId=2&operations=7,12&updateUser=58200&cookie=5533098A-43F1-4AFC-8641-E64875461345
+#pragma mark -- 编辑主管权限
+- (void)saveRolePrivilegeWithOrganizationId:(NSInteger)organizationId
+                           andRoleId:(NSInteger)roleId
+                              andOperations:(NSString *)operations
+                          andUpdateUser:(NSString *)updateUser{
+    NSString *releaseUrlStr = [NSString stringWithFormat:@"http://hb.m.gitom.com/3.0/userRole/saveRolePrivilege?organizationId=%d&roleId=%d&operations=%@&updateUser=%@&cookie=%@",organizationId,roleId,operations,updateUser,_cookie];
+    NSLog(@"编辑主管权限 url == %@",releaseUrlStr);
+    NSURL *url = [NSURL URLWithString:releaseUrlStr];
+    ASIHTTPRequest *req = [[ASIHTTPRequest alloc]initWithURL:url];
+    [req setCompletionBlock:^{
+        [SVProgressHUD showSuccessWithStatus:@"编辑成功"];
+    }];
+    [req setFailedBlock:^{
+        [SVProgressHUD showErrorWithStatus:@"失败"];
+    }];
+    [req startAsynchronous];
+    [req release];
+}
 //http://hb.m.gitom.com/3.0/organization/deleteOrgunit?organizationId=000&orgunitId=000&updateUser=58200&cookie=5533098A-43F1-4AFC-8641-E64875461345
 #pragma mark -- 删除部门
 - (void)deleteOrgunitWithOrganizationId:(NSInteger)organizationId
