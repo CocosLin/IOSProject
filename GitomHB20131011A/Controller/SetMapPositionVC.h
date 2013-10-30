@@ -10,5 +10,6 @@
 #import "BMapKit.h"
 
 @interface SetMapPositionVC : VcWithNavBar<BMKMapViewDelegate>
-
+@property (nonatomic,retain) BMKMapView *mapVeiw;
+@property (nonatomic,copy) NSString *locStr;
 @end

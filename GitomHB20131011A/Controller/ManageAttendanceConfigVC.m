@@ -8,6 +8,8 @@
 
 #import "ManageAttendanceConfigVC.h"
 #import "SetMapPositionVC.h"
+#import "SVProgressHUD.h"
+#import "WTool.h"
 
 @interface ManageAttendanceConfigVC ()
 
@@ -23,9 +25,42 @@
     }
     return self;
 }
-- (void)saveAction{
-    NSLog(@"saveAction");
+
+- (void)viewWillAppear:(BOOL)animated{
+    [self.configTableView reloadData];
 }
+
+- (void)saveAction{
+    GetCommonDataModel;
+    GetGitomSingal;
+    /*
+    "{\"attenConfig\":{\"createDate\":1377490018000,\"createUserId\":\"18929556299\",\"distance\":500,\"inMinute\":30,\"latitude\":25.030596,\"longitude\":102.726292,\"organizationId\":114,\"orgunitId\":1,\"outMinute\":30,\"updateDate\":1382660940000,\"updateUserId\":\"65587\"},\"attenWorktime\":[{\"createDate\":1382660940000,\"createUserId\":\"65587\",\"offTime\":14400000,\"onTime\":1800000,\"ordinal\":1,\"organizationId\":114,\"orgunitId\":1,\"updateDate\":1382660940000,\"updateUserId\":\"65587\",\"voidFlag\":false},{\"createDate\":1382660940000,\"createUserId\":\"65587\",\"offTime\":36000000,\"onTime\":18000000,\"ordinal\":2,\"organizationId\":114,\"orgunitId\":1,\"updateDate\":1382660940000,\"updateUserId\":\"65587\",\"voidFlag\":false}]}"*/
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateStyle:NSDateFormatterMediumStyle];
+    //{\"createDate\":1382660940000,\"createUserId\":\"65587\",\"offTime\":14400000,\"onTime\":1800000,\"ordinal\":1,\"organizationId\":114,\"orgunitId\":1,\"updateDate\":1382660940000,\"updateUserId\":\"65587\",\"voidFlag\":false},
+    NSMutableDictionary *attenWorktime1 = [[NSMutableDictionary alloc]init];
+    
+    [formatter setTimeStyle:NSDateFormatterShortStyle];
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    NSDate *date = [formatter dateFromString:[NSDate date]];
+    NSLog(@"anDate == %@",date);
+    
+    long long int dateToSeconde = [WTool getEndDateTimeMsWithNSDate:date];
+    NSLog(@"ManageAttendanceConfigVC dateToSeconde %lld",dateToSeconde);
+    [attenWorktime1 setObject:[NSString stringWithFormat:@"%lld",dateToSeconde] forKey:@"createDate"];
+    [attenWorktime1 setObject:comData.userModel.username forKey:@"createUserId"];
+    [attenWorktime1 setObject:[NSString stringWithFormat:@"%f",singal.offTime1] forKey:@"offTime"];
+    [attenWorktime1 setObject:[NSString stringWithFormat:@"%f",singal.oneTime1] forKey:@"onTime"];
+    [attenWorktime1 setObject:@"1" forKey:@"ordinal"];
+    [attenWorktime1 setObject:[NSString stringWithFormat:@"%d",comData.organization.organizationId] forKey:@"organizationId"];
+    [attenWorktime1 setObject:[NSString stringWithFormat:@"%d",comData.organization.orgunitId] forKey:@"orgunitId"];
+    [attenWorktime1 setObject:[NSString stringWithFormat:@"%lld",dateToSeconde] forKey:@"updateDate"];
+    [attenWorktime1 setObject:comData.userModel.username forKey:@"updateUserId"];
+    [attenWorktime1 setValue:false forKey:@"voidFlag"];
+    
+    NSLog(@"attenWorktime1 == %@",attenWorktime1);
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -99,6 +134,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    GetGitomSingal;
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
@@ -107,19 +143,19 @@
     }
     switch (indexPath.section) {
         case 0:
-            cell.textLabel.text = self.location;
+            cell.textLabel.text = [NSString stringWithFormat:@"位置：%f，%f",singal.latitude,singal.longitude];
             break;
         case 1:
             
             switch (indexPath.row) {
                 case 0:
-                    cell.textLabel.text = self.time1;
+                    cell.textLabel.text = [NSString stringWithFormat:@"时间段1：%@-%@",[WTool getStrDateTimeWithDateTimeMS:singal.oneTime1 DateTimeStyle:@"HH:mm:ss"],[WTool getStrDateTimeWithDateTimeMS:singal.offTime1 DateTimeStyle:@"HH:mm:ss"]];
                     break;
                 case 1:
-                    cell.textLabel.text = self.time2;
+                    cell.textLabel.text = [NSString stringWithFormat:@"时间段2：%@-%@",[WTool getStrDateTimeWithDateTimeMS:singal.oneTime2 DateTimeStyle:@"HH:mm:ss"],[WTool getStrDateTimeWithDateTimeMS:singal.offTime2 DateTimeStyle:@"HH:mm:ss"]];
                     break;
                 case 2:
-                    cell.textLabel.text = self.time3;
+                    cell.textLabel.text = [NSString stringWithFormat:@"时间段3：%@-%@",[WTool getStrDateTimeWithDateTimeMS:singal.oneTime3 DateTimeStyle:@"HH:mm:ss"],[WTool getStrDateTimeWithDateTimeMS:singal.offTime3 DateTimeStyle:@"HH:mm:ss"]];
                     break;
                 default:
                     break;
@@ -127,14 +163,13 @@
             break;
         case 2:
             if (indexPath.row == 0) {
-                cell.textLabel.text = self.inMinute;
+                cell.textLabel.text = [NSString stringWithFormat:@"上班前：%@",singal.inMinute];
             }else{
-                cell.textLabel.text = self.outMinute;
+                cell.textLabel.text = [NSString stringWithFormat:@"下班前：%@",singal.outMinute];
             }
-            
             break;
         case 3:
-            cell.textLabel.text = self.distance;
+            cell.textLabel.text = [NSString stringWithFormat:@"距离：%@",singal.distance];
             break;
         default:
             break;
@@ -205,22 +240,11 @@
 #pragma mark - Table view delegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    
-    //ShowStaffInfomationVC *detailViewController = [[ShowStaffInfomationVC alloc] initWithNibName:@"ShowStaffInfomationVC" bundle:nil];
-    // ...
-    // Pass the selected object to the new view controller.
-//    MemberOrgModel *memberIfo = [[MemberOrgModel alloc]init];
-//    memberIfo = [self.orgArray objectAtIndex:indexPath.row];
-//    NSLog(@"self.orgArray = %@",memberIfo.photoUrl);
-//    detailViewController.memberIfo = [self.orgArray objectAtIndex:indexPath.row];
-//    detailViewController.unitName = self.unitName;
-//    [self.navigationController pushViewController:detailViewController animated:YES];
-//    [detailViewController release];
-    switch (indexPath.section) {
+        switch (indexPath.section) {
         case 0:
             NSLog(@"%d",indexPath.section);
             SetMapPositionVC *setVC = [[SetMapPositionVC alloc]init];
+            setVC.locStr = self.location;
             [self.navigationController pushViewController:setVC animated:YES];
             [setVC release];
             break;
@@ -229,9 +253,58 @@
             break;
         case 2:
             NSLog(@"%d",indexPath.section);
+                if (indexPath.row ==0) {
+                    configType = 1;
+                    UIAlertView *changeOrgNameAler = [[UIAlertView alloc]initWithTitle:@"上班前" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定",@"取消", nil];
+                    changeOrgNameAler.alertViewStyle = UIAlertViewStylePlainTextInput;
+                    [changeOrgNameAler show];
+                    [changeOrgNameAler release];
+                }else{
+                    configType = 2;
+                    UIAlertView *changeOrgNameAler = [[UIAlertView alloc]initWithTitle:@"下班前" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定",@"取消", nil];
+                    changeOrgNameAler.alertViewStyle = UIAlertViewStylePlainTextInput;
+                    [changeOrgNameAler show];
+                    [changeOrgNameAler release];
+                }
             break;
         case 3:
-            NSLog(@"%d",indexPath.section);
+                configType = 3;
+                UIAlertView *changeOrgNameAler = [[UIAlertView alloc]initWithTitle:@"有效打卡距离" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定",@"取消", nil];
+                changeOrgNameAler.alertViewStyle = UIAlertViewStylePlainTextInput;
+                [changeOrgNameAler show];
+                [changeOrgNameAler release];
+            break;
+        default:
+            break;
+    }
+}
+
+#pragma mark - UIAlerView代理方法
+- (void)alertView : (UIAlertView*)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    GetGitomSingal;
+    UITextField *tf = [[UITextField alloc]init];
+    //得到输入框
+    tf=[alertView textFieldAtIndex:0];
+    
+    NSString * orgNameString = (NSString *)CFURLCreateStringByAddingPercentEscapes( kCFAllocatorDefault, (CFStringRef)tf.text, NULL, NULL,  kCFStringEncodingUTF8 );
+    switch (buttonIndex) {
+        case 0:
+        {
+            if (tf.text.length>0) {
+                if (configType == 1) {
+                    singal.inMinute = orgNameString;
+                }else if (configType == 2){
+                    singal.outMinute = orgNameString;
+                }else{
+                    singal.distance = orgNameString;
+                }
+                [self viewWillAppear:YES];
+            }else{
+                [SVProgressHUD showErrorWithStatus:@"设置不能为空！"];
+            }
+            
+        }
             break;
         default:
             break;

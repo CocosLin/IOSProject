@@ -10,6 +10,9 @@
 #import <AVFoundation/AVFoundation.h>
 #include "lame.h"
 #import "WCommonMacroDefine.h"
+#import "HBServerKit.h"
+#import "ReportVC.h"
+#import "GitomSingal.h"
 
 typedef NS_ENUM(NSInteger, Tag_MakeAudioVC) {
     TAG_BtnStartAudio = 101,
@@ -33,7 +36,8 @@ static int num_mp3;
 @end
 
 @implementation MakeAudioVC
-
+static double startRecordTime=0;
+static double endRecordTime=0;
 
 #pragma mark - 生命周期
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -65,9 +69,54 @@ static int num_mp3;
     return self;
 }
 
+/*
+#pragma mark -- 获得服务器存放声音路径
+- (void)sendSoundFileToServe{
+    NSLog(@"获得服务器存放声音路径");
+    NSString *soundPath = [NSString stringWithFormat:@"%@",[[NSTemporaryDirectory() stringByAppendingPathComponent:@"coverToAMR"]stringByAppendingPathExtension:@"amr"]];
+    HBServerKit *hbKit = [[HBServerKit alloc]init];
+    [hbKit saveSoundReportsOfMembersWithData:soundPath GotArrReports:^(NSArray *arrDicReports, WError *myError) {
+        NSLog(@"arrDicReports == %@",arrDicReports);
+        NSString *group = [[[NSString alloc]init]autorelease];
+        NSString *filename = [[[NSString alloc]init]autorelease];
+        NSString *server = [[[NSString alloc]init]autorelease];
+        group = [[arrDicReports objectAtIndex:0]objectForKey:@"group"];
+        filename = [[arrDicReports objectAtIndex:0]objectForKey:@"filename"];
+        server = [[arrDicReports objectAtIndex:0]objectForKey:@"server"];
+        
+        NSLog(@"server soundgeUrl == %@",[NSString stringWithFormat:@"http://%@/%@/%@",server,group,filename]);
+        NSString *urlOfSound = [NSString stringWithFormat:@"http://%@/%@/%@",server,group,filename];
+        //\"soundUrl\":\"{\\\"soundUrl\\\":[{\\\"id\\\":\\\"\\\",\\\"url\\\":\\\"http:\\\\/\\\\/imgcdn1.gitom.com\\\\/group1\\\\/M00\\\\/01\\\\/D2\\\\/OzkPqFJotsuAR8XkAAAaQGPB3Uo279.amr\\\"}]}
+        //\"imageUrl\":\"{\\\"imageUrl\\\":[{\\\"id\\\":\\\"\\\",\\\"thumb\\\":\\\"http:\\\\/\\\\/imgcdn1.gitom.com\\\\/group1\\\\/M00\\\\/01\\\\/D2\\\\/OzkPqFJotsuAZ0fRAAAJOerCkhQ453.jpg\\\",\\\"url\\\":\\\"http:\\\\/\\\\/imgcdn1.gitom.com\\\\/group1\\\\/M00\\\\/01\\\\/D2\\\\/OzkPqFJotsuAQtHMAATkKcDlssg600.jpg\\\"}]}\"
+        NSMutableDictionary *dic1 = [[NSMutableDictionary alloc]init];
+        [dic1 setObject:@" " forKey:@"id"];
+        [dic1 setObject:urlOfSound forKey:@"url"];
+        
+        NSArray *imgArr = [NSArray arrayWithObject:dic1];
+        
+        NSMutableDictionary *soundDic = [[NSMutableDictionary alloc]init];
+        [soundDic setObject:imgArr forKey:@"soundUrl"];
+        
+        
+        NSLog(@"soundDic == %@",soundDic);
+        
+        //self.imgUrlStr = imgDic;
+        
+        NSData *getData = [NSJSONSerialization dataWithJSONObject:soundDic
+                                                          options:kNilOptions
+                                                            error:nil];
+        NSString *getStr = [[NSString alloc]initWithData:getData encoding:NSUTF8StringEncoding];
+        NSLog(@"MakeAudioVC getStr == %@",getStr);
+        ReportVC *reportVC = [[ReportVC alloc]init];
+        reportVC.soundUrlStr = getStr;
+    }];
+}
+*/
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    recordAudio = [[RecordAudio alloc]init];
+    recordAudio.delegate = self;
 	//导航条设置
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(0, 0, 50, 44);
@@ -116,8 +165,8 @@ static int num_mp3;
     
     UIButton * btnEndMakeAudio = [UIButton buttonWithType:UIButtonTypeCustom];
     [btnEndMakeAudio setTag:TAG_BtnEndAudio];
-    [btnEndMakeAudio setFrame:CGRectMake(20,Height_Screen - 100, 100, 40)];
-    [btnEndMakeAudio setTitle:@"停止录音" forState:UIControlStateNormal];
+    [btnEndMakeAudio setFrame:CGRectMake(Screen_Width-120,Height_Screen - 100, 100, 40)];
+    [btnEndMakeAudio setTitle:@"完成录音" forState:UIControlStateNormal];
     [btnEndMakeAudio setBackgroundImage:[[UIImage imageNamed:@"commit_btn_normal"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
     [btnEndMakeAudio setBackgroundImage:[[UIImage imageNamed:@"commit_btn_highlighted"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateHighlighted];
     [btnEndMakeAudio addTarget:self action:@selector(btnAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -128,6 +177,46 @@ static int num_mp3;
     swip.direction = UISwipeGestureRecognizerDirectionRight;
     [self.view addGestureRecognizer:swip];
     [swip release];
+}
+
+-(void) startRecord {
+    [recordAudio stopPlay];
+    [recordAudio startRecord];
+    startRecordTime = [NSDate timeIntervalSinceReferenceDate];
+    
+    [curAudio release],curAudio=nil;
+}
+-(void)stopRecord {
+    endRecordTime = [NSDate timeIntervalSinceReferenceDate];
+    
+    NSURL *url = [recordAudio stopRecord];
+    
+    endRecordTime -= startRecordTime;
+    if (endRecordTime<2.00f) {
+        NSLog(@"录音时间过短");
+        return;
+    } else if (endRecordTime>30.00f){
+        NSLog(@"录音时间过长,应小于30秒");
+        return;
+    }
+    
+    
+    if (url != nil) {
+        curAudio = EncodeWAVEToAMR([NSData dataWithContentsOfURL:url],1,16);
+        
+//        [soundPath release];
+        if (curAudio) {
+            [curAudio retain];
+        }
+    }
+    NSString *soundPath = [[NSTemporaryDirectory() stringByAppendingPathComponent:@"coverToAMR"]stringByAppendingPathExtension:@"amr"];
+        NSLog(@"wav to amr path = %@",soundPath);
+        [curAudio writeToFile:soundPath atomically:NO];
+    if (curAudio.length >0) {
+        
+    } else {
+        
+    }
 }
 
 #pragma mark - 用户事件
@@ -143,7 +232,8 @@ static int num_mp3;
         [btn setHidden:YES];
         UIButton * btnEnd = (UIButton *)[self.view viewWithTag:TAG_BtnEndAudio];
         [btnEnd setHidden:NO];
-        
+        [self startRecord];
+        /*
         NSDictionary * settings = [NSDictionary dictionaryWithObjectsAndKeys:
                                   [NSNumber numberWithFloat:sampleRate],
                                   AVSampleRateKey,
@@ -158,29 +248,43 @@ static int num_mp3;
         NSError *error;
         recorder = [[AVAudioRecorder alloc] initWithURL:recordFile settings:settings error:&error];
         error ? NULL : (NSLog(@"Error: %@",[error description]));
-        [recorder prepareToRecord];
+        recorder.delegate = self;
         recorder.meteringEnabled = YES;
+        [recorder prepareToRecord];
+        [[AVAudioSession sharedInstance]setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+        [[AVAudioSession sharedInstance]setActive:YES error:nil];
         [recorder record];
-        
+        */
         secTimer = [NSTimer scheduledTimerWithTimeInterval:.01f target:self selector:@selector(timerUpdate) userInfo:nil repeats:YES];
         
         timer = [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(recordTimer) userInfo:nil repeats:YES];
         num = 3;
         
+        
     }
     else if (btn.tag == TAG_BtnEndAudio)
     {
+        
+        
+        /*
         NSLog(@"停止录音");
         [btn setHidden:YES];
         UIButton * btnStart = (UIButton *)[self.view viewWithTag:TAG_BtnStartAudio];
         [btnStart setHidden:NO];
         NSLog(@"停止录音");
+         */
+        
         [timer invalidate];
         [secTimer invalidate];
         timer = nil;
         secTimer = nil;
         
-        if (recorder != nil)
+        [self stopRecord];
+        GitomSingal *singal = [GitomSingal getInstance];
+        singal.recordedSound = YES;
+        //[self sendSoundFileToServe];
+        [self.navigationController popViewControllerAnimated:YES];
+        /*if (recorder != nil)
         {
             NSLog(@"录音不存在");
         }
@@ -188,7 +292,7 @@ static int num_mp3;
         [recorder release];
         //[self encodingClick];
         [self toMP3];
-        
+        */
     }
 }
 //- (void)encodingClick

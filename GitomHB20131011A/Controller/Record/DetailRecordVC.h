@@ -8,12 +8,15 @@
 
 #import "VcWithNavBar.h"
 #import "ReportModel.h"
-@interface DetailRecordVC : VcWithNavBar<UITableViewDataSource,UITableViewDelegate>
+#import <AVFoundation/AVFoundation.h>
+
+@interface DetailRecordVC : VcWithNavBar<UITableViewDataSource,UITableViewDelegate,AVAudioPlayerDelegate>
 @property(copy,nonatomic)NSString * username;
 @property(nonatomic,copy)NSString * realname;
 @property(nonatomic,copy)NSString * phone;
 @property (nonatomic,retain) UIImage *attenceImge;
 @property (nonatomic,retain) UIView *background;
 @property(retain,nonatomic)ReportModel * reportModel;
+@property(nonatomic,copy) NSString *soundStirng;
 
 @end

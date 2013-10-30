@@ -8,7 +8,9 @@
 
 #import "VcWithNavBar.h"
 
-@interface ManageAttendanceConfigVC : VcWithNavBar<UITableViewDataSource,UITableViewDelegate>
+@interface ManageAttendanceConfigVC : VcWithNavBar<UITableViewDataSource,UITableViewDelegate>{
+    int configType;
+}
 @property (retain, nonatomic) UITableView *configTableView;
 @property (nonatomic,retain) NSArray *orgArray;
 @property (nonatomic, copy) NSString *location,*outMinute,*inMinute,*distance,*time1,*time2,*time3;

@@ -13,6 +13,7 @@
 #import "ASIHTTPRequest.h"
 #import "HBServerKit.h"
 #import "SVProgressHUD.h"
+#import "RecordAudio.h"
 
 #define BIG_IMG_WIDTH  200.0
 #define BIG_IMG_HEIGHT 200.0
@@ -45,11 +46,36 @@
     [self.background removeFromSuperview];
     //[self.background removeFromSuperview];
 }
+#pragma mark -- 播放声音
+- (void)showSound{
+    NSLog(@"播放声音");
+    NSURL *url = [NSURL URLWithString:self.soundStirng];
+    ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:url];
+    [req setCompletionBlock:^{
+        NSData *getSound = DecodeAMRToWAVE([req responseData]);
+        AVAudioPlayer *player = [[AVAudioPlayer alloc]initWithData:getSound error:nil];
+        player.delegate = self;
+        [player play];
+    }];
+    [req startAsynchronous];
+}
+
+- (void)showPhoto{
+    UIButton *getAbutton = (UIButton *)[self.view viewWithTag:1001];
+    [_tvbRecordDetail addSubview:getAbutton];
+    [UIView animateWithDuration:1.0 animations:^{
+        getAbutton.frame = CGRectMake(0, 0, 300, 0);
+        getAbutton.frame = CGRectMake(0, 0, 300, 300);
+    }];
+    [getAbutton addTarget:self action:@selector(printWord) forControlEvents:UIControlEventTouchUpInside];
+}
 
 #pragma mark -- 放大图片
 - (void)showBigPicture{
+    
     NSLog(@"放大图片");
     //创建灰色透明背景，使其背后内容不可操作
+    
     self.background = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 548)];
     [self.background setBackgroundColor:[UIColor colorWithRed:0.3
                                                         green:0.3
@@ -188,11 +214,12 @@
             NSURL *url = [NSURL URLWithString:imgString];
             ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:url];
             [req setCompletionBlock:^{
-                NSLog(@"图片");
-                imgButton.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageWithData:[req responseData]]];
-                [imgButton addTarget:self action:@selector(showBigPicture) forControlEvents:UIControlEventTouchUpInside];
-                self.attenceImge = [UIImage imageWithData:[req responseData]];
-                [imgButton setBackgroundImage:[[UIImage imageWithData:[req responseData]]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
+                [imgButton setBackgroundImage:[UIImage imageWithData:[req responseData]] forState:UIControlStateNormal];
+                imgButton.tag = 1001;
+                //UIImage *getImg = [[[UIImage alloc]initWithData:[req responseData] scale:0.3]autorelease];
+                //self.attenceImge = getImg;
+                //[imgButton addTarget:self action:@selector(showBigPicture) forControlEvents:UIControlEventTouchUpInside];
+                [imgButton addTarget:self action:@selector(showPhoto) forControlEvents:UIControlEventTouchUpInside];
             }];
             [req startAsynchronous];
         }else{
@@ -206,30 +233,23 @@
         [myCell addSubview:imgButton];
         [hbKit release];
     }else if(indexPath.row ==7){
-//        HBServerKit *hbKit = [[HBServerKit alloc]init];
-//        NSLog(@"soundUrl == %@ ,%@",self.reportModel.soundUrl,[hbKit getSoundStringWith:self.reportModel.soundUrl]);
-//        NSString *soundStirng = [hbKit getSoundStringWith:self.reportModel.soundUrl];
-//        UIButton *soundButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//        soundButton.frame = CGRectMake(60, 2, 45, 40);
-//        if (soundStirng != nil) {
-//            NSURL *url = [NSURL URLWithString:soundStirng];
-//            ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:url];
-//            [req setCompletionBlock:^{
-//                NSLog(@"声音文件存在");
-//                soundButton.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageWithData:[req responseData]]];
-//                [soundButton addTarget:self action:@selector(showSound) forControlEvents:UIControlEventTouchUpInside];
-//                self.attenceImge = [UIImage imageWithData:[req responseData]];
-//                [soundButton setBackgroundImage:[UIImage imageNamed:@"111_19.png"] forState:UIControlStateNormal];
-//            }];
-//            [req startAsynchronous];
-//        }else{
-//            [soundButton setBackgroundImage:[[UIImage imageNamed:@"list_08.png"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
-//            [soundButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-//            [soundButton setTitle:@"无" forState:UIControlStateNormal];
-//        }
-//        [myCell addSubview:soundButton];
-//        [hbKit release];
-//        [soundButton release];
+        HBServerKit *hbKit = [[HBServerKit alloc]init];
+        NSLog(@"soundUrl == %@ ,%@",self.reportModel.soundUrl,[hbKit getSoundStringWith:self.reportModel.soundUrl]);
+        self.soundStirng = [hbKit getSoundStringWith:self.reportModel.soundUrl];
+        UIButton *soundButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        soundButton.frame = CGRectMake(60, 2, 45, 40);
+        if (self.soundStirng != nil) {
+            NSLog(@"声音文件存在");
+            [soundButton addTarget:self action:@selector(showSound) forControlEvents:UIControlEventTouchUpInside];
+            [soundButton setBackgroundImage:[UIImage imageNamed:@"111_19.png"] forState:UIControlStateNormal];
+        }else{
+            NSLog(@"sound nil");
+            [soundButton setBackgroundImage:[[UIImage imageNamed:@"list_08.png"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
+            [soundButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            [soundButton setTitle:@"无" forState:UIControlStateNormal];
+        }
+        [myCell addSubview:soundButton];
+        [hbKit release];
     }
     
     

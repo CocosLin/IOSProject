@@ -12,7 +12,7 @@
 #import "WTool.h"
 #import "UserManager.h"
 #import "ASIHTTPRequest.h"
-
+#import "RecordAudio.h"
 #define BIG_IMG_WIDTH  200.0
 #define BIG_IMG_HEIGHT 200.0
 
@@ -45,6 +45,19 @@
     //[self.background removeFromSuperview];
 }
 
+#pragma mark -- 播放声音
+- (void)showSound{
+    NSLog(@"播放声音");
+    NSURL *url = [NSURL URLWithString:self.soundStirng];
+    ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:url];
+    [req setCompletionBlock:^{
+        NSData *getSound = DecodeAMRToWAVE([req responseData]);
+        AVAudioPlayer *player = [[AVAudioPlayer alloc]initWithData:getSound error:nil];
+        player.delegate = self;
+        [player play];
+    }];
+    [req startAsynchronous];
+}
 #pragma mark -- 放大图片
 - (void)showBigPicture{
     NSLog(@"放大图片");
@@ -96,13 +109,6 @@
     [UIView commitAnimations];
 }
 
-- (void)showSound{
-    NSLog(@"播放声音");
-    NSError *error = nil;
-    AVAudioPlayer * soundPlayer = [[AVAudioPlayer alloc]initWithContentsOfURL:[NSURL URLWithString:@"http://imgcdn1.gitom.com/group1/M00/01/C0/OzkPqFJg8QaABuU-AAApAI7THEM724.amr"] error:&error];
-    soundPlayer.delegate = self;
-    [soundPlayer play];
-}
 
 #pragma mark - 表格视图代理方法
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -212,30 +218,23 @@
         [hbKit release];
         
     }else if(indexPath.row ==7){
-//        HBServerKit *hbKit = [[HBServerKit alloc]init];
-//        NSLog(@"soundUrl == %@ ,%@",self.reportModel.soundUrl,[hbKit getSoundStringWith:self.reportModel.soundUrl]);
-//        NSString *soundStirng = [hbKit getSoundStringWith:self.reportModel.soundUrl];
-//        UIButton *soundButton = [UIButton buttonWithType:UIButtonTypeCustom];
-//        soundButton.frame = CGRectMake(60, 2, 45, 40);
-//        if (soundStirng != nil) {
-//            NSURL *url = [NSURL URLWithString:soundStirng];
-//            ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:url];
-//            [req setCompletionBlock:^{
-//                NSLog(@"声音文件存在");
-//                soundButton.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageWithData:[req responseData]]];
-//                [soundButton addTarget:self action:@selector(showSound) forControlEvents:UIControlEventTouchUpInside];
-//                self.attenceImge = [UIImage imageWithData:[req responseData]];
-//                [soundButton setBackgroundImage:[UIImage imageNamed:@"111_19.png"] forState:UIControlStateNormal];
-//            }];
-//            [req startAsynchronous];
-//        }else{
-//            [soundButton setBackgroundImage:[[UIImage imageNamed:@"list_08.png"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
-//            [soundButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-//            [soundButton setTitle:@"无" forState:UIControlStateNormal];
-//        }
-//        [myCell addSubview:soundButton];
-//        [hbKit release];
-//        [soundButton release];
+        HBServerKit *hbKit = [[HBServerKit alloc]init];
+        NSLog(@"soundUrl == %@ ,%@",self.reportModel.soundUrl,[hbKit getSoundStringWith:self.reportModel.soundUrl]);
+        self.soundStirng = [hbKit getSoundStringWith:self.reportModel.soundUrl];
+        UIButton *soundButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        soundButton.frame = CGRectMake(60, 2, 45, 40);
+        if (self.soundStirng != nil) {
+            NSLog(@"声音文件存在");
+            [soundButton addTarget:self action:@selector(showSound) forControlEvents:UIControlEventTouchUpInside];
+            [soundButton setBackgroundImage:[UIImage imageNamed:@"111_19.png"] forState:UIControlStateNormal];
+        }else{
+            NSLog(@"sound nil");
+            [soundButton setBackgroundImage:[[UIImage imageNamed:@"list_08.png"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
+            [soundButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            [soundButton setTitle:@"无" forState:UIControlStateNormal];
+        }
+        [myCell addSubview:soundButton];
+        [hbKit release];
     }
               
     

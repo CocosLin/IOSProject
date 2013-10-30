@@ -9,6 +9,8 @@
 #import "VcWithNavBar.h"
 #import "BMKMapView.h"
 #import "ReportManager.h"
+//#import "ChatVoiceRecorderVC.h"
+
 @interface ReportVC : VcWithNavBar
 <UITableViewDataSource,UITableViewDelegate,UITextViewDelegate,BMKMapViewDelegate,BMKSearchDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
@@ -18,5 +20,6 @@
 @property(nonatomic,assign)double longitude;   // 经度
 @property(nonatomic,assign)double latitude;    // 纬度
 @property(nonatomic,copy)NSString * myAddress;//当前地址信息
-@property(nonatomic,copy) NSString *imgUrlStr;
+@property(nonatomic,copy) NSString *imgUrlStr;//服务器图片路径
+@property(nonatomic,copy) NSString *soundUrlStr;//服务器声音路径
 @end

@@ -20,6 +20,5 @@
 @property (nonatomic,retain) NSData * soundData;//汇报时上传的声音
 @property (nonatomic,retain) UIView * background;
 @property (retain,nonatomic) ReportModel * reportModel;
-
-//@property (nonatomic,retain) AVAudioPlayer * soundPlayer;
+@property(nonatomic,copy) NSString *soundStirng;
 @end

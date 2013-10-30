@@ -63,6 +63,7 @@
     
     //内容
     UITextView *contentText = [[UITextView alloc]initWithFrame:CGRectMake(10, 100, Screen_Width-20, 200)];
+    contentText.editable = NO;
     contentText.font = [UIFont systemFontOfSize:18];
     contentText.layer.cornerRadius = 5;
     if (self.content != NULL) {

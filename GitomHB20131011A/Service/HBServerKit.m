@@ -718,6 +718,50 @@
     [req startAsynchronous];
 }
 
+#pragma mark -- 保存上传声音
+-(void)saveSoundReportsOfMembersWithData:(NSString *)soundData
+                           GotArrReports:(WbReportJsonArr)callback{
+    NSString *urlString = [NSString stringWithFormat:@"http://hb.m.gitom.com/3.0/util/fileUpload?cookie=%@",_cookie];
+    ASIFormDataRequest* request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:urlString]];
+    
+    [request addFile:soundData forKey:@"file"];
+    [request startSynchronous];
+    //[request setCompletionBlock:^{
+        
+        NSLog(@"%@",request.responseString);
+        NSData *dataResponse = [request responseData];
+        
+        WDataParse *wdp = [WDataParse sharedWDataParse];
+        [self getIsServerNoErrorWithHead:[self getHeadWithDataResponse:dataResponse]];//检查服务器是否没有异常，如果有，就打印
+        NSLog(@"HBServerKit 从服务端获得的完整json格式数据 保存上传声音== %@",[[NSString alloc]initWithData:dataResponse encoding:NSUTF8StringEncoding]);
+        Body * body = [self getBodyWithDataResponse:dataResponse];
+        NSLog(@"HBServerKit 完整数据之中取得body 保存上传声音 %@",body);
+        NSLog(@"body.success == %c",body.success);
+        if (body.success)//如果查汇报成功
+        {
+            NSArray * arrReportsGot = [wdp wGetArrJsonWithStringJson:body.data];
+            NSLog(@"HBServerKit 从body取得data 保存上传声音 == %@",arrReportsGot);
+            callback(arrReportsGot,nil);
+        }else//如果查汇报不成功
+        {
+            WError * error = [[WError alloc]initWithWErrorType:WErrorType_Logic wErrorDescription:body.warning];
+            Mark_Custom;
+            NSLog(@"保存上传声音 ERROR == %@",error.wErrorDescription);
+            callback(nil,error);
+            [error release];
+        }
+        
+   // }];
+    
+    //[request setFailedBlock:^{
+        
+     //   NSLog(@"asi error: %@",request.error.debugDescription);
+        
+   // }];
+    
+    //[request startAsynchronous];
+    
+}
 
 #pragma mark -- 保存上传图片
 -(void)saveImageReportsOfMembersWithData:(NSString *)imgData
@@ -797,7 +841,12 @@
         
     }
     [dicParams setObject:imgUrl forKey:@"imgUrl"];
-    if (!soundUrl) soundUrl = @"{\"soundUrl\":[]}";
+    if (!soundUrl) {
+        NSLog(@"soundUrl nil");
+        soundUrl = @"{\"soundUrl\":[]}";
+    }else{
+        NSLog(@"HBServerKit soundUrl%@",soundUrl);
+    }
     [dicParams setObject:soundUrl forKey:@"soundUrl"];
     [dicParams setObject:[NSNumber numberWithDouble:longitude] forKey:@"longitude"];
     [dicParams setObject:[NSNumber numberWithDouble:latitude] forKey:@"latitude"];

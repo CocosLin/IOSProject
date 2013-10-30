@@ -162,9 +162,8 @@
     if (indexPath.row == 0) {
         NSLog(@"修改部门名称");
         configType = 0;
-        GetCommonDataModel;
         //http://hb.m.gitom.com/3.0/organization/updateOrgunit?organizationId=204&orgunitId=16&username=58200&name=WTO&cookie=5533098A-43F1-4AFC-8641-E64875461345
-        UIAlertView *changeOrgNameAler = [[UIAlertView alloc]initWithTitle:@"修改部门名称" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        UIAlertView *changeOrgNameAler = [[UIAlertView alloc]initWithTitle:@"修改部门名称" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定",@"取消", nil];
         changeOrgNameAler.alertViewStyle = UIAlertViewStylePlainTextInput;
         UITextField *nameText = [changeOrgNameAler textFieldAtIndex:0];
         nameText.placeholder = comData.userModel.unitName;
@@ -174,54 +173,16 @@
         [changeOrgNameAler release];
     }if (indexPath.row ==1) {
         NSLog(@"修改考勤配置");
-        [SVProgressHUD showWithStatus:@"加载考勤配置"];
-        
-        [hbKit getAttendanceConfigWithOrganizationId:comData.organization.organizationId orgunitId:comData.organization.orgunitId GotDicReports:^(NSDictionary *dicAttenConfig) {
-            
-            NSString * offTimeStr1 = [[[dicAttenConfig objectForKey:@"attenWorktime"]objectAtIndex:0]objectForKey:@"offTime"];
-            NSString * onTimeStr1 = [[[dicAttenConfig objectForKey:@"attenWorktime"]objectAtIndex:0]objectForKey:@"onTime"];
-            NSString * offTimeStr2 = [[[dicAttenConfig objectForKey:@"attenWorktime"]objectAtIndex:1]objectForKey:@"offTime"];
-            NSString * onTimeStr2 = [[[dicAttenConfig objectForKey:@"attenWorktime"]objectAtIndex:1]objectForKey:@"onTime"];
-            NSArray *countAr = [dicAttenConfig objectForKey:@"attenWorktime"];
-            
-            
-            [WTool getStrDateTimeWithDateTimeMS:[offTimeStr1 longLongValue] DateTimeStyle:@"HH:mm:ss"];
-            [WTool getStrDateTimeWithDateTimeMS:[onTimeStr1 longLongValue] DateTimeStyle:@"HH:mm:ss"];
-            [WTool getStrDateTimeWithDateTimeMS:[offTimeStr2 longLongValue] DateTimeStyle:@"HH:mm:ss"];
-            [WTool getStrDateTimeWithDateTimeMS:[onTimeStr2 longLongValue] DateTimeStyle:@"HH:mm:ss"];
-            
-            ManageAttendanceConfigVC *manageVC = [[ManageAttendanceConfigVC alloc]init];
-            
-            manageVC.location = [NSString stringWithFormat:@"位置：%@，%@",[[dicAttenConfig objectForKey:@"attenConfig"]objectForKey:@"longitude"],[[dicAttenConfig objectForKey:@"attenConfig"]objectForKey:@"latitude"]];
-            
-            manageVC.inMinute = [NSString stringWithFormat:@"上班前：%@",[[dicAttenConfig objectForKey:@"attenConfig"]objectForKey:@"inMinute"]];
-            manageVC.outMinute = [NSString stringWithFormat:@"下班前：%@",[[dicAttenConfig objectForKey:@"attenConfig"]objectForKey:@"outMinute"]];
-            
-            manageVC.distance = [NSString stringWithFormat:@"距离：%@",[[dicAttenConfig objectForKey:@"attenConfig"]objectForKey:@"distance"]];
-            
-            manageVC.time1 = [NSString stringWithFormat:@"时间段1： %@-%@",[WTool getStrDateTimeWithDateTimeMS:[onTimeStr1 longLongValue] DateTimeStyle:@"HH:mm:ss"],[WTool getStrDateTimeWithDateTimeMS:[offTimeStr1 longLongValue] DateTimeStyle:@"HH:mm:ss"]];
-            manageVC.time2 = [NSString stringWithFormat:@"时间段2： %@-%@",[WTool getStrDateTimeWithDateTimeMS:[onTimeStr2 longLongValue] DateTimeStyle:@"HH:mm:ss"],[WTool getStrDateTimeWithDateTimeMS:[offTimeStr2 longLongValue] DateTimeStyle:@"HH:mm:ss"]];
-            if (countAr.count>2) {
-                NSString * offTimeStr3 = [[[dicAttenConfig objectForKey:@"attenWorktime"]objectAtIndex:2]objectForKey:@"offTime"];
-                NSString * onTimeStr3 = [[[dicAttenConfig objectForKey:@"attenWorktime"]objectAtIndex:2]objectForKey:@"onTime"];
-                manageVC.time3 = [NSString stringWithFormat:@"时间段3： %@-%@",[WTool getStrDateTimeWithDateTimeMS:[onTimeStr3 longLongValue] DateTimeStyle:@"HH:mm:ss"],[WTool getStrDateTimeWithDateTimeMS:[offTimeStr3 longLongValue] DateTimeStyle:@"HH:mm:ss"]];
-            }else{
-                manageVC.time3 = @"--";
-            }
-            
-            [SVProgressHUD showSuccessWithStatus:@"加载成功"];
-            [self.navigationController pushViewController:manageVC animated:YES];
-            [manageVC release];
-            
-        }];
-        
+        ManageAttendanceConfigVC *manageVC = [[ManageAttendanceConfigVC alloc]init];
+        [self.navigationController pushViewController:manageVC animated:YES];
+        [manageVC release];
     }if (indexPath.row == 2) {
         NSLog(@"修改验证方式");
         [SVProgressHUD showErrorWithStatus:@"无该功能,期待下一版本"];
     }if (indexPath.row ==3) {
         NSLog(@"修改上传时间间隔");
         configType = 3;
-        UIAlertView *changeOrgNameAler = [[UIAlertView alloc]initWithTitle:@"间隔时长（1-30）分钟" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        UIAlertView *changeOrgNameAler = [[UIAlertView alloc]initWithTitle:@"间隔时长（1-30）分钟" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定",@"取消", nil];
         changeOrgNameAler.alertViewStyle = UIAlertViewStylePlainTextInput;
         [changeOrgNameAler show];
         [changeOrgNameAler release];
@@ -229,17 +190,18 @@
         NSLog(@"编辑主管权限");
         RolePrivilegeVC *nv = [[RolePrivilegeVC alloc]init];
         [self.navigationController pushViewController:nv animated:YES];
-        //[SVProgressHUD showErrorWithStatus:@"无该功能,期待下一版本"];
     }if (indexPath.row == 5) {
         NSLog(@"删除部门");
         configType = 5;
-        UIAlertView *changeOrgNameAler = [[UIAlertView alloc]initWithTitle:@"提示" message:@"确定要删除部门？" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        UIAlertView *changeOrgNameAler = [[UIAlertView alloc]initWithTitle:@"提示" message:@"确定要删除部门？" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定",@"取消", nil];
         [changeOrgNameAler show];
         [changeOrgNameAler release];
     }
     [hbKit release];
 }
-
+- (void)willPresentAlertView:(UIAlertView *)alertView{
+    
+}
 #pragma mark - UIAlerView代理方法
 - (void)alertView : (UIAlertView*)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -255,7 +217,7 @@
     
     NSString * orgNameString = (NSString *)CFURLCreateStringByAddingPercentEscapes( kCFAllocatorDefault, (CFStringRef)tf.text, NULL, NULL,  kCFStringEncodingUTF8 );
     switch (buttonIndex) {
-        case 1:
+        case 0:
         {
             if (configType == 5) {
                 [hbKit deleteOrgunitWithOrganizationId:comData.organization.organizationId andOrgunitId:comData.organization.orgunitId andUpdateUser:comData.userModel.username];

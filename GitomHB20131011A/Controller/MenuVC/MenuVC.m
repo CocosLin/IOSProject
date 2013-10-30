@@ -24,8 +24,8 @@
 #import "HBServerKit.h"
 #import "CommonDataModel.h"//存储用户数据的类
 #import "ReportManager.h"//管理来自服务器数据的类
+//#import <ShareSDK/ShareSDK.h>
 #import <ShareSDK/ShareSDK.h>
-
 #import "ASIHTTPRequest.h"
 #import "SVProgressHUD.h"
 #import "OrganizationsModel.h"//存放公司部门信息类
@@ -68,11 +68,46 @@ typedef NS_ENUM(NSInteger, TagFlag)
     }
     return self;
 }
+- (void)loadConfingSitting{
+    GetCommonDataModel;
+    GetGitomSingal;
+    HBServerKit *hbKit = [[HBServerKit alloc]init];
+    [hbKit getAttendanceConfigWithOrganizationId:comData.organization.organizationId orgunitId:comData.organization.orgunitId GotDicReports:^(NSDictionary *dicAttenConfig) {
+        NSLog(@"向单例存放考勤设置");
+        NSString * offTimeStr1 = [[[dicAttenConfig objectForKey:@"attenWorktime"]objectAtIndex:0]objectForKey:@"offTime"];
+        NSString * onTimeStr1 = [[[dicAttenConfig objectForKey:@"attenWorktime"]objectAtIndex:0]objectForKey:@"onTime"];
+        NSString * offTimeStr2 = [[[dicAttenConfig objectForKey:@"attenWorktime"]objectAtIndex:1]objectForKey:@"offTime"];
+        NSString * onTimeStr2 = [[[dicAttenConfig objectForKey:@"attenWorktime"]objectAtIndex:1]objectForKey:@"onTime"];
+        NSArray *countAr = [dicAttenConfig objectForKey:@"attenWorktime"];
+        
+        singal.latitude = [[[dicAttenConfig objectForKey:@"attenConfig"]objectForKey:@"latitude"]floatValue];
+        singal.longitude = [[[dicAttenConfig objectForKey:@"attenConfig"]objectForKey:@"longitude"]floatValue];
 
+        singal.inMinute = [[dicAttenConfig objectForKey:@"attenConfig"]objectForKey:@"inMinute"];
+        singal.outMinute = [[dicAttenConfig objectForKey:@"attenConfig"]objectForKey:@"outMinute"];
+
+        singal.distance = [[dicAttenConfig objectForKey:@"attenConfig"]objectForKey:@"distance"];
+        singal.oneTime1 = [onTimeStr1 longLongValue];
+        singal.offTime1 = [offTimeStr1 longLongValue];
+        singal.offTime2 = [offTimeStr2 longLongValue];
+        singal.oneTime2 = [onTimeStr2 longLongValue];
+        
+        if (countAr.count>2) {
+            NSString * offTimeStr3 = [[[dicAttenConfig objectForKey:@"attenWorktime"]objectAtIndex:2]objectForKey:@"offTime"];
+            NSString * onTimeStr3 = [[[dicAttenConfig objectForKey:@"attenWorktime"]objectAtIndex:2]objectForKey:@"onTime"];
+            singal.offTime3 = [onTimeStr3 longLongValue] ;
+            singal.oneTime3 = [offTimeStr3 longLongValue];
+        }else{
+            singal.oneTime3 = 00;
+            singal.offTime3 = 00;
+        }
+    }];
+    [hbKit release];
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    [self loadConfingSitting];
     [self.view setBackgroundColor:Color_Background];
     [self.view setBackgroundColor:[UIColor whiteColor]];
     [self.navigationController setNavigationBarHidden:YES animated:YES];
@@ -525,7 +560,7 @@ typedef NS_ENUM(NSInteger, TagFlag)
                 //http://hb.m.gitom.com/3.0/organization/updateOrganization?organizationId=204&updateUser=58200&name=WTO&cookie=5533098A-43F1-4AFC-8641-E64875461345
             {
                 NSLog(@"管理公司");
-                UIAlertView *changeOrgNameAler = [[UIAlertView alloc]initWithTitle:@"修改公司名称" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+                UIAlertView *changeOrgNameAler = [[UIAlertView alloc]initWithTitle:@"修改公司名称" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定",@"取消",nil];
                 changeOrgNameAler.alertViewStyle = UIAlertViewStylePlainTextInput;
                 UITextField *nameText = [changeOrgNameAler textFieldAtIndex:0];
                 nameText.placeholder = @"请输入更改的名称";
@@ -592,7 +627,7 @@ typedef NS_ENUM(NSInteger, TagFlag)
     NSString * orgNameString = (NSString *)CFURLCreateStringByAddingPercentEscapes( kCFAllocatorDefault, (CFStringRef)tf.text, NULL, NULL,  kCFStringEncodingUTF8 );
     //[NSString stringWithCString:[tf.text UTF8String]encoding:NSUnicodeStringEncoding];
     switch (buttonIndex) {
-        case 1:
+        case 0:
         {
             if (tf.text.length > 0) {
                 NSString *changeRoleUrlStr = [NSString stringWithFormat:@"http://hb.m.gitom.com/3.0/organization/updateOrganization?organizationId=%ld&updateUser=%@&name=%@&cookie=%@",(long)comData.organization.organizationId,comData.userModel.username,orgNameString,comData.cookie];

@@ -13,6 +13,7 @@
 
 @interface ShowStaffInfomationVC (){
     BOOL switchAlerDelegate;
+    BOOL moveStaffToOtherOrg;
 }
 
 @end
@@ -242,21 +243,35 @@
 
 #pragma mark -- 转移部门
 - (void)moveToOtherOrgunit{
+    NSLog(@"moveStaffToOtherOrg == %c",moveStaffToOtherOrg);
     
-    NSLog(@"转移部门");
-    UITableView  *orgunitTableView= [[[UITableView alloc]init]autorelease];
-    orgunitTableView.delegate = self;
-    orgunitTableView.dataSource = self;
-    UIView *orgView = [[[UIView alloc]init]autorelease];
-    [UIView animateWithDuration:0.5 animations:^{
-        orgView.frame = CGRectMake(Screen_Width/4, Screen_Height/4-45, Screen_Width/2+5, 0);
-        orgView.backgroundColor = [UIColor colorWithPatternImage:[[UIImage imageNamed:@"list_bg.png"]stretchableImageWithLeftCapWidth:100 topCapHeight:100]];
-        [self.view addSubview:orgView];
-        orgView.frame = CGRectMake(Screen_Width/4, Screen_Height/4, Screen_Width/2, Screen_Height/2+5);
-        orgunitTableView.frame = CGRectMake(25,46, orgView.frame.size.width-35, orgView.frame.size.height/2+8);
-        
+    if (moveStaffToOtherOrg) {
+        UIView *getAview = [self.view viewWithTag:1002];
+        [getAview removeFromSuperview];
+        //getAview.hidden = YES;
+        moveStaffToOtherOrg = NO;
+    }else{
+        UIView *orgView = [[[UIView alloc]init]autorelease];
+        orgView.tag = 1002;
+        UITableView  *orgunitTableView= [[[UITableView alloc]init]autorelease];
+        orgunitTableView.delegate = self;
+        orgunitTableView.dataSource = self;
         [orgView addSubview:orgunitTableView];
-    }];
+        [UIView animateWithDuration:0.5 animations:^{
+            orgView.frame = CGRectMake(Screen_Width/4, Screen_Height/4-45, Screen_Width/2+5, 0);
+            orgView.backgroundColor = [UIColor colorWithPatternImage:[[UIImage imageNamed:@"list_bg.png"]stretchableImageWithLeftCapWidth:100 topCapHeight:100]];
+            [self.view addSubview:orgView];
+            orgView.frame = CGRectMake(Screen_Width/4, Screen_Height/4, Screen_Width/2, Screen_Height/2+5);
+            orgunitTableView.frame = CGRectMake(25,46, orgView.frame.size.width-35, orgView.frame.size.height/2+8);
+            
+            
+        }];
+        moveStaffToOtherOrg = YES;
+    }
+    NSLog(@"转移部门");
+    
+    
+    
 }
 
 #pragma mark - 表格视图代理方法

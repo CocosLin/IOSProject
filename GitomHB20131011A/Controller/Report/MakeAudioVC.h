@@ -7,7 +7,14 @@
 //
 
 #import "VcWithNavBar.h"
+//#import <AVFoundation/AVFoundation.h>
+//#import <CoreAudio/CoreAudioTypes.h> 
+#import "RecordAudio.h"
 
-@interface MakeAudioVC : VcWithNavBar
+@interface MakeAudioVC : VcWithNavBar<RecordAudioDelegate>{
+    RecordAudio *recordAudio;
+    NSData *curAudio;
+
+}
 
 @end

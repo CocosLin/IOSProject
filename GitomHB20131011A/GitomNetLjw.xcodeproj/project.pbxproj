@@ -142,6 +142,10 @@
 		9762D2DC17799E97001CB047 /* libz.1.2.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9762D2DB17799E96001CB047 /* libz.1.2.5.dylib */; };
 		976573E2181B510300342C93 /* RolePrivilegeVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 976573DF181B510300342C93 /* RolePrivilegeVC.m */; };
 		976573E3181B510300342C93 /* SetMapPositionVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 976573E1181B510300342C93 /* SetMapPositionVC.m */; };
+		976574B4181BBA5A00342C93 /* amrFileCodec.m in Sources */ = {isa = PBXBuildFile; fileRef = 976574A7181BBA5A00342C93 /* amrFileCodec.m */; };
+		976574B5181BBA5A00342C93 /* libopencore-amrnb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 976574B0181BBA5A00342C93 /* libopencore-amrnb.a */; };
+		976574B6181BBA5A00342C93 /* libopencore-amrwb.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 976574B1181BBA5A00342C93 /* libopencore-amrwb.a */; };
+		976574B7181BBA5A00342C93 /* RecordAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = 976574B3181BBA5A00342C93 /* RecordAudio.m */; };
 		9765E6A1177A7C8600175B56 /* ServerBaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9765E6A0177A7C8600175B56 /* ServerBaseModel.m */; };
 		9765E6A2177A7C8600175B56 /* ServerBaseModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9765E6A0177A7C8600175B56 /* ServerBaseModel.m */; };
 		9765E6A5177A8C4300175B56 /* HBServerKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 9765E6A4177A8C4300175B56 /* HBServerKit.m */; };
@@ -275,7 +279,7 @@
 		97D0683217F127AF008CADD5 /* BMKMapView.h in Sources */ = {isa = PBXBuildFile; fileRef = 97EC2626177EB40A005CEEB2 /* BMKMapView.h */; };
 		97D0683317F127AF008CADD5 /* BMKSearch.h in Sources */ = {isa = PBXBuildFile; fileRef = 97EC2635177EB40A005CEEB2 /* BMKSearch.h */; };
 		97D0683417F12FED008CADD5 /* libmp3lame.a in Sources */ = {isa = PBXBuildFile; fileRef = 97F075591783CC860075B3FF /* libmp3lame.a */; };
-		97D0683517F1301A008CADD5 /* libbaidumapapi.h in Sources */ = {isa = PBXBuildFile; fileRef = 97EC263C177EB40A005CEEB2 /* libbaidumapapi.h */; };
+		97D0683517F1301A008CADD5 /* libbaidumapapi.a in Sources */ = {isa = PBXBuildFile; fileRef = 97EC263C177EB40A005CEEB2 /* libbaidumapapi.a */; };
 		97D70D0B181126A10069A0EF /* 111_19.png in Resources */ = {isa = PBXBuildFile; fileRef = 97D70D0A181126A10069A0EF /* 111_19.png */; };
 		97E3BAF01816541100B32D3C /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97E3BAEF1816541100B32D3C /* AudioToolbox.framework */; };
 		97E3BAF61816654000B32D3C /* shaking.wav in Resources */ = {isa = PBXBuildFile; fileRef = 97E3BAF51816654000B32D3C /* shaking.wav */; };
@@ -331,8 +335,8 @@
 		97EBF8D61807DDD20084F9E5 /* DetailQeryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 97EBF8D51807DDD20084F9E5 /* DetailQeryViewController.m */; };
 		97EBF8D91807E0460084F9E5 /* RecordDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 97EBF8D81807E0460084F9E5 /* RecordDetailView.m */; };
 		97EBF8DB1807E0580084F9E5 /* Empty.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97EBF8DA1807E0580084F9E5 /* Empty.xib */; };
-		97EC2641177EB40A005CEEB2 /* libbaidumapapi.h in Frameworks */ = {isa = PBXBuildFile; fileRef = 97EC263C177EB40A005CEEB2 /* libbaidumapapi.h */; };
-		97EC2642177EB40B005CEEB2 /* libbaidumapapi.h in Frameworks */ = {isa = PBXBuildFile; fileRef = 97EC263C177EB40A005CEEB2 /* libbaidumapapi.h */; };
+		97EC2641177EB40A005CEEB2 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 97EC263C177EB40A005CEEB2 /* libbaidumapapi.a */; };
+		97EC2642177EB40B005CEEB2 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 97EC263C177EB40A005CEEB2 /* libbaidumapapi.a */; };
 		97EC2645177EB40B005CEEB2 /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 97EC263F177EB40A005CEEB2 /* mapapi.bundle */; };
 		97EC2646177EB40B005CEEB2 /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 97EC263F177EB40A005CEEB2 /* mapapi.bundle */; };
 		97EC2647177EB40B005CEEB2 /* readme.docx in Resources */ = {isa = PBXBuildFile; fileRef = 97EC2640177EB40A005CEEB2 /* readme.docx */; };
@@ -371,6 +375,7 @@
 		97F075741783FFA80075B3FF /* AboutIphone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97F075721783FFA80075B3FF /* AboutIphone.xib */; };
 		97F07577178403170075B3FF /* DetailRecordVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 97F07576178403170075B3FF /* DetailRecordVC.m */; };
 		97F07578178403170075B3FF /* DetailRecordVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 97F07576178403170075B3FF /* DetailRecordVC.m */; };
+		97F08D23181E6229001EDE45 /* GitomSingal.m in Sources */ = {isa = PBXBuildFile; fileRef = 97F08D22181E6229001EDE45 /* GitomSingal.m */; };
 		97F23D511805577C00BFE19F /* RecordQeryReportsVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 97F23D501805577C00BFE19F /* RecordQeryReportsVC.m */; };
 		AF08E0EE1787A8520014C034 /* MyDocumentVC.m in Sources */ = {isa = PBXBuildFile; fileRef = AF08E0ED1787A8520014C034 /* MyDocumentVC.m */; };
 /* End PBXBuildFile section */
@@ -525,6 +530,16 @@
 		976573DF181B510300342C93 /* RolePrivilegeVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RolePrivilegeVC.m; sourceTree = "<group>"; };
 		976573E0181B510300342C93 /* SetMapPositionVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetMapPositionVC.h; sourceTree = "<group>"; };
 		976573E1181B510300342C93 /* SetMapPositionVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetMapPositionVC.m; sourceTree = "<group>"; };
+		976574A6181BBA5A00342C93 /* amrFileCodec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = amrFileCodec.h; sourceTree = "<group>"; };
+		976574A7181BBA5A00342C93 /* amrFileCodec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = amrFileCodec.m; sourceTree = "<group>"; };
+		976574AA181BBA5A00342C93 /* interf_dec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interf_dec.h; sourceTree = "<group>"; };
+		976574AB181BBA5A00342C93 /* interf_enc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = interf_enc.h; sourceTree = "<group>"; };
+		976574AD181BBA5A00342C93 /* dec_if.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dec_if.h; sourceTree = "<group>"; };
+		976574AE181BBA5A00342C93 /* if_rom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = if_rom.h; sourceTree = "<group>"; };
+		976574B0181BBA5A00342C93 /* libopencore-amrnb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libopencore-amrnb.a"; sourceTree = "<group>"; };
+		976574B1181BBA5A00342C93 /* libopencore-amrwb.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libopencore-amrwb.a"; sourceTree = "<group>"; };
+		976574B2181BBA5A00342C93 /* RecordAudio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordAudio.h; sourceTree = "<group>"; };
+		976574B3181BBA5A00342C93 /* RecordAudio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordAudio.m; sourceTree = "<group>"; };
 		9765E69F177A7C8600175B56 /* ServerBaseModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ServerBaseModel.h; sourceTree = "<group>"; };
 		9765E6A0177A7C8600175B56 /* ServerBaseModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ServerBaseModel.m; sourceTree = "<group>"; };
 		9765E6A3177A8C4300175B56 /* HBServerKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HBServerKit.h; sourceTree = "<group>"; };
@@ -726,7 +741,7 @@
 		97EC2637177EB40A005CEEB2 /* BMKTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMKTypes.h; sourceTree = "<group>"; };
 		97EC2638177EB40A005CEEB2 /* BMKUserLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMKUserLocation.h; sourceTree = "<group>"; };
 		97EC2639177EB40A005CEEB2 /* BMKVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMKVersion.h; sourceTree = "<group>"; };
-		97EC263C177EB40A005CEEB2 /* libbaidumapapi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libbaidumapapi.h; sourceTree = "<group>"; };
+		97EC263C177EB40A005CEEB2 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
 		97EC263F177EB40A005CEEB2 /* mapapi.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = mapapi.bundle; sourceTree = "<group>"; };
 		97EC2640177EB40A005CEEB2 /* readme.docx */ = {isa = PBXFileReference; lastKnownFileType = file; path = readme.docx; sourceTree = "<group>"; };
 		97EC2649177EB5A7005CEEB2 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -751,6 +766,8 @@
 		97F075721783FFA80075B3FF /* AboutIphone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AboutIphone.xib; sourceTree = "<group>"; };
 		97F07575178403170075B3FF /* DetailRecordVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailRecordVC.h; sourceTree = "<group>"; };
 		97F07576178403170075B3FF /* DetailRecordVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailRecordVC.m; sourceTree = "<group>"; };
+		97F08D21181E6229001EDE45 /* GitomSingal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GitomSingal.h; sourceTree = "<group>"; };
+		97F08D22181E6229001EDE45 /* GitomSingal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GitomSingal.m; sourceTree = "<group>"; };
 		97F23D4F1805577B00BFE19F /* RecordQeryReportsVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordQeryReportsVC.h; sourceTree = "<group>"; };
 		97F23D501805577C00BFE19F /* RecordQeryReportsVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordQeryReportsVC.m; sourceTree = "<group>"; };
 		AF08E0EC1787A8520014C034 /* MyDocumentVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyDocumentVC.h; path = ../MyDocumentVC.h; sourceTree = "<group>"; };
@@ -780,7 +797,7 @@
 				9762D1CD17796F03001CB047 /* UIKit.framework in Frameworks */,
 				9762D1CF17796F03001CB047 /* Foundation.framework in Frameworks */,
 				9762D1D117796F03001CB047 /* CoreGraphics.framework in Frameworks */,
-				97EC2641177EB40A005CEEB2 /* libbaidumapapi.h in Frameworks */,
+				97EC2641177EB40A005CEEB2 /* libbaidumapapi.a in Frameworks */,
 				97F0755A1783CC860075B3FF /* libmp3lame.a in Frameworks */,
 				97EAF09017DF0E5300CDFE46 /* DouBanConnection.framework in Frameworks */,
 				97EAF09117DF0E5300CDFE46 /* EverNoteConnection.framework in Frameworks */,
@@ -814,6 +831,8 @@
 				97EAF0B417DF0E5300CDFE46 /* ShareSDKiPhoneDefaultShareViewUI.framework in Frameworks */,
 				97EAF0B617DF0E5300CDFE46 /* ShareSDKiPhoneSimpleShareViewUI.framework in Frameworks */,
 				97EBF8D31807901B0084F9E5 /* libbaidumapapi.a in Frameworks */,
+				976574B5181BBA5A00342C93 /* libopencore-amrnb.a in Frameworks */,
+				976574B6181BBA5A00342C93 /* libopencore-amrwb.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -832,7 +851,7 @@
 				9762D1EB17796F03001CB047 /* SenTestingKit.framework in Frameworks */,
 				9762D1EC17796F03001CB047 /* UIKit.framework in Frameworks */,
 				9762D1ED17796F03001CB047 /* Foundation.framework in Frameworks */,
-				97EC2642177EB40B005CEEB2 /* libbaidumapapi.h in Frameworks */,
+				97EC2642177EB40B005CEEB2 /* libbaidumapapi.a in Frameworks */,
 				97F0755B1783CC860075B3FF /* libmp3lame.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -916,6 +935,8 @@
 				9762D1DB17796F03001CB047 /* AppDelegate.h */,
 				9762D1DC17796F03001CB047 /* AppDelegate.mm */,
 				9762D1D317796F03001CB047 /* Supporting Files */,
+				97F08D21181E6229001EDE45 /* GitomSingal.h */,
+				97F08D22181E6229001EDE45 /* GitomSingal.m */,
 			);
 			path = GitomNetLjw;
 			sourceTree = "<group>";
@@ -978,6 +999,7 @@
 		9762D20217796F61001CB047 /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				976574A5181BBA5A00342C93 /* arm */,
 				97EAF05D17DF0E5300CDFE46 /* ShareSDK_v2.2.1 */,
 				97F075571783CC860075B3FF /* RecordLame */,
 				97EC261B177EB40A005CEEB2 /* BaiduMap_iOSSDK_v2.0.1_Lib */,
@@ -1321,6 +1343,55 @@
 				9762D2C217799E29001CB047 /* Reachability.m */,
 			);
 			path = ASIHTTPRequest;
+			sourceTree = "<group>";
+		};
+		976574A5181BBA5A00342C93 /* arm */ = {
+			isa = PBXGroup;
+			children = (
+				976574A6181BBA5A00342C93 /* amrFileCodec.h */,
+				976574A7181BBA5A00342C93 /* amrFileCodec.m */,
+				976574A8181BBA5A00342C93 /* include */,
+				976574AF181BBA5A00342C93 /* lib */,
+				976574B2181BBA5A00342C93 /* RecordAudio.h */,
+				976574B3181BBA5A00342C93 /* RecordAudio.m */,
+			);
+			path = arm;
+			sourceTree = "<group>";
+		};
+		976574A8181BBA5A00342C93 /* include */ = {
+			isa = PBXGroup;
+			children = (
+				976574A9181BBA5A00342C93 /* opencore-amrnb */,
+				976574AC181BBA5A00342C93 /* opencore-amrwb */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		976574A9181BBA5A00342C93 /* opencore-amrnb */ = {
+			isa = PBXGroup;
+			children = (
+				976574AA181BBA5A00342C93 /* interf_dec.h */,
+				976574AB181BBA5A00342C93 /* interf_enc.h */,
+			);
+			path = "opencore-amrnb";
+			sourceTree = "<group>";
+		};
+		976574AC181BBA5A00342C93 /* opencore-amrwb */ = {
+			isa = PBXGroup;
+			children = (
+				976574AD181BBA5A00342C93 /* dec_if.h */,
+				976574AE181BBA5A00342C93 /* if_rom.h */,
+			);
+			path = "opencore-amrwb";
+			sourceTree = "<group>";
+		};
+		976574AF181BBA5A00342C93 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				976574B0181BBA5A00342C93 /* libopencore-amrnb.a */,
+				976574B1181BBA5A00342C93 /* libopencore-amrwb.a */,
+			);
+			path = lib;
 			sourceTree = "<group>";
 		};
 		9765E6B7177AD4D300175B56 /* Menu */ = {
@@ -1688,7 +1759,7 @@
 		97EC263B177EB40A005CEEB2 /* Release-iphoneos */ = {
 			isa = PBXGroup;
 			children = (
-				97EC263C177EB40A005CEEB2 /* libbaidumapapi.h */,
+				97EC263C177EB40A005CEEB2 /* libbaidumapapi.a */,
 			);
 			path = "Release-iphoneos";
 			sourceTree = "<group>";
@@ -1984,7 +2055,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				97AE61D017F19B23006F1FA4 /* ManageStaffDetialCell.h in Sources */,
-				97D0683517F1301A008CADD5 /* libbaidumapapi.h in Sources */,
+				97D0683517F1301A008CADD5 /* libbaidumapapi.a in Sources */,
 				97D0683417F12FED008CADD5 /* libmp3lame.a in Sources */,
 				97D0683117F127AF008CADD5 /* BMKMapManager.h in Sources */,
 				97D0683217F127AF008CADD5 /* BMKMapView.h in Sources */,
@@ -2075,6 +2146,9 @@
 				97671A18180D37DA00E3A5E3 /* AttendanceModel.m in Sources */,
 				976573E2181B510300342C93 /* RolePrivilegeVC.m in Sources */,
 				976573E3181B510300342C93 /* SetMapPositionVC.m in Sources */,
+				976574B4181BBA5A00342C93 /* amrFileCodec.m in Sources */,
+				976574B7181BBA5A00342C93 /* RecordAudio.m in Sources */,
+				97F08D23181E6229001EDE45 /* GitomSingal.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2265,8 +2339,14 @@
 					"\"$(SRCROOT)/Lib/RecordLame\"",
 					"\"$(SRCROOT)/Lib/ShareSDK_v2.2.1/Extend/SDKExport\"",
 					"\"$(SRCROOT)/Lib/ShareSDK_v2.2.1/Extend/TencentWeiboSSO\"",
+					"\"$(SRCROOT)/Lib/AmrConvertAndRecord/VoiceConvert/lib\"",
+					"\"$(SRCROOT)/Lib/VoiceConvert/lib\"",
+					"\"$(SRCROOT)/Lib/arm/lib\"",
 				);
-				OTHER_LDFLAGS = "-all_load";
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-Objc",
+				);
 				PRODUCT_NAME = "移动汇报";
 				SKIP_INSTALL = NO;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -2299,8 +2379,14 @@
 					"\"$(SRCROOT)/Lib/RecordLame\"",
 					"\"$(SRCROOT)/Lib/ShareSDK_v2.2.1/Extend/SDKExport\"",
 					"\"$(SRCROOT)/Lib/ShareSDK_v2.2.1/Extend/TencentWeiboSSO\"",
+					"\"$(SRCROOT)/Lib/AmrConvertAndRecord/VoiceConvert/lib\"",
+					"\"$(SRCROOT)/Lib/VoiceConvert/lib\"",
+					"\"$(SRCROOT)/Lib/arm/lib\"",
 				);
-				OTHER_LDFLAGS = "-all_load";
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-Objc",
+				);
 				PRODUCT_NAME = "移动汇报";
 				PROVISIONING_PROFILE = "C6E68A20-8483-4E2E-95BB-FA97E7197AC8";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "C6E68A20-8483-4E2E-95BB-FA97E7197AC8";

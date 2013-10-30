@@ -11,7 +11,7 @@
 #import "MakeAudioVC.h"
 #import <QuartzCore/QuartzCore.h>
 #import "HBServerKit.h"
-
+#import "GitomSingal.h"
 #define kMyPhotoName @"myPhoto.jpg"
 
 typedef NS_ENUM(NSInteger, Tag_ReportVC) {
@@ -37,12 +37,15 @@ typedef NS_ENUM(NSInteger, Tag_ReportVC) {
 
 #pragma mark - 用户事件
 
-
+//@synthesize recorderVC;
 
 -(void)btnAction:(UIButton *)btn
 {
     if (btn.tag == TAG_BtnSaveReport)
     {
+        GitomSingal *singal = [GitomSingal getInstance];
+        singal.recordedSound = NO;
+        [self sendSoundFileToServe];
         //上传汇报
         [self saveMyReport];
     }else if(btn.tag == TAG_BtnRecording)
@@ -53,13 +56,13 @@ typedef NS_ENUM(NSInteger, Tag_ReportVC) {
         [mavc release];
     }
 }
+
+
+
 #pragma mark -- 获得服务器存放图片路径
 - (void)sendFileToServe{
     NSLog(@"获得服务器存放图片路径");
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-	NSString *photoPath = [documentsDirectory stringByAppendingPathComponent:kMyPhotoName];
-    //__block NSString *imgUrlString = [[NSString alloc]init];
+    NSString *photoPath = [NSString stringWithFormat:@"%@%@",NSTemporaryDirectory(),kMyPhotoName];
     HBServerKit *hbKit = [[HBServerKit alloc]init];
     [hbKit saveImageReportsOfMembersWithData:photoPath GotArrReports:^(NSArray *arrDicReports, WError *myError) {
         NSLog(@"arrDicReports == %@",arrDicReports);
@@ -69,11 +72,7 @@ typedef NS_ENUM(NSInteger, Tag_ReportVC) {
         group = [[arrDicReports objectAtIndex:0]objectForKey:@"group"];
         filename = [[arrDicReports objectAtIndex:0]objectForKey:@"filename"];
         server = [[arrDicReports objectAtIndex:0]objectForKey:@"server"];
-        
-        NSLog(@"server imageUrl == %@",[NSString stringWithFormat:@"http://%@/%@/%@",server,group,filename]);
         NSString *urlOfImg = [NSString stringWithFormat:@"http://%@/%@/%@",server,group,filename];
-        //        self.imgUrlStr = [NSString stringWithFormat:@"{\\\"imageUrl\\\":[{\\\"id\\\":\\\"\\\",\\\"thumb\\\":\\\"http:\\\\\/\\\\\/imgcdn1.gitom.com\\\\\/group1\\\\\/M00\\\\\/01\\\\\/C0\\\\\/OzkPqFJg8QaAJoexAAAF31GLukg274.jpg\\\",\\\"url\\\":\\\"http:\\\\\/\\\\\/%@\\\\\/%@\\\\\/M00\\\\\/01\\\\\/C0\\\\\/OzkPqFJg8QWAOMKhAAYiO57ScNY757.jpg\\\"}]}",server,group,filename];
-        
         NSMutableDictionary *dic1 = [[NSMutableDictionary alloc]init];
         [dic1 setObject:@" " forKey:@"id"];
         [dic1 setObject:@" " forKey:@"thumb"];
@@ -83,12 +82,7 @@ typedef NS_ENUM(NSInteger, Tag_ReportVC) {
         
         NSMutableDictionary *imgDic = [[NSMutableDictionary alloc]init];
         [imgDic setObject:imgArr forKey:@"imageUrl"];
-        
-        
         NSLog(@"imgDic == %@",imgDic);
-        
-        //self.imgUrlStr = imgDic;
-        
         NSData *getData = [NSJSONSerialization dataWithJSONObject:imgDic
                                                           options:kNilOptions
                                                             error:nil];
@@ -99,7 +93,39 @@ typedef NS_ENUM(NSInteger, Tag_ReportVC) {
         
     }];
 }
-
+#pragma mark -- 获得服务器存放声音路径
+- (void)sendSoundFileToServe{
+    NSLog(@"获得服务器存放声音路径");
+    NSString *soundPath = [NSString stringWithFormat:@"%@",[[NSTemporaryDirectory() stringByAppendingPathComponent:@"coverToAMR"]stringByAppendingPathExtension:@"amr"]];
+    HBServerKit *hbKit = [[HBServerKit alloc]init];
+    [hbKit saveSoundReportsOfMembersWithData:soundPath GotArrReports:^(NSArray *arrDicReports, WError *myError) {
+        NSLog(@"arrDicReports == %@",arrDicReports);
+        NSString *group = [[[NSString alloc]init]autorelease];
+        NSString *filename = [[[NSString alloc]init]autorelease];
+        NSString *server = [[[NSString alloc]init]autorelease];
+        group = [[arrDicReports objectAtIndex:0]objectForKey:@"group"];
+        filename = [[arrDicReports objectAtIndex:0]objectForKey:@"filename"];
+        server = [[arrDicReports objectAtIndex:0]objectForKey:@"server"];
+        
+        NSLog(@"server soundgeUrl == %@",[NSString stringWithFormat:@"http://%@/%@/%@",server,group,filename]);
+        NSString *urlOfSound = [NSString stringWithFormat:@"http://%@/%@/%@",server,group,filename];
+        NSMutableDictionary *dic1 = [[NSMutableDictionary alloc]init];
+        [dic1 setObject:@" " forKey:@"id"];
+        [dic1 setObject:urlOfSound forKey:@"url"];
+        
+        NSArray *imgArr = [NSArray arrayWithObject:dic1];
+                NSMutableDictionary *soundDic = [[NSMutableDictionary alloc]init];
+        [soundDic setObject:imgArr forKey:@"soundUrl"];
+        NSLog(@"soundDic == %@",soundDic);
+        //self.imgUrlStr = imgDic;
+        NSData *getData = [NSJSONSerialization dataWithJSONObject:soundDic
+                                                          options:kNilOptions
+                                                            error:nil];
+        NSString *getStr = [[NSString alloc]initWithData:getData encoding:NSUTF8StringEncoding];
+        self.soundUrlStr = getStr;
+        NSLog(@"server soundPath == %@",self.soundUrlStr);
+    }];
+}
 
 #pragma mark -- 拍照
 - (void)saveMyImage{
@@ -123,23 +149,11 @@ typedef NS_ENUM(NSInteger, Tag_ReportVC) {
 
 #pragma mark -- UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)image editingInfo:(NSDictionary *)editingInfo{
-    
-    NSData *photoData = UIImageJPEGRepresentation(image, 0.1);
-    //NSLog(@"photoData == %@",photoData);
-    Byte *testByte = (Byte *)[photoData bytes];
-    NSLog(@"testByteS == %s",testByte);
-//    for(int i=0;i<[photoData length];i++)
-//        printf("testByte = %d\n",testByte[i]);
-    //存储进Document
-    //NSString *tmpPath = [NSTemporaryDirectory() stringByAppendingString:@"mySaveImage.jpg"];
-    
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-	NSString *photoPath = [paths objectAtIndex:0];
-    NSString *fullPath = [NSString stringWithFormat:@"%@/%@",photoPath,kMyPhotoName];
-    NSLog(@"photoPath == %@",fullPath);
-   
+    NSData *photoData = UIImageJPEGRepresentation(image, 0.0001);
+    NSString *photoPath = [NSTemporaryDirectory() stringByAppendingString:kMyPhotoName];
+    NSLog(@"photoPath == %@",photoPath);
     imgViewPhoto.image = image;
-    [photoData writeToFile:fullPath atomically:NO];
+    [photoData writeToFile:photoPath atomically:NO];
     [self sendFileToServe];
     [self dismissModalViewControllerAnimated:YES];
 }
@@ -189,7 +203,15 @@ typedef NS_ENUM(NSInteger, Tag_ReportVC) {
      */
     
     report.imageUrl = self.imgUrlStr;
-    report.soundUrl = nil;
+//    if ([[NSTemporaryDirectory() stringByAppendingPathComponent:@"coverToAMR"]stringByAppendingPathExtension:@"amr"]) {
+//        [self sendSoundFileToServe];
+//        report.soundUrl = self.soundUrlStr;
+//    }else{
+//        NSLog(@"不存在soundURL路径");
+//        report.soundUrl = nil;
+//    }
+    NSLog(@"report.soundUrl == %@",self.soundUrlStr);
+    report.soundUrl = self.soundUrlStr;
     ReportManager * rm = [ReportManager sharedReportManager];
     [rm saveReportWithReportModel:report GotIsReportOk:^(BOOL isReportOk)
      {NSLog(@"ReportVC == 上传汇报 ");}];
@@ -262,14 +284,7 @@ typedef NS_ENUM(NSInteger, Tag_ReportVC) {
         [myCell addSubview:view];
         
         imgViewPhoto = [[UIImageView alloc]initWithFrame:CGRectMake(view.frame.size.width/2 - 50/2, 0, 50, 50)];
-//        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-//        NSString *documentsDirectory = [paths objectAtIndex:0];
-//        NSString *appFile = [documentsDirectory stringByAppendingPathComponent:kMyPhotoName];
-//        NSData *myData = [[NSData alloc] initWithContentsOfFile:appFile];
-//        NSLog(@"图片文字流 %@",myData);
-        //if (imgViewPhoto.image == nil)
         imgViewPhoto.image = [UIImage imageNamed:@"report_picture"];
-//        imgViewPhoto.image = [UIImage imageWithContentsOfFile:appFile];
         [view addSubview:imgViewPhoto];
         
         UIButton * btnMakePicture = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -297,7 +312,13 @@ typedef NS_ENUM(NSInteger, Tag_ReportVC) {
         [myCell addSubview:view];
         
         UIImageView * imgViewSound = [[UIImageView alloc]initWithFrame:CGRectMake(view.frame.size.width/2 - 50/2, 0, 50, 50)];
-        imgViewSound.image = [UIImage imageNamed:@"report_recording"];
+        GitomSingal *singal = [GitomSingal getInstance];
+        if (singal.recordedSound) {
+            imgViewSound.image = [UIImage imageNamed:@"111_19.png"];
+        }else{
+            imgViewSound.image = [UIImage imageNamed:@"report_recording"];
+        }
+        
         [view addSubview:imgViewSound];
         [imgViewSound release];
         
@@ -471,6 +492,7 @@ typedef NS_ENUM(NSInteger, Tag_ReportVC) {
 }
 
 #pragma mark - 生命周期
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -489,6 +511,9 @@ typedef NS_ENUM(NSInteger, Tag_ReportVC) {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    //初始化录音vc
+  //  recorderVC = [[ChatVoiceRecorderVC alloc]init];
+ //   recorderVC.vrbDelegate = self;
     
     //导航条设置
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -524,6 +549,8 @@ typedef NS_ENUM(NSInteger, Tag_ReportVC) {
     [self startPosition];
     _bMapSearch = [[BMKSearch alloc]init];
     [_bMapSearch setDelegate:self];
+    [_tvbReportInput reloadData];
+    //[self sendSoundFileToServe];
 }
 
 -(void)viewWillDisappear:(BOOL)animated

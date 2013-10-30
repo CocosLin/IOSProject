@@ -70,6 +70,11 @@ typedef  void(^WbReportSave)(BOOL isReportOk,WError * myError);
                                Latitude:(CGFloat)latitude
                           GotArrReports:(WbReportJsonArr)callback;
 
+#pragma mark -- 保存上传声音
+-(void)saveSoundReportsOfMembersWithData:(NSString *)imgData
+                           GotArrReports:(WbReportJsonArr)callback;
+
+
 #pragma mark -- 上传图片，返回服务器图片链接  http://hb.m.gitom.com/3.0/util/fileUpload/此处是图片的二进制data数据?width==200&height==200&cookie=5533098A-43F1-4AFC-8641-E64875461345
 #pragma mark -- 保存上传图片
 -(void)saveImageReportsOfMembersWithData:(NSString *)imgData
