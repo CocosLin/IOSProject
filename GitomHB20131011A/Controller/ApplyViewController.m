@@ -44,7 +44,8 @@
     myCell.realName.text = [NSString stringWithFormat:@"%@(%@)申请加入[%@]",applyMod.realname,applyMod.createUserId,applyMod.orgunitName];
     myCell.creatDate.text = [NSString stringWithFormat:@"申请时间:%@",[WTool getStrDateTimeWithDateTimeMS:[applyMod.updateDate doubleValue] DateTimeStyle:@"yyyy-MM-dd HH:mm:ss"]];
     myCell.address.text = [NSString stringWithFormat:@"申请理由:%@",applyMod.note];
-    
+    myCell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
+    myCell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
     return myCell;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -183,6 +184,7 @@
     
     _tvbRecordInfo = [[UITableView alloc] initWithFrame:CGRectMake(0, 41, Screen_Width, Screen_Height-51)];
     [self.view addSubview:_tvbRecordInfo];
+    [_tvbRecordInfo setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [_tvbRecordInfo setBackgroundColor:[UIColor whiteColor]];
     [_tvbRecordInfo setDelegate:self];
     [_tvbRecordInfo setDataSource:self];

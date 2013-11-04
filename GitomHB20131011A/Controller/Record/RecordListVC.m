@@ -15,10 +15,6 @@
 #import "RecordQeryReportsVcCell.h"
 #import "AttendanceModel.h"
 #import "SVProgressHUD.h"
-//#define TypeReport_GoOut @"REPORT_TYPE_GO_OUT"// 外出汇报
-//#define TypeReport_Travel @"REPORT_TYPE_TRAVEL"// 出差汇报
-//#define TypeReport_Work @"REPORT_TYPE_DAY_REPORT"// 工作汇报
-//#define TypeReport_ALL @"REPORT_TYPE_ALL"// 所有汇报 (暂时没用)
 
 @interface RecordListVC ()
 {
@@ -78,12 +74,24 @@
         myCell.realName.text = [NSString stringWithFormat:@"%@(%@)",self.userRealname,self.username];
         myCell.creatDate.text = [WTool getStrDateTimeWithDateTimeMS:reModel.updateDate DateTimeStyle:@"yyyy-MM-dd HH:mm:ss"];
         myCell.address.text = reModel.address;
+        
     }
+    myCell.textLabel.backgroundColor = [UIColor clearColor];
+    myCell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
+    myCell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
+    if (!self.typeRecord)myCell.rightImg.hidden = YES;
     return myCell;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 53;
+}
+-(BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (!self.typeRecord) {
+        return NO;
+    }
+    return YES;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -250,6 +258,7 @@
 -(void)initRecordInfoTableView
 {
     _tvbRecordInfo = [[UITableView alloc] initWithFrame:CGRectMake(0, 41, Width_Screen, Height_Screen-41)];
+    [_tvbRecordInfo setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.view addSubview:_tvbRecordInfo];
     [_tvbRecordInfo setBackgroundColor:[UIColor whiteColor]];
     [_tvbRecordInfo setDelegate:self];

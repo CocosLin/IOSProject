@@ -68,6 +68,7 @@ typedef NS_ENUM(NSInteger, TagFlag)
     }
     return self;
 }
+#pragma mark -- 获取考勤配置
 - (void)loadConfingSitting{
     GetCommonDataModel;
     GetGitomSingal;
@@ -87,16 +88,16 @@ typedef NS_ENUM(NSInteger, TagFlag)
         singal.outMinute = [[dicAttenConfig objectForKey:@"attenConfig"]objectForKey:@"outMinute"];
 
         singal.distance = [[dicAttenConfig objectForKey:@"attenConfig"]objectForKey:@"distance"];
-        singal.oneTime1 = [onTimeStr1 longLongValue];
-        singal.offTime1 = [offTimeStr1 longLongValue];
-        singal.offTime2 = [offTimeStr2 longLongValue];
-        singal.oneTime2 = [onTimeStr2 longLongValue];
+        singal.oneTime1 = [onTimeStr1 intValue];
+        singal.offTime1 = [offTimeStr1 intValue];
+        singal.offTime2 = [offTimeStr2 intValue];
+        singal.oneTime2 = [onTimeStr2 intValue];
         
         if (countAr.count>2) {
             NSString * offTimeStr3 = [[[dicAttenConfig objectForKey:@"attenWorktime"]objectAtIndex:2]objectForKey:@"offTime"];
             NSString * onTimeStr3 = [[[dicAttenConfig objectForKey:@"attenWorktime"]objectAtIndex:2]objectForKey:@"onTime"];
-            singal.offTime3 = [onTimeStr3 longLongValue] ;
-            singal.oneTime3 = [offTimeStr3 longLongValue];
+            singal.offTime3 = [onTimeStr3 intValue] ;
+            singal.oneTime3 = [offTimeStr3 intValue];
         }else{
             singal.oneTime3 = 00;
             singal.offTime3 = 00;
@@ -104,6 +105,12 @@ typedef NS_ENUM(NSInteger, TagFlag)
     }];
     [hbKit release];
 }
+
+#pragma mark -- 刷新部分数据
+- (void)refreshAction{
+    [self loadConfingSitting];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -179,9 +186,9 @@ typedef NS_ENUM(NSInteger, TagFlag)
 
 -(void)initCustomUserInfoView
 {
-    UIView * viewUserInfo = [[[UIView alloc]initWithFrame:CGRectMake(0, 0, Width_Screen, 50)] autorelease];
+    UIView * viewUserInfo = [[[UIView alloc]initWithFrame:CGRectMake(0, 0, Screen_Width, 50)] autorelease];
     [viewUserInfo setBackgroundColor:[UIColor whiteColor]];
-    
+    [viewUserInfo setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"user_control_top2.png"]]];
     //头像imageView
     _imgViewUserPhoto = [[UIImageView alloc]initWithFrame:CGRectMake(5, 5, 40, 40)];
     _imgViewUserPhoto.image = [UIImage imageNamed:@"user_control_user.png"];
@@ -195,7 +202,7 @@ typedef NS_ENUM(NSInteger, TagFlag)
     [viewUserInfo addSubview:_lblOrganizationInfoInNavigation];
     
     //用户信息
-    _lblUserInfoInNavigation = [[UILabel alloc]initWithFrame:CGRectMake(50, 26, Width_Screen - 50-40, 25)];
+    _lblUserInfoInNavigation = [[UILabel alloc]initWithFrame:CGRectMake(50, 26, Width_Screen - 90, 25)];
     if (!self.userRealname) {
          _lblUserInfoInNavigation.text = [NSString stringWithFormat:@"(%@:%@)",_strUserRole,self.username];
     }else
@@ -206,14 +213,21 @@ typedef NS_ENUM(NSInteger, TagFlag)
     [_lblUserInfoInNavigation setFont:[UIFont systemFontOfSize:14]];
     [viewUserInfo addSubview:_lblUserInfoInNavigation];
     
+    UIButton *refreshButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    refreshButton.frame = CGRectMake(Width_Screen-110, 5, 40, 40);
+    [refreshButton setBackgroundImage:[UIImage imageNamed:@"icon_update_normal.png"] forState:UIControlStateNormal];
+    [refreshButton setBackgroundImage:[UIImage imageNamed:@"icon_update_pressed.png"] forState:UIControlStateHighlighted];
+    [refreshButton addTarget:self action:@selector(refreshAction) forControlEvents:UIControlEventTouchUpInside];
+    [viewUserInfo addSubview:refreshButton];
     [self.view addSubview:viewUserInfo];
 }
 //公告栏
 -(void)initCustomNoticeBoard
 {
     float wViewNoticeAll = 260.0f;
-    UIView * viewNoticeALL=[[[UIView alloc]initWithFrame:CGRectMake(0,50,wViewNoticeAll,50)] autorelease];
-    viewNoticeALL.backgroundColor=[UIColor clearColor];
+    UIView * viewNoticeALL=[[[UIView alloc]initWithFrame:CGRectMake(0,50,Screen_Width,50)] autorelease];
+    //viewNoticeALL.backgroundColor=[UIColor clearColor];
+    viewNoticeALL.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"bg_main_menu2.png"]];
     viewNoticeALL.layer.borderColor=[UIColor grayColor].CGColor;
     viewNoticeALL.layer.borderWidth=1.0f;
     [self.view addSubview:viewNoticeALL];
@@ -226,6 +240,7 @@ typedef NS_ENUM(NSInteger, TagFlag)
         //
         UIButton * btnNoticeOne = [UIButton buttonWithType:UIButtonTypeCustom];
         btnNoticeOne.backgroundColor=[UIColor clearColor];
+        [btnNoticeOne setBackgroundImage:[UIImage imageNamed:@"ex_list_group_default.png"] forState:UIControlStateHighlighted];
         btnNoticeOne.tag= TagFlag_BtnBaseNotice + i + 1;
         [btnNoticeOne setFrame:CGRectMake(0+i*wNoticeOne,0,wNoticeOne,50)];
         [viewNoticeALL addSubview:btnNoticeOne];
@@ -254,8 +269,9 @@ typedef NS_ENUM(NSInteger, TagFlag)
 -(void)initRightMenuListTableView
 {
     //具体功能菜单,用列表来显示
-    _tableViewFunction = [[UITableView alloc]initWithFrame:CGRectMake(60, 100, Width_Screen-60-50, Height_Screen -100)];
-    [_tableViewFunction setBackgroundColor:[UIColor whiteColor]];
+    _tableViewFunction = [[UITableView alloc]initWithFrame:CGRectMake(60, 100, Screen_Width-60, Screen_Height -100)];
+    [_tableViewFunction setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bg_main_menu2.png"]]];
+    [_tableViewFunction setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     _tableViewFunction.dataSource = self;
     _tableViewFunction.delegate = self;
     [self.view addSubview:_tableViewFunction];
@@ -329,10 +345,10 @@ typedef NS_ENUM(NSInteger, TagFlag)
     }else if(_currentSeletedMenuFlag == 2)
     {
         if (self.roleId == RoleId_Administrator) {
-            arrFuncNames = @[@"员工记录查询",@"公告发布",@"加入申请",@"管理员工",@"管理部门"];
+            arrFuncNames = @[@"记录查询",@"公告发布",@"加入申请",@"管理员工",@"管理部门"];
         }else
         {
-            arrFuncNames = @[@"员工记录查询",@"公告发布",@"加入申请",@"管理员工",@"管理部门",@"管理公司"];
+            arrFuncNames = @[@"记录查询",@"公告发布",@"加入申请",@"管理员工",@"管理部门",@"管理公司"];
         }
     }else if(_currentSeletedMenuFlag == 3)
     {
@@ -347,13 +363,14 @@ typedef NS_ENUM(NSInteger, TagFlag)
     if (!cell) {
         cell = [[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID]autorelease];
     }
-    cell.textLabel.text = arrFuncNames[indexPath.row];
+    cell.textLabel.text = [NSString stringWithFormat:@"   %@",arrFuncNames[indexPath.row]];
+    cell.textLabel.backgroundColor = [UIColor clearColor];
     cell.textLabel.lineBreakMode = 1;
     cell.textLabel.font = [UIFont systemFontOfSize:22];
-    //        cell.textLabel.numberOfLines = 10;
     cell.textLabel.textAlignment=NSTextAlignmentLeft;
     cell.textLabel.textColor = [UIColor blackColor];
-    //        cell.textLabel.highlightedTextColor = [UIColor blackColor];
+    cell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
+    cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
     return cell;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

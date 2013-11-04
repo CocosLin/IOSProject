@@ -10,7 +10,7 @@
 #import "ASIHTTPRequest.h"
 #import "ASIFormDataRequest.h"
 #import "SVProgressHUD.h"
-
+#import "WTool.h"
 //typedef NS_ENUM(NSInteger, ETypeReport)
 //{
 //    ETypeReport
@@ -397,6 +397,12 @@
             [error release];
         }
     }];
+    //获取全局变量
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    //设置缓存方式
+    [req setDownloadCache:appDelegate.myCache];
+    //设置缓存数据存储策略，这里采取的是如果无更新或无法联网就读取缓存数据
+    [req setCacheStoragePolicy:ASICachePermanentlyCacheStoragePolicy];
     [req startAsynchronous];
 }
 
@@ -418,6 +424,12 @@
     
     NSURL *url = [NSURL URLWithString:urlString];
     ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:url];
+    //获取全局变量
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    //设置缓存方式
+    [req setDownloadCache:appDelegate.myCache];
+    //设置缓存数据存储策略，这里采取的是如果无更新或无法联网就读取缓存数据
+    [req setCacheStoragePolicy:ASICachePermanentlyCacheStoragePolicy];
     [req setCompletionBlock:^{
         NSData *dataResponse = [req responseData];
         NSLog(@"部门汇报(整个部门) == %@",[req responseString]);
@@ -455,6 +467,7 @@
     
     NSString *urlStr = [NSString stringWithFormat:@"http://hb.m.gitom.com/3.0/organization/%@?organizationId=%ld&orgunitId=%ld&first=0&max=1&cookie=%@",newsType,(long)organizationId,(long)orgunitId,_cookie];
     NSURL *url = [NSURL URLWithString:urlStr];
+    
     ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:url];
     [req setDelegate:self];
     //[req startSynchronous];
@@ -750,17 +763,6 @@
             callback(nil,error);
             [error release];
         }
-        
-   // }];
-    
-    //[request setFailedBlock:^{
-        
-     //   NSLog(@"asi error: %@",request.error.debugDescription);
-        
-   // }];
-    
-    //[request startAsynchronous];
-    
 }
 
 #pragma mark -- 保存上传图片
@@ -883,6 +885,123 @@
         }
     }];
 
+}
+#pragma mark - 考勤数据处理
+/*{"inTime":-14400000,"ordinal":1,"outTime":60000,"voidFlag":false}*/
+#pragma mark -- 将考勤的打卡配置数据转换为字典
+- (NSMutableArray *)getAttenWorktimeArrayBySetOutTime1:(int)outTime1
+                                          andInTime1:(int)inTime1
+                                         SetOutTime2:(int)outTime2
+                                          andInTime2:(int)inTime2
+                                         SetOutTime3:(int)outTime3
+                                          andInTime3:(int)inTime3
+{
+    NSMutableDictionary *attenWorktimeDic1 = [[[NSMutableDictionary alloc]init]autorelease];
+    [attenWorktimeDic1 setObject:[NSString stringWithFormat:@"%d",outTime1] forKey:@"outTime"];
+    [attenWorktimeDic1 setObject:[NSString stringWithFormat:@"%d",inTime1] forKey:@"inTime"];
+    [attenWorktimeDic1 setObject:@"1" forKey:@"ordinal"];
+    [attenWorktimeDic1 setObject:@"false" forKey:@"voidFlag"];
+    NSMutableDictionary *attenWorktimeDic2 = [[[NSMutableDictionary alloc]init]autorelease];
+    [attenWorktimeDic2 setObject:[NSString stringWithFormat:@"%d",outTime2] forKey:@"outTime"];
+    [attenWorktimeDic2 setObject:[NSString stringWithFormat:@"%d",inTime2] forKey:@"inTime"];
+    [attenWorktimeDic2 setObject:@"2" forKey:@"ordinal"];
+    [attenWorktimeDic2 setObject:@"false" forKey:@"voidFlag"];
+    NSMutableDictionary *attenWorktimeDic3 = [[[NSMutableDictionary alloc]init]autorelease];
+    [attenWorktimeDic3 setObject:[NSString stringWithFormat:@"%d",outTime3] forKey:@"outTime"];
+    [attenWorktimeDic3 setObject:[NSString stringWithFormat:@"%d",inTime3] forKey:@"inTime"];
+    [attenWorktimeDic3 setObject:@"3" forKey:@"ordinal"];
+    [attenWorktimeDic3 setObject:@"false" forKey:@"voidFlag"];
+    
+    NSMutableArray *attenWorktimeArr = [[[NSMutableArray alloc]init]autorelease];
+    [attenWorktimeArr addObject:attenWorktimeDic1];
+    [attenWorktimeArr addObject:attenWorktimeDic2];
+    if (outTime3>1) [attenWorktimeArr addObject:attenWorktimeDic3];
+    
+    NSLog(@"NSMutableArray == %@",attenWorktimeArr);
+    
+    return attenWorktimeArr;
+}
+/*attenInfo={"distance":"999","inMinute":"33","latitude":24.799119,"longitude":118.584223,"organizationId":204,"orgunitId":1,"outMinute":23,"updateUser":"58200","worktimes":[{"inTime":-14400000,"ordinal":1,"outTime":60000,"voidFlag":false},{"inTime":25020000,"ordinal":2,"outTime":32580000,"voidFlag":false}]}
+ */
+#pragma mark -- 考勤的其他数据转成字典
+- (NSDictionary *)getAttenConfigDictionaryByUpdateUser:(NSString *)updateUser
+                                 andDistance:(NSString *)distance
+                                 andInMinute:(NSString *)inMinute
+                                andOutMinute:(NSString *)outMinute
+                                 andLatitude:(CGFloat)latitude
+                                andLongitude:(CGFloat)longitude
+                           andOrganizationId:(int)organizationId
+                                andOrgunitId:(int)orgunitId
+                             andWorkTimesArr:(NSArray *)worktimes{
+    
+    //    [attenWorktimeDic setObject:[NSString stringWithFormat:@"%lld",dateToSeconde] forKey:@"createDate"];
+    NSMutableDictionary *attenWorktimeDic = [[[NSMutableDictionary alloc]init]autorelease];
+    [attenWorktimeDic setObject:updateUser forKey:@"updateUser"];
+    [attenWorktimeDic setObject:distance forKey:@"distance"];
+    [attenWorktimeDic setObject:inMinute forKey:@"inMinute"];
+    [attenWorktimeDic setObject:outMinute forKey:@"outMinute"];
+    [attenWorktimeDic setObject:[NSString stringWithFormat:@"%f",latitude] forKey:@"latitude"];
+    [attenWorktimeDic setObject:[NSString stringWithFormat:@"%f",longitude] forKey:@"longitude"];
+    [attenWorktimeDic setObject:[NSString stringWithFormat:@"%d",organizationId] forKey:@"organizationId"];
+    [attenWorktimeDic setObject:[NSString stringWithFormat:@"%d",orgunitId] forKey:@"orgunitId"];
+    [attenWorktimeDic setObject:worktimes forKey:@"worktimes"];
+    return attenWorktimeDic;
+}
+
+- (NSString *)getUpdateAttendanceConfigUTF8stringByUpdateUser:(NSString *)updateUser
+                                                  andDistance:(NSString *)distance
+                                                  andInMinute:(NSString *)inMinute
+                                                 andOutMinute:(NSString *)outMinute
+                                                  andLatitude:(CGFloat)latitude
+                                                 andLongitude:(CGFloat)longitude
+                                            andOrganizationId:(int)organizationId
+                                                 andOrgunitId:(int)orgunitId
+                                                  SetOutTime1:(int)outTime1
+                                                   andInTime1:(int)inTime1
+                                                  SetOutTime2:(int)outTime2
+                                                   andInTime2:(int)inTime2
+                                                  SetOutTime3:(int)outTime3
+                                                   andInTime3:(int)inTime3{
+    NSArray *confingArr = [self getAttenWorktimeArrayBySetOutTime1:outTime1 andInTime1:inTime1 SetOutTime2:outTime2 andInTime2:inTime2 SetOutTime3:outTime3 andInTime3:inTime3];
+    NSDictionary *confingDic = [self getAttenConfigDictionaryByUpdateUser:updateUser andDistance:distance andInMinute:inMinute andOutMinute:outMinute andLatitude:latitude andLongitude:longitude andOrganizationId:organizationId andOrgunitId:orgunitId andWorkTimesArr:confingArr];
+    NSData *getData = [NSJSONSerialization dataWithJSONObject:confingDic options:kNilOptions error:nil];
+    NSString *getStr = [[NSString alloc]initWithData:getData encoding:NSUTF8StringEncoding];
+    NSLog(@"getStr of configDatasDic == %@",getStr);
+    NSString * encodedString = (NSString *)CFURLCreateStringByAddingPercentEscapes( kCFAllocatorDefault, (CFStringRef)getStr, NULL, NULL,  kCFStringEncodingUTF8 );
+    NSLog(@"utf8 str == %@",encodedString);
+    return encodedString;
+}
+#pragma mark -- 保存更新考勤参数
+- (void) saveUpdateAttendanceConfigWithAttenInfoByUpdateUser:(NSString *)updateUser
+                                                 andDistance:(NSString *)distance
+                                                 andInMinute:(NSString *)inMinute
+                                                andOutMinute:(NSString *)outMinute
+                                                 andLatitude:(CGFloat)latitude
+                                                andLongitude:(CGFloat)longitude
+                                           andOrganizationId:(int)organizationId
+                                                andOrgunitId:(int)orgunitId
+                                                 SetOutTime1:(int)outTime1
+                                                  andInTime1:(int)inTime1
+                                                 SetOutTime2:(int)outTime2
+                                                  andInTime2:(int)inTime2
+                                                 SetOutTime3:(int)outTime3
+                                                  andInTime3:(int)inTime3{
+    NSDateFormatter *formatter = [[[NSDateFormatter alloc]init]autorelease];
+    [formatter setDateStyle:NSDateFormatterMediumStyle];
+    long long int dateToSeconde = [WTool getEndDateTimeMsWithNSDate:[NSDate date]];
+    NSLog(@"ManageAttendanceConfigVC dateToSeconde %lld",dateToSeconde);
+    NSString *attenInfo = [self getUpdateAttendanceConfigUTF8stringByUpdateUser:updateUser andDistance:distance andInMinute:inMinute andOutMinute:outMinute andLatitude:latitude andLongitude:longitude andOrganizationId:organizationId andOrgunitId:orgunitId SetOutTime1:outTime1 andInTime1:inTime1 SetOutTime2:outTime2 andInTime2:inTime2 SetOutTime3:outTime3 andInTime3:inTime3];
+    NSString *urlString = [NSString stringWithFormat:@"http://hb.m.gitom.com/3.0/attendance/updateAttendanceConfig?attenInfo=%@&cookie=%@&temp=%lld",attenInfo,_cookie,dateToSeconde];
+    NSLog(@"保存更新考勤参数 url == %@",urlString);
+    [SVProgressHUD showWithStatus:@"修改考勤配置…"];
+    ASIHTTPRequest *req = [[ASIHTTPRequest alloc]initWithURL:[NSURL URLWithString:urlString]];
+    [req setCompletionBlock:^{
+        [SVProgressHUD showSuccessWithStatus:@"修改成功！"];
+    }];
+    [req setFailedBlock:^{
+        [SVProgressHUD showErrorWithStatus:@"修改失败"];
+    }];
+    [req startAsynchronous];
 }
 
 #pragma mark - 发布部门消息

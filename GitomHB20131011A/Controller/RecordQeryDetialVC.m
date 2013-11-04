@@ -16,6 +16,7 @@
 #import "RecordQeryReportsVC.h"
 #import "SVProgressHUD.h"
 #import "AttendanceModel.h"
+#import "UIImageView+MJWebCache.h"
 
 @interface RecordQeryDetialVC ()
 
@@ -48,6 +49,7 @@
     
 	// Do any additional setup after loading the view.
     self.organizationTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, Screen_Width, Screen_Height-66)];
+    [self.organizationTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     self.organizationTableView.delegate = self;
     self.organizationTableView.dataSource = self;
     [self.view addSubview:self.organizationTableView];
@@ -117,7 +119,16 @@
                  cell.headImg.image = imgUserPhoto;
              }
          }];
-    }
+    }/*
+    if (memberInfo.photoUrl) {
+        NSLog(@"memberInfo.photoUrl");
+        UIImageView *imgView = [[UIImageView alloc]init];
+        [imgView setImageURLStr:memberInfo.photoUrl placeholder:nil];
+        cell.headImg = imgView;
+        //[cell addSubview:imgView];
+    }*/
+    cell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
+    cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
     return cell;
 }
 

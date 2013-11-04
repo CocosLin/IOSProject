@@ -1,0 +1,80 @@
+\hypertarget{interface_b_m_k_o_l_update_element}{\section{B\-M\-K\-O\-L\-Update\-Element 类参考}
+\label{interface_b_m_k_o_l_update_element}\index{B\-M\-K\-O\-L\-Update\-Element@{B\-M\-K\-O\-L\-Update\-Element}}
+}
+
+
+离线地图更新信息  
+
+
+
+
+{\ttfamily \#import $<$B\-M\-K\-Offline\-Map\-Type.\-h$>$}
+
+继承关系图 B\-M\-K\-O\-L\-Update\-Element\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{interface_b_m_k_o_l_update_element}
+\end{center}
+\end{figure}
+\subsection*{保护成员变量}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{interface_b_m_k_o_l_update_element_aa136416d4cc93c840d971046171358f3}{int {\bfseries \-\_\-city\-I\-D}}\label{interface_b_m_k_o_l_update_element_aa136416d4cc93c840d971046171358f3}
+
+\item 
+\hypertarget{interface_b_m_k_o_l_update_element_a9b77aeb4ed08740f3dab046fb48cf4f9}{int {\bfseries \-\_\-size}}\label{interface_b_m_k_o_l_update_element_a9b77aeb4ed08740f3dab046fb48cf4f9}
+
+\item 
+\hypertarget{interface_b_m_k_o_l_update_element_acf85b01f08fccf6e7ab5d1bbce6485b6}{int {\bfseries \-\_\-serversize}}\label{interface_b_m_k_o_l_update_element_acf85b01f08fccf6e7ab5d1bbce6485b6}
+
+\item 
+\hypertarget{interface_b_m_k_o_l_update_element_a2ce86cc25a0ce594be9dee2ed7ed6d7b}{B\-O\-O\-L {\bfseries \-\_\-update}}\label{interface_b_m_k_o_l_update_element_a2ce86cc25a0ce594be9dee2ed7ed6d7b}
+
+\item 
+\hypertarget{interface_b_m_k_o_l_update_element_a7d22cf3754355f93fb119984121d25be}{int {\bfseries \-\_\-ratio}}\label{interface_b_m_k_o_l_update_element_a7d22cf3754355f93fb119984121d25be}
+
+\item 
+\hypertarget{interface_b_m_k_o_l_update_element_afac492949ec4ce5f4f229de43f9a6836}{int {\bfseries \-\_\-status}}\label{interface_b_m_k_o_l_update_element_afac492949ec4ce5f4f229de43f9a6836}
+
+\item 
+\hypertarget{interface_b_m_k_o_l_update_element_a21210d50957c6b1ebddd9f5bdfed5e7f}{C\-L\-Location\-Coordinate2\-D {\bfseries \-\_\-pt}}\label{interface_b_m_k_o_l_update_element_a21210d50957c6b1ebddd9f5bdfed5e7f}
+
+\end{DoxyCompactItemize}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{interface_b_m_k_o_l_update_element_aa27dfbfc8e801d04ea9a55c43793fe24}{N\-S\-String $\ast$ {\bfseries \-\_\-city\-Name}}\label{interface_b_m_k_o_l_update_element_aa27dfbfc8e801d04ea9a55c43793fe24}
+
+\item 
+\hypertarget{interface_b_m_k_o_l_update_element_acf8998f896d5eee3bf25b5efaf316ffa}{N\-S\-String $\ast$ \hyperlink{interface_b_m_k_o_l_update_element_acf8998f896d5eee3bf25b5efaf316ffa}{city\-Name}}\label{interface_b_m_k_o_l_update_element_acf8998f896d5eee3bf25b5efaf316ffa}
+
+\begin{DoxyCompactList}\small\item\em 城市名称 \end{DoxyCompactList}\item 
+\hypertarget{interface_b_m_k_o_l_update_element_a0fc2ac335466b2fb891d1c3c430e14db}{int \hyperlink{interface_b_m_k_o_l_update_element_a0fc2ac335466b2fb891d1c3c430e14db}{city\-I\-D}}\label{interface_b_m_k_o_l_update_element_a0fc2ac335466b2fb891d1c3c430e14db}
+
+\begin{DoxyCompactList}\small\item\em 城市\-I\-D \end{DoxyCompactList}\item 
+\hypertarget{interface_b_m_k_o_l_update_element_a64207ce9d00c3127b02fbeaeb2dfc49c}{int \hyperlink{interface_b_m_k_o_l_update_element_a64207ce9d00c3127b02fbeaeb2dfc49c}{size}}\label{interface_b_m_k_o_l_update_element_a64207ce9d00c3127b02fbeaeb2dfc49c}
+
+\begin{DoxyCompactList}\small\item\em 已下载数据大小，单位：字节 \end{DoxyCompactList}\item 
+\hypertarget{interface_b_m_k_o_l_update_element_ad61b9f37f09ee7c2c2c41570c1329d1e}{int \hyperlink{interface_b_m_k_o_l_update_element_ad61b9f37f09ee7c2c2c41570c1329d1e}{serversize}}\label{interface_b_m_k_o_l_update_element_ad61b9f37f09ee7c2c2c41570c1329d1e}
+
+\begin{DoxyCompactList}\small\item\em 服务端数据大小，当update为\-Y\-E\-S时有效，单位：字节 \end{DoxyCompactList}\item 
+\hypertarget{interface_b_m_k_o_l_update_element_a8f26b0d8b91573b17f2314fe5795dcd4}{int \hyperlink{interface_b_m_k_o_l_update_element_a8f26b0d8b91573b17f2314fe5795dcd4}{ratio}}\label{interface_b_m_k_o_l_update_element_a8f26b0d8b91573b17f2314fe5795dcd4}
+
+\begin{DoxyCompactList}\small\item\em 下载比率，100为下载完成 \end{DoxyCompactList}\item 
+\hypertarget{interface_b_m_k_o_l_update_element_a1e980d13929fc0dc732edddf1ae13bf2}{int \hyperlink{interface_b_m_k_o_l_update_element_a1e980d13929fc0dc732edddf1ae13bf2}{status}}\label{interface_b_m_k_o_l_update_element_a1e980d13929fc0dc732edddf1ae13bf2}
+
+\begin{DoxyCompactList}\small\item\em 下载状态, 1\-:正在下载　2\-:等待下载　3\-:已暂停　4\-:完成 \end{DoxyCompactList}\item 
+\hypertarget{interface_b_m_k_o_l_update_element_a1adc137eba11d9ae142310d3556bc446}{B\-O\-O\-L \hyperlink{interface_b_m_k_o_l_update_element_a1adc137eba11d9ae142310d3556bc446}{update}}\label{interface_b_m_k_o_l_update_element_a1adc137eba11d9ae142310d3556bc446}
+
+\begin{DoxyCompactList}\small\item\em 更新状态 \end{DoxyCompactList}\item 
+\hypertarget{interface_b_m_k_o_l_update_element_a9e229b507ced476146db8f80c71ea5bd}{C\-L\-Location\-Coordinate2\-D \hyperlink{interface_b_m_k_o_l_update_element_a9e229b507ced476146db8f80c71ea5bd}{pt}}\label{interface_b_m_k_o_l_update_element_a9e229b507ced476146db8f80c71ea5bd}
+
+\begin{DoxyCompactList}\small\item\em 城市中心点 \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{详细描述}
+离线地图更新信息 
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+B\-M\-K\-Offline\-Map\-Type.\-h\end{DoxyCompactItemize}

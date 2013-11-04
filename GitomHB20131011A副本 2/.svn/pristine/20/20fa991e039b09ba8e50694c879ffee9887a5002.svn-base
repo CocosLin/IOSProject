@@ -1,0 +1,49 @@
+\hypertarget{protocol_b_m_k_offline_map_delegate-p}{\section{$<$B\-M\-K\-Offline\-Map\-Delegate$>$ 协议参考}
+\label{protocol_b_m_k_offline_map_delegate-p}\index{$<$\-B\-M\-K\-Offline\-Map\-Delegate$>$@{$<$\-B\-M\-K\-Offline\-Map\-Delegate$>$}}
+}
+
+
+离线地图delegate，用于获取通知  
+
+
+
+
+{\ttfamily \#import $<$B\-M\-K\-Offline\-Map.\-h$>$}
+
+继承关系图 $<$B\-M\-K\-Offline\-Map\-Delegate$>$\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{protocol_b_m_k_offline_map_delegate-p}
+\end{center}
+\end{figure}
+\subsection*{实例方法}
+\begin{DoxyCompactItemize}
+\item 
+(void) -\/ \hyperlink{protocol_b_m_k_offline_map_delegate-p_abe1dd90ae5ffd9612423c547ab9b1970}{on\-Get\-Offline\-Map\-State\-:with\-State\-:}
+\end{DoxyCompactItemize}
+
+
+\subsection{详细描述}
+离线地图delegate，用于获取通知 
+
+\subsection{方法文档}
+\hypertarget{protocol_b_m_k_offline_map_delegate-p_abe1dd90ae5ffd9612423c547ab9b1970}{\index{B\-M\-K\-Offline\-Map\-Delegate-\/p@{B\-M\-K\-Offline\-Map\-Delegate-\/p}!on\-Get\-Offline\-Map\-State\-:with\-State\-:@{on\-Get\-Offline\-Map\-State\-:with\-State\-:}}
+\index{on\-Get\-Offline\-Map\-State\-:with\-State\-:@{on\-Get\-Offline\-Map\-State\-:with\-State\-:}!BMKOfflineMapDelegate-p@{B\-M\-K\-Offline\-Map\-Delegate-\/p}}
+\subsubsection[{on\-Get\-Offline\-Map\-State\-:with\-State\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (void) on\-Get\-Offline\-Map\-State\-: 
+\begin{DoxyParamCaption}
+\item[{(int)}]{type}
+\item[{withState:(int)}]{state}
+\end{DoxyParamCaption}
+}}\label{protocol_b_m_k_offline_map_delegate-p_abe1dd90ae5ffd9612423c547ab9b1970}
+返回通知结果 
+\begin{DoxyParams}{参数}
+{\em type} & 事件类型： T\-Y\-P\-E\-\_\-\-O\-F\-F\-L\-I\-N\-E\-\_\-\-U\-P\-D\-A\-T\-E,T\-Y\-P\-E\-\_\-\-O\-F\-F\-L\-I\-N\-E\-\_\-\-Z\-I\-P\-C\-N\-T,T\-Y\-P\-E\-\_\-\-O\-F\-F\-L\-I\-N\-E\-\_\-\-U\-N\-Z\-I\-P, T\-Y\-P\-E\-\_\-\-O\-F\-F\-L\-I\-N\-E\-\_\-\-E\-R\-R\-Z\-I\-P, T\-Y\-P\-E\-\_\-\-V\-E\-R\-\_\-\-U\-P\-D\-A\-T\-E, T\-Y\-P\-E\-\_\-\-O\-F\-F\-L\-I\-N\-E\-\_\-\-U\-N\-Z\-I\-P\-F\-I\-N\-I\-S\-H, T\-Y\-P\-E\-\_\-\-O\-F\-F\-L\-I\-N\-E\-\_\-\-A\-D\-D \\
+\hline
+{\em state} & 事件状态，当type为\-T\-Y\-P\-E\-\_\-\-O\-F\-F\-L\-I\-N\-E\-\_\-\-U\-P\-D\-A\-T\-E时，表示正在下载或更新城市id为state的离线包，当type为\-T\-Y\-P\-E\-\_\-\-O\-F\-F\-L\-I\-N\-E\-\_\-\-Z\-I\-P\-C\-N\-T时，表示检测到state个离线压缩包，当type为\-T\-Y\-P\-E\-\_\-\-O\-F\-F\-L\-I\-N\-E\-\_\-\-A\-D\-D时，表示新安装的离线地图数目，当type为\-T\-Y\-P\-E\-\_\-\-O\-F\-F\-L\-I\-N\-E\-\_\-\-U\-N\-Z\-I\-P时，表示正在解压第state个离线包，当type为\-T\-Y\-P\-E\-\_\-\-O\-F\-F\-L\-I\-N\-E\-\_\-\-E\-R\-R\-Z\-I\-P时，表示有state个错误包，当type为\-T\-Y\-P\-E\-\_\-\-V\-E\-R\-\_\-\-U\-P\-D\-A\-T\-E时，表示id为state的城市离线包有更新，当type为\-T\-Y\-P\-E\-\_\-\-O\-F\-F\-L\-I\-N\-E\-\_\-\-U\-N\-Z\-I\-P\-F\-I\-N\-I\-S\-H时，表示扫瞄完成，成功导入state个离线包 \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this protocol was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+B\-M\-K\-Offline\-Map.\-h\end{DoxyCompactItemize}

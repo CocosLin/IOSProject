@@ -12,5 +12,6 @@
 @property (retain, nonatomic) IBOutlet UILabel *realName;
 @property (retain, nonatomic) IBOutlet UILabel *creatDate;
 @property (retain, nonatomic) IBOutlet UILabel *address;
+@property (retain, nonatomic) IBOutlet UIImageView *rightImg;
 
 @end

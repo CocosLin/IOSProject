@@ -13,6 +13,7 @@
 #import "WDataParse.h"
 #import "WDataService.h"
 #import "ServerBaseModel.h"
+
 @interface HBServerKit : BaseService
 @property(nonatomic,retain)ServerBaseModel * serverBaseMessage;
 #pragma mark - 用户相关操作
@@ -80,6 +81,21 @@ typedef  void(^WbReportSave)(BOOL isReportOk,WError * myError);
 -(void)saveImageReportsOfMembersWithData:(NSString *)imgData
                            GotArrReports:(WbReportJsonArr)callback;
 
+#pragma mark -- 保存更新考勤参数
+- (void) saveUpdateAttendanceConfigWithAttenInfoByUpdateUser:(NSString *)updateUser
+                                                 andDistance:(NSString *)distance
+                                                 andInMinute:(NSString *)inMinute
+                                                andOutMinute:(NSString *)outMinute
+                                                 andLatitude:(CGFloat)latitude
+                                                andLongitude:(CGFloat)longitude
+                                           andOrganizationId:(int)organizationId
+                                                andOrgunitId:(int)orgunitId
+                                                 SetOutTime1:(int)outTime1
+                                                  andInTime1:(int)inTime1
+                                                 SetOutTime2:(int)outTime2
+                                                  andInTime2:(int)inTime2
+                                                 SetOutTime3:(int)outTime3
+                                                  andInTime3:(int)inTime3;
 #pragma mark - 发布部门消息
 -(void)saveReportWithOrganizationId:(NSInteger)organizationId
                           OrgunitId:(NSInteger)orgunitId

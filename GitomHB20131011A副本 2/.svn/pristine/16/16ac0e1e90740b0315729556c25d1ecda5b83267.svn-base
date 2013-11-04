@@ -1,0 +1,137 @@
+\hypertarget{interface_b_m_k_polygon}{\section{B\-M\-K\-Polygon 类参考}
+\label{interface_b_m_k_polygon}\index{B\-M\-K\-Polygon@{B\-M\-K\-Polygon}}
+}
+
+
+此类用于定义一个多边形区域  
+
+
+
+
+{\ttfamily \#import $<$B\-M\-K\-Polygon.\-h$>$}
+
+继承关系图 B\-M\-K\-Polygon\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=5.000000cm]{interface_b_m_k_polygon}
+\end{center}
+\end{figure}
+\subsection*{类方法}
+\begin{DoxyCompactItemize}
+\item 
+(\hyperlink{interface_b_m_k_polygon}{B\-M\-K\-Polygon} $\ast$) + \hyperlink{interface_b_m_k_polygon_a74b92a200709fb4c6718b26ebdfcc50a}{polygon\-With\-Points\-:count\-:}
+\item 
+(\hyperlink{interface_b_m_k_polygon}{B\-M\-K\-Polygon} $\ast$) + \hyperlink{interface_b_m_k_polygon_aa4d03b7361ffc6b93721d456e62b14b0}{polygon\-With\-Points\-:count\-:interior\-Polygons\-:}
+\item 
+(\hyperlink{interface_b_m_k_polygon}{B\-M\-K\-Polygon} $\ast$) + \hyperlink{interface_b_m_k_polygon_aa3de0deeba040969c9211b64c59831f2}{polygon\-With\-Coordinates\-:count\-:}
+\item 
+(\hyperlink{interface_b_m_k_polygon}{B\-M\-K\-Polygon} $\ast$) + \hyperlink{interface_b_m_k_polygon_a298e0f0578320ab5419a9e150ffc0714}{polygon\-With\-Coordinates\-:count\-:interior\-Polygons\-:}
+\end{DoxyCompactItemize}
+\subsection*{保护成员变量}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{interface_b_m_k_polygon_ab6ba9bddb4458202dc547dd3a7d2f880}{package C\-L\-Location\-Coordinate2\-D {\bfseries \-\_\-centroid}}\label{interface_b_m_k_polygon_ab6ba9bddb4458202dc547dd3a7d2f880}
+
+\item 
+\hypertarget{interface_b_m_k_polygon_a2f794615e03edb6c089d892ee93c7f98}{N\-S\-Array $\ast$ {\bfseries \-\_\-interior\-Polygons}}\label{interface_b_m_k_polygon_a2f794615e03edb6c089d892ee93c7f98}
+
+\item 
+\hypertarget{interface_b_m_k_polygon_ac422f2bfe27b80c7b34a8f4d4c8bb4bb}{B\-O\-O\-L {\bfseries \-\_\-is\-Definitely\-Convex}}\label{interface_b_m_k_polygon_ac422f2bfe27b80c7b34a8f4d4c8bb4bb}
+
+\end{DoxyCompactItemize}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{interface_b_m_k_polygon_a7ff1fd88f27c07dbd6a2243178d7f8c4}{N\-S\-Array $\ast$ \hyperlink{interface_b_m_k_polygon_a7ff1fd88f27c07dbd6a2243178d7f8c4}{interior\-Polygons}}\label{interface_b_m_k_polygon_a7ff1fd88f27c07dbd6a2243178d7f8c4}
+
+\begin{DoxyCompactList}\small\item\em 内部多边形数组 \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{附加继承成员}
+
+
+\subsection{详细描述}
+此类用于定义一个多边形区域 
+
+\subsection{方法文档}
+\hypertarget{interface_b_m_k_polygon_aa3de0deeba040969c9211b64c59831f2}{\index{B\-M\-K\-Polygon@{B\-M\-K\-Polygon}!polygon\-With\-Coordinates\-:count\-:@{polygon\-With\-Coordinates\-:count\-:}}
+\index{polygon\-With\-Coordinates\-:count\-:@{polygon\-With\-Coordinates\-:count\-:}!BMKPolygon@{B\-M\-K\-Polygon}}
+\subsubsection[{polygon\-With\-Coordinates\-:count\-:}]{\setlength{\rightskip}{0pt plus 5cm}+ ({\bf B\-M\-K\-Polygon} $\ast$) polygon\-With\-Coordinates\-: 
+\begin{DoxyParamCaption}
+\item[{(C\-L\-Location\-Coordinate2\-D $\ast$)}]{coords}
+\item[{count:(N\-S\-U\-Integer)}]{count}
+\end{DoxyParamCaption}
+}}\label{interface_b_m_k_polygon_aa3de0deeba040969c9211b64c59831f2}
+根据多个点生成多边形 
+\begin{DoxyParams}{参数}
+{\em coords} & 经纬度坐标点数组，这些点将被拷贝到生成的多边形对象中 \\
+\hline
+{\em count} & 点的个数 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+新生成的多边形对象 
+\end{DoxyReturn}
+\hypertarget{interface_b_m_k_polygon_a298e0f0578320ab5419a9e150ffc0714}{\index{B\-M\-K\-Polygon@{B\-M\-K\-Polygon}!polygon\-With\-Coordinates\-:count\-:interior\-Polygons\-:@{polygon\-With\-Coordinates\-:count\-:interior\-Polygons\-:}}
+\index{polygon\-With\-Coordinates\-:count\-:interior\-Polygons\-:@{polygon\-With\-Coordinates\-:count\-:interior\-Polygons\-:}!BMKPolygon@{B\-M\-K\-Polygon}}
+\subsubsection[{polygon\-With\-Coordinates\-:count\-:interior\-Polygons\-:}]{\setlength{\rightskip}{0pt plus 5cm}+ ({\bf B\-M\-K\-Polygon} $\ast$) polygon\-With\-Coordinates\-: 
+\begin{DoxyParamCaption}
+\item[{(C\-L\-Location\-Coordinate2\-D $\ast$)}]{coords}
+\item[{count:(N\-S\-U\-Integer)}]{count}
+\item[{interiorPolygons:(N\-S\-Array $\ast$)}]{interior\-Polygons}
+\end{DoxyParamCaption}
+}}\label{interface_b_m_k_polygon_a298e0f0578320ab5419a9e150ffc0714}
+根据多个点及指定的内部镂空多边形数组生成新的多边形对象 
+\begin{DoxyParams}{参数}
+{\em coords} & 经纬度坐标点数组，这些点将被拷贝到生成的多边形对象中 \\
+\hline
+{\em count} & 点的个数 \\
+\hline
+{\em interior\-Polygons} & 指定的内部镂空多边形数组 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+新生成的多边形对象 
+\end{DoxyReturn}
+\hypertarget{interface_b_m_k_polygon_a74b92a200709fb4c6718b26ebdfcc50a}{\index{B\-M\-K\-Polygon@{B\-M\-K\-Polygon}!polygon\-With\-Points\-:count\-:@{polygon\-With\-Points\-:count\-:}}
+\index{polygon\-With\-Points\-:count\-:@{polygon\-With\-Points\-:count\-:}!BMKPolygon@{B\-M\-K\-Polygon}}
+\subsubsection[{polygon\-With\-Points\-:count\-:}]{\setlength{\rightskip}{0pt plus 5cm}+ ({\bf B\-M\-K\-Polygon} $\ast$) polygon\-With\-Points\-: 
+\begin{DoxyParamCaption}
+\item[{({\bf B\-M\-K\-Map\-Point} $\ast$)}]{points}
+\item[{count:(N\-S\-U\-Integer)}]{count}
+\end{DoxyParamCaption}
+}}\label{interface_b_m_k_polygon_a74b92a200709fb4c6718b26ebdfcc50a}
+根据多个点生成多边形 
+\begin{DoxyParams}{参数}
+{\em points} & 直角坐标点数组，这些点将被拷贝到生成的多边形对象中 \\
+\hline
+{\em count} & 点的个数 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+新生成的多边形对象 
+\end{DoxyReturn}
+\hypertarget{interface_b_m_k_polygon_aa4d03b7361ffc6b93721d456e62b14b0}{\index{B\-M\-K\-Polygon@{B\-M\-K\-Polygon}!polygon\-With\-Points\-:count\-:interior\-Polygons\-:@{polygon\-With\-Points\-:count\-:interior\-Polygons\-:}}
+\index{polygon\-With\-Points\-:count\-:interior\-Polygons\-:@{polygon\-With\-Points\-:count\-:interior\-Polygons\-:}!BMKPolygon@{B\-M\-K\-Polygon}}
+\subsubsection[{polygon\-With\-Points\-:count\-:interior\-Polygons\-:}]{\setlength{\rightskip}{0pt plus 5cm}+ ({\bf B\-M\-K\-Polygon} $\ast$) polygon\-With\-Points\-: 
+\begin{DoxyParamCaption}
+\item[{({\bf B\-M\-K\-Map\-Point} $\ast$)}]{points}
+\item[{count:(N\-S\-U\-Integer)}]{count}
+\item[{interiorPolygons:(N\-S\-Array $\ast$)}]{interior\-Polygons}
+\end{DoxyParamCaption}
+}}\label{interface_b_m_k_polygon_aa4d03b7361ffc6b93721d456e62b14b0}
+根据多个点及指定的内部镂空多边形数组生成新的多边形对象 
+\begin{DoxyParams}{参数}
+{\em points} & 直角坐标点数组，这些点将被拷贝到生成的多边形对象中 \\
+\hline
+{\em count} & 点的个数 \\
+\hline
+{\em interior\-Polygons} & 指定的内部镂空多边形数组 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+新生成的多边形对象 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+B\-M\-K\-Polygon.\-h\end{DoxyCompactItemize}

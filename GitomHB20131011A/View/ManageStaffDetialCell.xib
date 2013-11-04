@@ -138,6 +138,10 @@
 				<reference key="NSSuperview"/>
 				<reference key="NSNextKeyView" ref="454427291"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
+				<object class="NSColor" key="IBUIBackgroundColor">
+					<int key="NSColorSpace">1</int>
+					<bytes key="NSRGB">MC45MjU0OTAxOTYxIDAuOTI5NDExNzY0NyAwLjk0NTA5ODAzOTIgMC42AA</bytes>
+				</object>
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 				<reference key="IBUIContentView" ref="454427291"/>
 				<string key="IBUIReuseIdentifier">ManageStaffDetialCell</string>

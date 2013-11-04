@@ -16,12 +16,12 @@
 @property (nonatomic,assign) CGFloat latitude;
 @property (nonatomic,assign) CGFloat longitude;
 
-@property (nonatomic,assign) CGFloat offTime1;
-@property (nonatomic,assign) CGFloat oneTime1;
-@property (nonatomic,assign) CGFloat offTime2;
-@property (nonatomic,assign) CGFloat oneTime2;
-@property (nonatomic,assign) CGFloat offTime3;
-@property (nonatomic,assign) CGFloat oneTime3;
+@property (nonatomic,assign) long offTime1;
+@property (nonatomic,assign) long oneTime1;
+@property (nonatomic,assign) long offTime2;
+@property (nonatomic,assign) long oneTime2;
+@property (nonatomic,assign) long offTime3;
+@property (nonatomic,assign) long oneTime3;
 
 @property (nonatomic,copy) NSString *distance;
 @property (nonatomic,copy) NSString *outMinute;

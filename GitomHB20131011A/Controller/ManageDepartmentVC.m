@@ -111,6 +111,7 @@
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
     }
     cell.textLabel.text = [self.arrSet objectAtIndex:indexPath.row];
+    cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
     return cell;
 }
 

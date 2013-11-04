@@ -1,0 +1,36 @@
+\hypertarget{interface_b_m_k_pin_annotation_view}{\section{B\-M\-K\-Pin\-Annotation\-View 类参考}
+\label{interface_b_m_k_pin_annotation_view}\index{B\-M\-K\-Pin\-Annotation\-View@{B\-M\-K\-Pin\-Annotation\-View}}
+}
+
+
+提供类似大头针效果的annotation view  
+
+
+
+
+{\ttfamily \#import $<$B\-M\-K\-Pin\-Annotation\-View.\-h$>$}
+
+继承关系图 B\-M\-K\-Pin\-Annotation\-View\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{interface_b_m_k_pin_annotation_view}
+\end{center}
+\end{figure}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{interface_b_m_k_pin_annotation_view_a84f4c8db4dfa8d1d5a8ff6af8db7826d}{B\-M\-K\-Pin\-Annotation\-Color \hyperlink{interface_b_m_k_pin_annotation_view_a84f4c8db4dfa8d1d5a8ff6af8db7826d}{pin\-Color}}\label{interface_b_m_k_pin_annotation_view_a84f4c8db4dfa8d1d5a8ff6af8db7826d}
+
+\begin{DoxyCompactList}\small\item\em 大头针的颜色，有\-B\-M\-K\-Pin\-Annotation\-Color\-Red, B\-M\-K\-Pin\-Annotation\-Color\-Green, B\-M\-K\-Pin\-Annotation\-Color\-Purple三种 \end{DoxyCompactList}\item 
+\hypertarget{interface_b_m_k_pin_annotation_view_a0ea18aa3b2d71e06564bf11199d05625}{B\-O\-O\-L \hyperlink{interface_b_m_k_pin_annotation_view_a0ea18aa3b2d71e06564bf11199d05625}{animates\-Drop}}\label{interface_b_m_k_pin_annotation_view_a0ea18aa3b2d71e06564bf11199d05625}
+
+\begin{DoxyCompactList}\small\item\em 动画效果 \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{附加继承成员}
+
+
+\subsection{详细描述}
+提供类似大头针效果的annotation view 
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+B\-M\-K\-Pin\-Annotation\-View.\-h\end{DoxyCompactItemize}

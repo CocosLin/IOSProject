@@ -159,6 +159,10 @@
 				<reference key="NSSuperview"/>
 				<reference key="NSNextKeyView" ref="971085846"/>
 				<string key="NSReuseIdentifierKey">_NS:9</string>
+				<object class="NSColor" key="IBUIBackgroundColor">
+					<int key="NSColorSpace">1</int>
+					<bytes key="NSRGB">MC45MjU0OTAxOTYxIDAuOTI5NDExNzY0NyAwLjk0NTA5ODAzOTIgMC42AA</bytes>
+				</object>
 				<string key="targetRuntimeIdentifier">IBCocoaTouchFramework</string>
 				<reference key="IBUIContentView" ref="971085846"/>
 				<string key="IBUIReuseIdentifier">RecordQeryReportsVcCell</string>
@@ -190,6 +194,14 @@
 						<reference key="destination" ref="214876228"/>
 					</object>
 					<int key="connectionID">24</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchOutletConnection" key="connection">
+						<string key="label">rightImg</string>
+						<reference key="source" ref="391339513"/>
+						<reference key="destination" ref="740403764"/>
+					</object>
+					<int key="connectionID">118</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -649,7 +661,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">117</int>
+			<int key="maxID">118</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes"/>
 		<int key="IBDocument.localizationMode">0</int>

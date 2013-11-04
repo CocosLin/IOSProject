@@ -1,0 +1,197 @@
+\hypertarget{category_b_m_k_map_view_07_overlays_a_p_i_08}{\section{B\-M\-K\-Map\-View(Overlays\-A\-P\-I) Category Reference}
+\label{category_b_m_k_map_view_07_overlays_a_p_i_08}\index{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)@{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)}}
+}
+\subsection*{实例方法}
+\begin{DoxyCompactItemize}
+\item 
+(void) -\/ \hyperlink{category_b_m_k_map_view_07_overlays_a_p_i_08_af85ad6091568df29d9e7c3dea82a1a2b}{add\-Overlay\-:}
+\item 
+(void) -\/ \hyperlink{category_b_m_k_map_view_07_overlays_a_p_i_08_ab7d29d948515cc6d947d6aa63f904168}{add\-Overlays\-:}
+\item 
+(void) -\/ \hyperlink{category_b_m_k_map_view_07_overlays_a_p_i_08_a3be1f2a019df3ff971f6a36f142e55be}{remove\-Overlay\-:}
+\item 
+(void) -\/ \hyperlink{category_b_m_k_map_view_07_overlays_a_p_i_08_a3eb7909fb1adce117c1de432fd5d816a}{remove\-Overlays\-:}
+\item 
+(void) -\/ \hyperlink{category_b_m_k_map_view_07_overlays_a_p_i_08_adc0775a2651c1e4099f93d9c1bbffe3d}{insert\-Overlay\-:at\-Index\-:}
+\item 
+(void) -\/ \hyperlink{category_b_m_k_map_view_07_overlays_a_p_i_08_a62c1c29b8e5b408ba0c40411a3c1f50f}{exchange\-Overlay\-At\-Index\-:with\-Overlay\-At\-Index\-:}
+\item 
+(void) -\/ \hyperlink{category_b_m_k_map_view_07_overlays_a_p_i_08_ad94b45c4df7978e3a6095918323496d3}{insert\-Overlay\-:above\-Overlay\-:}
+\item 
+(void) -\/ \hyperlink{category_b_m_k_map_view_07_overlays_a_p_i_08_a73dfe9f74d722b7b1fc477e791f34653}{insert\-Overlay\-:below\-Overlay\-:}
+\item 
+(\hyperlink{interface_b_m_k_overlay_view}{B\-M\-K\-Overlay\-View} $\ast$) -\/ \hyperlink{category_b_m_k_map_view_07_overlays_a_p_i_08_aa88093440ad22f7af9cf9a36051f662d}{view\-For\-Overlay\-:}
+\end{DoxyCompactItemize}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{category_b_m_k_map_view_07_overlays_a_p_i_08_a6c673c46ad9f146f80e48d82ebcf934b}{N\-S\-Array $\ast$ \hyperlink{category_b_m_k_map_view_07_overlays_a_p_i_08_a6c673c46ad9f146f80e48d82ebcf934b}{overlays}}\label{category_b_m_k_map_view_07_overlays_a_p_i_08_a6c673c46ad9f146f80e48d82ebcf934b}
+
+\begin{DoxyCompactList}\small\item\em 当前map\-View中已经添加的\-Overlay数组 \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{方法文档}
+\hypertarget{category_b_m_k_map_view_07_overlays_a_p_i_08_af85ad6091568df29d9e7c3dea82a1a2b}{\index{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)@{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)}!add\-Overlay\-:@{add\-Overlay\-:}}
+\index{add\-Overlay\-:@{add\-Overlay\-:}!BMKMapView(OverlaysAPI)@{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)}}
+\subsubsection[{add\-Overlay\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (void) add\-Overlay\-: 
+\begin{DoxyParamCaption}
+\item[{(id$<$ {\bf B\-M\-K\-Overlay} $>$)}]{overlay}
+\end{DoxyParamCaption}
+}}\label{category_b_m_k_map_view_07_overlays_a_p_i_08_af85ad6091568df29d9e7c3dea82a1a2b}
+向地图窗口添加\-Overlay，需要实现\-B\-M\-K\-Map\-View\-Delegate的-\/map\-View\-:view\-For\-Overlay\-:函数来生成标注对应的\-View 
+\begin{DoxyParams}{参数}
+{\em overlay} & 要添加的overlay \\
+\hline
+\end{DoxyParams}
+
+
+Extends class \hyperlink{interface_b_m_k_map_view_af85ad6091568df29d9e7c3dea82a1a2b}{B\-M\-K\-Map\-View}.
+
+\hypertarget{category_b_m_k_map_view_07_overlays_a_p_i_08_ab7d29d948515cc6d947d6aa63f904168}{\index{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)@{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)}!add\-Overlays\-:@{add\-Overlays\-:}}
+\index{add\-Overlays\-:@{add\-Overlays\-:}!BMKMapView(OverlaysAPI)@{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)}}
+\subsubsection[{add\-Overlays\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (void) add\-Overlays\-: 
+\begin{DoxyParamCaption}
+\item[{(N\-S\-Array $\ast$)}]{overlays}
+\end{DoxyParamCaption}
+}}\label{category_b_m_k_map_view_07_overlays_a_p_i_08_ab7d29d948515cc6d947d6aa63f904168}
+向地图窗口添加一组\-Overlay，需要实现\-B\-M\-K\-Map\-View\-Delegate的-\/map\-View\-:view\-For\-Overlay\-:函数来生成标注对应的\-View 
+\begin{DoxyParams}{参数}
+{\em overlays} & 要添加的overlay数组 \\
+\hline
+\end{DoxyParams}
+
+
+Extends class \hyperlink{interface_b_m_k_map_view_ab7d29d948515cc6d947d6aa63f904168}{B\-M\-K\-Map\-View}.
+
+\hypertarget{category_b_m_k_map_view_07_overlays_a_p_i_08_a62c1c29b8e5b408ba0c40411a3c1f50f}{\index{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)@{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)}!exchange\-Overlay\-At\-Index\-:with\-Overlay\-At\-Index\-:@{exchange\-Overlay\-At\-Index\-:with\-Overlay\-At\-Index\-:}}
+\index{exchange\-Overlay\-At\-Index\-:with\-Overlay\-At\-Index\-:@{exchange\-Overlay\-At\-Index\-:with\-Overlay\-At\-Index\-:}!BMKMapView(OverlaysAPI)@{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)}}
+\subsubsection[{exchange\-Overlay\-At\-Index\-:with\-Overlay\-At\-Index\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (void) exchange\-Overlay\-At\-Index\-: 
+\begin{DoxyParamCaption}
+\item[{(N\-S\-U\-Integer)}]{index1}
+\item[{withOverlayAtIndex:(N\-S\-U\-Integer)}]{index2}
+\end{DoxyParamCaption}
+}}\label{category_b_m_k_map_view_07_overlays_a_p_i_08_a62c1c29b8e5b408ba0c40411a3c1f50f}
+在交换指定索引处的\-Overlay 
+\begin{DoxyParams}{参数}
+{\em index1} & 索引1 \\
+\hline
+{\em index2} & 索引2 \\
+\hline
+\end{DoxyParams}
+
+
+Extends class \hyperlink{interface_b_m_k_map_view_a62c1c29b8e5b408ba0c40411a3c1f50f}{B\-M\-K\-Map\-View}.
+
+\hypertarget{category_b_m_k_map_view_07_overlays_a_p_i_08_ad94b45c4df7978e3a6095918323496d3}{\index{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)@{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)}!insert\-Overlay\-:above\-Overlay\-:@{insert\-Overlay\-:above\-Overlay\-:}}
+\index{insert\-Overlay\-:above\-Overlay\-:@{insert\-Overlay\-:above\-Overlay\-:}!BMKMapView(OverlaysAPI)@{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)}}
+\subsubsection[{insert\-Overlay\-:above\-Overlay\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (void) insert\-Overlay\-: 
+\begin{DoxyParamCaption}
+\item[{(id$<$ {\bf B\-M\-K\-Overlay} $>$)}]{overlay}
+\item[{aboveOverlay:(id$<$ {\bf B\-M\-K\-Overlay} $>$)}]{sibling}
+\end{DoxyParamCaption}
+}}\label{category_b_m_k_map_view_07_overlays_a_p_i_08_ad94b45c4df7978e3a6095918323496d3}
+在指定的\-Overlay之上插入一个overlay 
+\begin{DoxyParams}{参数}
+{\em overlay} & 带添加的\-Overlay \\
+\hline
+{\em sibling} & 用于指定相对位置的\-Overlay \\
+\hline
+\end{DoxyParams}
+
+
+Extends class \hyperlink{interface_b_m_k_map_view_ad94b45c4df7978e3a6095918323496d3}{B\-M\-K\-Map\-View}.
+
+\hypertarget{category_b_m_k_map_view_07_overlays_a_p_i_08_adc0775a2651c1e4099f93d9c1bbffe3d}{\index{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)@{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)}!insert\-Overlay\-:at\-Index\-:@{insert\-Overlay\-:at\-Index\-:}}
+\index{insert\-Overlay\-:at\-Index\-:@{insert\-Overlay\-:at\-Index\-:}!BMKMapView(OverlaysAPI)@{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)}}
+\subsubsection[{insert\-Overlay\-:at\-Index\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (void) insert\-Overlay\-: 
+\begin{DoxyParamCaption}
+\item[{(id$<$ {\bf B\-M\-K\-Overlay} $>$)}]{overlay}
+\item[{atIndex:(N\-S\-U\-Integer)}]{index}
+\end{DoxyParamCaption}
+}}\label{category_b_m_k_map_view_07_overlays_a_p_i_08_adc0775a2651c1e4099f93d9c1bbffe3d}
+在指定的索引处添加一个\-Overlay 
+\begin{DoxyParams}{参数}
+{\em overlay} & 要添加的overlay \\
+\hline
+{\em index} & 指定的索引 \\
+\hline
+\end{DoxyParams}
+
+
+Extends class \hyperlink{interface_b_m_k_map_view_adc0775a2651c1e4099f93d9c1bbffe3d}{B\-M\-K\-Map\-View}.
+
+\hypertarget{category_b_m_k_map_view_07_overlays_a_p_i_08_a73dfe9f74d722b7b1fc477e791f34653}{\index{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)@{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)}!insert\-Overlay\-:below\-Overlay\-:@{insert\-Overlay\-:below\-Overlay\-:}}
+\index{insert\-Overlay\-:below\-Overlay\-:@{insert\-Overlay\-:below\-Overlay\-:}!BMKMapView(OverlaysAPI)@{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)}}
+\subsubsection[{insert\-Overlay\-:below\-Overlay\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (void) insert\-Overlay\-: 
+\begin{DoxyParamCaption}
+\item[{(id$<$ {\bf B\-M\-K\-Overlay} $>$)}]{overlay}
+\item[{belowOverlay:(id$<$ {\bf B\-M\-K\-Overlay} $>$)}]{sibling}
+\end{DoxyParamCaption}
+}}\label{category_b_m_k_map_view_07_overlays_a_p_i_08_a73dfe9f74d722b7b1fc477e791f34653}
+在指定的\-Overlay之下插入一个overlay 
+\begin{DoxyParams}{参数}
+{\em overlay} & 带添加的\-Overlay \\
+\hline
+{\em sibling} & 用于指定相对位置的\-Overlay \\
+\hline
+\end{DoxyParams}
+
+
+Extends class \hyperlink{interface_b_m_k_map_view_a73dfe9f74d722b7b1fc477e791f34653}{B\-M\-K\-Map\-View}.
+
+\hypertarget{category_b_m_k_map_view_07_overlays_a_p_i_08_a3be1f2a019df3ff971f6a36f142e55be}{\index{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)@{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)}!remove\-Overlay\-:@{remove\-Overlay\-:}}
+\index{remove\-Overlay\-:@{remove\-Overlay\-:}!BMKMapView(OverlaysAPI)@{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)}}
+\subsubsection[{remove\-Overlay\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (void) remove\-Overlay\-: 
+\begin{DoxyParamCaption}
+\item[{(id$<$ {\bf B\-M\-K\-Overlay} $>$)}]{overlay}
+\end{DoxyParamCaption}
+}}\label{category_b_m_k_map_view_07_overlays_a_p_i_08_a3be1f2a019df3ff971f6a36f142e55be}
+移除\-Overlay 
+\begin{DoxyParams}{参数}
+{\em overlay} & 要移除的overlay \\
+\hline
+\end{DoxyParams}
+
+
+Extends class \hyperlink{interface_b_m_k_map_view_a3be1f2a019df3ff971f6a36f142e55be}{B\-M\-K\-Map\-View}.
+
+\hypertarget{category_b_m_k_map_view_07_overlays_a_p_i_08_a3eb7909fb1adce117c1de432fd5d816a}{\index{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)@{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)}!remove\-Overlays\-:@{remove\-Overlays\-:}}
+\index{remove\-Overlays\-:@{remove\-Overlays\-:}!BMKMapView(OverlaysAPI)@{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)}}
+\subsubsection[{remove\-Overlays\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (void) remove\-Overlays\-: 
+\begin{DoxyParamCaption}
+\item[{(N\-S\-Array $\ast$)}]{overlays}
+\end{DoxyParamCaption}
+}}\label{category_b_m_k_map_view_07_overlays_a_p_i_08_a3eb7909fb1adce117c1de432fd5d816a}
+移除一组\-Overlay 
+\begin{DoxyParams}{参数}
+{\em overlays} & 要移除的overlay数组 \\
+\hline
+\end{DoxyParams}
+
+
+Extends class \hyperlink{interface_b_m_k_map_view_a3eb7909fb1adce117c1de432fd5d816a}{B\-M\-K\-Map\-View}.
+
+\hypertarget{category_b_m_k_map_view_07_overlays_a_p_i_08_aa88093440ad22f7af9cf9a36051f662d}{\index{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)@{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)}!view\-For\-Overlay\-:@{view\-For\-Overlay\-:}}
+\index{view\-For\-Overlay\-:@{view\-For\-Overlay\-:}!BMKMapView(OverlaysAPI)@{B\-M\-K\-Map\-View(\-Overlays\-A\-P\-I)}}
+\subsubsection[{view\-For\-Overlay\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ ({\bf B\-M\-K\-Overlay\-View} $\ast$) view\-For\-Overlay\-: 
+\begin{DoxyParamCaption}
+\item[{(id$<$ {\bf B\-M\-K\-Overlay} $>$)}]{overlay}
+\end{DoxyParamCaption}
+}}\label{category_b_m_k_map_view_07_overlays_a_p_i_08_aa88093440ad22f7af9cf9a36051f662d}
+查找指定overlay对应的\-View，如果该\-View尚未创建，返回nil 
+\begin{DoxyParams}{参数}
+{\em overlay} & 指定的overlay \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+指定overlay对应的\-View 
+\end{DoxyReturn}
+
+
+Extends class \hyperlink{interface_b_m_k_map_view_aa88093440ad22f7af9cf9a36051f662d}{B\-M\-K\-Map\-View}.
+
+
+
+The documentation for this category was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+B\-M\-K\-Map\-View.\-h\end{DoxyCompactItemize}

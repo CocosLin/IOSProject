@@ -157,6 +157,7 @@
     [baseInformaton addSubview:self.name];
     _name.backgroundColor = [UIColor clearColor];
     _name.text = self.memberIfo.realName;
+    _name.enabled = NO;
     
     UIImageView *img1 = [[UIImageView alloc]initWithFrame:CGRectMake(271, 10, 25, 25)];
     img1.image = [UIImage imageNamed:@"info_edit.png"];
@@ -166,8 +167,7 @@
     //可编辑号码
     UITextField * tempPhoneNumber    = [[UITextField alloc]initWithFrame:CGRectMake(140, 45, 130, 25)];
     tempPhoneNumber.backgroundColor = [UIColor clearColor];
-    //MemberOrgModel *memberModel = [[MemberOrgModel alloc]init];
-    //memberModel = [self.ifoArray objectAtIndex:0];
+    tempPhoneNumber.enabled = NO;
     tempPhoneNumber.text = self.memberIfo.telePhone;
     NSLog(@"showstaffinfomationVC memberModel = %@",self.memberIfo.realName );
     self.phoneNumber = tempPhoneNumber;
@@ -252,19 +252,28 @@
         moveStaffToOtherOrg = NO;
     }else{
         UIView *orgView = [[[UIView alloc]init]autorelease];
+        [orgView setBackgroundColor:BlueColor];
         orgView.tag = 1002;
+        
         UITableView  *orgunitTableView= [[[UITableView alloc]init]autorelease];
+        orgunitTableView.backgroundColor = [UIColor clearColor];
+        [orgunitTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
         orgunitTableView.delegate = self;
         orgunitTableView.dataSource = self;
         [orgView addSubview:orgunitTableView];
+        
         [UIView animateWithDuration:0.5 animations:^{
             orgView.frame = CGRectMake(Screen_Width/4, Screen_Height/4-45, Screen_Width/2+5, 0);
-            orgView.backgroundColor = [UIColor colorWithPatternImage:[[UIImage imageNamed:@"list_bg.png"]stretchableImageWithLeftCapWidth:100 topCapHeight:100]];
             [self.view addSubview:orgView];
+            UILabel *titleLb = [[UILabel alloc]initWithFrame:CGRectMake(0, 10, orgView.frame.size.width, 25)];
+            titleLb.text =  @"选择部门";
+            titleLb.font = [UIFont systemFontOfSize:25];
+            titleLb.textColor = [UIColor whiteColor];
+            titleLb.backgroundColor = [UIColor clearColor];
+            titleLb.textAlignment = NSTextAlignmentCenter;
+            [orgView addSubview:titleLb];
             orgView.frame = CGRectMake(Screen_Width/4, Screen_Height/4, Screen_Width/2, Screen_Height/2+5);
-            orgunitTableView.frame = CGRectMake(25,46, orgView.frame.size.width-35, orgView.frame.size.height/2+8);
-            
-            
+            orgunitTableView.frame = CGRectMake(5,46, orgView.frame.size.width-10, orgView.frame.size.height-50);            
         }];
         moveStaffToOtherOrg = YES;
     }
@@ -287,7 +296,10 @@
         myCell = [[[UITableViewCell alloc]initWithStyle:0 reuseIdentifier:cellID]autorelease];
     }
     NSLog(@"[[orgNameArr objectAtIndex:indexPath.row]objectForKey:@ = %@",[[self.orgNameArr objectAtIndex:indexPath.row]objectForKey:@"name"]);
+    myCell.textLabel.backgroundColor = [UIColor clearColor];
     myCell.textLabel.text = [[self.orgNameArr objectAtIndex:indexPath.row]objectForKey:@"name"];
+    myCell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
+    myCell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
     return myCell;
 }
 

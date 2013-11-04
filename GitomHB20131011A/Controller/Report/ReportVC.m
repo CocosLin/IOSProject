@@ -549,7 +549,7 @@ typedef NS_ENUM(NSInteger, Tag_ReportVC) {
     [self startPosition];
     _bMapSearch = [[BMKSearch alloc]init];
     [_bMapSearch setDelegate:self];
-    [_tvbReportInput reloadData];
+    //[_tvbReportInput reloadData];
     //[self sendSoundFileToServe];
 }
 

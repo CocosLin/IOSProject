@@ -10,6 +10,8 @@
 #import "SetMapPositionVC.h"
 #import "SVProgressHUD.h"
 #import "WTool.h"
+#import "HBServerKit.h"
+#import "ManagDatePickerVC.h"
 
 @interface ManageAttendanceConfigVC ()
 
@@ -30,40 +32,44 @@
     [self.configTableView reloadData];
 }
 
+#pragma mark -- 更新考勤配置
 - (void)saveAction{
     GetCommonDataModel;
     GetGitomSingal;
-    /*
-    "{\"attenConfig\":{\"createDate\":1377490018000,\"createUserId\":\"18929556299\",\"distance\":500,\"inMinute\":30,\"latitude\":25.030596,\"longitude\":102.726292,\"organizationId\":114,\"orgunitId\":1,\"outMinute\":30,\"updateDate\":1382660940000,\"updateUserId\":\"65587\"},\"attenWorktime\":[{\"createDate\":1382660940000,\"createUserId\":\"65587\",\"offTime\":14400000,\"onTime\":1800000,\"ordinal\":1,\"organizationId\":114,\"orgunitId\":1,\"updateDate\":1382660940000,\"updateUserId\":\"65587\",\"voidFlag\":false},{\"createDate\":1382660940000,\"createUserId\":\"65587\",\"offTime\":36000000,\"onTime\":18000000,\"ordinal\":2,\"organizationId\":114,\"orgunitId\":1,\"updateDate\":1382660940000,\"updateUserId\":\"65587\",\"voidFlag\":false}]}"*/
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateStyle:NSDateFormatterMediumStyle];
-    //{\"createDate\":1382660940000,\"createUserId\":\"65587\",\"offTime\":14400000,\"onTime\":1800000,\"ordinal\":1,\"organizationId\":114,\"orgunitId\":1,\"updateDate\":1382660940000,\"updateUserId\":\"65587\",\"voidFlag\":false},
-    NSMutableDictionary *attenWorktime1 = [[NSMutableDictionary alloc]init];
-    
-    [formatter setTimeStyle:NSDateFormatterShortStyle];
-    [formatter setDateFormat:@"yyyy-MM-dd"];
-    NSDate *date = [formatter dateFromString:[NSDate date]];
-    NSLog(@"anDate == %@",date);
-    
-    long long int dateToSeconde = [WTool getEndDateTimeMsWithNSDate:date];
-    NSLog(@"ManageAttendanceConfigVC dateToSeconde %lld",dateToSeconde);
-    [attenWorktime1 setObject:[NSString stringWithFormat:@"%lld",dateToSeconde] forKey:@"createDate"];
-    [attenWorktime1 setObject:comData.userModel.username forKey:@"createUserId"];
-    [attenWorktime1 setObject:[NSString stringWithFormat:@"%f",singal.offTime1] forKey:@"offTime"];
-    [attenWorktime1 setObject:[NSString stringWithFormat:@"%f",singal.oneTime1] forKey:@"onTime"];
-    [attenWorktime1 setObject:@"1" forKey:@"ordinal"];
-    [attenWorktime1 setObject:[NSString stringWithFormat:@"%d",comData.organization.organizationId] forKey:@"organizationId"];
-    [attenWorktime1 setObject:[NSString stringWithFormat:@"%d",comData.organization.orgunitId] forKey:@"orgunitId"];
-    [attenWorktime1 setObject:[NSString stringWithFormat:@"%lld",dateToSeconde] forKey:@"updateDate"];
-    [attenWorktime1 setObject:comData.userModel.username forKey:@"updateUserId"];
-    [attenWorktime1 setValue:false forKey:@"voidFlag"];
-    
-    NSLog(@"attenWorktime1 == %@",attenWorktime1);
-}
+    if (singal.oneTime1 >singal.offTime1||singal.oneTime2>singal.offTime2) {
+        UIAlertView *aler = [[UIAlertView alloc]initWithTitle:@"设置不合理" message:@"下班时间不能比上班时间早" delegate:nil cancelButtonTitle:@"知道" otherButtonTitles:nil, nil];
+        [aler show];
+        [aler release];
+    }else if (singal.offTime1 > singal.oneTime2){
+        UIAlertView *aler = [[UIAlertView alloc]initWithTitle:@"设置不合理" message:@"下个时间段上班时间不能早于上个时间段的下班时间" delegate:nil cancelButtonTitle:@"知道" otherButtonTitles:nil, nil];
+        [aler show];
+        [aler release];
+    }
+    else{
+        HBServerKit *hbKit = [[HBServerKit alloc]init];
+    [hbKit saveUpdateAttendanceConfigWithAttenInfoByUpdateUser:comData.userModel.unitName
+                                                   andDistance:singal.distance
+                                                   andInMinute:singal.inMinute
+                                                  andOutMinute:singal.outMinute
+                                                   andLatitude:singal.latitude
+                                                  andLongitude:singal.longitude
+                                             andOrganizationId:comData.organization.organizationId
+                                                  andOrgunitId:comData.organization.orgunitId
+                                                   SetOutTime1:singal.offTime1
+                                                    andInTime1:singal.oneTime1
+                                                   SetOutTime2:singal.offTime2
+                                                    andInTime2:singal.oneTime2
+                                                   SetOutTime3:singal.offTime3
+                                                    andInTime3:singal.oneTime3];
 
+    }
+    }
+
+    
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.navigationController.title = @"修改考勤配置";
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(0, 0, 50, 44);
     [btn setBackgroundImage:[UIImage imageNamed:@"btnBackFromNavigationBar_On"] forState:UIControlStateNormal];
@@ -155,7 +161,8 @@
                     cell.textLabel.text = [NSString stringWithFormat:@"时间段2：%@-%@",[WTool getStrDateTimeWithDateTimeMS:singal.oneTime2 DateTimeStyle:@"HH:mm:ss"],[WTool getStrDateTimeWithDateTimeMS:singal.offTime2 DateTimeStyle:@"HH:mm:ss"]];
                     break;
                 case 2:
-                    cell.textLabel.text = [NSString stringWithFormat:@"时间段3：%@-%@",[WTool getStrDateTimeWithDateTimeMS:singal.oneTime3 DateTimeStyle:@"HH:mm:ss"],[WTool getStrDateTimeWithDateTimeMS:singal.offTime3 DateTimeStyle:@"HH:mm:ss"]];
+                    if (singal.offTime3>1)cell.textLabel.text = [NSString stringWithFormat:@"时间段3：%@-%@",[WTool getStrDateTimeWithDateTimeMS:singal.oneTime3 DateTimeStyle:@"HH:mm:ss"],[WTool getStrDateTimeWithDateTimeMS:singal.offTime3 DateTimeStyle:@"HH:mm:ss"]];
+                    cell.textLabel.text = @"--";
                     break;
                 default:
                     break;
@@ -175,6 +182,7 @@
             break;
     }
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
     return cell;
 }
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
@@ -250,6 +258,9 @@
             break;
         case 1:
             NSLog(@"%d",indexPath.section);
+            ManagDatePickerVC *datePicker = [[ManagDatePickerVC alloc]init];
+            datePicker.setTimeType = indexPath.row;
+            [self.navigationController pushViewController:datePicker animated:YES];
             break;
         case 2:
             NSLog(@"%d",indexPath.section);

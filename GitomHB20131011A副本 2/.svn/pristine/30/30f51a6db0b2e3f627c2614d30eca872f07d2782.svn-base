@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>2D88E30D-4D5B-4B33-8CCA-B1A7EAC9CB74</string>
+	<key>IDESourceControlProjectName</key>
+	<string>GitomNetLjw</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>8875A171-5AEE-4796-824F-87750665D123</key>
+		<string>http://192.168.100.118:8080/svn/app-android/panch_ios/GitomHB20130705</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>GitomNetLjw.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>8875A171-5AEE-4796-824F-87750665D123</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectRepositoryRootDictionary</key>
+	<dict>
+		<key>8875A171-5AEE-4796-824F-87750665D123</key>
+		<string>http://192.168.100.118:8080/svn/app-android</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>http://192.168.100.118:8080/svn/app-android/panch_ios/GitomHB20130705/GitomNetLjw.xcodeproj</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>8875A171-5AEE-4796-824F-87750665D123</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.subversion</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>8875A171-5AEE-4796-824F-87750665D123</string>
+			<key>IDESourceControlWCCName</key>
+			<string>GitomHB20130705</string>
+		</dict>
+	</array>
+</dict>
+</plist>

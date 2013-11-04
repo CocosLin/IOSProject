@@ -22,10 +22,18 @@
 #define kOffPunch @"offPunch"
 
 //用到的单例
+/*获得用户基本信息*/
 #define GetCommonDataModel CommonDataModel * comData = [(AppDelegate *)[UIApplication sharedApplication].delegate comData]
+/*获得公司考勤配置*/
 #define GetGitomSingal GitomSingal *singal = [GitomSingal getInstance];
 
 //屏幕宽高
 #define Screen_Height [[UIScreen mainScreen] bounds].size.height
 #define Screen_Width  [[UIScreen mainScreen] bounds].size.width
 #define BlueColor [UIColor colorWithRed:194.0/255.0 green:214.0/255.0 blue:243.0/255.0 alpha:1]
+/*在项目的prefix.pch文件里加入下面一段代码，加入后，NSLog就只在Debug下有输出，Release下不输出了。*/
+#ifndef __OPTIMIZE__
+#define NSLog(...) NSLog(__VA_ARGS__)
+#else
+#define NSLog(...) {}
+#endif

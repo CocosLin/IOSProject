@@ -44,6 +44,7 @@
     
     self.title = @"部门人员";
     self.organizationTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, Screen_Width, Screen_Height-66)];
+    [self.organizationTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     self.organizationTableView.delegate = self;
     self.organizationTableView.dataSource = self;
     [self.view addSubview:self.organizationTableView];
@@ -117,7 +118,8 @@
              }
          }];
     }
-    
+    cell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
+    cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
     return cell;
 }
 

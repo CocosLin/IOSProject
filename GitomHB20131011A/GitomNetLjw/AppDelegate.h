@@ -12,11 +12,14 @@
 #import "CommonDataModel.h"
 #import "UIViewController+JASidePanel.h"
 #import "BMapKit.h"
+#import "ASIDownloadCache.h"
 @class JASidePanelController;
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 {
     BMKMapManager* _mapManager;
+    ASIDownloadCache *myCache;
 }
 @property (strong, nonatomic) JWMotionRecognizingWindow * window;
 @property(retain,nonatomic)CommonDataModel * comData;
+@property (nonatomic,retain) ASIDownloadCache *myCache;
 @end

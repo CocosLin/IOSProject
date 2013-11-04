@@ -56,11 +56,13 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
 {
     UITableView * _tbvUserLoginInput;
     UITableView * _tbvUserLoginInfoOpera;
+    UITableView * _tbvUserHistoryIfo;
     UIImage * _imageCheckBox_on;
     UIImage * _imageCheckBox_off;
     UIImageView * _checkBoxRememberView;
     UIImageView * _checkBoxAutoLoginView;
     NSUserDefaults *accountDefaults;
+    BOOL hideHistoryUserIfo;
 }
 @end
 
@@ -205,6 +207,8 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
         return Count_Cell_LoginInput;
     }else if(tableView.tag==Tag_Tbv_LoginInfoOpera){
         return Count_Cell_LoginInfoOpera;
+    }else if (tableView.tag == Tag_Tbv_LoginHistory){
+        return _userIfoAr.count;
     }
     return 0;
 }
@@ -214,18 +218,21 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
         return Height_Cell_LoginInput;
     }else if(tableView.tag == Tag_Tbv_LoginInfoOpera){
         return Height_Cell_LoginInfoOpera;
+    }else if(tableView.tag == Tag_Tbv_LoginHistory){
+        return 40;
     }
     return 0;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    static  NSString * cellIdLogin = @"cellIdLogin";
+    //UITableViewCell * myCell = [tableView dequeueReusableHeaderFooterViewWithIdentifier:cellIdLogin];
+    UITableViewCell *myCell = [tableView dequeueReusableCellWithIdentifier:cellIdLogin];
+    if (!myCell) {
+        myCell = [[[UITableViewCell alloc]initWithStyle:0 reuseIdentifier:cellIdLogin]autorelease];
+    }
     if (tableView.tag == Tag_Tbv_LoginInput) {
-        static  NSString * cellIdLogin = @"cellIdLogin";
-        //UITableViewCell * myCell = [tableView dequeueReusableHeaderFooterViewWithIdentifier:cellIdLogin];
-        UITableViewCell *myCell = [tableView dequeueReusableCellWithIdentifier:cellIdLogin];
-        if (!myCell) {
-            myCell = [[[UITableViewCell alloc]initWithStyle:0 reuseIdentifier:cellIdLogin]autorelease];
-        }
+        
         //密码框
         if (indexPath.row == 1)
         {
@@ -268,10 +275,21 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
                                                     Height_Cell_LoginInput,
                                                     Height_Cell_LoginInput)];
             [btnHistoryUsername setImage:[UIImage imageNamed:@"btn_list_extra_arrow.png"] forState:UIControlStateNormal];
-            [btnHistoryUsername setImage:[UIImage imageNamed:imageName_btnHistoryAccountNumber] forState:UIControlStateHighlighted];
-            //[btnHistoryUsername addTarget:self action:@selector(getHistoryUserNameAction) forControlEvents:UIControlEventTouchUpInside];
+            
+            [btnHistoryUsername addTarget:self action:@selector(showHistoryUserNameAction) forControlEvents:UIControlEventTouchUpInside];
             [myCell addSubview:btnHistoryUsername];
         }
+        return myCell;
+    }else if (tableView.tag == Tag_Tbv_LoginHistory){
+        _userIfo = [_userIfoAr objectAtIndex:indexPath.row];
+        NSLog(@"——userIfo = %@ ,%d ,%@",_userIfo.userName,_userIfo.userId,_userIfo.userPassWord);
+        myCell.textLabel.text = _userIfo.userName;
+        UIButton *removeBut = [UIButton buttonWithType:UIButtonTypeCustom];
+        removeBut.tag = indexPath.row+100;
+        [removeBut setBackgroundImage:[UIImage imageNamed:@"remove.png"] forState:UIControlStateNormal];
+        [removeBut addTarget:self action:@selector(removeUserHistoryAction:) forControlEvents:UIControlEventTouchUpInside];
+        removeBut.frame = CGRectMake(Screen_Width-55, 7, 26, 26);
+        [myCell addSubview:removeBut];
         return myCell;
     }
     return nil;
@@ -285,8 +303,16 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    self.isShowHisLoginInfo = NO;
+    if (tableView.tag == Tag_Tbv_LoginHistory) {
+        _userIfo = [_userIfoAr objectAtIndex:indexPath.row];
+        _tfUsername.text = _userIfo.userName;
+        _tfPassword.text = _userIfo.userPassWord;
+        tableView.hidden = YES;
+        UIButton *btnHistoryUsername = (UIButton *)[self.view viewWithTag:Tag_BtnHistoryUsername];
+        [btnHistoryUsername setImage:[UIImage imageNamed:@"btn_list_extra_arrow.png"] forState:UIControlStateNormal];
+    }
+//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+//    self.isShowHisLoginInfo = NO;
 }
 #pragma mark - 属性控制
 #pragma mark -- 自动登入
@@ -395,6 +421,11 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
     [self.view addSubview:lblVersionInfo];
     lblVersionInfo.textAlignment = NSTextAlignmentCenter;
     [lblVersionInfo release];
+    
+    //成功登入用户查询
+    _userIfoAr = [UserInformationsManager findAll];
+    _userIfo = [[UserInformationsManager alloc]init];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -413,8 +444,40 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
     [super dealloc];
 }
 #pragma mark - 用户事件
+#pragma mark -- 删除历史帐号
+- (void)removeUserHistoryAction:(id)sender{
+    int index = ((UIButton *)sender).tag-100;
+    NSLog(@"remove button %d",index);
+    _userIfo = [_userIfoAr objectAtIndex:index];
+    NSLog(@"remove useerid %d",_userIfo.userId);
+    [UserInformationsManager deleteWithId:_userIfo.userId];
+    _userIfoAr = [UserInformationsManager findAll];
+    [_tbvUserHistoryIfo reloadData];
+}
+#pragma mark -- 历史记录帐号
+- (void)showHistoryUserNameAction{
+    NSLog(@"历史记录帐号");
+    UIButton *btnHistoryUsername = (UIButton *)[self.view viewWithTag:Tag_BtnHistoryUsername];
+    [btnHistoryUsername setImage:[UIImage imageNamed:imageName_btnHistoryAccountNumber] forState:UIControlStateNormal];
+    if (hideHistoryUserIfo) {
+        [btnHistoryUsername setImage:[UIImage imageNamed:@"btn_list_extra_arrow.png"] forState:UIControlStateNormal];
+        _tbvUserHistoryIfo.hidden = YES;
+        hideHistoryUserIfo = NO;
+    }else{
+        _tbvUserHistoryIfo = [[UITableView alloc]initWithFrame:CGRectMake(10, 70, Screen_Width-20, _userIfoAr.count *40)];
+        _tbvUserHistoryIfo.delegate = self;
+        _tbvUserHistoryIfo.dataSource = self;
+        _tbvUserHistoryIfo.tag = Tag_Tbv_LoginHistory;
+        [self.view addSubview:_tbvUserHistoryIfo];
+        hideHistoryUserIfo = YES;
+    }
+    
+    //[self userInfoRecorded1];
+}
+
 //处理用户事件
 #pragma mark -- 登入
+static int idx=1;
 -(void)btnAction:(UIButton *)btn
 {
     NSLog(@"开始登入");
@@ -435,14 +498,6 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
             //将登入时填写的信息存储进LoggingInfo中
             loggingInfo.username = username;
             loggingInfo.password = password;
-            //添加数据到 user defaults:
-            [accountDefaults setObject:username forKey:kMinZi];
-            
-            //也可以添加基本数据类型int, float, bool等，有相应得方法
-            
-            [accountDefaults setObject:password forKey:kMiMa];
-            NSLog(@"aaccountDefaults objectForKey%@ %@",[accountDefaults objectForKey:kMinZi],[accountDefaults objectForKey:kMiMa]);
-            [accountDefaults synchronize];
         }
         
         //用户业务管理
@@ -455,6 +510,19 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
                 GetCommonDataModel;
                 comData.isLogged = YES;
                 comData.serverDate = loggedInfo.serverDate;
+                
+                /*存储成功登入的用户、密码*/
+                [accountDefaults setObject:username forKey:kMinZi];
+                    [accountDefaults setObject:password forKey:kMiMa];
+                    NSLog(@"aaccountDefaults objectForKey%@ %@",[accountDefaults objectForKey:kMinZi],[accountDefaults objectForKey:kMiMa]);
+                    [accountDefaults synchronize];
+                
+                /*将成功登入的密码存进数据库*/
+                //查询数据库，判断表中是否存在相同的数据
+                //UserInformationsManager *manager = [[UserInformationsManager alloc]init];
+                [UserInformationsManager insertWithUserName:loggingInfo.username andUserPassWord:loggingInfo.password andUserId:_userIfoAr.count+1];
+                
+                
                 /*
                  这边要得到用户信息。。。
                  */
@@ -542,5 +610,14 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
     [btn setTitleColor:titleNormalColor forState:UIControlStateNormal];
     [btn setTitle:titleHighlightedText forState:UIControlStateHighlighted];
     [btn setTitleColor:titleHighlightedColor forState:UIControlStateHighlighted];
+}
+
+#pragma mark -  刷新
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    _userIfoAr=[UserInformationsManager findAll];
+    [_tbvUserHistoryIfo reloadData];
+    
 }
 @end

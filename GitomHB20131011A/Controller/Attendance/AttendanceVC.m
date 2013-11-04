@@ -102,8 +102,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    
+    GetGitomSingal;
+    self.rangeAtten2Org = [singal.distance longLongValue];
+    self.companyLatitude = singal.latitude;
+    self.companyLongitude = singal.longitude;
     
     //上视图320/3=106.3  480/6=80
     up=[[UIImageView alloc]initWithFrame:CGRectMake(Screen_Width/3,Screen_Height/6-10, Screen_Width/3, Screen_Height/6)];
@@ -186,18 +188,6 @@
     
     [self.view addSubview:viewDistance];
     [viewDistance release];
-    
-    //图片动画
-//    UIImage *image2=[UIImage imageNamed:@"shake_logo_up"];
-//    _imageViewShakeUp=[[UIImageView alloc]initWithImage:image2];
-//    _imageViewShakeUp.frame=CGRectMake(Width_Screen/2 - 140/2,150 + y_top,140,70);
-//    [self.view addSubview:_imageViewShakeUp];
-//    CGRect frameImageViewShakeUp = _imageViewShakeUp.frame;
-//    
-//    UIImage *image3=[UIImage imageNamed:@"shake_logo_down"];
-//    _imageViewShakeDown=[[UIImageView alloc]initWithImage:image3];
-//    _imageViewShakeDown.frame=CGRectMake(frameImageViewShakeUp.origin.x,frameImageViewShakeUp.size.height + frameImageViewClock.origin.y + 150,140,frameImageViewShakeUp.size.height);
-//    [self.view addSubview:_imageViewShakeDown];
 }
 
 

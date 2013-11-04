@@ -78,7 +78,7 @@
     NSLog(@"mapVeiw.userLocation == %f  %f ",cllocation.latitude,cllocation.longitude);
     //[self.mapVeiw setCenterCoordinate:cllocation animated:YES];
     self.mapVeiw.centerCoordinate = cllocation;
-    self.mapVeiw.zoomLevel = 17.0;
+    self.mapVeiw.zoomLevel = 19.0;
     self.view = self.mapVeiw;
 //    BMKCoordinateSpan span = BMKCoordinateSpanMake(10, 10);
 //    BMKCoordinateRegion region = BMKCoordinateRegionMake(cllocation, span);

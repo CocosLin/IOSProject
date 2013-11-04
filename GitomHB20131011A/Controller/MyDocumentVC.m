@@ -102,6 +102,7 @@
     
     //可编辑名字
     _name = [[UITextField alloc]initWithFrame:CGRectMake(140, 10, 130, 25)];
+    _name.enabled= NO;
     [baseInformaton addSubview:self.name];
     _name.backgroundColor = [UIColor clearColor];
     GetCommonDataModel;
@@ -114,6 +115,7 @@
     
     //可编辑号码
     UITextField * tempPhoneNumber    = [[UITextField alloc]initWithFrame:CGRectMake(140, 45, 130, 25)];
+    tempPhoneNumber.enabled = NO;
     tempPhoneNumber.backgroundColor = [UIColor clearColor];
     tempPhoneNumber.text = comData.userModel.telephone;
     NSLog(@"comData.userModel.cellphone==%@",comData.userModel.telephone);

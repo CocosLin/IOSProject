@@ -13,11 +13,17 @@
 #import "UserManager.h"
 #import "ASIHTTPRequest.h"
 #import "RecordAudio.h"
+
+#import "UIImageView+MJWebCache.h"
+#import "MJPhotoBrowser.h"
+#import "MJPhoto.h"
+
 #define BIG_IMG_WIDTH  200.0
 #define BIG_IMG_HEIGHT 200.0
 
 @interface DetailQeryViewController (){
     UITableView *_tvbRecordDetail;
+    NSMutableArray *_urls;
 }
 @end
 
@@ -34,6 +40,14 @@
     [values addObject:[NSValue valueWithCATransform3D:CATransform3DMakeScale(1.0, 1.0, 1.0)]];
     animation.values = values;
     [aView.layer addAnimation:animation forKey:nil];
+}
+
+- (void) dealloc{
+    [self.attenceImge release];
+    self.attenceImge = nil;
+    [self.background release];
+    self.background = nil;    
+    [super dealloc];
 }
 
 -(void)suoxiao
@@ -59,6 +73,36 @@
     [req startAsynchronous];
 }
 #pragma mark -- 放大图片
+- (void)tapImage:(UITapGestureRecognizer *)tap
+{
+    int count = 1;
+    NSLog(@"封装图片数据 %@",_urls);
+    //NSLog(@"_urls == %@",_urls);
+    // 1.封装图片数据
+    NSMutableArray *photos = [NSMutableArray arrayWithCapacity:count];
+    for (int i = 0; i<1; i++) {
+        NSLog(@"替换为中等尺寸图片");
+        // 替换为中等尺寸图片
+        //NSString *url = [_urls[i] stringByReplacingOccurrencesOfString:@"thumbnail" withString:@"bmiddle"];
+        NSString *url = [_urls objectAtIndex:0];
+        NSLog(@"url == %@",url);
+        
+        MJPhoto *photo = [[MJPhoto alloc] init];
+        photo.url = [NSURL URLWithString:url]; // 图片路径
+        UIImageView *imgView = (UIImageView *)[self.view viewWithTag:1000+i];
+        photo.srcImageView = imgView; // 来源于哪个UIImageView
+        [photos addObject:photo];
+    }
+    NSLog(@"显示相册");
+    // 2.显示相册
+    MJPhotoBrowser *browser = [[MJPhotoBrowser alloc] init];
+    browser.currentPhotoIndex = 0; // 弹出相册时显示的第一张图片是？
+    browser.photos = photos; // 设置所有的图片
+    [browser show];
+}
+
+
+/*
 - (void)showBigPicture{
     NSLog(@"放大图片");
     //创建灰色透明背景，使其背后内容不可操作
@@ -107,7 +151,7 @@
     // 动画完毕后调用animationFinished
     [UIView setAnimationDidStopSelector:@selector(animationFinished)];
     [UIView commitAnimations];
-}
+}*/
 
 
 #pragma mark - 表格视图代理方法
@@ -193,30 +237,44 @@
         NSString *imgString = [hbKit getImgStringWith:self.reportModel.imageUrl];
         NSLog(@"tup == %@",imgString);
         
-        UIButton *imgButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        imgButton.frame = CGRectMake(60, 2, 45, 40);
-        if (imgString != nil) {
-            NSURL *url = [NSURL URLWithString:imgString];
-            ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:url];
-            [req setCompletionBlock:^{
-                NSLog(@"图片");
-                imgButton.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageWithData:[req responseData]]];
-                [imgButton addTarget:self action:@selector(showBigPicture) forControlEvents:UIControlEventTouchUpInside];
-                self.attenceImge = [UIImage imageWithData:[req responseData]];
-                [imgButton setBackgroundImage:[[UIImage imageWithData:[req responseData]]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
-            }];
-            [req startAsynchronous];
-        }else{
-            [imgButton setBackgroundImage:[[UIImage imageNamed:@"list_08.png"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
-            [imgButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-            [imgButton setTitle:@"无" forState:UIControlStateNormal];
+        // 1.创建个UIImageView
+        UIImage *placeholder = [UIImage imageNamed:@"timeline_image_loading.png"];
+        CGFloat width = 45;
+        CGFloat height = 40;
+        if (imgString) {
+            [_urls addObject:imgString];
+            //        CGFloat margin = 20;
+            //        CGFloat startX = (self.view.frame.size.width - 3 * width - 2 * margin) * 0.5;
+            //        CGFloat startY = 50;
+            for (int i = 0; i<1; i++) {
+                UIImageView *imageView = [[UIImageView alloc] init];
+                //[self.view addSubview:imageView];
+                NSLog(@"下载图片0");
+                
+                [self.view addSubview:imageView];
+                
+                // 计算位置
+                //int row = i/3;
+                //int column = i%3;
+                CGFloat x = 60;
+                CGFloat y = 2;
+                imageView.frame = CGRectMake(x, y, width, height);
+                NSLog(@"下载图片1");
+                // 下载图片
+                [imageView setImageURLStr:imgString placeholder:placeholder];
+                NSLog(@"下载图片2");
+                // 事件监听
+                imageView.tag = 1000+i;
+                NSLog(@"imageView.tag == %d",imageView.tag);
+                imageView.userInteractionEnabled = YES;
+                [imageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapImage:)]];
+                [myCell addSubview:imageView];
+                // 内容模式
+                imageView.clipsToBounds = YES;
+                imageView.contentMode = UIViewContentModeScaleAspectFill;
+            }
         }
-        
-        //imgButton.backgroundColor = [UIColor blackColor];
-        
-        [myCell addSubview:imgButton];
-        [hbKit release];
-        
+        [hbKit release];        
     }else if(indexPath.row ==7){
         HBServerKit *hbKit = [[HBServerKit alloc]init];
         NSLog(@"soundUrl == %@ ,%@",self.reportModel.soundUrl,[hbKit getSoundStringWith:self.reportModel.soundUrl]);
@@ -251,6 +309,7 @@
     UIView * viewLine = [[UIView alloc]initWithFrame:CGRectMake(56, 0, 1, tableView.frame.size.height)];
     [myCell addSubview:viewLine];
     [viewLine setBackgroundColor:[UIColor grayColor]];
+    myCell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
     [viewLine release];
     
     return myCell;
@@ -323,7 +382,8 @@
     [self.navigationItem setLeftBarButtonItem:backItem];
     [backItem release];
     
-    _tvbRecordDetail = [[UITableView alloc]initWithFrame:CGRectMake(10, 10, Width_Screen - 20 , 400)];
+    _tvbRecordDetail = [[UITableView alloc]initWithFrame:CGRectMake(10, 10, Width_Screen - 20 , 390)];
+    [_tvbRecordDetail setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.view addSubview:_tvbRecordDetail];
     _tvbRecordDetail.delegate = self;
     _tvbRecordDetail.dataSource = self;

@@ -30,6 +30,7 @@
     [_realName release];
     [_creatDate release];
     [_address release];
+    [_rightImg release];
     [super dealloc];
 }
 @end

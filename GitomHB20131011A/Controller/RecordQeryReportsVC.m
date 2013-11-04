@@ -65,8 +65,9 @@
         myCell.creatDate.text = [WTool getStrDateTimeWithDateTimeMS:[[[self.arrData objectAtIndex:indexPath.row] objectForKey:@"updateDate"] doubleValue] DateTimeStyle:@"yyyy-MM-dd HH:mm:ss"];
         myCell.address.text = [[self.arrData objectAtIndex:indexPath.row] objectForKey:@"address"];
     }
-    
-    
+    myCell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
+    myCell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
+    if (!self.typeRecord) myCell.rightImg.hidden = NO;
     return myCell;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -332,6 +333,7 @@
 -(void)initRecordInfoTableView
 {
     _tvbRecordInfo = [[UITableView alloc] initWithFrame:CGRectMake(0, 41, Width_Screen, Height_Screen-102)];
+    [_tvbRecordInfo setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.view addSubview:_tvbRecordInfo];
     [_tvbRecordInfo setBackgroundColor:[UIColor whiteColor]];
     [_tvbRecordInfo setDelegate:self];

@@ -190,7 +190,7 @@
                 //cusBT.imgIcon.image = _custom.img;
                 NSString *http = [_custom.imgUrl substringWithRange:NSMakeRange(0, 4)];
                 if ([http isEqualToString:@"http"]) {//对解析的到的图片地址进行逻辑判断：本地、服务器
-                    //[customButton.imgIcon setImageFronUrl:_custom.imgUrl];
+                    [customButton.imgIcon setImageFronUrl:_custom.imgUrl];
                 }else{
                     customButton.imgIcon.image = [UIImage imageNamed:_custom.imgUrl];
                 }

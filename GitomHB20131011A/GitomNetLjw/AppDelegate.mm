@@ -31,6 +31,18 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    //自定义缓存
+    ASIDownloadCache *cache = [[ASIDownloadCache alloc] init];
+    self.myCache = cache;
+    [cache release];
+    
+    //设置缓存路径
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentDirectory = [paths objectAtIndex:0];
+    [self.myCache setStoragePath:[documentDirectory stringByAppendingPathComponent:@"resource"]];
+    [self.myCache setDefaultCachePolicy:ASIOnlyLoadIfNotCachedCachePolicy];
+    
+    
     NewsManager *manger = [[NewsManager alloc]init];
     [manger getNewsOforganizationId:114 andOrgunitId:1 andCookie:@"5533098A-43F1-4AFC-8641-E64875461345"];
     

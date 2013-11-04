@@ -66,6 +66,7 @@
     [self.view addSubview:_tbMenu];
     [_tbMenu.layer setBorderWidth:0.7];
     [_tbMenu.layer setCornerRadius:7];
+    [_tbMenu setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     _tbMenu.scrollEnabled = NO;
     _tbMenu.delegate = self;
     _tbMenu.dataSource = self;
@@ -84,8 +85,11 @@
         myCell = [[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:myCellID]autorelease];
     }
     myCell.textLabel.text = [_arrMenuRecordNames objectAtIndex:indexPath.row];
+    myCell.textLabel.backgroundColor = [UIColor clearColor];
     myCell.imageView.image = [UIImage imageNamed:_arrMenuImageNames[indexPath.row]];
     myCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    myCell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
+    myCell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
     return myCell;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

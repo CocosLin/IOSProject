@@ -7,7 +7,7 @@
 //
 
 #import "VcWithNavBar.h"
-
+#import "UserInformationsManager.h"
 
 @class JASidePanelController;
 
@@ -33,5 +33,8 @@
 
 //历史账号信息
 @property(retain,nonatomic)NSMutableArray * arrLoggingInfos;
+
+@property (strong, nonatomic) NSArray *userIfoAr;
+@property (strong, nonatomic) UserInformationsManager *userIfo;
 
 @end

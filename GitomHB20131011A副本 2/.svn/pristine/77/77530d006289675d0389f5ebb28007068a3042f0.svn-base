@@ -1,0 +1,58 @@
+\hypertarget{protocol_b_m_k_overlay-p}{\section{$<$B\-M\-K\-Overlay$>$ 协议参考}
+\label{protocol_b_m_k_overlay-p}\index{$<$\-B\-M\-K\-Overlay$>$@{$<$\-B\-M\-K\-Overlay$>$}}
+}
+
+
+该类是地图覆盖物的基类，所有地图的覆盖物需要继承自此类  
+
+
+
+
+{\ttfamily \#import $<$B\-M\-K\-Overlay.\-h$>$}
+
+继承关系图 $<$B\-M\-K\-Overlay$>$\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=4.000000cm]{protocol_b_m_k_overlay-p}
+\end{center}
+\end{figure}
+\subsection*{实例方法}
+\begin{DoxyCompactItemize}
+\item 
+(B\-O\-O\-L) -\/ \hyperlink{protocol_b_m_k_overlay-p_ad89c522da656c2a977b87bdc1cc4bf21}{intersects\-Map\-Rect\-:}
+\end{DoxyCompactItemize}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{protocol_b_m_k_overlay-p_a7a10d9dde65c9611e3b5279179a9d480}{C\-L\-Location\-Coordinate2\-D \hyperlink{protocol_b_m_k_overlay-p_a7a10d9dde65c9611e3b5279179a9d480}{coordinate}}\label{protocol_b_m_k_overlay-p_a7a10d9dde65c9611e3b5279179a9d480}
+
+\begin{DoxyCompactList}\small\item\em 返回区域中心坐标. \end{DoxyCompactList}\item 
+\hypertarget{protocol_b_m_k_overlay-p_a77465daa9e52be51cc5aa15591ab74f0}{\hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} \hyperlink{protocol_b_m_k_overlay-p_a77465daa9e52be51cc5aa15591ab74f0}{bounding\-Map\-Rect}}\label{protocol_b_m_k_overlay-p_a77465daa9e52be51cc5aa15591ab74f0}
+
+\begin{DoxyCompactList}\small\item\em 返回区域外接矩形 \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{详细描述}
+该类是地图覆盖物的基类，所有地图的覆盖物需要继承自此类 
+
+\subsection{方法文档}
+\hypertarget{protocol_b_m_k_overlay-p_ad89c522da656c2a977b87bdc1cc4bf21}{\index{B\-M\-K\-Overlay-\/p@{B\-M\-K\-Overlay-\/p}!intersects\-Map\-Rect\-:@{intersects\-Map\-Rect\-:}}
+\index{intersects\-Map\-Rect\-:@{intersects\-Map\-Rect\-:}!BMKOverlay-p@{B\-M\-K\-Overlay-\/p}}
+\subsubsection[{intersects\-Map\-Rect\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (B\-O\-O\-L) intersects\-Map\-Rect\-: 
+\begin{DoxyParamCaption}
+\item[{({\bf B\-M\-K\-Map\-Rect})}]{map\-Rect}
+\end{DoxyParamCaption}
+\hspace{0.3cm}{\ttfamily [optional]}}}\label{protocol_b_m_k_overlay-p_ad89c522da656c2a977b87bdc1cc4bf21}
+判断指定的矩形是否与本\-Overlay相交，用于更精确的控制overlay view的显示. 默认使用\-B\-M\-K\-Map\-Rect\-Intersects\-Rect(\mbox{[}overlay bounding\-Rect\mbox{]}, map\-Rect)代替. 
+\begin{DoxyParams}{参数}
+{\em map\-Rect} & 指定的\-B\-M\-K\-Map\-Rect \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+如果相交返回\-Y\-E\-S，否则返回\-N\-O 
+\end{DoxyReturn}
+
+
+The documentation for this protocol was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+B\-M\-K\-Overlay.\-h\end{DoxyCompactItemize}

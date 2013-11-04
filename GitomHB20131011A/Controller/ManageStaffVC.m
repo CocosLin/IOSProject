@@ -39,6 +39,7 @@
     self.manageTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, Screen_Width, Screen_Height-66)];
     self.manageTableView.delegate = self;
     self.manageTableView.dataSource = self;
+    [self.manageTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.view addSubview:self.manageTableView];
     
     OrganizationsModel *orgModel = [[OrganizationsModel alloc]init];
@@ -86,6 +87,8 @@
         cell = [nib objectAtIndex:0];
     }
     cell.orgName.text = [[self.orgArray objectAtIndex:indexPath.row] organizationName];
+    cell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
+    cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
     return cell;
 }
 

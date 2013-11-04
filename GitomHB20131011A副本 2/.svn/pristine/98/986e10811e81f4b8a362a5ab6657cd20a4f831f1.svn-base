@@ -1,0 +1,412 @@
+//
+//  ReportVC.m
+//  GitomNetLjw
+//
+//  Created by jiawei on 13-6-26.
+//  Copyright (c) 2013年 Gitom. All rights reserved.
+//
+
+#import "ReportVC.h"
+#import "WCommonMacroDefine.h"
+#import "MakeAudioVC.h"
+#import <QuartzCore/QuartzCore.h>
+typedef NS_ENUM(NSInteger, Tag_ReportVC) {
+    TAG_BtnSaveReport = 101,
+    TAG_BtnShowLocation = 102,
+    TAG_BtnRecording = 103
+};
+@interface ReportVC ()
+{
+    UITableView * _tvbReportInput;
+    UILabel * _lblLocationInfo;
+    UILabel * _lblMyAddress;
+    UITextView * _tvNoteInput;
+    BMKUserLocation * _userLocation;
+    BMKSearch * _bMapSearch;
+    NSString * _strReportType;
+}
+@end
+
+@implementation ReportVC
+
+
+#pragma mark - 用户事件
+-(void)btnAction:(UIButton *)btn
+{
+    if (btn.tag == TAG_BtnSaveReport)
+    {
+        //上传汇报
+        [self saveMyReport];
+    }else if(btn.tag == TAG_BtnRecording)
+    {
+        //录音
+        MakeAudioVC * mavc = [[MakeAudioVC alloc]init];
+        [self.navigationController pushViewController:mavc animated:YES];
+        [mavc release];
+    }
+}
+-(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [self setEditing:NO];
+}
+#pragma mark - 自定义方法
+//开始定位
+-(void)startPosition
+{
+    self.bMapView.showsUserLocation = YES;
+    self.bMapView.delegate = self;
+}
+
+//结束定位
+-(void)stopPosition
+{
+    self.bMapView.showsUserLocation = NO;
+    self.bMapView.delegate = nil;
+}
+-(void)dismissKeyBoard
+{
+    [_tvNoteInput resignFirstResponder];
+}
+
+//我的汇报上传
+-(void)saveMyReport
+{
+    ReportModel * report = [[ReportModel alloc]init];
+    GetCommonDataModel;
+    report.organizationId = comData.organization.organizationId;
+    report.orgunitId = comData.organization.orgunitId;
+    report.reportType = [ReportManager getStrTypeReportWithIntReportType:self.intReportType];
+    report.latitude = self.latitude;
+    report.longitude = self.longitude;
+    report.address = self.myAddress;
+    report.note = _tvNoteInput.text;
+    report.voidFlag = NO;
+    report.imageUrl = nil;
+    report.soundUrl = nil;
+    ReportManager * rm = [ReportManager sharedReportManager];
+    [rm saveReportWithReportModel:report GotIsReportOk:^(BOOL isReportOk)
+     {NSLog(@"ReportVC == 上传汇报 ");}];
+    [report release];
+}
+
+#pragma mark - 表格代理方法
+
+-(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    static NSString * sCellID = @"sCellID";
+    NSLog(@"breakOne");
+    //UITableViewCell * myCell = [tableView dequeueReusableHeaderFooterViewWithIdentifier:sCellID];
+    UITableViewCell *myCell = [tableView dequeueReusableCellWithIdentifier:sCellID];
+    if (!myCell) {
+        myCell = [[[UITableViewCell alloc]initWithStyle:0 reuseIdentifier:sCellID]autorelease];
+    }
+    myCell.selectionStyle = UITableViewCellSelectionStyleNone;
+    NSArray * _array=[NSArray arrayWithObjects:@"当前位置",@"当前地址",@"附加文字",@"附加照片",@"附加录音", nil];
+    float h = 80;
+    if (indexPath.row == 0) {
+        h = 30.0;
+        _lblLocationInfo = [[UILabel alloc]initWithFrame:CGRectMake(60, 0, myCell.frame.size.width - 60-50, h)];
+        [_lblLocationInfo setBackgroundColor:[UIColor clearColor]];
+        _lblLocationInfo.text = [NSString stringWithFormat:@"正在获取您当前位置..."];
+        [_lblLocationInfo setFont:[UIFont systemFontOfSize:12]];
+        [myCell addSubview:_lblLocationInfo];
+        [self startPosition];
+    }else if(indexPath.row == 1)
+    {
+        h = 40.0;
+        _lblMyAddress = [[UILabel alloc]initWithFrame:CGRectMake(60, 0, myCell.frame.size.width - 60-5, h)];
+        _lblMyAddress.text = @"正在读取您当前位置,请确保GPS和网络已开启!";
+        _lblMyAddress.lineBreakMode = 3;
+        _lblMyAddress.numberOfLines = 2;
+        [_lblMyAddress setFont:[UIFont systemFontOfSize:12]];
+        [myCell addSubview:_lblMyAddress];
+    }else if(indexPath.row == 2)
+    {
+        h = tableView.frame.size.height - 30 - 40 -90 -90;
+        _tvNoteInput = [[UITextView alloc]initWithFrame:CGRectMake(60, 1, myCell.frame.size.width - 60 -5 - 5 - 3, h - 4)];
+        [_tvNoteInput setBackgroundColor:[UIColor clearColor]];
+        [_tvNoteInput.layer setBorderWidth:0.2];
+        [_tvNoteInput.layer setCornerRadius:7];
+        [_tvNoteInput setFont:[UIFont systemFontOfSize:13]];
+        _tvNoteInput.delegate = self;
+        [myCell addSubview:_tvNoteInput];
+        
+        //在弹出的键盘上面加一个view来放置退出键盘的Done按钮
+        UIToolbar * topView = [[UIToolbar alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];
+        [topView setBarStyle:UIBarStyleDefault];
+        UIBarButtonItem * btnSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
+        UIBarButtonItem * doneButton = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStyleDone target:self action:@selector(dismissKeyBoard)];
+        NSArray * buttonsArray = [NSArray arrayWithObjects:btnSpace, doneButton, nil];
+        [btnSpace release];
+        [doneButton release];
+        [topView setItems:buttonsArray];
+        [_tvNoteInput setInputAccessoryView:topView];
+        [topView release];
+        
+    }else if(indexPath.row == 3)
+    {
+        h = 90.0;
+    }
+    else if(indexPath.row == 4)
+    {
+        h = 90.0;
+        UIView * view = [[UIView alloc]initWithFrame:CGRectMake(60, 0, myCell.frame.size.width - 75, h)];
+        UIColor *color = [UIColor colorWithRed:(208/255.0) green:(208/255.0) blue:(208/255.0) alpha:1];
+        view.layer.borderColor = color.CGColor;
+        view.layer.borderWidth = 1.0;
+        view.tag = 100;
+        [myCell addSubview:view];
+        
+        UIImageView * imgViewSound = [[UIImageView alloc]initWithFrame:CGRectMake(view.frame.size.width/2 - 50/2, 0, 50, 50)];
+        imgViewSound.image = [UIImage imageNamed:@"report_recording"];
+        [view addSubview:imgViewSound];
+        [imgViewSound release];
+        
+        UIButton * btnMakeSound = [UIButton buttonWithType:UIButtonTypeCustom];
+        [btnMakeSound setBackgroundImage:[[UIImage imageNamed:@"btn_group_normal"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
+             [btnMakeSound setTitle:@"录音" forState:UIControlStateNormal];
+        [btnMakeSound setBackgroundImage:[[UIImage imageNamed:@"btn_group_highlighted"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateHighlighted];
+        [btnMakeSound setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+         [btnMakeSound.titleLabel setFont:[UIFont systemFontOfSize:13]];
+        btnMakeSound.layer.borderColor = color.CGColor;
+        btnMakeSound.layer.borderWidth = 1.0;
+        btnMakeSound.frame = CGRectMake(0+5, view.frame.size.height - 35, view.frame.size.width-10, 30);
+        [view addSubview:btnMakeSound];
+        [btnMakeSound addTarget:self action:@selector(btnAction:) forControlEvents:UIControlEventTouchUpInside];
+        btnMakeSound.tag = TAG_BtnRecording;
+        
+        
+        [view release];
+    }
+    
+    UILabel * lbl = [[UILabel alloc]initWithFrame:CGRectMake(5, 0, 50,h)];
+    lbl.text = _array[indexPath.row];
+    lbl.textAlignment = NSTextAlignmentCenter;
+    lbl.font = [UIFont systemFontOfSize:12];
+    lbl.backgroundColor = [UIColor clearColor];
+    lbl.lineBreakMode=NSLineBreakByCharWrapping;
+    [myCell addSubview:lbl];
+    [lbl release];
+    
+    UIView * viewLine = [[UIView alloc]initWithFrame:CGRectMake(56, 0, 1, tableView.frame.size.height)];
+    [myCell addSubview:viewLine];
+    [viewLine setBackgroundColor:[UIColor grayColor]];
+    [viewLine release];
+    
+    
+    return myCell;
+}
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 5;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row == 0) {
+        return 30;
+    }else if(indexPath.row == 1)
+    {
+        return 40;
+    }
+    if (indexPath.row == 2)
+    {
+        return tableView.frame.size.height - 30 - 40 -90 -90;
+    }
+    return 90.0;
+}
+
+-(BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return YES;
+}
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self dismissKeyBoard];
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+}
+
+#pragma mark - UITextViewDelegate
+-(BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    return YES;
+}
+
+#pragma mark - 百度地图代理方法
+-(void)mapView:(BMKMapView *)mapView didUpdateUserLocation:(BMKUserLocation *)userLocation
+{
+        //定位一次
+        _userLocation = userLocation;
+        self.longitude = _userLocation.coordinate.longitude;
+        self.latitude = _userLocation.coordinate.latitude;
+    
+        //反编码地址
+        [_bMapSearch reverseGeocode:_userLocation.coordinate];
+    
+}
+
+-(void)mapViewWillStartLocatingUser:(BMKMapView *)mapView
+{
+    _userLocation = nil;
+}
+-(void)mapViewDidStopLocatingUser:(BMKMapView *)mapView
+{
+   _userLocation = mapView.userLocation;
+//    NSLog(@"%@",[ReportManager getStrTypeReportWithIntReportType:self.intReportType]);
+}
+
+#pragma mark -百度地图服务
+-(void)onGetAddrResult:(BMKAddrInfo *)result errorCode:(int)error
+{
+    
+    self.myAddress = result.strAddr;
+    //解析完就停止定位
+    self.bMapView.showsUserLocation = NO;
+}
+
+#pragma mark - 属性控制
+-(void)setIntReportType:(Flag_ReportType)intReportType
+{
+    _intReportType = intReportType;
+    if (_intReportType == Flag_ReportType_Work)
+    {
+        self.title = @"工作汇报";
+    }
+    else if(_intReportType == Flag_ReportType_GoOut)
+    {
+        self.title = @"外出汇报";
+    }
+    else if(_intReportType == Flag_ReportType_Travel)
+    {
+        self.title = @"出差汇报";
+    }
+    else
+    {
+        self.title = @"汇报";
+    }
+}
+
+-(void)setIsShowRecord:(BOOL)isShowRecord
+{
+    _isShowRecord = isShowRecord;
+    if (_isShowRecord) {
+        //如果是查汇报，就把按钮去掉，让汇报内容不可以编辑等
+    }else
+    {
+        //如果不是查汇报，就把按钮显示出来，让汇报内容可以编辑等
+    }
+}
+
+-(void)setLatitude:(double)latitude
+{
+    _latitude = latitude;
+    _lblLocationInfo.text = [NSString stringWithFormat:@"%.6lf,%.6lf",_latitude,_longitude];
+}
+
+-(void)setLongitude:(double)longitude
+{
+    _longitude = longitude;
+    _lblLocationInfo.text = [NSString stringWithFormat:@"%.6lf,%.6lf",_latitude,_longitude];
+}
+
+-(void)setMyAddress:(NSString *)myAddress
+{
+    if (myAddress != _myAddress) {
+        [_myAddress release];
+        _myAddress = [myAddress copy];
+    }
+    _lblMyAddress.text = _myAddress;
+}
+
+#pragma mark - 视图生成
+-(void)initWithReportInput
+{
+    _tvbReportInput = [[UITableView alloc]initWithFrame:CGRectMake(5, 5, Width_Screen - 10, Height_Screen - 40 - 44 - 20 -10)];
+    _tvbReportInput.delegate = self;
+    _tvbReportInput.dataSource = self;
+    _tvbReportInput.layer.borderWidth = 0.3;
+    _tvbReportInput.layer.cornerRadius = 7;
+    [_tvbReportInput setUserInteractionEnabled:YES];
+    [self.view addSubview:_tvbReportInput];
+}
+
+#pragma mark - 生命周期
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self)
+    {
+        self.isShowRecord = NO;
+        //测试
+        BMKMapView * mapView = [[BMKMapView alloc]init];
+        self.bMapView = mapView;
+        [self startPosition];
+        [mapView release];
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    //导航条设置
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.frame = CGRectMake(0, 0, 50, 44);
+    [btn setBackgroundImage:[UIImage imageNamed:@"btnBackFromNavigationBar_On"] forState:UIControlStateNormal];
+    [btn  setBackgroundImage:[UIImage imageNamed:@"btnBackFromNavigationBar_Off"] forState:UIControlStateHighlighted];
+    [btn addTarget:self action:@selector(btnBack:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc]initWithCustomView:btn];
+    [self.navigationItem setLeftBarButtonItem:backItem];
+    [backItem release];
+    
+    [self initWithReportInput];
+    
+    //上传汇报
+    UIButton * btnSaveReoprt = [UIButton buttonWithType:0];
+    btnSaveReoprt.tag = TAG_BtnSaveReport;
+    [btnSaveReoprt setBackgroundImage:[[UIImage imageNamed:@"commit_btn_normal"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
+    [btnSaveReoprt  setBackgroundImage:[[UIImage imageNamed:@"commit_btn_highlighted"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateHighlighted];
+    [btnSaveReoprt setTitle:@"上传汇报" forState:UIControlStateNormal];
+    [btnSaveReoprt setTitle:@"放手上传吧..." forState:UIControlStateHighlighted];
+    [btnSaveReoprt setFrame:CGRectMake(5, Height_Screen - 40 - 44 - 20, Width_Screen - 10, 40)];
+    [btnSaveReoprt addTarget:self action:@selector(btnAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btnSaveReoprt];
+    
+    [self startPosition];
+    
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self startPosition];
+    _bMapSearch = [[BMKSearch alloc]init];
+    [_bMapSearch setDelegate:self];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self stopPosition];
+    _bMapSearch.delegate = nil;
+    [_bMapSearch release];
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc {
+    
+    [_lblLocationInfo release];
+    [_lblMyAddress release];
+    [_tvNoteInput release];
+    [_tvbReportInput release];
+    
+    [super dealloc];
+}
+@end
