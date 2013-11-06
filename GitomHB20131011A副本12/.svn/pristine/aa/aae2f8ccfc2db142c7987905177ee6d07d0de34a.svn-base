@@ -1,0 +1,68 @@
+\hypertarget{interface_b_m_k_bus_line_result}{\section{B\-M\-K\-Bus\-Line\-Result 类参考}
+\label{interface_b_m_k_bus_line_result}\index{B\-M\-K\-Bus\-Line\-Result@{B\-M\-K\-Bus\-Line\-Result}}
+}
+
+
+公交详情结果类.  
+
+
+
+
+{\ttfamily \#import $<$B\-M\-K\-Route\-Search\-Type.\-h$>$}
+
+继承关系图 B\-M\-K\-Bus\-Line\-Result\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{interface_b_m_k_bus_line_result}
+\end{center}
+\end{figure}
+\subsection*{保护成员变量}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{interface_b_m_k_bus_line_result_abc69157a4b302e25f834d22718f6d0f7}{N\-S\-String $\ast$ {\bfseries \-\_\-m\-Bus\-Name}}\label{interface_b_m_k_bus_line_result_abc69157a4b302e25f834d22718f6d0f7}
+
+\item 
+\hypertarget{interface_b_m_k_bus_line_result_a00071f4e6289bf9506f5d9928dfbdaea}{int {\bfseries \-\_\-m\-Is\-Mon\-Ticket}}\label{interface_b_m_k_bus_line_result_a00071f4e6289bf9506f5d9928dfbdaea}
+
+\item 
+\hypertarget{interface_b_m_k_bus_line_result_aacca8d8685fbbd9c69b2129104197f14}{N\-S\-String $\ast$ {\bfseries \-\_\-m\-Start\-Time}}\label{interface_b_m_k_bus_line_result_aacca8d8685fbbd9c69b2129104197f14}
+
+\item 
+\hypertarget{interface_b_m_k_bus_line_result_add4d8cfb78c543c01f4ec126a81950c7}{N\-S\-String $\ast$ {\bfseries \-\_\-m\-End\-Time}}\label{interface_b_m_k_bus_line_result_add4d8cfb78c543c01f4ec126a81950c7}
+
+\item 
+\hypertarget{interface_b_m_k_bus_line_result_aaec01789f4b09de0017b54651c4be14d}{\hyperlink{interface_b_m_k_route}{B\-M\-K\-Route} $\ast$ {\bfseries \-\_\-m\-Bus\-Route}}\label{interface_b_m_k_bus_line_result_aaec01789f4b09de0017b54651c4be14d}
+
+\end{DoxyCompactItemize}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{interface_b_m_k_bus_line_result_ae220e8f61d63bc810e2fcec3cbba716d}{N\-S\-String $\ast$ {\bfseries \-\_\-m\-Company}}\label{interface_b_m_k_bus_line_result_ae220e8f61d63bc810e2fcec3cbba716d}
+
+\item 
+\hypertarget{interface_b_m_k_bus_line_result_ac69981cd28c6d7c5b20d47b3192c5d68}{N\-S\-String $\ast$ {\bfseries m\-Company}}\label{interface_b_m_k_bus_line_result_ac69981cd28c6d7c5b20d47b3192c5d68}
+
+\item 
+\hypertarget{interface_b_m_k_bus_line_result_ae33b464d9523ee4f6a02d281d0ba6e13}{N\-S\-String $\ast$ {\bfseries m\-Bus\-Name}}\label{interface_b_m_k_bus_line_result_ae33b464d9523ee4f6a02d281d0ba6e13}
+
+\item 
+\hypertarget{interface_b_m_k_bus_line_result_a058b38950a97101d275bcf8a1a2663c7}{int {\bfseries m\-Is\-Mon\-Ticket}}\label{interface_b_m_k_bus_line_result_a058b38950a97101d275bcf8a1a2663c7}
+
+\item 
+\hypertarget{interface_b_m_k_bus_line_result_a5627fd4b44b2bb27f899a42d2bc6ba65}{N\-S\-String $\ast$ {\bfseries m\-Start\-Time}}\label{interface_b_m_k_bus_line_result_a5627fd4b44b2bb27f899a42d2bc6ba65}
+
+\item 
+\hypertarget{interface_b_m_k_bus_line_result_aa2e675ce53aaa766fabdb0052dc7ba10}{N\-S\-String $\ast$ {\bfseries m\-End\-Time}}\label{interface_b_m_k_bus_line_result_aa2e675ce53aaa766fabdb0052dc7ba10}
+
+\item 
+\hypertarget{interface_b_m_k_bus_line_result_ae3befda89bc1866b9ffdca02a6f5a80a}{\hyperlink{interface_b_m_k_route}{B\-M\-K\-Route} $\ast$ {\bfseries m\-Bus\-Route}}\label{interface_b_m_k_bus_line_result_ae3befda89bc1866b9ffdca02a6f5a80a}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{详细描述}
+公交详情结果类. 
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+B\-M\-K\-Route\-Search\-Type.\-h\end{DoxyCompactItemize}

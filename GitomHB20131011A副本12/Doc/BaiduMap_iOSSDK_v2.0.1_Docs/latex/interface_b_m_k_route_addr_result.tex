@@ -1,0 +1,68 @@
+\hypertarget{interface_b_m_k_route_addr_result}{\section{B\-M\-K\-Route\-Addr\-Result 类参考}
+\label{interface_b_m_k_route_addr_result}\index{B\-M\-K\-Route\-Addr\-Result@{B\-M\-K\-Route\-Addr\-Result}}
+}
+
+
+路线搜索地址结果类.\-当输入的起点或终点有多个地点选择时，或者选定的城市没有此地点，但其它城市有(驾乘或步行)，返回该类的实例  
+
+
+
+
+{\ttfamily \#import $<$B\-M\-K\-Route\-Search\-Type.\-h$>$}
+
+继承关系图 B\-M\-K\-Route\-Addr\-Result\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{interface_b_m_k_route_addr_result}
+\end{center}
+\end{figure}
+\subsection*{保护成员变量}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{interface_b_m_k_route_addr_result_a2108d7a47157103e55d409766ab84257}{N\-S\-Array $\ast$ {\bfseries \-\_\-end\-Poi\-List}}\label{interface_b_m_k_route_addr_result_a2108d7a47157103e55d409766ab84257}
+
+\item 
+\hypertarget{interface_b_m_k_route_addr_result_ac944121c0903e92a4313a4c0350923cd}{N\-S\-Array $\ast$ {\bfseries \-\_\-start\-City\-List}}\label{interface_b_m_k_route_addr_result_ac944121c0903e92a4313a4c0350923cd}
+
+\item 
+\hypertarget{interface_b_m_k_route_addr_result_aed02e5199c20db0c913a1cc6e2d236d9}{N\-S\-Array $\ast$ {\bfseries \-\_\-end\-City\-List}}\label{interface_b_m_k_route_addr_result_aed02e5199c20db0c913a1cc6e2d236d9}
+
+\item 
+\hypertarget{interface_b_m_k_route_addr_result_adf21c7d401bfce4af38c94ffc7269d72}{N\-S\-Array $\ast$ {\bfseries \-\_\-way\-Points\-Poi\-List}}\label{interface_b_m_k_route_addr_result_adf21c7d401bfce4af38c94ffc7269d72}
+
+\item 
+\hypertarget{interface_b_m_k_route_addr_result_a5799836ee0446e22bac7b39bc5b8945a}{N\-S\-Array $\ast$ {\bfseries \-\_\-way\-Points\-City\-List}}\label{interface_b_m_k_route_addr_result_a5799836ee0446e22bac7b39bc5b8945a}
+
+\end{DoxyCompactItemize}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{interface_b_m_k_route_addr_result_ad31bb0d912c49be75dad1f61e24a5867}{N\-S\-Array $\ast$ {\bfseries \-\_\-start\-Poi\-List}}\label{interface_b_m_k_route_addr_result_ad31bb0d912c49be75dad1f61e24a5867}
+
+\item 
+\hypertarget{interface_b_m_k_route_addr_result_ae29bb91f70c2e6cee75b8a2f918b8fd2}{N\-S\-Array $\ast$ \hyperlink{interface_b_m_k_route_addr_result_ae29bb91f70c2e6cee75b8a2f918b8fd2}{start\-Poi\-List}}\label{interface_b_m_k_route_addr_result_ae29bb91f70c2e6cee75b8a2f918b8fd2}
+
+\begin{DoxyCompactList}\small\item\em 起点\-P\-O\-I列表，成员类型为\-B\-M\-K\-Poi\-Info \end{DoxyCompactList}\item 
+\hypertarget{interface_b_m_k_route_addr_result_aac903c422d926b12913133eeb0444e17}{N\-S\-Array $\ast$ \hyperlink{interface_b_m_k_route_addr_result_aac903c422d926b12913133eeb0444e17}{start\-City\-List}}\label{interface_b_m_k_route_addr_result_aac903c422d926b12913133eeb0444e17}
+
+\begin{DoxyCompactList}\small\item\em 起点城市列表，成员类型为\-B\-M\-K\-City\-List\-Info,如果输入的地点在本城市没有而在其它城市有，则返回其它城市的信息 \end{DoxyCompactList}\item 
+\hypertarget{interface_b_m_k_route_addr_result_a68f28dd49c16ff67a814d19fe2570e1e}{N\-S\-Array $\ast$ \hyperlink{interface_b_m_k_route_addr_result_a68f28dd49c16ff67a814d19fe2570e1e}{end\-Poi\-List}}\label{interface_b_m_k_route_addr_result_a68f28dd49c16ff67a814d19fe2570e1e}
+
+\begin{DoxyCompactList}\small\item\em 终点\-P\-O\-I列表，成员类型为\-B\-M\-K\-Poi\-Info \end{DoxyCompactList}\item 
+\hypertarget{interface_b_m_k_route_addr_result_a29b7a094255410379a8f960c3fc1e3da}{N\-S\-Array $\ast$ \hyperlink{interface_b_m_k_route_addr_result_a29b7a094255410379a8f960c3fc1e3da}{end\-City\-List}}\label{interface_b_m_k_route_addr_result_a29b7a094255410379a8f960c3fc1e3da}
+
+\begin{DoxyCompactList}\small\item\em 终点城市列表，成员类型为\-B\-M\-K\-City\-List\-Info,如果输入的地点在本城市没有而在其它城市有，则返回其它城市的信息 \end{DoxyCompactList}\item 
+\hypertarget{interface_b_m_k_route_addr_result_a0724f64a30f591ce225bdf9c9920c70a}{N\-S\-Array $\ast$ \hyperlink{interface_b_m_k_route_addr_result_a0724f64a30f591ce225bdf9c9920c70a}{way\-Point\-Poi\-List}}\label{interface_b_m_k_route_addr_result_a0724f64a30f591ce225bdf9c9920c70a}
+
+\begin{DoxyCompactList}\small\item\em 途经点\-P\-O\-I列表，成员类型为\-N\-S\-Array$<$\-B\-M\-K\-Poi\-Info$\ast$$>$ \end{DoxyCompactList}\item 
+\hypertarget{interface_b_m_k_route_addr_result_a11c8c192e86286a080e4df7306800ab8}{N\-S\-Array $\ast$ \hyperlink{interface_b_m_k_route_addr_result_a11c8c192e86286a080e4df7306800ab8}{way\-Point\-City\-List}}\label{interface_b_m_k_route_addr_result_a11c8c192e86286a080e4df7306800ab8}
+
+\begin{DoxyCompactList}\small\item\em 途经点城市列表，成员类型为\-N\-S\-Array$<$\-B\-M\-K\-City\-List\-Info$\ast$$>$,如果输入的地点在本城市没有而在其它城市有，则返回其它城市的信息 \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{详细描述}
+路线搜索地址结果类.\-当输入的起点或终点有多个地点选择时，或者选定的城市没有此地点，但其它城市有(驾乘或步行)，返回该类的实例 
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+B\-M\-K\-Route\-Search\-Type.\-h\end{DoxyCompactItemize}

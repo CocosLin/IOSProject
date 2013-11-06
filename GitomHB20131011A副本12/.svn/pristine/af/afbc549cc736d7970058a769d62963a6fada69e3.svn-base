@@ -1,0 +1,29 @@
+\hypertarget{struct_b_m_k_map_size}{\section{B\-M\-K\-Map\-Size Struct Reference}
+\label{struct_b_m_k_map_size}\index{B\-M\-K\-Map\-Size@{B\-M\-K\-Map\-Size}}
+}
+
+
+矩形大小，用直角地理坐标表示  
+
+
+
+
+{\ttfamily \#include $<$B\-M\-K\-Geometry.\-h$>$}
+
+\subsection*{公有成员变量}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{struct_b_m_k_map_size_a1005d7fd59045a80619c024df3156d6a}{double \hyperlink{struct_b_m_k_map_size_a1005d7fd59045a80619c024df3156d6a}{width}}\label{struct_b_m_k_map_size_a1005d7fd59045a80619c024df3156d6a}
+
+\begin{DoxyCompactList}\small\item\em 宽度 \end{DoxyCompactList}\item 
+\hypertarget{struct_b_m_k_map_size_a516baff78187bf8f07ef49f01c7d86fc}{double \hyperlink{struct_b_m_k_map_size_a516baff78187bf8f07ef49f01c7d86fc}{height}}\label{struct_b_m_k_map_size_a516baff78187bf8f07ef49f01c7d86fc}
+
+\begin{DoxyCompactList}\small\item\em 高度 \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{详细描述}
+矩形大小，用直角地理坐标表示 
+
+The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{_b_m_k_geometry_8h}{B\-M\-K\-Geometry.\-h}\end{DoxyCompactItemize}

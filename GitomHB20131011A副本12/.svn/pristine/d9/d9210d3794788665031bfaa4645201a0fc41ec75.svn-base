@@ -1,0 +1,188 @@
+\hypertarget{interface_b_m_k_offline_map}{\section{B\-M\-K\-Offline\-Map 类参考}
+\label{interface_b_m_k_offline_map}\index{B\-M\-K\-Offline\-Map@{B\-M\-K\-Offline\-Map}}
+}
+
+
+离线地图服务  
+
+
+
+
+{\ttfamily \#import $<$B\-M\-K\-Offline\-Map.\-h$>$}
+
+继承关系图 B\-M\-K\-Offline\-Map\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{interface_b_m_k_offline_map}
+\end{center}
+\end{figure}
+\subsection*{实例方法}
+\begin{DoxyCompactItemize}
+\item 
+(B\-O\-O\-L) -\/ \hyperlink{interface_b_m_k_offline_map_a2074d1fd832b6e5c84ab6b1c438a3b1f}{scan\-:}
+\item 
+(B\-O\-O\-L) -\/ \hyperlink{interface_b_m_k_offline_map_a40aa794e96677e472bf0d6f2ac18d583}{start\-:}
+\item 
+(B\-O\-O\-L) -\/ \hyperlink{interface_b_m_k_offline_map_a4c2489e1502d34bd807a1c4418560f88}{update\-:}
+\item 
+(B\-O\-O\-L) -\/ \hyperlink{interface_b_m_k_offline_map_a9c601d81b148c729342863db92b47831}{pause\-:}
+\item 
+(B\-O\-O\-L) -\/ \hyperlink{interface_b_m_k_offline_map_ac834ae7e577d2fa4dc864232b30f02df}{remove\-:}
+\item 
+(N\-S\-Array $\ast$) -\/ \hyperlink{interface_b_m_k_offline_map_a35c1c36472716ec22cacd54c5c710a5e}{get\-Hot\-City\-List}
+\item 
+(N\-S\-Array $\ast$) -\/ \hyperlink{interface_b_m_k_offline_map_a9a78b1a176ea59abe1b26e237a6e3a2c}{get\-Offline\-City\-List}
+\item 
+(N\-S\-Array $\ast$) -\/ \hyperlink{interface_b_m_k_offline_map_a9447d5aed62366152b3b6978b9fc1d34}{search\-City\-:}
+\item 
+(N\-S\-Array $\ast$) -\/ \hyperlink{interface_b_m_k_offline_map_a3152e5d5076958cda782d20565ceea56}{get\-All\-Update\-Info}
+\item 
+(\hyperlink{interface_b_m_k_o_l_update_element}{B\-M\-K\-O\-L\-Update\-Element} $\ast$) -\/ \hyperlink{interface_b_m_k_offline_map_ab11a98584ffd1f5582a2439a794646cb}{get\-Update\-Info\-:}
+\end{DoxyCompactItemize}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{interface_b_m_k_offline_map_ae25b1af7e710b8dbffd88aad3e081f48}{id$<$ \hyperlink{protocol_b_m_k_offline_map_delegate-p}{B\-M\-K\-Offline\-Map\-Delegate} $>$ {\bfseries delegate}}\label{interface_b_m_k_offline_map_ae25b1af7e710b8dbffd88aad3e081f48}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{详细描述}
+离线地图服务 
+
+\subsection{方法文档}
+\hypertarget{interface_b_m_k_offline_map_a3152e5d5076958cda782d20565ceea56}{\index{B\-M\-K\-Offline\-Map@{B\-M\-K\-Offline\-Map}!get\-All\-Update\-Info@{get\-All\-Update\-Info}}
+\index{get\-All\-Update\-Info@{get\-All\-Update\-Info}!BMKOfflineMap@{B\-M\-K\-Offline\-Map}}
+\subsubsection[{get\-All\-Update\-Info}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (N\-S\-Array$\ast$) get\-All\-Update\-Info 
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+}}\label{interface_b_m_k_offline_map_a3152e5d5076958cda782d20565ceea56}
+返回各城市离线地图更新信息 \begin{DoxyReturn}{返回}
+各城市离线地图更新信息,用户需要显示释放该数组，数组元素为\-B\-M\-K\-O\-L\-Update\-Element 
+\end{DoxyReturn}
+\hypertarget{interface_b_m_k_offline_map_a35c1c36472716ec22cacd54c5c710a5e}{\index{B\-M\-K\-Offline\-Map@{B\-M\-K\-Offline\-Map}!get\-Hot\-City\-List@{get\-Hot\-City\-List}}
+\index{get\-Hot\-City\-List@{get\-Hot\-City\-List}!BMKOfflineMap@{B\-M\-K\-Offline\-Map}}
+\subsubsection[{get\-Hot\-City\-List}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (N\-S\-Array$\ast$) get\-Hot\-City\-List 
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+}}\label{interface_b_m_k_offline_map_a35c1c36472716ec22cacd54c5c710a5e}
+返回热门城市列表 \begin{DoxyReturn}{返回}
+热门城市列表,用户需要显示释放该数组，数组元素为\-B\-M\-K\-O\-L\-Search\-Record 
+\end{DoxyReturn}
+\hypertarget{interface_b_m_k_offline_map_a9a78b1a176ea59abe1b26e237a6e3a2c}{\index{B\-M\-K\-Offline\-Map@{B\-M\-K\-Offline\-Map}!get\-Offline\-City\-List@{get\-Offline\-City\-List}}
+\index{get\-Offline\-City\-List@{get\-Offline\-City\-List}!BMKOfflineMap@{B\-M\-K\-Offline\-Map}}
+\subsubsection[{get\-Offline\-City\-List}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (N\-S\-Array$\ast$) get\-Offline\-City\-List 
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+}}\label{interface_b_m_k_offline_map_a9a78b1a176ea59abe1b26e237a6e3a2c}
+返回所有支持离线地图的城市列表 \begin{DoxyReturn}{返回}
+支持离线地图的城市列表,用户需要显示释放该数组，数组元素为\-B\-M\-K\-O\-L\-Search\-Record 
+\end{DoxyReturn}
+\hypertarget{interface_b_m_k_offline_map_ab11a98584ffd1f5582a2439a794646cb}{\index{B\-M\-K\-Offline\-Map@{B\-M\-K\-Offline\-Map}!get\-Update\-Info\-:@{get\-Update\-Info\-:}}
+\index{get\-Update\-Info\-:@{get\-Update\-Info\-:}!BMKOfflineMap@{B\-M\-K\-Offline\-Map}}
+\subsubsection[{get\-Update\-Info\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ ({\bf B\-M\-K\-O\-L\-Update\-Element}$\ast$) get\-Update\-Info\-: 
+\begin{DoxyParamCaption}
+\item[{(int)}]{city\-I\-D}
+\end{DoxyParamCaption}
+}}\label{interface_b_m_k_offline_map_ab11a98584ffd1f5582a2439a794646cb}
+返回指定城市id离线地图更新信息 
+\begin{DoxyParams}{参数}
+{\em city\-I\-D} & 指定的城市id \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+指定城市id离线地图更新信息,用户需要显示释放该数据 
+\end{DoxyReturn}
+\hypertarget{interface_b_m_k_offline_map_a9c601d81b148c729342863db92b47831}{\index{B\-M\-K\-Offline\-Map@{B\-M\-K\-Offline\-Map}!pause\-:@{pause\-:}}
+\index{pause\-:@{pause\-:}!BMKOfflineMap@{B\-M\-K\-Offline\-Map}}
+\subsubsection[{pause\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (B\-O\-O\-L) pause\-: 
+\begin{DoxyParamCaption}
+\item[{(int)}]{city\-I\-D}
+\end{DoxyParamCaption}
+}}\label{interface_b_m_k_offline_map_a9c601d81b148c729342863db92b47831}
+暂停下载指定城市id的离线地图 
+\begin{DoxyParams}{参数}
+{\em city\-I\-D} & 指定的城市id \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+成功返回\-Y\-E\-S，否则返回\-N\-O 
+\end{DoxyReturn}
+\hypertarget{interface_b_m_k_offline_map_ac834ae7e577d2fa4dc864232b30f02df}{\index{B\-M\-K\-Offline\-Map@{B\-M\-K\-Offline\-Map}!remove\-:@{remove\-:}}
+\index{remove\-:@{remove\-:}!BMKOfflineMap@{B\-M\-K\-Offline\-Map}}
+\subsubsection[{remove\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (B\-O\-O\-L) remove\-: 
+\begin{DoxyParamCaption}
+\item[{(int)}]{city\-I\-D}
+\end{DoxyParamCaption}
+}}\label{interface_b_m_k_offline_map_ac834ae7e577d2fa4dc864232b30f02df}
+删除下载指定城市id的离线地图 
+\begin{DoxyParams}{参数}
+{\em city\-I\-D} & 指定的城市id \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+成功返回\-Y\-E\-S，否则返回\-N\-O 
+\end{DoxyReturn}
+\hypertarget{interface_b_m_k_offline_map_a2074d1fd832b6e5c84ab6b1c438a3b1f}{\index{B\-M\-K\-Offline\-Map@{B\-M\-K\-Offline\-Map}!scan\-:@{scan\-:}}
+\index{scan\-:@{scan\-:}!BMKOfflineMap@{B\-M\-K\-Offline\-Map}}
+\subsubsection[{scan\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (B\-O\-O\-L) scan\-: 
+\begin{DoxyParamCaption}
+\item[{(B\-O\-O\-L)}]{delete\-Failed}
+\end{DoxyParamCaption}
+}}\label{interface_b_m_k_offline_map_a2074d1fd832b6e5c84ab6b1c438a3b1f}
+扫描离线地图压缩包,异步函数 \begin{DoxyReturn}{返回}
+成功返回\-Y\-E\-S，否则返回\-N\-O 
+\end{DoxyReturn}
+\hypertarget{interface_b_m_k_offline_map_a9447d5aed62366152b3b6978b9fc1d34}{\index{B\-M\-K\-Offline\-Map@{B\-M\-K\-Offline\-Map}!search\-City\-:@{search\-City\-:}}
+\index{search\-City\-:@{search\-City\-:}!BMKOfflineMap@{B\-M\-K\-Offline\-Map}}
+\subsubsection[{search\-City\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (N\-S\-Array$\ast$) search\-City\-: 
+\begin{DoxyParamCaption}
+\item[{(N\-S\-String $\ast$)}]{city\-Name}
+\end{DoxyParamCaption}
+}}\label{interface_b_m_k_offline_map_a9447d5aed62366152b3b6978b9fc1d34}
+根据城市名搜索该城市离线地图记录 
+\begin{DoxyParams}{参数}
+{\em city\-Name} & 城市名 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+该城市离线地图记录,用户需要显示释放该数组，数组元素为\-B\-M\-K\-O\-L\-Search\-Record 
+\end{DoxyReturn}
+\hypertarget{interface_b_m_k_offline_map_a40aa794e96677e472bf0d6f2ac18d583}{\index{B\-M\-K\-Offline\-Map@{B\-M\-K\-Offline\-Map}!start\-:@{start\-:}}
+\index{start\-:@{start\-:}!BMKOfflineMap@{B\-M\-K\-Offline\-Map}}
+\subsubsection[{start\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (B\-O\-O\-L) start\-: 
+\begin{DoxyParamCaption}
+\item[{(int)}]{city\-I\-D}
+\end{DoxyParamCaption}
+}}\label{interface_b_m_k_offline_map_a40aa794e96677e472bf0d6f2ac18d583}
+启动下载指定城市id的离线地图 
+\begin{DoxyParams}{参数}
+{\em city\-I\-D} & 指定的城市id \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+成功返回\-Y\-E\-S，否则返回\-N\-O 
+\end{DoxyReturn}
+\hypertarget{interface_b_m_k_offline_map_a4c2489e1502d34bd807a1c4418560f88}{\index{B\-M\-K\-Offline\-Map@{B\-M\-K\-Offline\-Map}!update\-:@{update\-:}}
+\index{update\-:@{update\-:}!BMKOfflineMap@{B\-M\-K\-Offline\-Map}}
+\subsubsection[{update\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (B\-O\-O\-L) update\-: 
+\begin{DoxyParamCaption}
+\item[{(int)}]{city\-I\-D}
+\end{DoxyParamCaption}
+}}\label{interface_b_m_k_offline_map_a4c2489e1502d34bd807a1c4418560f88}
+启动更新指定城市id的离线地图 
+\begin{DoxyParams}{参数}
+{\em city\-I\-D} & 指定的城市id \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+成功返回\-Y\-E\-S，否则返回\-N\-O 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+B\-M\-K\-Offline\-Map.\-h\end{DoxyCompactItemize}

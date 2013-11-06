@@ -1,0 +1,29 @@
+\hypertarget{struct_b_m_k_map_point}{\section{B\-M\-K\-Map\-Point Struct Reference}
+\label{struct_b_m_k_map_point}\index{B\-M\-K\-Map\-Point@{B\-M\-K\-Map\-Point}}
+}
+
+
+地理坐标点，用直角地理坐标表示  
+
+
+
+
+{\ttfamily \#include $<$B\-M\-K\-Geometry.\-h$>$}
+
+\subsection*{公有成员变量}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{struct_b_m_k_map_point_a8c0ca1c3f0cbb5fe183ae7745781d8fb}{double \hyperlink{struct_b_m_k_map_point_a8c0ca1c3f0cbb5fe183ae7745781d8fb}{x}}\label{struct_b_m_k_map_point_a8c0ca1c3f0cbb5fe183ae7745781d8fb}
+
+\begin{DoxyCompactList}\small\item\em 横坐标 \end{DoxyCompactList}\item 
+\hypertarget{struct_b_m_k_map_point_a9d0aff0bad009459af85d1e51a194341}{double \hyperlink{struct_b_m_k_map_point_a9d0aff0bad009459af85d1e51a194341}{y}}\label{struct_b_m_k_map_point_a9d0aff0bad009459af85d1e51a194341}
+
+\begin{DoxyCompactList}\small\item\em 纵坐标 \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{详细描述}
+地理坐标点，用直角地理坐标表示 
+
+The documentation for this struct was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+\hyperlink{_b_m_k_geometry_8h}{B\-M\-K\-Geometry.\-h}\end{DoxyCompactItemize}

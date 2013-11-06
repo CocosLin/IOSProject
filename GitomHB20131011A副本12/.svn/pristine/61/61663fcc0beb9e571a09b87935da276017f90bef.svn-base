@@ -1,0 +1,50 @@
+\hypertarget{interface_b_m_k_step}{\section{B\-M\-K\-Step 类参考}
+\label{interface_b_m_k_step}\index{B\-M\-K\-Step@{B\-M\-K\-Step}}
+}
+
+
+此类表示驾车或步行路线中的一个关键点  
+
+
+
+
+{\ttfamily \#import $<$B\-M\-K\-Route\-Search\-Type.\-h$>$}
+
+继承关系图 B\-M\-K\-Step\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{interface_b_m_k_step}
+\end{center}
+\end{figure}
+\subsection*{保护成员变量}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{interface_b_m_k_step_a230932a6c5fc5fe1f58720c7ecc1db5f}{C\-L\-Location\-Coordinate2\-D {\bfseries \-\_\-pt}}\label{interface_b_m_k_step_a230932a6c5fc5fe1f58720c7ecc1db5f}
+
+\item 
+\hypertarget{interface_b_m_k_step_aaec82a08f562e79fd6e71a5c4c8564f4}{N\-S\-String $\ast$ {\bfseries \-\_\-content}}\label{interface_b_m_k_step_aaec82a08f562e79fd6e71a5c4c8564f4}
+
+\item 
+\hypertarget{interface_b_m_k_step_ab33cdca63bee56baaf844b19274d80fb}{int {\bfseries \-\_\-degree}}\label{interface_b_m_k_step_ab33cdca63bee56baaf844b19274d80fb}
+
+\end{DoxyCompactItemize}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{interface_b_m_k_step_ad517bf5db8d177cb33cd94489dbaac51}{C\-L\-Location\-Coordinate2\-D \hyperlink{interface_b_m_k_step_ad517bf5db8d177cb33cd94489dbaac51}{pt}}\label{interface_b_m_k_step_ad517bf5db8d177cb33cd94489dbaac51}
+
+\begin{DoxyCompactList}\small\item\em 关键点坐标 \end{DoxyCompactList}\item 
+\hypertarget{interface_b_m_k_step_a647dc013ca983bb77a6d0f4407ee1d63}{N\-S\-String $\ast$ \hyperlink{interface_b_m_k_step_a647dc013ca983bb77a6d0f4407ee1d63}{content}}\label{interface_b_m_k_step_a647dc013ca983bb77a6d0f4407ee1d63}
+
+\begin{DoxyCompactList}\small\item\em 关键点提示信息 \end{DoxyCompactList}\item 
+\hypertarget{interface_b_m_k_step_a072bddb98bea4d5da2d6a5f54df46599}{int \hyperlink{interface_b_m_k_step_a072bddb98bea4d5da2d6a5f54df46599}{degree}}\label{interface_b_m_k_step_a072bddb98bea4d5da2d6a5f54df46599}
+
+\begin{DoxyCompactList}\small\item\em 路线相对正北的角度 \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{详细描述}
+此类表示驾车或步行路线中的一个关键点 
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+B\-M\-K\-Route\-Search\-Type.\-h\end{DoxyCompactItemize}

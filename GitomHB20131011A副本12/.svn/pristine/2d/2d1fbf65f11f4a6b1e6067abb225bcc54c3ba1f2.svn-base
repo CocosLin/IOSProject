@@ -1,0 +1,44 @@
+\hypertarget{interface_b_m_k_city_list_info}{\section{B\-M\-K\-City\-List\-Info 类参考}
+\label{interface_b_m_k_city_list_info}\index{B\-M\-K\-City\-List\-Info@{B\-M\-K\-City\-List\-Info}}
+}
+
+
+城市列表信息类  
+
+
+
+
+{\ttfamily \#import $<$B\-M\-K\-Poi\-Search\-Type.\-h$>$}
+
+继承关系图 B\-M\-K\-City\-List\-Info\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{interface_b_m_k_city_list_info}
+\end{center}
+\end{figure}
+\subsection*{保护成员变量}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{interface_b_m_k_city_list_info_a868f1df35a24867c0957420506703225}{N\-S\-String $\ast$ {\bfseries \-\_\-city}}\label{interface_b_m_k_city_list_info_a868f1df35a24867c0957420506703225}
+
+\item 
+\hypertarget{interface_b_m_k_city_list_info_a0cc9abd0bfad17b52c924611f975db77}{int {\bfseries \-\_\-num}}\label{interface_b_m_k_city_list_info_a0cc9abd0bfad17b52c924611f975db77}
+
+\end{DoxyCompactItemize}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{interface_b_m_k_city_list_info_ad1b2093344ad0524a9bef93c823f8242}{N\-S\-String $\ast$ \hyperlink{interface_b_m_k_city_list_info_ad1b2093344ad0524a9bef93c823f8242}{city}}\label{interface_b_m_k_city_list_info_ad1b2093344ad0524a9bef93c823f8242}
+
+\begin{DoxyCompactList}\small\item\em 城市名称 \end{DoxyCompactList}\item 
+\hypertarget{interface_b_m_k_city_list_info_a63163c524339e1687d90541b3a24b54c}{int \hyperlink{interface_b_m_k_city_list_info_a63163c524339e1687d90541b3a24b54c}{num}}\label{interface_b_m_k_city_list_info_a63163c524339e1687d90541b3a24b54c}
+
+\begin{DoxyCompactList}\small\item\em 该城市所含搜索结果数目 \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{详细描述}
+城市列表信息类 
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+B\-M\-K\-Poi\-Search\-Type.\-h\end{DoxyCompactItemize}

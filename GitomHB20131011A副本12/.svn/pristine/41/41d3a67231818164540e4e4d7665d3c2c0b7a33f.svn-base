@@ -1,0 +1,175 @@
+\hypertarget{protocol_b_m_k_search_delegate-p}{\section{$<$B\-M\-K\-Search\-Delegate$>$ 协议参考}
+\label{protocol_b_m_k_search_delegate-p}\index{$<$\-B\-M\-K\-Search\-Delegate$>$@{$<$\-B\-M\-K\-Search\-Delegate$>$}}
+}
+
+
+搜索delegate，用于获取搜索结果  
+
+
+
+
+{\ttfamily \#import $<$B\-M\-K\-Search.\-h$>$}
+
+继承关系图 $<$B\-M\-K\-Search\-Delegate$>$\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{protocol_b_m_k_search_delegate-p}
+\end{center}
+\end{figure}
+\subsection*{实例方法}
+\begin{DoxyCompactItemize}
+\item 
+(void) -\/ \hyperlink{protocol_b_m_k_search_delegate-p_aaebc1737d2df985b3d7878fd9ea53122}{on\-Get\-Poi\-Result\-:search\-Type\-:error\-Code\-:}
+\item 
+(void) -\/ \hyperlink{protocol_b_m_k_search_delegate-p_a300f82b22ee2295fb1eda590ce468f6e}{on\-Get\-Transit\-Route\-Result\-:error\-Code\-:}
+\item 
+(void) -\/ \hyperlink{protocol_b_m_k_search_delegate-p_ae37ff980770f8d8b1129e41cc05c76ae}{on\-Get\-Driving\-Route\-Result\-:error\-Code\-:}
+\item 
+(void) -\/ \hyperlink{protocol_b_m_k_search_delegate-p_a4fcbf962b5af9d50c194a69da26261c1}{on\-Get\-Walking\-Route\-Result\-:error\-Code\-:}
+\item 
+(void) -\/ \hyperlink{protocol_b_m_k_search_delegate-p_a7eebe5b2da7524f72e9f56413647d2fc}{on\-Get\-Addr\-Result\-:error\-Code\-:}
+\item 
+(void) -\/ \hyperlink{protocol_b_m_k_search_delegate-p_a029cc846020073395c4c437798ccfa05}{on\-Get\-Suggestion\-Result\-:error\-Code\-:}
+\item 
+(void) -\/ \hyperlink{protocol_b_m_k_search_delegate-p_aa43e8862315533032603901acaaf8dca}{on\-Get\-Bus\-Detail\-Result\-:error\-Code\-:}
+\end{DoxyCompactItemize}
+
+
+\subsection{详细描述}
+搜索delegate，用于获取搜索结果 
+
+\subsection{方法文档}
+\hypertarget{protocol_b_m_k_search_delegate-p_a7eebe5b2da7524f72e9f56413647d2fc}{\index{B\-M\-K\-Search\-Delegate-\/p@{B\-M\-K\-Search\-Delegate-\/p}!on\-Get\-Addr\-Result\-:error\-Code\-:@{on\-Get\-Addr\-Result\-:error\-Code\-:}}
+\index{on\-Get\-Addr\-Result\-:error\-Code\-:@{on\-Get\-Addr\-Result\-:error\-Code\-:}!BMKSearchDelegate-p@{B\-M\-K\-Search\-Delegate-\/p}}
+\subsubsection[{on\-Get\-Addr\-Result\-:error\-Code\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (void) on\-Get\-Addr\-Result\-: 
+\begin{DoxyParamCaption}
+\item[{({\bf B\-M\-K\-Addr\-Info} $\ast$)}]{result}
+\item[{errorCode:(int)}]{error}
+\end{DoxyParamCaption}
+\hspace{0.3cm}{\ttfamily [optional]}}}\label{protocol_b_m_k_search_delegate-p_a7eebe5b2da7524f72e9f56413647d2fc}
+返回地址信息搜索结果 
+\begin{DoxyParams}{参数}
+{\em result} & 搜索结果 \\
+\hline
+{\em error} & 错误号，\\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See Also}
+B\-M\-K\-Error\-Code 
+\end{DoxySeeAlso}
+\hypertarget{protocol_b_m_k_search_delegate-p_aa43e8862315533032603901acaaf8dca}{\index{B\-M\-K\-Search\-Delegate-\/p@{B\-M\-K\-Search\-Delegate-\/p}!on\-Get\-Bus\-Detail\-Result\-:error\-Code\-:@{on\-Get\-Bus\-Detail\-Result\-:error\-Code\-:}}
+\index{on\-Get\-Bus\-Detail\-Result\-:error\-Code\-:@{on\-Get\-Bus\-Detail\-Result\-:error\-Code\-:}!BMKSearchDelegate-p@{B\-M\-K\-Search\-Delegate-\/p}}
+\subsubsection[{on\-Get\-Bus\-Detail\-Result\-:error\-Code\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (void) on\-Get\-Bus\-Detail\-Result\-: 
+\begin{DoxyParamCaption}
+\item[{({\bf B\-M\-K\-Bus\-Line\-Result} $\ast$)}]{bus\-Line\-Result}
+\item[{errorCode:(int)}]{error}
+\end{DoxyParamCaption}
+\hspace{0.3cm}{\ttfamily [optional]}}}\label{protocol_b_m_k_search_delegate-p_aa43e8862315533032603901acaaf8dca}
+返回busdetail搜索结果 
+\begin{DoxyParams}{参数}
+{\em bus\-Line\-Result} & 搜索结果 \\
+\hline
+{\em error} & 错误号，\\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See Also}
+B\-M\-K\-Error\-Code 
+\end{DoxySeeAlso}
+\hypertarget{protocol_b_m_k_search_delegate-p_ae37ff980770f8d8b1129e41cc05c76ae}{\index{B\-M\-K\-Search\-Delegate-\/p@{B\-M\-K\-Search\-Delegate-\/p}!on\-Get\-Driving\-Route\-Result\-:error\-Code\-:@{on\-Get\-Driving\-Route\-Result\-:error\-Code\-:}}
+\index{on\-Get\-Driving\-Route\-Result\-:error\-Code\-:@{on\-Get\-Driving\-Route\-Result\-:error\-Code\-:}!BMKSearchDelegate-p@{B\-M\-K\-Search\-Delegate-\/p}}
+\subsubsection[{on\-Get\-Driving\-Route\-Result\-:error\-Code\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (void) on\-Get\-Driving\-Route\-Result\-: 
+\begin{DoxyParamCaption}
+\item[{({\bf B\-M\-K\-Plan\-Result} $\ast$)}]{result}
+\item[{errorCode:(int)}]{error}
+\end{DoxyParamCaption}
+\hspace{0.3cm}{\ttfamily [optional]}}}\label{protocol_b_m_k_search_delegate-p_ae37ff980770f8d8b1129e41cc05c76ae}
+返回驾乘搜索结果 
+\begin{DoxyParams}{参数}
+{\em result} & 搜索结果 \\
+\hline
+{\em error} & 错误号，\\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See Also}
+B\-M\-K\-Error\-Code 
+\end{DoxySeeAlso}
+\hypertarget{protocol_b_m_k_search_delegate-p_aaebc1737d2df985b3d7878fd9ea53122}{\index{B\-M\-K\-Search\-Delegate-\/p@{B\-M\-K\-Search\-Delegate-\/p}!on\-Get\-Poi\-Result\-:search\-Type\-:error\-Code\-:@{on\-Get\-Poi\-Result\-:search\-Type\-:error\-Code\-:}}
+\index{on\-Get\-Poi\-Result\-:search\-Type\-:error\-Code\-:@{on\-Get\-Poi\-Result\-:search\-Type\-:error\-Code\-:}!BMKSearchDelegate-p@{B\-M\-K\-Search\-Delegate-\/p}}
+\subsubsection[{on\-Get\-Poi\-Result\-:search\-Type\-:error\-Code\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (void) on\-Get\-Poi\-Result\-: 
+\begin{DoxyParamCaption}
+\item[{(N\-S\-Array $\ast$)}]{poi\-Result\-List}
+\item[{searchType:(int)}]{type}
+\item[{errorCode:(int)}]{error}
+\end{DoxyParamCaption}
+\hspace{0.3cm}{\ttfamily [optional]}}}\label{protocol_b_m_k_search_delegate-p_aaebc1737d2df985b3d7878fd9ea53122}
+返回\-P\-O\-I搜索结果 
+\begin{DoxyParams}{参数}
+{\em poi\-Result\-List} & 搜索结果列表，成员类型为\-B\-M\-K\-Poi\-Result \\
+\hline
+{\em type} & 返回结果类型： B\-M\-K\-Type\-Poi\-List,B\-M\-K\-Type\-Area\-Poi\-List,B\-M\-K\-Area\-Multi\-Poi\-List \\
+\hline
+{\em error} & 错误号，\\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See Also}
+B\-M\-K\-Error\-Code 
+\end{DoxySeeAlso}
+\hypertarget{protocol_b_m_k_search_delegate-p_a029cc846020073395c4c437798ccfa05}{\index{B\-M\-K\-Search\-Delegate-\/p@{B\-M\-K\-Search\-Delegate-\/p}!on\-Get\-Suggestion\-Result\-:error\-Code\-:@{on\-Get\-Suggestion\-Result\-:error\-Code\-:}}
+\index{on\-Get\-Suggestion\-Result\-:error\-Code\-:@{on\-Get\-Suggestion\-Result\-:error\-Code\-:}!BMKSearchDelegate-p@{B\-M\-K\-Search\-Delegate-\/p}}
+\subsubsection[{on\-Get\-Suggestion\-Result\-:error\-Code\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (void) on\-Get\-Suggestion\-Result\-: 
+\begin{DoxyParamCaption}
+\item[{({\bf B\-M\-K\-Suggestion\-Result} $\ast$)}]{result}
+\item[{errorCode:(int)}]{error}
+\end{DoxyParamCaption}
+\hspace{0.3cm}{\ttfamily [optional]}}}\label{protocol_b_m_k_search_delegate-p_a029cc846020073395c4c437798ccfa05}
+返回suggestion搜索结果 
+\begin{DoxyParams}{参数}
+{\em result} & 搜索结果 \\
+\hline
+{\em error} & 错误号，\\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See Also}
+B\-M\-K\-Error\-Code 
+\end{DoxySeeAlso}
+\hypertarget{protocol_b_m_k_search_delegate-p_a300f82b22ee2295fb1eda590ce468f6e}{\index{B\-M\-K\-Search\-Delegate-\/p@{B\-M\-K\-Search\-Delegate-\/p}!on\-Get\-Transit\-Route\-Result\-:error\-Code\-:@{on\-Get\-Transit\-Route\-Result\-:error\-Code\-:}}
+\index{on\-Get\-Transit\-Route\-Result\-:error\-Code\-:@{on\-Get\-Transit\-Route\-Result\-:error\-Code\-:}!BMKSearchDelegate-p@{B\-M\-K\-Search\-Delegate-\/p}}
+\subsubsection[{on\-Get\-Transit\-Route\-Result\-:error\-Code\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (void) on\-Get\-Transit\-Route\-Result\-: 
+\begin{DoxyParamCaption}
+\item[{({\bf B\-M\-K\-Plan\-Result} $\ast$)}]{result}
+\item[{errorCode:(int)}]{error}
+\end{DoxyParamCaption}
+\hspace{0.3cm}{\ttfamily [optional]}}}\label{protocol_b_m_k_search_delegate-p_a300f82b22ee2295fb1eda590ce468f6e}
+返回公交搜索结果 
+\begin{DoxyParams}{参数}
+{\em result} & 搜索结果 \\
+\hline
+{\em error} & 错误号，\\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See Also}
+B\-M\-K\-Error\-Code 
+\end{DoxySeeAlso}
+\hypertarget{protocol_b_m_k_search_delegate-p_a4fcbf962b5af9d50c194a69da26261c1}{\index{B\-M\-K\-Search\-Delegate-\/p@{B\-M\-K\-Search\-Delegate-\/p}!on\-Get\-Walking\-Route\-Result\-:error\-Code\-:@{on\-Get\-Walking\-Route\-Result\-:error\-Code\-:}}
+\index{on\-Get\-Walking\-Route\-Result\-:error\-Code\-:@{on\-Get\-Walking\-Route\-Result\-:error\-Code\-:}!BMKSearchDelegate-p@{B\-M\-K\-Search\-Delegate-\/p}}
+\subsubsection[{on\-Get\-Walking\-Route\-Result\-:error\-Code\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (void) on\-Get\-Walking\-Route\-Result\-: 
+\begin{DoxyParamCaption}
+\item[{({\bf B\-M\-K\-Plan\-Result} $\ast$)}]{result}
+\item[{errorCode:(int)}]{error}
+\end{DoxyParamCaption}
+\hspace{0.3cm}{\ttfamily [optional]}}}\label{protocol_b_m_k_search_delegate-p_a4fcbf962b5af9d50c194a69da26261c1}
+返回步行搜索结果 
+\begin{DoxyParams}{参数}
+{\em result} & 搜索结果 \\
+\hline
+{\em error} & 错误号，\\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See Also}
+B\-M\-K\-Error\-Code 
+\end{DoxySeeAlso}
+
+
+The documentation for this protocol was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+B\-M\-K\-Search.\-h\end{DoxyCompactItemize}

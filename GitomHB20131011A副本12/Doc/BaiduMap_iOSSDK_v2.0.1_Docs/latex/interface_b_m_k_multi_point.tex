@@ -1,0 +1,70 @@
+\hypertarget{interface_b_m_k_multi_point}{\section{B\-M\-K\-Multi\-Point 类参考}
+\label{interface_b_m_k_multi_point}\index{B\-M\-K\-Multi\-Point@{B\-M\-K\-Multi\-Point}}
+}
+
+
+该类定义多个点，是个由多个点组成的虚基类, 不能直接实例化对象, 要使用其子类\-B\-M\-K\-Polyline,B\-M\-K\-Polygon来实例化  
+
+
+
+
+{\ttfamily \#import $<$B\-M\-K\-Multi\-Point.\-h$>$}
+
+继承关系图 B\-M\-K\-Multi\-Point\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=5.000000cm]{interface_b_m_k_multi_point}
+\end{center}
+\end{figure}
+\subsection*{实例方法}
+\begin{DoxyCompactItemize}
+\item 
+(void) -\/ \hyperlink{interface_b_m_k_multi_point_a5d7b000029db5c7efb2230ccb980bc29}{get\-Coordinates\-:range\-:}
+\end{DoxyCompactItemize}
+\subsection*{保护成员变量}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{interface_b_m_k_multi_point_a736d72334fd2ca7ae2108d9692d1107c}{package \hyperlink{struct_b_m_k_map_point}{B\-M\-K\-Map\-Point} $\ast$ {\bfseries \-\_\-points}}\label{interface_b_m_k_multi_point_a736d72334fd2ca7ae2108d9692d1107c}
+
+\item 
+\hypertarget{interface_b_m_k_multi_point_a8cc584110411ad5f72fc5068ae123a32}{N\-S\-U\-Integer {\bfseries \-\_\-point\-Count}}\label{interface_b_m_k_multi_point_a8cc584110411ad5f72fc5068ae123a32}
+
+\item 
+\hypertarget{interface_b_m_k_multi_point_a25b2435a2c10b3a22f6e7dc5bd064a52}{\hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} {\bfseries \-\_\-bounding\-Rect}}\label{interface_b_m_k_multi_point_a25b2435a2c10b3a22f6e7dc5bd064a52}
+
+\end{DoxyCompactItemize}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{interface_b_m_k_multi_point_aa810056a59644284eb13fca968124e0c}{\hyperlink{struct_b_m_k_map_point}{B\-M\-K\-Map\-Point} $\ast$ \hyperlink{interface_b_m_k_multi_point_aa810056a59644284eb13fca968124e0c}{points}}\label{interface_b_m_k_multi_point_aa810056a59644284eb13fca968124e0c}
+
+\begin{DoxyCompactList}\small\item\em 坐标点数组 \end{DoxyCompactList}\item 
+\hypertarget{interface_b_m_k_multi_point_a717b76bf8c1c25ce7ae11c959fb4af9f}{N\-S\-U\-Integer \hyperlink{interface_b_m_k_multi_point_a717b76bf8c1c25ce7ae11c959fb4af9f}{point\-Count}}\label{interface_b_m_k_multi_point_a717b76bf8c1c25ce7ae11c959fb4af9f}
+
+\begin{DoxyCompactList}\small\item\em 坐标点的个数 \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{详细描述}
+该类定义多个点，是个由多个点组成的虚基类, 不能直接实例化对象, 要使用其子类\-B\-M\-K\-Polyline,B\-M\-K\-Polygon来实例化 
+
+\subsection{方法文档}
+\hypertarget{interface_b_m_k_multi_point_a5d7b000029db5c7efb2230ccb980bc29}{\index{B\-M\-K\-Multi\-Point@{B\-M\-K\-Multi\-Point}!get\-Coordinates\-:range\-:@{get\-Coordinates\-:range\-:}}
+\index{get\-Coordinates\-:range\-:@{get\-Coordinates\-:range\-:}!BMKMultiPoint@{B\-M\-K\-Multi\-Point}}
+\subsubsection[{get\-Coordinates\-:range\-:}]{\setlength{\rightskip}{0pt plus 5cm}-\/ (void) get\-Coordinates\-: 
+\begin{DoxyParamCaption}
+\item[{(C\-L\-Location\-Coordinate2\-D $\ast$)}]{coords}
+\item[{range:(N\-S\-Range)}]{range}
+\end{DoxyParamCaption}
+}}\label{interface_b_m_k_multi_point_a5d7b000029db5c7efb2230ccb980bc29}
+将内部的直角坐标数据转换为经纬度坐标点数据，并拷贝到指定的数组中 
+\begin{DoxyParams}{参数}
+{\em coords} & 经纬度坐标数组，转换后的坐标将存储到该数组中，该数组长度必须大于等于要拷贝的坐标点的个数（range.\-length） \\
+\hline
+{\em range} & 指定要拷贝的数据段 \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+B\-M\-K\-Multi\-Point.\-h\end{DoxyCompactItemize}

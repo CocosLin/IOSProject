@@ -1,0 +1,94 @@
+\hypertarget{interface_b_m_k_circle}{\section{B\-M\-K\-Circle 类参考}
+\label{interface_b_m_k_circle}\index{B\-M\-K\-Circle@{B\-M\-K\-Circle}}
+}
+
+
+该类用于定义一个圆  
+
+
+
+
+{\ttfamily \#import $<$B\-M\-K\-Circle.\-h$>$}
+
+继承关系图 B\-M\-K\-Circle\-:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=5.000000cm]{interface_b_m_k_circle}
+\end{center}
+\end{figure}
+\subsection*{类方法}
+\begin{DoxyCompactItemize}
+\item 
+(\hyperlink{interface_b_m_k_circle}{B\-M\-K\-Circle} $\ast$) + \hyperlink{interface_b_m_k_circle_a82a7234e92fda719b74d6055ee30d360}{circle\-With\-Center\-Coordinate\-:radius\-:}
+\item 
+(\hyperlink{interface_b_m_k_circle}{B\-M\-K\-Circle} $\ast$) + \hyperlink{interface_b_m_k_circle_af4109f36f784b80a758a0b48c636e4a7}{circle\-With\-Map\-Rect\-:}
+\end{DoxyCompactItemize}
+\subsection*{保护成员变量}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{interface_b_m_k_circle_a66cd02759b46e5f8eb0370c40642cac1}{package C\-L\-Location\-Coordinate2\-D {\bfseries \-\_\-coordinate}}\label{interface_b_m_k_circle_a66cd02759b46e5f8eb0370c40642cac1}
+
+\item 
+\hypertarget{interface_b_m_k_circle_a84860dbbaa96509cfa4c7590908aabe8}{C\-L\-Location\-Distance {\bfseries \-\_\-radius}}\label{interface_b_m_k_circle_a84860dbbaa96509cfa4c7590908aabe8}
+
+\item 
+\hypertarget{interface_b_m_k_circle_abfa42e25c856dd426fb74b9531e1061b}{\hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} {\bfseries \-\_\-bounding\-Map\-Rect}}\label{interface_b_m_k_circle_abfa42e25c856dd426fb74b9531e1061b}
+
+\end{DoxyCompactItemize}
+\subsection*{Properties}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{interface_b_m_k_circle_a1c516c10dec1971c686e07f814f333f9}{C\-L\-Location\-Coordinate2\-D \hyperlink{interface_b_m_k_circle_a1c516c10dec1971c686e07f814f333f9}{coordinate}}\label{interface_b_m_k_circle_a1c516c10dec1971c686e07f814f333f9}
+
+\begin{DoxyCompactList}\small\item\em 中心点坐标 \end{DoxyCompactList}\item 
+\hypertarget{interface_b_m_k_circle_a42507e4c17b4a1c1309fcbe06e370bf5}{C\-L\-Location\-Distance \hyperlink{interface_b_m_k_circle_a42507e4c17b4a1c1309fcbe06e370bf5}{radius}}\label{interface_b_m_k_circle_a42507e4c17b4a1c1309fcbe06e370bf5}
+
+\begin{DoxyCompactList}\small\item\em 半径，单位：米 \end{DoxyCompactList}\item 
+\hypertarget{interface_b_m_k_circle_a462a1696e47b1523dd481b22d43bcf46}{\hyperlink{struct_b_m_k_map_rect}{B\-M\-K\-Map\-Rect} \hyperlink{interface_b_m_k_circle_a462a1696e47b1523dd481b22d43bcf46}{bounding\-Map\-Rect}}\label{interface_b_m_k_circle_a462a1696e47b1523dd481b22d43bcf46}
+
+\begin{DoxyCompactList}\small\item\em 该圆的外接矩形 \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{附加继承成员}
+
+
+\subsection{详细描述}
+该类用于定义一个圆 
+
+\subsection{方法文档}
+\hypertarget{interface_b_m_k_circle_a82a7234e92fda719b74d6055ee30d360}{\index{B\-M\-K\-Circle@{B\-M\-K\-Circle}!circle\-With\-Center\-Coordinate\-:radius\-:@{circle\-With\-Center\-Coordinate\-:radius\-:}}
+\index{circle\-With\-Center\-Coordinate\-:radius\-:@{circle\-With\-Center\-Coordinate\-:radius\-:}!BMKCircle@{B\-M\-K\-Circle}}
+\subsubsection[{circle\-With\-Center\-Coordinate\-:radius\-:}]{\setlength{\rightskip}{0pt plus 5cm}+ ({\bf B\-M\-K\-Circle} $\ast$) circle\-With\-Center\-Coordinate\-: 
+\begin{DoxyParamCaption}
+\item[{(C\-L\-Location\-Coordinate2\-D)}]{coord}
+\item[{radius:(C\-L\-Location\-Distance)}]{radius}
+\end{DoxyParamCaption}
+}}\label{interface_b_m_k_circle_a82a7234e92fda719b74d6055ee30d360}
+根据中心点和半径生成圆 
+\begin{DoxyParams}{参数}
+{\em coord} & 中心点的经纬度坐标 \\
+\hline
+{\em radius} & 半径，单位：米 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+新生成的圆 
+\end{DoxyReturn}
+\hypertarget{interface_b_m_k_circle_af4109f36f784b80a758a0b48c636e4a7}{\index{B\-M\-K\-Circle@{B\-M\-K\-Circle}!circle\-With\-Map\-Rect\-:@{circle\-With\-Map\-Rect\-:}}
+\index{circle\-With\-Map\-Rect\-:@{circle\-With\-Map\-Rect\-:}!BMKCircle@{B\-M\-K\-Circle}}
+\subsubsection[{circle\-With\-Map\-Rect\-:}]{\setlength{\rightskip}{0pt plus 5cm}+ ({\bf B\-M\-K\-Circle} $\ast$) circle\-With\-Map\-Rect\-: 
+\begin{DoxyParamCaption}
+\item[{({\bf B\-M\-K\-Map\-Rect})}]{map\-Rect}
+\end{DoxyParamCaption}
+}}\label{interface_b_m_k_circle_af4109f36f784b80a758a0b48c636e4a7}
+根据指定的直角坐标矩形生成圆，半径由较长的那条边决定，radius = M\-A\-X(width, height)/2 
+\begin{DoxyParams}{参数}
+{\em map\-Rect} & 指定的直角坐标矩形 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{返回}
+新生成的圆 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\-:\begin{DoxyCompactItemize}
+\item 
+B\-M\-K\-Circle.\-h\end{DoxyCompactItemize}
