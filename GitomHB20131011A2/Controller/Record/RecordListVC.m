@@ -15,6 +15,8 @@
 #import "RecordQeryReportsVcCell.h"
 #import "AttendanceModel.h"
 #import "SVProgressHUD.h"
+#import "RecordQeryReportsVcCellForios5.h"
+
 
 @interface RecordListVC ()
 {
@@ -55,36 +57,66 @@
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString * cellID = @"RecordQeryReportsVcCell";
-    RecordQeryReportsVcCell * myCell = [tableView dequeueReusableCellWithIdentifier:cellID];
-    if (!myCell) {
-        NSArray *nib = [[NSBundle mainBundle]loadNibNamed:@"RecordQeryReportsVcCell" owner:self options:nil];
-        myCell = [nib objectAtIndex:0];
-    }
-    if (!self.typeRecord) {
-        NSLog(@"打卡情况");
-        NSDictionary *dicReports = [self.arrData objectAtIndex:indexPath.row];
-        myCell.realName.text = [NSString stringWithFormat:@"%@(%@)",self.userRealname,self.username];
-        myCell.creatDate.text = [WTool getStrDateTimeWithDateTimeMS:[[dicReports objectForKey:@"createDate"]floatValue] DateTimeStyle:@"yyyy-MM-dd HH:mm:ss"];
-        myCell.address.text = [dicReports objectForKey:@"note"];
+    if ([[[UIDevice currentDevice]systemName] floatValue]<6.0) {
+        static NSString *CellIdentifier = @"Cell";
+        RecordQeryReportsVcCellForios5 *myCell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (myCell == nil) {
+            myCell = [[RecordQeryReportsVcCellForios5 alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            
+        }
+        if (!self.typeRecord) {
+            NSLog(@"打卡情况");
+            NSDictionary *dicReports = [self.arrData objectAtIndex:indexPath.row];
+            myCell.nameLabel.text = [NSString stringWithFormat:@"%@(%@)",self.userRealname,self.username];
+            myCell.timeLabel.text = [WTool getStrDateTimeWithDateTimeMS:[[dicReports objectForKey:@"createDate"]floatValue] DateTimeStyle:@"yyyy-MM-dd HH:mm:ss"];
+            myCell.addressLabel.text = [dicReports objectForKey:@"note"];
+        }else{
+            ReportModel * reModel = (ReportModel *)[self.arrData objectAtIndex:indexPath.row];
+            NSLog(@"RecordQerReportsVC user ifo  updateDate== %lld address== %@ ",reModel.updateDate,reModel.address);
+            
+            myCell.nameLabel.text = [NSString stringWithFormat:@"%@(%@)",self.userRealname,self.username];
+            myCell.timeLabel.text = [WTool getStrDateTimeWithDateTimeMS:reModel.updateDate DateTimeStyle:@"yyyy-MM-dd HH:mm:ss"];
+            myCell.addressLabel.text = reModel.address;
+            myCell.accessoryType= UITableViewCellAccessoryDisclosureIndicator;
+        }
+        myCell.textLabel.backgroundColor = [UIColor clearColor];
+        myCell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
+        myCell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
+        return myCell;
+        
     }else{
-        ReportModel * reModel = (ReportModel *)[self.arrData objectAtIndex:indexPath.row];
-        NSLog(@"RecordQerReportsVC user ifo  updateDate== %lld address== %@ ",reModel.updateDate,reModel.address);
-        
-        myCell.realName.text = [NSString stringWithFormat:@"%@(%@)",self.userRealname,self.username];
-        myCell.creatDate.text = [WTool getStrDateTimeWithDateTimeMS:reModel.updateDate DateTimeStyle:@"yyyy-MM-dd HH:mm:ss"];
-        myCell.address.text = reModel.address;
-        
+        static NSString * cellID = @"RecordQeryReportsVcCell";
+        RecordQeryReportsVcCell * myCell = [tableView dequeueReusableCellWithIdentifier:cellID];
+        if (!myCell) {
+            NSArray *nib = [[NSBundle mainBundle]loadNibNamed:@"RecordQeryReportsVcCell" owner:self options:nil];
+            myCell = [nib objectAtIndex:0];
+        }
+        if (!self.typeRecord) {
+            NSLog(@"打卡情况");
+            NSDictionary *dicReports = [self.arrData objectAtIndex:indexPath.row];
+            myCell.realName.text = [NSString stringWithFormat:@"%@(%@)",self.userRealname,self.username];
+            myCell.creatDate.text = [WTool getStrDateTimeWithDateTimeMS:[[dicReports objectForKey:@"createDate"]floatValue] DateTimeStyle:@"yyyy-MM-dd HH:mm:ss"];
+            myCell.address.text = [dicReports objectForKey:@"note"];
+        }else{
+            ReportModel * reModel = (ReportModel *)[self.arrData objectAtIndex:indexPath.row];
+            NSLog(@"RecordQerReportsVC user ifo  updateDate== %lld address== %@ ",reModel.updateDate,reModel.address);
+            
+            myCell.realName.text = [NSString stringWithFormat:@"%@(%@)",self.userRealname,self.username];
+            myCell.creatDate.text = [WTool getStrDateTimeWithDateTimeMS:reModel.updateDate DateTimeStyle:@"yyyy-MM-dd HH:mm:ss"];
+            myCell.address.text = reModel.address;
+            
+        }
+        myCell.textLabel.backgroundColor = [UIColor clearColor];
+        myCell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
+        myCell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
+        if (!self.typeRecord)myCell.rightImg.hidden = YES;
+        return myCell;
     }
-    myCell.textLabel.backgroundColor = [UIColor clearColor];
-    myCell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
-    myCell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
-    if (!self.typeRecord)myCell.rightImg.hidden = YES;
-    return myCell;
+    
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 53;
+    return 60;
 }
 -(BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
 {

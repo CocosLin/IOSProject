@@ -43,16 +43,22 @@
     
     //通用的导航条背景图片
 	[self.navigationController.navigationBar setTintColor:[UIColor colorWithPatternImage:[UIImage imageNamed:self.imgNameNavBar]]];
-    _lblNavBarTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0 , 100, 44)];
+    _lblNavBarTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 0 , 120, 44)];
+    
     _lblNavBarTitle.backgroundColor = [UIColor clearColor];  //设置Label背景透明
     _lblNavBarTitle.font = [UIFont boldSystemFontOfSize:20];  //设置文本字体与大小
-    _lblNavBarTitle.textColor = [UIColor blackColor];  //设置文本颜色
+    if ([[[UIDevice currentDevice]systemVersion]floatValue]<6.0) {
+        _lblNavBarTitle.textColor = [UIColor whiteColor];
+    }else{
+        _lblNavBarTitle.textColor = [UIColor blackColor];  //设置文本颜色
+    }
+    
     _lblNavBarTitle.textAlignment = NSTextAlignmentCenter;
     self.navigationItem.titleView = _lblNavBarTitle;
     self.myVcTitle = self.title;
     
     [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"bg_block.png"]]];
-    
+    //[self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"navigationBarBackground.png"]]];
    
 }
 

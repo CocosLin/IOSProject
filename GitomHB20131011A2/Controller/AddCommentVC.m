@@ -43,7 +43,7 @@
     
     DLStarRatingControl *customNumberOfStars = [[DLStarRatingControl alloc] initWithFrame:CGRectMake(0, 40, Screen_Width, 70) andStars:5 isFractional:YES];
     customNumberOfStars.delegate = self;
-	customNumberOfStars.backgroundColor = [UIColor groupTableViewBackgroundColor];
+	customNumberOfStars.backgroundColor = [UIColor clearColor];
 	customNumberOfStars.autoresizingMask =  UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
 	customNumberOfStars.rating = 0.0;
 	[self.view addSubview:customNumberOfStars];

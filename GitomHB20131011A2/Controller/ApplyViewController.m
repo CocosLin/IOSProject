@@ -12,6 +12,7 @@
 #import "ApplyModel.h"
 #import "HBServerKit.h"
 #import "SVProgressHUD.h"
+#import "RecordQeryReportsVcCellForios5.h"
 
 @interface ApplyViewController (){
     UITableView *_tvbRecordInfo;
@@ -33,20 +34,37 @@
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString * cellID = @"RecordQeryReportsVcCell";
-    RecordQeryReportsVcCell * myCell = [tableView dequeueReusableCellWithIdentifier:cellID];
-    if (!myCell) {
-        NSArray *nib = [[NSBundle mainBundle]loadNibNamed:@"RecordQeryReportsVcCell" owner:self options:nil];
-        myCell = [nib objectAtIndex:0];
+    if ([[[UIDevice currentDevice] systemVersion] floatValue]<6.0) {
+        static NSString *CellIdentifier = @"Cell";
+        RecordQeryReportsVcCellForios5 *myCell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (myCell == nil) {
+            myCell = [[RecordQeryReportsVcCellForios5 alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        }
+        applyMod = [self.arrData objectAtIndex:indexPath.row];
+        myCell.nameLabel.text = [NSString stringWithFormat:@"%@(%@)申请加入[%@]",applyMod.realname,applyMod.createUserId,applyMod.orgunitName];
+        myCell.timeLabel.text = [NSString stringWithFormat:@"申请时间:%@",[WTool getStrDateTimeWithDateTimeMS:[applyMod.updateDate doubleValue] DateTimeStyle:@"yyyy-MM-dd HH:mm:ss"]];
+        myCell.addressLabel.text = [NSString stringWithFormat:@"申请理由:%@",applyMod.note];
+        myCell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
+        myCell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
+        return myCell;
+        
+    }else{
+        static NSString * cellID = @"RecordQeryReportsVcCell";
+        RecordQeryReportsVcCell * myCell = [tableView dequeueReusableCellWithIdentifier:cellID];
+        if (!myCell) {
+            NSArray *nib = [[NSBundle mainBundle]loadNibNamed:@"RecordQeryReportsVcCell" owner:self options:nil];
+            myCell = [nib objectAtIndex:0];
+        }
+        
+        applyMod = [self.arrData objectAtIndex:indexPath.row];
+        myCell.realName.text = [NSString stringWithFormat:@"%@(%@)申请加入[%@]",applyMod.realname,applyMod.createUserId,applyMod.orgunitName];
+        myCell.creatDate.text = [NSString stringWithFormat:@"申请时间:%@",[WTool getStrDateTimeWithDateTimeMS:[applyMod.updateDate doubleValue] DateTimeStyle:@"yyyy-MM-dd HH:mm:ss"]];
+        myCell.address.text = [NSString stringWithFormat:@"申请理由:%@",applyMod.note];
+        myCell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
+        myCell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
+        return myCell;
     }
-
-    applyMod = [self.arrData objectAtIndex:indexPath.row];
-    myCell.realName.text = [NSString stringWithFormat:@"%@(%@)申请加入[%@]",applyMod.realname,applyMod.createUserId,applyMod.orgunitName];
-    myCell.creatDate.text = [NSString stringWithFormat:@"申请时间:%@",[WTool getStrDateTimeWithDateTimeMS:[applyMod.updateDate doubleValue] DateTimeStyle:@"yyyy-MM-dd HH:mm:ss"]];
-    myCell.address.text = [NSString stringWithFormat:@"申请理由:%@",applyMod.note];
-    myCell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
-    myCell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
-    return myCell;
+    
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {

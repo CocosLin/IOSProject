@@ -28,7 +28,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        self.title = @"人员列表";
     }
     return self;
 }
@@ -79,57 +79,82 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{/*
-  static NSString *CellIdentifier = @"Cell";
-  UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-  if (cell == nil) {
-  cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-  
-  }
-  // Configure the cell...
-  cell.textLabel.text = [[self.orgArray objectAtIndex:indexPath.row] organizationName];*/
-    static NSString *CellIdentifier = @"RecordQeryDetialCell";
-    RecordQeryDetialCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        NSArray *nib = [[NSBundle mainBundle]loadNibNamed:@"RecordQeryDetialCell" owner:self options:nil];
-        //cell = [[OrganizationCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        cell = [nib objectAtIndex:0];
-    }
-    MemberOrgModel *memberInfo = [[MemberOrgModel alloc]init];
-    memberInfo = [self.orgArray objectAtIndex:indexPath.row];
-    NSString *nameS = [NSString stringWithFormat:@"%@(%@)",memberInfo.realName,memberInfo.username];
-    cell.name.text = nameS;
-    
-    NSString *roleIdStr = [NSString stringWithFormat:@"%@",memberInfo.roleId];
-    if ([roleIdStr isEqualToString:@"1"]) {
-        cell.roleId.text = @"创建者";
-    }else if ([roleIdStr isEqualToString:@"2"] ){
-        cell.roleId.text = @"部门主管";
-    }else{
-        cell.roleId.text = @"员工";
-    }
-    
-    UserManager * um = [UserManager sharedUserManager];
-    if (memberInfo.photoUrl != nil) {
-        [um getUserPhotoImageWithStrUserPhotoUrl:memberInfo.photoUrl GotResult:^(UIImage *imgUserPhoto, BOOL isOK)
-         {
-             if (isOK)
+{
+    if ([[[UIDevice currentDevice]systemVersion]floatValue] <6.0) {
+        static NSString *CellIdentifier = @"Cell";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
+            
+        }
+        
+        MemberOrgModel *memberInfo = [[MemberOrgModel alloc]init];
+        memberInfo = [self.orgArray objectAtIndex:indexPath.row];
+        NSString *nameS = [NSString stringWithFormat:@"%@(%@)",memberInfo.realName,memberInfo.username];
+        cell.textLabel.text = nameS;
+        cell.textLabel.backgroundColor = [UIColor clearColor];
+        NSString *roleIdStr = [NSString stringWithFormat:@"%@",memberInfo.roleId];
+        if ([roleIdStr isEqualToString:@"1"]) {
+            cell.detailTextLabel.text = @"创建者";
+        }else if ([roleIdStr isEqualToString:@"2"] ){
+            cell.detailTextLabel.text = @"部门主管";
+        }else{
+            cell.detailTextLabel.text = @"员工";
+        }
+        cell.detailTextLabel.backgroundColor  = [UIColor clearColor];
+        cell.imageView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"icon_avatar_user.png"]];
+        UserManager * um = [UserManager sharedUserManager];
+        if (memberInfo.photoUrl != nil) {
+            [um getUserPhotoImageWithStrUserPhotoUrl:memberInfo.photoUrl GotResult:^(UIImage *imgUserPhoto, BOOL isOK)
              {
-                 //_imgUserPhoto = imgUserPhoto;
-                 cell.headImg.image = imgUserPhoto;
-             }
-         }];
-    }/*
-    if (memberInfo.photoUrl) {
-        NSLog(@"memberInfo.photoUrl");
-        UIImageView *imgView = [[UIImageView alloc]init];
-        [imgView setImageURLStr:memberInfo.photoUrl placeholder:nil];
-        cell.headImg = imgView;
-        //[cell addSubview:imgView];
-    }*/
-    cell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
-    cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
-    return cell;
+                 if (isOK)
+                 {
+                     cell.imageView.image = imgUserPhoto;
+                 }
+             }];
+        }else{
+            cell.imageView.image = [UIImage imageNamed:@"icon_avatar_user.png"];
+        }
+        cell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
+        cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        return cell;
+    }else{
+        static NSString *CellIdentifier = @"RecordQeryDetialCell";
+        RecordQeryDetialCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            NSArray *nib = [[NSBundle mainBundle]loadNibNamed:@"RecordQeryDetialCell" owner:self options:nil];
+            cell = [nib objectAtIndex:0];
+        }
+        MemberOrgModel *memberInfo = [[MemberOrgModel alloc]init];
+        memberInfo = [self.orgArray objectAtIndex:indexPath.row];
+        NSString *nameS = [NSString stringWithFormat:@"%@(%@)",memberInfo.realName,memberInfo.username];
+        cell.name.text = nameS;
+        
+        NSString *roleIdStr = [NSString stringWithFormat:@"%@",memberInfo.roleId];
+        if ([roleIdStr isEqualToString:@"1"]) {
+            cell.roleId.text = @"创建者";
+        }else if ([roleIdStr isEqualToString:@"2"] ){
+            cell.roleId.text = @"部门主管";
+        }else{
+            cell.roleId.text = @"员工";
+        }
+        
+        UserManager * um = [UserManager sharedUserManager];
+        if (memberInfo.photoUrl != nil) {
+            [um getUserPhotoImageWithStrUserPhotoUrl:memberInfo.photoUrl GotResult:^(UIImage *imgUserPhoto, BOOL isOK)
+             {
+                 if (isOK)
+                 {
+                     cell.headImg.image = imgUserPhoto;
+                 }
+             }];
+        }
+        cell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
+        cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
+        return cell;
+    }
+    
 }
 
 /*
@@ -207,10 +232,7 @@
     MemberOrgModel *orgMod = [[MemberOrgModel alloc]init];
     orgMod = [self.orgArray objectAtIndex:self.seledBtIdx];
     GetCommonDataModel;
-    NSLog(@"RecordQeryDetialVC == orgunitId %@ realName %@ realName %@",orgMod.orgunitId,orgMod.realName,orgMod.username);
-    
     NSDateComponents * componets = [WTool getDateComponentsWithDate:[NSDate date]];
-    //GetCommonDataModel;
     switch (buttonIndex)
     {
         case 0://打卡考勤查询
@@ -224,7 +246,7 @@
                                                              orgunitId:[orgMod.orgunitId integerValue]
                                                      orgunitAttendance:NO
                                                               userName:[orgMod.username integerValue]
-                                                          BeginDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.day -1)*24*60*60*1000)
+                                                          BeginDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000)
                                                             EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]FirstReportRecord:0
                                                        MaxReportRecord:150 GotArrReports:^(NSArray *arrDicReports, WError *myError) {
                 if (arrDicReports.count) {
@@ -249,7 +271,7 @@
                     rdVC.playCard = YES;
                     rdVC.arrData = mArrReports;//存放具体汇报内容的数组
                     rdVC.title = [NSString stringWithFormat:@"%@记录",@"打卡"];
-                    rdVC.dtBegin = [WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.day-1)*24*60*60*1000);
+                    rdVC.dtBegin = [WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000);
                     
                     [SVProgressHUD dismissWithSuccess:@"加载成功"];
                     [self.navigationController pushViewController:rdVC animated:YES];
@@ -272,7 +294,8 @@
             [hbServer findReportsWithOrganizationId:comData.organization.organizationId
                                           OrgunitId:[orgMod.orgunitId integerValue]
                                            Username:orgMod.username ReportType:@"REPORT_TYPE_DAY_REPORT"
-                                       BeginDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.day -1)*24*60*60*1000) EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]
+                                       BeginDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000)
+                                         EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]
                                   FirstReportRecord:0
                                     MaxReportRecord:150
                                       GotArrReports:^(NSArray *arrDicReports, WError *myError)
@@ -295,6 +318,9 @@
                          repMod.address = [dicReports objectForKey:@"address"];
                          repMod.realName = [dicReports objectForKey:@"realname"];
                          repMod.userName = [dicReports objectForKey:@"updateUserId"];
+                         repMod.reportId = [dicReports objectForKey:@"reportId"];
+                         repMod.organizationId = [[dicReports objectForKey:@"organizationId"]integerValue];
+                         repMod.orgunitId = [[dicReports objectForKey:@"orgunitId"]integerValue];
                          
                          NSLog(@"RecordQeryVC repMod.address= %@",repMod.address);
                          [mArrReports addObject:repMod];
@@ -315,7 +341,7 @@
                      ReportModel *mdo = [mArrReports objectAtIndex:0];
                      NSLog(@"mArrReports == %@",mdo.address);
                      rdVC.title = [NSString stringWithFormat:@"%@记录",orgMod.realName];
-                     rdVC.dtBegin = [WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.day-1)*24*60*60*1000);
+                     rdVC.dtBegin = [WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000);
                      
                      [SVProgressHUD dismissWithSuccess:@"加载成功"];
                      [self.navigationController pushViewController:rdVC animated:YES];
@@ -337,7 +363,8 @@
             [hbServer findReportsWithOrganizationId:comData.organization.organizationId
                                           OrgunitId:[orgMod.orgunitId integerValue]
                                            Username:orgMod.username ReportType:@"REPORT_TYPE_GO_OUT"
-                                       BeginDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.day -1)*24*60*60*1000) EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]
+                                       BeginDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000)
+                                         EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]
                                   FirstReportRecord:0
                                     MaxReportRecord:150
                                       GotArrReports:^(NSArray *arrDicReports, WError *myError)
@@ -360,6 +387,9 @@
                          repMod.address = [dicReports objectForKey:@"address"];
                          repMod.realName = [dicReports objectForKey:@"realname"];
                          repMod.userName = [dicReports objectForKey:@"updateUserId"];
+                         repMod.reportId = [dicReports objectForKey:@"reportId"];
+                         repMod.organizationId = [[dicReports objectForKey:@"organizationId"]integerValue];
+                         repMod.orgunitId = [[dicReports objectForKey:@"orgunitId"]integerValue];
                      
                          NSLog(@"RecordQeryVC repMod.address= %@",repMod.address);
                          [mArrReports addObject:repMod];
@@ -379,7 +409,7 @@
                  ReportModel *mdo = [mArrReports objectAtIndex:0];
                  NSLog(@"mArrReports == %@",mdo.address);
                      rdVC.title = [NSString stringWithFormat:@"%@记录",orgMod.realName];
-                 rdVC.dtBegin = [WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.day-1)*24*60*60*1000);
+                 rdVC.dtBegin = [WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000);
                  
                  [SVProgressHUD dismissWithSuccess:@"加载成功"];
                  [self.navigationController pushViewController:rdVC animated:YES];
@@ -401,7 +431,8 @@
             [hbServer findReportsWithOrganizationId:comData.organization.organizationId
                                           OrgunitId:[orgMod.orgunitId integerValue]
                                            Username:orgMod.username ReportType:@"REPORT_TYPE_TRAVEL"
-                                       BeginDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.day -1)*24*60*60*1000) EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]
+                                       BeginDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000)
+                                         EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]
                                   FirstReportRecord:0
                                     MaxReportRecord:150
                                       GotArrReports:^(NSArray *arrDicReports, WError *myError)
@@ -445,7 +476,7 @@
                      ReportModel *mdo = [mArrReports objectAtIndex:0];
                      NSLog(@"mArrReports == %@",mdo.address);
                      rdVC.title = [NSString stringWithFormat:@"%@记录",orgMod.realName];
-                     rdVC.dtBegin = [WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.day-1)*24*60*60*1000);
+                     rdVC.dtBegin = [WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000);
                      
                      [SVProgressHUD dismissWithSuccess:@"加载成功"];
                      [self.navigationController pushViewController:rdVC animated:YES];

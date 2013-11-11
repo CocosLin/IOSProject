@@ -71,29 +71,45 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{/*
-    static NSString *CellIdentifier = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+{
+    if ([[[UIDevice currentDevice] systemVersion] floatValue]<6.0) {
+         static NSString *CellIdentifier = @"Cell";
+         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+         if (cell == nil) {
+         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+         
+         }//275,5
+        UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        rightBtn.tag = indexPath.row +100;
+        [rightBtn setBackgroundImage:[UIImage imageNamed:@"btnMoreFromNavigationBar_On.png"] forState:UIControlStateNormal];
+        [rightBtn setBackgroundImage:[UIImage imageNamed:@"btnMoreFromNavigationBar_Off.png"] forState:UIControlStateHighlighted];
+        [cell addSubview:rightBtn];
+        rightBtn.frame = CGRectMake(Screen_Width-45, 5, 42, 35);
+        [rightBtn addTarget:self action:@selector(reportAction:) forControlEvents:UIControlEventTouchUpInside];
+        cell.textLabel.text = [[self.orgArray objectAtIndex:indexPath.row] organizationName];
+        cell.imageView.image = [UIImage imageNamed:@"btn_list_extra_arrow.png"];
+        cell.textLabel.backgroundColor = [UIColor clearColor];
+        cell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
+        cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
+        return cell;
+    }else{
+        static NSString *CellIdentifier = @"OrganizationCell";
+        OrganizationCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            NSArray *nib = [[NSBundle mainBundle]loadNibNamed:@"OrganizationCell" owner:self options:nil];
+            //cell = [[OrganizationCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            cell = [nib objectAtIndex:0];
+        }
+        cell.organizationName.text = [[self.orgArray objectAtIndex:indexPath.row] organizationName];
         
+        cell.reportBtu.tag = indexPath.row +100;
+        [cell.reportBtu addTarget:self action:@selector(reportAction:) forControlEvents:UIControlEventTouchUpInside];
+        cell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
+        cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
+        return cell;
     }
-    // Configure the cell...
-    cell.textLabel.text = [[self.orgArray objectAtIndex:indexPath.row] organizationName];*/
-    static NSString *CellIdentifier = @"OrganizationCell";
-    OrganizationCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        NSArray *nib = [[NSBundle mainBundle]loadNibNamed:@"OrganizationCell" owner:self options:nil];
-        //cell = [[OrganizationCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        cell = [nib objectAtIndex:0];
-    }
-    cell.organizationName.text = [[self.orgArray objectAtIndex:indexPath.row] organizationName];
+
     
-    cell.reportBtu.tag = indexPath.row +100;
-    [cell.reportBtu addTarget:self action:@selector(reportAction:) forControlEvents:UIControlEventTouchUpInside];
-    cell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
-    cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
-    return cell;
 }
 
 - (void)reportAction:(id)sender{

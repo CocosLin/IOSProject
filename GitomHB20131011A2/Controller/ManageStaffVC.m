@@ -70,26 +70,32 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{/*
-  static NSString *CellIdentifier = @"Cell";
-  UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-  if (cell == nil) {
-  cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-  
-  }
-  // Configure the cell...
-  cell.textLabel.text = [[self.orgArray objectAtIndex:indexPath.row] organizationName];*/
-    static NSString *CellIdentifier = @"ManageStaffCell";
-    ManageStaffCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    if (cell == nil) {
-        NSArray *nib = [[NSBundle mainBundle]loadNibNamed:@"ManageStaffCell" owner:self options:nil];
-        //cell = [[OrganizationCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        cell = [nib objectAtIndex:0];
+{
+    if ([[[UIDevice currentDevice] systemVersion] floatValue]<6.0) {
+        static NSString *CellIdentifier = @"Cell";
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        }
+        cell.textLabel.text = [[self.orgArray objectAtIndex:indexPath.row] organizationName];
+        cell.imageView.image = [UIImage imageNamed:@"btn_list_extra_arrow.png"];
+        cell.textLabel.backgroundColor = [UIColor clearColor];
+        cell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
+        cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
+        return cell;
+    }else{
+        static NSString *CellIdentifier = @"ManageStaffCell";
+        ManageStaffCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+        if (cell == nil) {
+            NSArray *nib = [[NSBundle mainBundle]loadNibNamed:@"ManageStaffCell" owner:self options:nil];
+            cell = [nib objectAtIndex:0];
+        }
+        cell.orgName.text = [[self.orgArray objectAtIndex:indexPath.row] organizationName];
+        cell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
+        cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
+        return cell;
     }
-    cell.orgName.text = [[self.orgArray objectAtIndex:indexPath.row] organizationName];
-    cell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
-    cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
-    return cell;
+    
 }
 
 /*

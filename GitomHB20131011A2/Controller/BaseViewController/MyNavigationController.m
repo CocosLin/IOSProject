@@ -36,7 +36,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"navigationBarBackground"] forBarMetrics:0];
+    
+    if ([[[UIDevice currentDevice]systemVersion]floatValue]<6.0) {
+        //[self.navigationController.navigationBar setBackgroundColor:[UIColor whiteColor]];
+    }else{
+        //[self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"navigationBarBackground"] forBarMetrics:0];
+    }
    
 }
 
