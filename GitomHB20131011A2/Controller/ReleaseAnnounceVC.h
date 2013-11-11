@@ -14,5 +14,5 @@
 @property (retain, nonatomic) UIScrollView *baseView;
 @property (retain, nonatomic) UITextView *textTitle;
 @property (retain, nonatomic) UITextView *announceContent;
-@property (retain, nonatomic) UIView *hideKeyBoardView;
+//@property (retain, nonatomic) UIView *hideKeyBoardView;
 @end

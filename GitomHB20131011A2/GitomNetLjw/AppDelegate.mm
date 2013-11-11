@@ -32,9 +32,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     //自定义缓存
-    ASIDownloadCache *cache = [[ASIDownloadCache alloc] init];
-    self.myCache = cache;
-    [cache release];
+    self.myCache = [[ASIDownloadCache alloc] init];
     
     //设置缓存路径
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
@@ -42,6 +40,9 @@
     [self.myCache setStoragePath:[documentDirectory stringByAppendingPathComponent:@"resource"]];
     [self.myCache setDefaultCachePolicy:ASIOnlyLoadIfNotCachedCachePolicy];
     
+    
+    self.networkQueue = [[ASINetworkQueue alloc] init];
+    [self.networkQueue reset];
     
     NewsManager *manger = [[NewsManager alloc]init];
     [manger getNewsOforganizationId:114 andOrgunitId:1 andCookie:@"5533098A-43F1-4AFC-8641-E64875461345"];

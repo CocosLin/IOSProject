@@ -53,13 +53,13 @@
     if (self.playCard==YES) {
         NSLog(@"打卡情况");
         _atteMod = [self.arrData objectAtIndex:indexPath.row];
-        NSLog(@"_atteMod.realName  %@",_atteMod.realName);
+        //NSLog(@"_atteMod.realName  %@",_atteMod.realName);
 
         myCell.realName.text = [NSString stringWithFormat:@"%@(%@)",_atteMod.realName,_atteMod.userName];
         myCell.creatDate.text = [WTool getStrDateTimeWithDateTimeMS:[_atteMod.createTime doubleValue] DateTimeStyle:@"yyyy-MM-dd HH:mm:ss"];
         myCell.address.text = _atteMod.note;
     }else{
-        NSLog(@"RecordQerReportsVC user ifo  updateDate== %@ address== %@ ",[[self.arrData objectAtIndex:indexPath.row] objectForKey:@"updateDate"],[[self.arrData objectAtIndex:indexPath.row] objectForKey:@"address"]);
+//        NSLog(@"RecordQerReportsVC user ifo  updateDate== %@ address== %@ ",[[self.arrData objectAtIndex:indexPath.row] objectForKey:@"updateDate"],[[self.arrData objectAtIndex:indexPath.row] objectForKey:@"address"]);
         
         myCell.realName.text = [NSString stringWithFormat:@"%@(%@)",[[self.arrData objectAtIndex:indexPath.row] objectForKey:@"realname"],[[self.arrData objectAtIndex:indexPath.row] objectForKey:@"createUserId"]];
         myCell.creatDate.text = [WTool getStrDateTimeWithDateTimeMS:[[[self.arrData objectAtIndex:indexPath.row] objectForKey:@"updateDate"] doubleValue] DateTimeStyle:@"yyyy-MM-dd HH:mm:ss"];
@@ -67,7 +67,7 @@
     }
     myCell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
     myCell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
-    if (!self.typeRecord) myCell.rightImg.hidden = NO;
+    if (!self.typeRecord) myCell.rightImg.hidden = YES;
     return myCell;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -86,9 +86,7 @@
     if (self.playCard == YES) {
         return;
     }
-    DetailQeryViewController * dvc = [[DetailQeryViewController alloc]init];//WithNibName:@"DetailRecordVC_Iphone" bundle:nil];
-    dvc.username = self.username;
-    dvc.realname = self.userRealname;
+    DetailQeryViewController * dvc = [[DetailQeryViewController alloc]init];
     GetCommonDataModel;
     dvc.phone =comData.userModel.telephone;
     dvc.reportModel = [self.reportArrData objectAtIndex:indexPath.row];
@@ -134,11 +132,8 @@
         }
         case 3://自定义
         {
-            //            UIDatePicker * dp = [[UIDatePicker alloc]initWithFrame:CGRectMake(0, 0, 320, 400)];
-            //            [alertView addSubview:dp];
             self.dtEnd = [WTool getEndDateTimeMsWithNSDate:[NSDate date]];
             self.dtBegin = self.dtEnd - ((long long int)(componets.month)*30*24*60*60*1000);
-            //NSLog(@"RecordListVC 自定义时间还未定");
             break;
         }
         case 4://取消
@@ -151,111 +146,178 @@
     }
     _lblRecordPromptTimeInfo.text = [NSString stringWithFormat:@"从%@至%@",_strTimeInfoStart,_strTimeInfoEnd];
 
-        //查汇报记录
+    //查汇报记录
+    GetCommonDataModel;
     HBServerKit *hbServer = [[HBServerKit alloc]init];
     NSLog(@"self.dtBegin,self.dtEnd %lld %lld",self.dtBegin,self.dtEnd);
-    if (self.personalOrOrgRecod == 1) {
-        GetCommonDataModel;
-        [hbServer findReportsWithOrganizationId:comData.organization.organizationId
-                                      OrgunitId:[self.orgunitId integerValue]
-                                       Username:self.username
-                                     ReportType:self.strTypeRecord
-                                   BeginDateLli:self.dtBegin
-                                     EndDateLli:self.dtEnd
-                              FirstReportRecord:0
-                                MaxReportRecord:150
-                                  GotArrReports:^(NSArray *arrDicReports, WError *myError)
-         {
-             if (arrDicReports.count) {
-                 NSMutableArray * mArrReports = [NSMutableArray arrayWithCapacity:arrDicReports.count   ];
-                 for (NSDictionary * dicReports in arrDicReports)
-                 {
-                     NSLog(@"realname == %@",dicReports);
-                     
-                     NSLog(@"444name == %@",[dicReports objectForKey:@"name"]);
-                     ReportModel *repMod = [[ReportModel alloc]init];
-                     repMod.imageUrl = [dicReports objectForKey:@"imageUrl"];
-                     repMod.latitude = [[dicReports objectForKey:@"latitude"]floatValue];
-                     repMod.longitude = [[dicReports objectForKey:@"longitude"]floatValue];
-                     repMod.note = [dicReports objectForKey:@"note"];
-                     repMod.soundUrl = [dicReports objectForKey:@"soundUrl"];
-                     repMod.telephone = [dicReports objectForKey:@"telephone"];
-                     repMod.updateDate = [[dicReports objectForKey:@"updateDate"]longLongValue];
-                     repMod.address = [dicReports objectForKey:@"address"];
-                     repMod.realName = [dicReports objectForKey:@"realname"];
-                     repMod.userName = [dicReports objectForKey:@"updateUserId"];
-                     
-                     NSLog(@"RecordQeryVC repMod.address= %@",repMod.address);
-                     [mArrReports addObject:repMod];
-                     [repMod release];
-                 }
-                 self.arrData = arrDicReports;
-                 self.reportArrData = mArrReports;
-                 //[_tvbRecordInfo reloadData];
-                 //[self viewWillAppear:YES];
-
-                 NSLog(@"--------------||||||||||__________%@",self.arrData);
-                 [SVProgressHUD showSuccessWithStatus:@"数据加载成功！"];
-             }else
+    if (self.playCard == YES) {
+        [SVProgressHUD showWithStatus:@"加载…"];
+        if (self.personalOrOrgRecod == 1) {//获得个人打卡数据
+            [hbServer findAttendanceReportsOfMembersWithOrganizationId:comData.organization.organizationId
+                                                             orgunitId:[self.orgunitId integerValue]
+                                                     orgunitAttendance:NO
+                                                              userName:[self.username integerValue]
+                                                          BeginDateLli:self.dtBegin
+                                                            EndDateLli:self.dtEnd
+                                                     FirstReportRecord:0
+                                                       MaxReportRecord:10+addDataInt
+                                                         GotArrReports:^(NSArray *arrDicReports, WError *myError)
              {
-                 [SVProgressHUD showErrorWithStatus:@"无记录"];
-             }
-         }];
+                 if (arrDicReports.count) {
+                     NSMutableArray * mArrReports = [NSMutableArray arrayWithCapacity:arrDicReports.count];
+                     for (NSDictionary * dicReports in arrDicReports)
+                     {
+                         NSLog(@"realname == %@",dicReports);
+                         NSLog(@"444name == %@",[dicReports objectForKey:@"createDate"]);
+                         AttendanceModel *repMod = [[AttendanceModel alloc]init];
+                         repMod.realName = [dicReports objectForKey:@"realname"];
+                         repMod.userName = [dicReports objectForKey:@"username"];
+                         repMod.note = [dicReports objectForKey:@"note"];
+                         repMod.createTime = [dicReports objectForKey:@"createDate"];
+                         NSLog(@"RecordQeryVC note = %@",repMod.note);
+                         [mArrReports addObject:repMod];
+                         [repMod release];
+                     }
+                     self.arrData = mArrReports;
+                     [SVProgressHUD showSuccessWithStatus:@"完成"];
+                 }else
+                 {
+                     self.arrData =nil;
+                     [SVProgressHUD showErrorWithStatus:@"无记录"];
+                 }
+             }];
+            
+        }else{//获得部门打卡数据
+            [hbServer findAttendanceReportsOfMembersWithOrganizationId:comData.organization.organizationId
+                                                             orgunitId:[self.orgunitId integerValue]
+                                                     orgunitAttendance:YES
+                                                              userName:nil
+                                                          BeginDateLli:self.dtBegin
+                                                            EndDateLli:self.dtEnd
+                                                     FirstReportRecord:0
+                                                       MaxReportRecord:10+addDataInt
+                                                         GotArrReports:^(NSArray *arrDicReports, WError *myError)
+             {
+                 if (arrDicReports.count) {
+                     NSMutableArray * mArrReports = [NSMutableArray arrayWithCapacity:arrDicReports.count];
+                     for (NSDictionary * dicReports in arrDicReports)
+                     {
+                         NSLog(@"realname == %@",dicReports);
+                         NSLog(@"444name == %@",[dicReports objectForKey:@"createDate"]);
+                         AttendanceModel *repMod = [[AttendanceModel alloc]init];
+                         repMod.realName = [dicReports objectForKey:@"realname"];
+                         repMod.userName = [dicReports objectForKey:@"username"];
+                         repMod.note = [dicReports objectForKey:@"note"];
+                         repMod.createTime = [dicReports objectForKey:@"createDate"];
+                         NSLog(@"RecordQeryVC note = %@",repMod.note);
+                         [mArrReports addObject:repMod];
+                         [repMod release];
+                     }
+                     self.arrData = mArrReports;
+                     [SVProgressHUD showSuccessWithStatus:@"完成!"];
+                 }else
+                 {
+                     self.arrData = nil;
+                     [SVProgressHUD showErrorWithStatus:@"无记录"];;
+                 }
+             }];
+        }
     }else{
-        
-        [hbServer findOrgunitReportsOfMembersWithOrganizationId:[self.organizationId integerValue]
-                                                      orgunitId:[self.orgunitId integerValue] ReportType:self.strTypeRecord
-                                                   BeginDateLli:self.dtBegin
-                                                     EndDateLli:self.dtEnd
-                                              FirstReportRecord:nil
-                                                MaxReportRecord:nil
-                                                  GotArrReports:^(NSArray *arrDicReports, WError *myError)
-         {
-             if (arrDicReports.count) {
-                 NSMutableArray * mArrReports = [NSMutableArray arrayWithCapacity:arrDicReports.count];
-                 for (NSDictionary * dicReports in arrDicReports)
-                 {
-                     NSLog(@"realname == %@",dicReports);
-                     
-                     NSLog(@"444name == %@",[dicReports objectForKey:@"name"]);
-                     ReportModel *repMod = [[ReportModel alloc]init];
-                     repMod.imageUrl = [dicReports objectForKey:@"imageUrl"];
-                     repMod.latitude = [[dicReports objectForKey:@"latitude"]floatValue];
-                     repMod.longitude = [[dicReports objectForKey:@"longitude"]floatValue];
-                     repMod.note = [dicReports objectForKey:@"note"];
-                     repMod.soundUrl = [dicReports objectForKey:@"soundUrl"];
-                     repMod.telephone = [dicReports objectForKey:@"telephone"];
-                     repMod.updateDate = [[dicReports objectForKey:@"updateDate"]longLongValue];
-                     repMod.address = [dicReports objectForKey:@"address"];
-                     repMod.realName = [dicReports objectForKey:@"realname"];
-                     repMod.userName = [dicReports objectForKey:@"updateUserId"];
-                     
-                     NSLog(@"RecordQeryVC repMod.address= %@",repMod.address);
-                     [mArrReports addObject:repMod];
-                     [repMod release];
-                 }
-                 self.arrData = arrDicReports;
-                 //[_tvbRecordInfo reloadData];
-                 self.reportArrData = mArrReports;
-                 //[self viewWillAppear:YES];
-                 NSLog(@"--------------||||||||||__________%@",self.arrData);
-                 [SVProgressHUD showSuccessWithStatus:@"数据加载成功！"];
-             }else
+        [SVProgressHUD showWithStatus:@"加载…"];
+        if (self.personalOrOrgRecod == 1) {
+            [hbServer findReportsWithOrganizationId:comData.organization.organizationId
+                                          OrgunitId:[self.orgunitId integerValue]
+                                           Username:self.username
+                                         ReportType:self.strTypeRecord
+                                       BeginDateLli:self.dtBegin
+                                         EndDateLli:self.dtEnd
+                                  FirstReportRecord:0
+                                    MaxReportRecord:10
+                                      GotArrReports:^(NSArray *arrDicReports, WError *myError)
              {
-                 [SVProgressHUD showErrorWithStatus:@"无记录"];
-             }
-         }];
+                 if (arrDicReports.count) {
+                     NSMutableArray * mArrReports = [NSMutableArray arrayWithCapacity:arrDicReports.count   ];
+                     for (NSDictionary * dicReports in arrDicReports)
+                     {
+                         NSLog(@"realname == %@",dicReports);
+                         
+                         NSLog(@"444name == %@",[dicReports objectForKey:@"name"]);
+                         ReportModel *repMod = [[ReportModel alloc]init];
+                         repMod.imageUrl = [dicReports objectForKey:@"imageUrl"];
+                         repMod.latitude = [[dicReports objectForKey:@"latitude"]floatValue];
+                         repMod.longitude = [[dicReports objectForKey:@"longitude"]floatValue];
+                         repMod.note = [dicReports objectForKey:@"note"];
+                         repMod.soundUrl = [dicReports objectForKey:@"soundUrl"];
+                         repMod.telephone = [dicReports objectForKey:@"telephone"];
+                         repMod.updateDate = [[dicReports objectForKey:@"updateDate"]longLongValue];
+                         repMod.address = [dicReports objectForKey:@"address"];
+                         repMod.realName = [dicReports objectForKey:@"realname"];
+                         repMod.userName = [dicReports objectForKey:@"updateUserId"];
+                         repMod.reportId = [dicReports objectForKey:@"reportId"];
+                         repMod.organizationId = [[dicReports objectForKey:@"organizationId"]integerValue];
+                         repMod.orgunitId = [[dicReports objectForKey:@"orgunitId"]integerValue];
+                         NSLog(@"RecordQeryVC repMod.address 考勤 = %@",repMod.address);
+                         [mArrReports addObject:repMod];
+                         [repMod release];
+                     }
+                     self.arrData = arrDicReports;
+                     self.reportArrData = mArrReports;
+                     [SVProgressHUD showSuccessWithStatus:@"数据加载成功！"];
+                 }else
+                 {
+                     self.arrData = nil;
+                     [SVProgressHUD showErrorWithStatus:@"无记录"];
+                 }
+             }];
+        }else{
+            
+            [hbServer findOrgunitReportsOfMembersWithOrganizationId:[self.organizationId integerValue]
+                                                          orgunitId:[self.orgunitId integerValue] ReportType:self.strTypeRecord
+                                                       BeginDateLli:self.dtBegin
+                                                         EndDateLli:self.dtEnd
+                                                  FirstReportRecord:0
+                                                    MaxReportRecord:10
+                                                      GotArrReports:^(NSArray *arrDicReports, WError *myError)
+             {
+                 if (arrDicReports.count) {
+                     NSMutableArray * mArrReports = [NSMutableArray arrayWithCapacity:arrDicReports.count];
+                     for (NSDictionary * dicReports in arrDicReports)
+                     {
+                         NSLog(@"realname == %@",dicReports);
+                         ReportModel *repMod = [[ReportModel alloc]init];
+                         repMod.imageUrl = [dicReports objectForKey:@"imageUrl"];
+                         repMod.latitude = [[dicReports objectForKey:@"latitude"]floatValue];
+                         repMod.longitude = [[dicReports objectForKey:@"longitude"]floatValue];
+                         repMod.note = [dicReports objectForKey:@"note"];
+                         repMod.soundUrl = [dicReports objectForKey:@"soundUrl"];
+                         repMod.telephone = [dicReports objectForKey:@"telephone"];
+                         repMod.updateDate = [[dicReports objectForKey:@"updateDate"]longLongValue];
+                         repMod.address = [dicReports objectForKey:@"address"];
+                         repMod.realName = [dicReports objectForKey:@"realname"];
+                         repMod.userName = [dicReports objectForKey:@"updateUserId"];
+                         repMod.reportId = [dicReports objectForKey:@"reportId"];
+                         repMod.organizationId = [[dicReports objectForKey:@"organizationId"]integerValue];
+                         repMod.orgunitId = [[dicReports objectForKey:@"orgunitId"]integerValue];
+                         
+                         NSLog(@"RecordQeryVC repMod.address= %@",repMod.address);
+                         [mArrReports addObject:repMod];
+                         [repMod release];
+                     }
+                     self.arrData = arrDicReports;
+                     self.reportArrData = mArrReports;
+                     [SVProgressHUD showSuccessWithStatus:@"完成！"];
+                 }else
+                 {
+                     self.arrData = nil;
+                     [SVProgressHUD showErrorWithStatus:@"无记录"];
+                 }
+             }];
+        }
     }
+    
     [hbServer release];
 }
 
-//- (void) viewWillAppear:(BOOL)animated{
-//    [super viewWillAppear:animated];
-//    self.arrData = self.arrData;
-//    [_tvbRecordInfo reloadData];
-//    
-//    
-//}
 #pragma mark - 用户事件
 -(void)btnAction:(UIButton *)btn
 {
@@ -282,14 +344,8 @@
     NSString * strDate = [WTool getStrDateTimeWithDateTimeMS:dtEnd DateTimeStyle:@"yyyy-MM-dd"];
     NSString * strWeekday = [WTool getStrWeekdayWithNSdate:[NSDate dateWithTimeIntervalSince1970:dtEnd/1000]];
     _strTimeInfoEnd = [NSString stringWithFormat:@"%@(%@)",strDate,strWeekday];
-    //    _lblRecordPromptTimeInfo.text = [NSString stringWithFormat:@"从%@至%@",_strTimeInfoStart,_strTimeInfoEnd];
 }
-//-(void)setTypeRecord:(NSInteger)typeRecord
-//{
-//    _typeRecord = typeRecord;
-//    _strRecordType = [_arrMenuRecordNames objectAtIndex:typeRecord];
-//    self.title = [NSString stringWithFormat:@"%@查询",_strRecordType];
-//}
+
 
 #pragma mark - 视图
 //记录提示信息
@@ -338,6 +394,12 @@
     [_tvbRecordInfo setBackgroundColor:[UIColor whiteColor]];
     [_tvbRecordInfo setDelegate:self];
     [_tvbRecordInfo setDataSource:self];
+    
+    //上拉刷新的控件添加在tableView上
+    refreshView = [[EGORefreshTableFooterView alloc]  initWithFrame:CGRectZero];
+    refreshView.delegate = self;
+    [_tvbRecordInfo addSubview:refreshView];
+    reloading = NO;
 }
 #pragma mark - 生命周期
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -379,8 +441,8 @@
     //获得开始时间
     NSString *begineTime = [NSString stringWithFormat:@"%@(%@)",[WTool getStrDateTimeWithDateTimeMS:self.dtBegin DateTimeStyle:@"yyyy-MM-dd"],[WTool getStrWeekdayWithNSdate:[NSDate dateWithTimeIntervalSince1970:self.dtBegin/1000]]];
     
-    self.dtBegin = [WTool getBeginDateTimeMsWithNSDate:[NSDate date]];
-    self.dtEnd = [WTool getEndDateTimeMsWithdtBeginMS:self.dtBegin];
+    //self.dtBegin = [WTool getBeginDateTimeMsWithNSDate:[NSDate date]];
+    self.dtEnd = [WTool getEndDateTimeMsWithdtBeginMS:[WTool getBeginDateTimeMsWithNSDate:[NSDate date]]];
     _lblRecordPromptTimeInfo.text = [NSString stringWithFormat:@"从%@至%@",begineTime,_strTimeInfoEnd];
     
     if (!self.typeRecord)
@@ -417,12 +479,257 @@
 {
     if (_arrData != arrData)
     {
-        [_arrData release];
+        //[_arrData release];
         _arrData = [arrData retain];
         //重新写
     }
     [_tvbRecordInfo reloadData];
 }
+
+#pragma mark - 上拉刷新相关
+-(void)viewDidAppear:(BOOL)animated
+{
+    //frame应在表格加载完数据源之后再设置
+    [self setRefreshViewFrame];
+    [super viewDidAppear:animated];
+}
+//请求数据
+-(void)reloadData
+{
+    reloading = YES;
+    //新建一个线程来加载数据
+    [NSThread detachNewThreadSelector:@selector(requestData)
+                             toTarget:self
+                           withObject:nil];
+}
+static int addDataInt=0;
+-(void)requestData
+{   NSLog(@"上拉刷新 addDataInt == %d",addDataInt);
+    addDataInt=addDataInt +10;
+    GetCommonDataModel;
+    
+    //查汇报记录
+    HBServerKit *hbServer = [[HBServerKit alloc]init];
+    NSLog(@"self.dtBegin,self.dtEnd %lld %lld",self.dtBegin,self.dtEnd);
+    if (self.playCard == YES) {//打卡数据
+        if (self.personalOrOrgRecod == 1) {//获得个人打卡数据
+            [hbServer findAttendanceReportsOfMembersWithOrganizationId:comData.organization.organizationId
+                                                             orgunitId:[self.orgunitId integerValue]
+                                                     orgunitAttendance:NO
+                                                              userName:[self.username integerValue]
+                                                          BeginDateLli:self.dtBegin
+                                                            EndDateLli:self.dtEnd
+                                                     FirstReportRecord:0
+                                                       MaxReportRecord:10+addDataInt
+                                                         GotArrReports:^(NSArray *arrDicReports, WError *myError)
+            {
+             if (arrDicReports.count) {
+                NSMutableArray * mArrReports = [NSMutableArray arrayWithCapacity:arrDicReports.count];
+                for (NSDictionary * dicReports in arrDicReports)
+                {
+                   NSLog(@"realname == %@",dicReports);
+                   NSLog(@"444name == %@",[dicReports objectForKey:@"createDate"]);
+                   AttendanceModel *repMod = [[AttendanceModel alloc]init];
+                   repMod.realName = [dicReports objectForKey:@"realname"];
+                   repMod.userName = [dicReports objectForKey:@"username"];
+                   repMod.note = [dicReports objectForKey:@"note"];
+                   repMod.createTime = [dicReports objectForKey:@"createDate"];
+                   NSLog(@"RecordQeryVC note = %@",repMod.note);
+                   [mArrReports addObject:repMod];
+                   [repMod release];
+                }
+                    self.arrData = mArrReports;
+                    }else
+                     {
+                      nil;
+                     }
+             }];
+            
+        }else{//获得部门打卡数据
+            [hbServer findAttendanceReportsOfMembersWithOrganizationId:comData.organization.organizationId
+                                                             orgunitId:[self.orgunitId integerValue]
+                                                     orgunitAttendance:YES
+                                                              userName:nil
+                                                          BeginDateLli:self.dtBegin
+                                                            EndDateLli:self.dtEnd
+                                                     FirstReportRecord:0
+                                                       MaxReportRecord:10+addDataInt
+                                                         GotArrReports:^(NSArray *arrDicReports, WError *myError)
+            {
+                  if (arrDicReports.count) {
+                       NSMutableArray * mArrReports = [NSMutableArray arrayWithCapacity:arrDicReports.count];
+                       for (NSDictionary * dicReports in arrDicReports)
+                         {
+                            NSLog(@"realname == %@",dicReports);
+                            NSLog(@"444name == %@",[dicReports objectForKey:@"createDate"]);
+                            AttendanceModel *repMod = [[AttendanceModel alloc]init];
+                            repMod.realName = [dicReports objectForKey:@"realname"];
+                            repMod.userName = [dicReports objectForKey:@"username"];
+                            repMod.note = [dicReports objectForKey:@"note"];
+                            repMod.createTime = [dicReports objectForKey:@"createDate"];
+                            NSLog(@"RecordQeryVC note = %@",repMod.note);
+                            [mArrReports addObject:repMod];
+                            [repMod release];
+                            }
+                            self.arrData = mArrReports;
+                            }else
+                            {
+                            nil;
+                            }
+          }];
+        }
+    
+    }else{//汇报数据（上班、出差、出门）
+        if (self.personalOrOrgRecod == 1) {//个人汇报数据
+            [hbServer findReportsWithOrganizationId:comData.organization.organizationId
+                                          OrgunitId:[self.orgunitId integerValue]
+                                           Username:self.username
+                                         ReportType:self.strTypeRecord
+                                       BeginDateLli:self.dtBegin
+                                         EndDateLli:self.dtEnd
+                                  FirstReportRecord:0
+                                    MaxReportRecord:10+addDataInt
+                                      GotArrReports:^(NSArray *arrDicReports, WError *myError)
+             {
+                 if (arrDicReports.count) {
+                     NSMutableArray * mArrReports = [NSMutableArray arrayWithCapacity:arrDicReports.count   ];
+                     for (NSDictionary * dicReports in arrDicReports)
+                     {
+                         NSLog(@"realname == %@",dicReports);
+                         
+                         NSLog(@"444name == %@",[dicReports objectForKey:@"name"]);
+                         ReportModel *repMod = [[ReportModel alloc]init];
+                         repMod.imageUrl = [dicReports objectForKey:@"imageUrl"];
+                         repMod.latitude = [[dicReports objectForKey:@"latitude"]floatValue];
+                         repMod.longitude = [[dicReports objectForKey:@"longitude"]floatValue];
+                         repMod.note = [dicReports objectForKey:@"note"];
+                         repMod.soundUrl = [dicReports objectForKey:@"soundUrl"];
+                         repMod.telephone = [dicReports objectForKey:@"telephone"];
+                         repMod.updateDate = [[dicReports objectForKey:@"updateDate"]longLongValue];
+                         repMod.address = [dicReports objectForKey:@"address"];
+                         repMod.realName = [dicReports objectForKey:@"realname"];
+                         repMod.userName = [dicReports objectForKey:@"updateUserId"];
+                         repMod.reportId = [dicReports objectForKey:@"reportId"];
+                         repMod.organizationId = [[dicReports objectForKey:@"organizationId"]integerValue];
+                         repMod.orgunitId = [[dicReports objectForKey:@"orgunitId"]integerValue];
+                         NSLog(@"RecordQeryVC repMod.address= %@",repMod.address);
+                         [mArrReports addObject:repMod];
+                         [repMod release];
+                     }
+                     self.arrData = arrDicReports;
+                     self.reportArrData = mArrReports;
+                     
+                     NSLog(@"--------------||||||||||__________%@",self.arrData);
+                 }else
+                 {
+                     nil;
+                 }
+             }];
+        }else{//部门汇报数据
+            
+            [hbServer findOrgunitReportsOfMembersWithOrganizationId:[self.organizationId integerValue]
+                                                          orgunitId:[self.orgunitId integerValue]
+                                                         ReportType:self.strTypeRecord
+                                                       BeginDateLli:self.dtBegin
+                                                         EndDateLli:self.dtEnd
+                                                  FirstReportRecord:0
+                                                    MaxReportRecord:10+addDataInt
+                                                      GotArrReports:^(NSArray *arrDicReports, WError *myError)
+             {
+                 if (arrDicReports.count) {
+                     NSMutableArray * mArrReports = [NSMutableArray arrayWithCapacity:arrDicReports.count];
+                     for (NSDictionary * dicReports in arrDicReports)
+                     {
+                         NSLog(@"realname == %@",dicReports);
+                         
+                         NSLog(@"444name == %@",[dicReports objectForKey:@"name"]);
+                         ReportModel *repMod = [[ReportModel alloc]init];
+                         repMod.imageUrl = [dicReports objectForKey:@"imageUrl"];
+                         repMod.latitude = [[dicReports objectForKey:@"latitude"]floatValue];
+                         repMod.longitude = [[dicReports objectForKey:@"longitude"]floatValue];
+                         repMod.note = [dicReports objectForKey:@"note"];
+                         repMod.soundUrl = [dicReports objectForKey:@"soundUrl"];
+                         repMod.telephone = [dicReports objectForKey:@"telephone"];
+                         repMod.updateDate = [[dicReports objectForKey:@"updateDate"]longLongValue];
+                         repMod.address = [dicReports objectForKey:@"address"];
+                         repMod.realName = [dicReports objectForKey:@"realname"];
+                         repMod.userName = [dicReports objectForKey:@"updateUserId"];
+                         repMod.reportId = [dicReports objectForKey:@"reportId"];
+                         repMod.organizationId = [[dicReports objectForKey:@"organizationId"]integerValue];
+                         repMod.orgunitId = [[dicReports objectForKey:@"orgunitId"]integerValue];
+                         NSLog(@"RecordQeryVC repMod.address= %@",repMod.address);
+                         [mArrReports addObject:repMod];
+                         [repMod release];
+                     }
+                     self.arrData = arrDicReports;
+                     self.reportArrData = mArrReports;
+                     NSLog(@"--------------||||||||||__________%@",self.arrData);
+                 }else
+                 {
+                     nil;
+                 }
+             }];
+        }
+    }
+    
+    [hbServer release];
+    
+    
+    sleep(3);
+    //在主线程中刷新UI
+    [self performSelectorOnMainThread:@selector(reloadUI)
+                           withObject:nil
+                        waitUntilDone:NO];
+}
+
+-(void)reloadUI
+{
+	reloading = NO;
+    
+    //停止下拉的动作,恢复表格的便宜
+	[refreshView egoRefreshScrollViewDataSourceDidFinishedLoading:_tvbRecordInfo];
+    //更新界面
+    [_tvbRecordInfo reloadData];
+    [self setRefreshViewFrame];
+}
+
+-(void)setRefreshViewFrame
+{
+    //如果contentsize的高度比表的高度小，那么就需要把刷新视图放在表的bounds的下面
+    int height = MAX(_tvbRecordInfo.bounds.size.height, _tvbRecordInfo.contentSize.height);
+    refreshView.frame =CGRectMake(0.0f, height, self.view.frame.size.width, _tvbRecordInfo.bounds.size.height);
+}
+#pragma mark - EGORefreshTableFooterDelegate
+//出发下拉刷新动作，开始拉取数据
+- (void)egoRefreshTableFooterDidTriggerRefresh:(EGORefreshTableFooterView*)view
+{
+    [self reloadData];
+}
+//返回当前刷新状态：是否在刷新
+- (BOOL)egoRefreshTableFooterDataSourceIsLoading:(EGORefreshTableFooterView*)view
+{
+    return reloading;
+}
+//返回刷新时间
+-(NSDate *)egoRefreshTableFooterDataSourceLastUpdated:(EGORefreshTableFooterView *)view
+{
+    return [NSDate date];
+}
+
+#pragma mark - UIScrollView
+
+//此代理在scrollview滚动时就会调用
+//在下拉一段距离到提示松开和松开后提示都应该有变化，变化可以在这里实现
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    [refreshView egoRefreshScrollViewDidScroll:scrollView];
+}
+//松开后判断表格是否在刷新，若在刷新则表格位置偏移，且状态说明文字变化为loading...
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    [refreshView egoRefreshScrollViewDidEndDragging:scrollView];
+}
+
 
 
 - (void)didReceiveMemoryWarning

@@ -10,6 +10,7 @@
 #import "ShowNoticView.h"
 #import <QuartzCore/QuartzCore.h>
 #import "SVProgressHUD.h"
+#import "ASIHTTPRequest.h"
 
 @interface OrganizationNoticVC ()
 
@@ -22,6 +23,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        self.title = @"公告";
     }
     return self;
 }
@@ -34,7 +36,7 @@
     titleLabel.backgroundColor = [UIColor clearColor];
     NSCharacterSet *set = [NSCharacterSet characterSetWithCharactersInString:@"@／：；（）¥「」＂、[]{}#%-*+=_\\|~＜＞$€^•'@#$%^&*()_+'\""]; //过滤字符串    
     titleLabel.text = [self.textTitle stringByTrimmingCharactersInSet:set];
-    titleLabel.font = [UIFont systemFontOfSize:40.0];
+    titleLabel.font = [UIFont systemFontOfSize:30.0];
     [self.view addSubview:titleLabel];
     [titleLabel release];
     //来源
@@ -61,25 +63,55 @@
         [self.view addSubview:timeLabel];
     }
     
+    
+    NSArray *separatImgAndStr = [self.content componentsSeparatedByString:@"\n[附加图片]"];
+    NSString *contentStr = [separatImgAndStr objectAtIndex:0];
+    NSString *imgUrlStr = [[[NSString alloc]init]autorelease];
+    if (separatImgAndStr.count>1) {
+     imgUrlStr = [separatImgAndStr objectAtIndex:1];
+    }
+    NSLog(@"imgUrlStr == %@",imgUrlStr);
+    //图片
+    UIImageView *imgView = [[UIImageView alloc]init];
+    if (imgUrlStr.length >1) {
+        imgView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 100, Screen_Width-20, 160)];
+        imgView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"icon_image_load_ing.png"]];
+        NSURL *imgurl = [NSURL URLWithString:imgUrlStr];
+        ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:imgurl];
+        [req setCompletionBlock:^{
+            imgView.image = [UIImage imageWithData:[req responseData]];
+            imgView.backgroundColor = [UIColor clearColor];
+            imgView.layer.borderWidth = 0.8;
+            imgView.contentMode = UIViewContentModeScaleAspectFit;
+            [self.view addSubview:imgView];
+        }];
+        [req startAsynchronous];
+    }
+    
+    
     //内容
-    UITextView *contentText = [[UITextView alloc]initWithFrame:CGRectMake(10, 100, Screen_Width-20, 200)];
+    UITextView *contentText = [[UITextView alloc]initWithFrame:CGRectMake(10, imgView.frame.size.height+105, Screen_Width-20, 200)];
     contentText.editable = NO;
     contentText.font = [UIFont systemFontOfSize:18];
     contentText.layer.cornerRadius = 5;
-    if (self.content != NULL) {
+    if (contentStr != NULL) {
         contentText.textAlignment = UITextAlignmentLeft;
         contentText.contentMode = UIControlContentVerticalAlignmentCenter;
         CGRect orgRect=contentText.frame;//获取原始UITextView的frame
-        CGSize  size = [self.content sizeWithFont:[UIFont systemFontOfSize:18] constrainedToSize:CGSizeMake(240, 2000) lineBreakMode:UILineBreakModeWordWrap];
+        CGSize  size = [contentStr sizeWithFont:[UIFont systemFontOfSize:18] constrainedToSize:CGSizeMake(240, 2000) lineBreakMode:UILineBreakModeWordWrap];
         orgRect.size.height=size.height+10;//获取自适应文本内容高度
         contentText.frame=orgRect;//重设UITextView的frame
-        contentText.text=self.content;
+        
+        contentText.text=contentStr;
         [self.view addSubview:contentText];
         [contentText release];
     }else{
         [SVProgressHUD showErrorWithStatus:@"暂时无通知"];
     }
     
+    
+    [imgView release];
+    //[imgUrlStr release];
 }
 
 - (void)didReceiveMemoryWarning

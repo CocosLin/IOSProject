@@ -15,4 +15,5 @@
 @property (nonatomic, copy) NSString *orgunitName;
 @property (nonatomic, retain) NSMutableArray *orgunitNameArray;
 @property (nonatomic, retain) NSArray *orgunitIdArray;
+@property (nonatomic, retain) NSArray *orgunitPropsArray;
 @end

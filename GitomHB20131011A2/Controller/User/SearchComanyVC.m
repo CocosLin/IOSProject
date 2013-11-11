@@ -120,15 +120,18 @@
     //NSLog(@"predicate %@",predicateString);
     
     //__block NSArray  *filteredArray = [[NSArray alloc]init];
-    __block OrganizationsModel *orgMod = [[OrganizationsModel alloc]init];
+    //__block OrganizationsModel *orgMod = [[OrganizationsModel alloc]init];
     HBServerKit *hbKit = [[HBServerKit alloc]init];
     NSString *utf8Str = (NSString *)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,(CFStringRef)self.search.text,NULL,NULL,kCFStringEncodingUTF8);
     if (utf8Str == nil) {
         utf8Str = @"1";
     }
     [hbKit searchCompanyWithKey:utf8Str andFirst:0 andMax:10 andGetArr:^(NSArray *companyAr) {
-        orgMod = [companyAr objectAtIndex:0];
-        NSLog(@"OrganizationsModel %@ %@ %@ %@",orgMod.organizationName,orgMod.organizationId,orgMod.orgunitName,orgMod.organizationId);
+        //orgMod = [companyAr objectAtIndex:0];
+        for (OrganizationsModel *aorgMod in companyAr) {
+            NSLog(@"OrganizationsModel %@ %@ %@ ",aorgMod.organizationName,aorgMod.organizationId,aorgMod.orgunitPropsArray);
+        }
+        
         self.searchAr = companyAr;
         [self.searchTable reloadData];
     }];
@@ -152,6 +155,9 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     NSLog(@"searchA count == %d",self.searchAr.count);
+    if (!self.searchAr) {
+        return 0;
+    }
     return self.searchAr.count;
 }
 
@@ -167,12 +173,16 @@
     
 //    NSLog(@"SearchComanyVC cell == %@",orgMod.organizationName);
     NSLog(@"array count = %d",self.searchAr.count);
-    OrganizationsModel *orgMod = [[OrganizationsModel alloc]init];
-    if (self.searchAr.count >1 && orgMod != nil ) {
-        
+    
+    if (self.searchAr.count >1) {
+        OrganizationsModel *orgMod = [[OrganizationsModel alloc]init];
         orgMod = [self.searchAr objectAtIndex:indexPath.row];
-        cell.textLabel.text = orgMod.organizationName;
         NSLog(@"SearchComanyVC orgMod == %@",orgMod);
+        if (orgMod) {
+            cell.textLabel.text = orgMod.organizationName;
+        }else{
+            cell.textLabel.text = @"-";
+        }
     }
     return cell;
 }
@@ -183,13 +193,12 @@
     self.alert = [MLTableAlert tableAlertWithTitle:@"选择部门" cancelButtonTitle:@"取消" numberOfRows:^NSInteger(NSInteger section) {
         OrganizationsModel *orgMod = [[OrganizationsModel alloc]init];
         orgMod = [self.searchAr objectAtIndex:indexPath.row];
-        NSLog(@"numberOfRows %d",orgMod.orgunitNameArray.count);
-        return orgMod.orgunitNameArray.count;
+        return orgMod.orgunitNameArray.count; 
         [orgMod release];
     } andCells:^UITableViewCell *(MLTableAlert *alert, NSIndexPath *indexPath) {
         NSLog(@"indexPath");
         OrganizationsModel *orgMod = [[OrganizationsModel alloc]init];
-        orgMod = [self.searchAr objectAtIndex:indexPath.row];
+        orgMod = [self.searchAr objectAtIndex:self.uitableIndexPath];
         static NSString *CellIdentifier = @"CellIdentifier";
         UITableViewCell *cell = [alert.table dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil)
@@ -218,8 +227,9 @@
         vc.orgId = [orgMod.orgunitIdArray objectAtIndex:selectedIndex.row];
         vc.companyName = orgMod.organizationName;
         vc.companyId = orgMod.organizationId;
+        vc.orgPropsArray = [orgMod.orgunitPropsArray objectAtIndex:selectedIndex.row];
         NSLog(@"SearchComanyVC %@ %@ %@ %@",vc.orgName,vc.orgId,vc.companyName,vc.companyId);
-        
+        NSLog(@"SearchComanyVC orgPropsArray == %@",vc.orgPropsArray);
         [self.navigationController pushViewController:vc animated:YES];
         
 	} andCompletionBlock:^{

@@ -41,7 +41,7 @@
     
     [self initRecordPromptInfo];
 
-    self.arrSet = [NSArray arrayWithObjects:@"修改部门名称",@"修改考勤配置",@"修改验证方式",@"修改员工位置上传时间间隔",@"编辑主管权限",@"删除部门", nil];
+    self.arrSet = [NSArray arrayWithObjects:@"修改部门名称",@"修改考勤配置",@"修改验证方式",@"位置上传时间间隔",@"编辑主管权限",@"删除部门", nil];
     GetCommonDataModel;
     if (comData.organization.roleId == 1) {
         NSLog(@"创建者权限");
@@ -90,6 +90,21 @@
 }
 
 #pragma mark - UITableView Delegate
+- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath{
+    GetCommonDataModel;
+    if (indexPath.row==4 || indexPath.row == 5) {
+        if (comData.organization.roleId!=1) {
+            return NO;
+            
+        }else{
+            return YES;
+        }
+    }else{
+        return YES;
+    }
+    
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
@@ -110,8 +125,24 @@
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         [cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
     }
-    cell.textLabel.text = [self.arrSet objectAtIndex:indexPath.row];
-    cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
+    
+    cell.textLabel.backgroundColor = [UIColor clearColor];
+    GetCommonDataModel;
+    if (indexPath.row==4 || indexPath.row == 5) {
+        if (comData.organization.roleId!=1) {
+            cell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
+            cell.textLabel.text = [NSString stringWithFormat:@"%@(创建者)",[self.arrSet objectAtIndex:indexPath.row]];
+            
+        }else{
+            cell.textLabel.text = [self.arrSet objectAtIndex:indexPath.row];
+            cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
+        }
+    }else{
+        cell.textLabel.text = [self.arrSet objectAtIndex:indexPath.row];
+        cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
+    }
+    
+    
     return cell;
 }
 
@@ -188,15 +219,19 @@
         [changeOrgNameAler show];
         [changeOrgNameAler release];
     }if (indexPath.row == 4) {
-        NSLog(@"编辑主管权限");
-        RolePrivilegeVC *nv = [[RolePrivilegeVC alloc]init];
-        [self.navigationController pushViewController:nv animated:YES];
+        if (comData.organization.roleId == 1) {
+            RolePrivilegeVC *nv = [[RolePrivilegeVC alloc]init];
+            [self.navigationController pushViewController:nv animated:YES];
+        }
+        
     }if (indexPath.row == 5) {
-        NSLog(@"删除部门");
-        configType = 5;
-        UIAlertView *changeOrgNameAler = [[UIAlertView alloc]initWithTitle:@"提示" message:@"确定要删除部门？" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定",@"取消", nil];
-        [changeOrgNameAler show];
-        [changeOrgNameAler release];
+        if (comData.organization.roleId == 1) {
+            configType = 5;
+            UIAlertView *changeOrgNameAler = [[UIAlertView alloc]initWithTitle:@"提示" message:@"确定要删除部门？" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定",@"取消", nil];
+            [changeOrgNameAler show];
+            [changeOrgNameAler release];
+        }
+        
     }
     [hbKit release];
 }

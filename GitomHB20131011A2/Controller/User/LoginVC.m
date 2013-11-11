@@ -369,7 +369,9 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-        
+    NSString *temPath = NSTemporaryDirectory();
+    NSLog(@"tempath = %@",temPath);
+    
     self.view.backgroundColor = Color_Background;
     _tfPassword = [[UITextField alloc]init];
     _tfUsername = [[UITextField alloc]init];
@@ -417,16 +419,17 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
     [self addViewForMoreLoginOperaWithBtnLoginFrame:frameBtnLogin];
     
     UIButton *registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    registerButton.backgroundColor = [UIColor greenColor];
-    [registerButton setTitle:@"注册" forState:UIControlStateNormal];
+    registerButton.backgroundColor = [UIColor clearColor];
+    [registerButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    [registerButton setTitle:@"注册帐号" forState:UIControlStateNormal];
     [registerButton addTarget:self action:@selector(registerAction) forControlEvents:UIControlEventTouchUpInside];
-    registerButton.frame = CGRectMake(10, Height_Screen - 200, Width_Screen - 20, 30);
+    registerButton.frame = CGRectMake(10, Height_Screen - 150, Width_Screen - 20, 30);
     [self.view addSubview:registerButton];
     
     
     
     UILabel *lblVersionInfo = [[UILabel alloc]initWithFrame:CGRectMake(10, Height_Screen - 120, Width_Screen - 20, 30)];
-    lblVersionInfo.text = @"正式版 : v1.0.0";
+    lblVersionInfo.text = @"内测版 : v1.0.0";
     lblVersionInfo.textColor = [UIColor grayColor];
     lblVersionInfo.backgroundColor = [UIColor clearColor];
     [self.view addSubview:lblVersionInfo];

@@ -13,6 +13,8 @@
 #import "UIViewController+JASidePanel.h"
 #import "BMapKit.h"
 #import "ASIDownloadCache.h"
+#import "ASINetworkQueue.h"
+
 @class JASidePanelController;
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 {
@@ -22,4 +24,5 @@
 @property (strong, nonatomic) JWMotionRecognizingWindow * window;
 @property(retain,nonatomic)CommonDataModel * comData;
 @property (nonatomic,retain) ASIDownloadCache *myCache;
+@property (nonatomic, retain) ASINetworkQueue *networkQueue;    //asi下载队列
 @end

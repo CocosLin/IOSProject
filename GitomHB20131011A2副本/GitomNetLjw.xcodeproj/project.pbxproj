@@ -338,7 +338,7 @@
 		97D0683217F127AF008CADD5 /* BMKMapView.h in Sources */ = {isa = PBXBuildFile; fileRef = 97EC2626177EB40A005CEEB2 /* BMKMapView.h */; };
 		97D0683317F127AF008CADD5 /* BMKSearch.h in Sources */ = {isa = PBXBuildFile; fileRef = 97EC2635177EB40A005CEEB2 /* BMKSearch.h */; };
 		97D0683417F12FED008CADD5 /* libmp3lame.a in Sources */ = {isa = PBXBuildFile; fileRef = 97F075591783CC860075B3FF /* libmp3lame.a */; };
-		97D0683517F1301A008CADD5 /* libbaidumapapi.a in Sources */ = {isa = PBXBuildFile; fileRef = 97EC263C177EB40A005CEEB2 /* libbaidumapapi.a */; };
+		97D0683517F1301A008CADD5 /* libbaidumapapi.h in Sources */ = {isa = PBXBuildFile; fileRef = 97EC263C177EB40A005CEEB2 /* libbaidumapapi.h */; };
 		97D70D0B181126A10069A0EF /* 111_19.png in Resources */ = {isa = PBXBuildFile; fileRef = 97D70D0A181126A10069A0EF /* 111_19.png */; };
 		97E3BAF01816541100B32D3C /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97E3BAEF1816541100B32D3C /* AudioToolbox.framework */; };
 		97E3BAF61816654000B32D3C /* shaking.wav in Resources */ = {isa = PBXBuildFile; fileRef = 97E3BAF51816654000B32D3C /* shaking.wav */; };
@@ -394,8 +394,8 @@
 		97EBF8D61807DDD20084F9E5 /* DetailQeryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 97EBF8D51807DDD20084F9E5 /* DetailQeryViewController.m */; };
 		97EBF8D91807E0460084F9E5 /* RecordDetailView.m in Sources */ = {isa = PBXBuildFile; fileRef = 97EBF8D81807E0460084F9E5 /* RecordDetailView.m */; };
 		97EBF8DB1807E0580084F9E5 /* Empty.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97EBF8DA1807E0580084F9E5 /* Empty.xib */; };
-		97EC2641177EB40A005CEEB2 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 97EC263C177EB40A005CEEB2 /* libbaidumapapi.a */; };
-		97EC2642177EB40B005CEEB2 /* libbaidumapapi.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 97EC263C177EB40A005CEEB2 /* libbaidumapapi.a */; };
+		97EC2641177EB40A005CEEB2 /* libbaidumapapi.h in Frameworks */ = {isa = PBXBuildFile; fileRef = 97EC263C177EB40A005CEEB2 /* libbaidumapapi.h */; };
+		97EC2642177EB40B005CEEB2 /* libbaidumapapi.h in Frameworks */ = {isa = PBXBuildFile; fileRef = 97EC263C177EB40A005CEEB2 /* libbaidumapapi.h */; };
 		97EC2645177EB40B005CEEB2 /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 97EC263F177EB40A005CEEB2 /* mapapi.bundle */; };
 		97EC2646177EB40B005CEEB2 /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 97EC263F177EB40A005CEEB2 /* mapapi.bundle */; };
 		97EC2647177EB40B005CEEB2 /* readme.docx in Resources */ = {isa = PBXBuildFile; fileRef = 97EC2640177EB40A005CEEB2 /* readme.docx */; };
@@ -894,7 +894,7 @@
 		97EC2637177EB40A005CEEB2 /* BMKTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMKTypes.h; sourceTree = "<group>"; };
 		97EC2638177EB40A005CEEB2 /* BMKUserLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMKUserLocation.h; sourceTree = "<group>"; };
 		97EC2639177EB40A005CEEB2 /* BMKVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMKVersion.h; sourceTree = "<group>"; };
-		97EC263C177EB40A005CEEB2 /* libbaidumapapi.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libbaidumapapi.a; sourceTree = "<group>"; };
+		97EC263C177EB40A005CEEB2 /* libbaidumapapi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = libbaidumapapi.h; sourceTree = "<group>"; };
 		97EC263F177EB40A005CEEB2 /* mapapi.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = mapapi.bundle; sourceTree = "<group>"; };
 		97EC2640177EB40A005CEEB2 /* readme.docx */ = {isa = PBXFileReference; lastKnownFileType = file; path = readme.docx; sourceTree = "<group>"; };
 		97EC2649177EB5A7005CEEB2 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -952,7 +952,7 @@
 				9762D1CD17796F03001CB047 /* UIKit.framework in Frameworks */,
 				9762D1CF17796F03001CB047 /* Foundation.framework in Frameworks */,
 				9762D1D117796F03001CB047 /* CoreGraphics.framework in Frameworks */,
-				97EC2641177EB40A005CEEB2 /* libbaidumapapi.a in Frameworks */,
+				97EC2641177EB40A005CEEB2 /* libbaidumapapi.h in Frameworks */,
 				97F0755A1783CC860075B3FF /* libmp3lame.a in Frameworks */,
 				97EAF09017DF0E5300CDFE46 /* DouBanConnection.framework in Frameworks */,
 				97EAF09117DF0E5300CDFE46 /* EverNoteConnection.framework in Frameworks */,
@@ -1006,7 +1006,7 @@
 				9762D1EB17796F03001CB047 /* SenTestingKit.framework in Frameworks */,
 				9762D1EC17796F03001CB047 /* UIKit.framework in Frameworks */,
 				9762D1ED17796F03001CB047 /* Foundation.framework in Frameworks */,
-				97EC2642177EB40B005CEEB2 /* libbaidumapapi.a in Frameworks */,
+				97EC2642177EB40B005CEEB2 /* libbaidumapapi.h in Frameworks */,
 				97F0755B1783CC860075B3FF /* libmp3lame.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2048,7 +2048,7 @@
 		97EC263B177EB40A005CEEB2 /* Release-iphoneos */ = {
 			isa = PBXGroup;
 			children = (
-				97EC263C177EB40A005CEEB2 /* libbaidumapapi.a */,
+				97EC263C177EB40A005CEEB2 /* libbaidumapapi.h */,
 			);
 			path = "Release-iphoneos";
 			sourceTree = "<group>";
@@ -2393,7 +2393,7 @@
 				9718476C1823B16B00F6EFA4 /* MJPhoto.m in Sources */,
 				9718476B1823B14E00F6EFA4 /* MJPhotoBrowser.m in Sources */,
 				97AE61D017F19B23006F1FA4 /* ManageStaffDetialCell.h in Sources */,
-				97D0683517F1301A008CADD5 /* libbaidumapapi.a in Sources */,
+				97D0683517F1301A008CADD5 /* libbaidumapapi.h in Sources */,
 				97D0683417F12FED008CADD5 /* libmp3lame.a in Sources */,
 				97D0683117F127AF008CADD5 /* BMKMapManager.h in Sources */,
 				97D0683217F127AF008CADD5 /* BMKMapView.h in Sources */,

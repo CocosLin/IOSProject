@@ -8,6 +8,7 @@
 
 #import "ApplyForCompany.h"
 #import "SearchComanyVC.h"
+#import "SVProgressHUD.h"
 
 @interface ApplyForCompany ()
 
@@ -48,7 +49,7 @@
 }
 #pragma mark -- 创建公司
 - (void)applyCreatCompany{
-    NSLog(@"applyCreatCompany");
+    [SVProgressHUD showErrorWithStatus:@"抱歉该版本暂未提供在线创建公司服务，请联系代理商为您办理，谢谢" duration:1.1];
 }
 - (void)creatTextAndButtonView{
     UITextView *textView = [[UITextView alloc]initWithFrame:CGRectMake(0, 0, Screen_Width, Screen_Height-120)];

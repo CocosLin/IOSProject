@@ -59,30 +59,64 @@
     [self loadImage];
     //详细信息
     [self creatDetileInformationViews];
+    
+    
+    
+    
     //职位变更
     UIButton *changRoldBut = [UIButton buttonWithType:0];
     [changRoldBut addTarget:self action:@selector(changRoleId) forControlEvents:UIControlEventTouchUpInside];
     [changRoldBut setFrame:CGRectMake((Screen_Width-270)/4, Screen_Height-110, 90, 40)];
-    [changRoldBut setBackgroundImage:[[UIImage imageNamed:@"commit_btn_normal"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
-    [changRoldBut  setBackgroundImage:[[UIImage imageNamed:@"commit_btn_highlighted"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateHighlighted];
+    
     [changRoldBut setTitle:@"职位变更" forState:UIControlStateNormal];
     [self.view addSubview:changRoldBut];
     //转移部门
     UIButton *changUnitBtu = [UIButton buttonWithType:0];
     [changUnitBtu addTarget:self action:@selector(moveToOtherOrgunit) forControlEvents:UIControlEventTouchUpInside];
     [changUnitBtu setFrame:CGRectMake((Screen_Width-270)/4+102, Screen_Height-110, 90, 40)];
-    [changUnitBtu setBackgroundImage:[[UIImage imageNamed:@"commit_btn_normal"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
-    [changUnitBtu  setBackgroundImage:[[UIImage imageNamed:@"commit_btn_highlighted"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateHighlighted];
+    
     [changUnitBtu setTitle:@"转移部门" forState:UIControlStateNormal];
     [self.view addSubview:changUnitBtu];
     //删除员工
     UIButton *deletBtu = [UIButton buttonWithType:0];
     [deletBtu addTarget:self action:@selector(deleteOrgunitUser) forControlEvents:UIControlEventTouchUpInside];
     [deletBtu setFrame:CGRectMake((Screen_Width-270)/2+192, Screen_Height-110, 90, 40)];
-    [deletBtu setBackgroundImage:[[UIImage imageNamed:@"commit_btn_normal"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
-    [deletBtu  setBackgroundImage:[[UIImage imageNamed:@"commit_btn_highlighted"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateHighlighted];
+    
     [deletBtu setTitle:@"删除员工" forState:UIControlStateNormal];
     [self.view addSubview:deletBtu];
+    
+    NSString *roleString = [[NSString alloc]init];
+    if (comData.organization.roleId == 2) {
+        roleString = @"部门主管";
+    }else if (comData.organization.roleId == 4){
+        roleString = @"普通员工";
+    }
+    if (comData.organization.roleId  >=[self.memberIfo.roleId intValue] &&comData.organization.roleId!=1) {
+        UITextView *alerLB = [[UITextView alloc]initWithFrame:CGRectMake(0, Screen_Height-170, Screen_Width, 60)];
+        alerLB.textColor = [UIColor grayColor];
+        alerLB.font = [UIFont systemFontOfSize:15];
+        alerLB.editable = NO;
+        alerLB.backgroundColor = [UIColor clearColor];
+        if (comData.organization.orgunitId != [self.memberIfo.orgunitId intValue]){
+            alerLB.text = [NSString stringWithFormat:@"您是%@\n但是不能对其他部门进行以下操作",roleString];
+        }else{
+            alerLB.text = [NSString stringWithFormat:@"您是%@\n不能对其他主管和创建者进行以下操作",roleString];
+        }
+        [self.view addSubview:alerLB];
+        alerLB.textAlignment = NSTextAlignmentCenter;
+        deletBtu.backgroundColor = [UIColor lightGrayColor];
+        changRoldBut.backgroundColor = [UIColor lightGrayColor];
+        changUnitBtu.backgroundColor = [UIColor lightGrayColor];
+        [alerLB release];
+    }else{
+        [deletBtu setBackgroundImage:[[UIImage imageNamed:@"commit_btn_normal"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
+        [deletBtu  setBackgroundImage:[[UIImage imageNamed:@"commit_btn_highlighted"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateHighlighted];
+        [changUnitBtu setBackgroundImage:[[UIImage imageNamed:@"commit_btn_normal"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
+        [changUnitBtu  setBackgroundImage:[[UIImage imageNamed:@"commit_btn_highlighted"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateHighlighted];
+        [changRoldBut setBackgroundImage:[[UIImage imageNamed:@"commit_btn_normal"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
+        [changRoldBut  setBackgroundImage:[[UIImage imageNamed:@"commit_btn_highlighted"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateHighlighted];
+    }
+    [roleString release];
 }
 
 //连接图片
@@ -199,14 +233,26 @@
 
 #pragma mark -- 职位变更
 - (void)changRoleId{
-    [self changAlertView];
+    GetCommonDataModel;
+    if (comData.organization.roleId  >=[self.memberIfo.roleId intValue] &&comData.organization.roleId!=1) {
+        nil;
+    }else{
+        [self changAlertView];
+    }
+    
 }
 
 - (void)changAlertView{
-    switchAlerDelegate = YES;
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"职位变更" message:[NSString stringWithFormat:@"使%@成为主管？",self.memberIfo.realName] delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定",@"取消", nil];
-    [alert show];
-    [alert release];
+    GetCommonDataModel;
+    if (comData.organization.roleId  >=[self.memberIfo.roleId intValue] &&comData.organization.roleId!=1){
+        nil;
+    }else{
+        switchAlerDelegate = YES;
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"职位变更" message:[NSString stringWithFormat:@"使%@成为主管？",self.memberIfo.realName] delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定",@"取消", nil];
+        [alert show];
+        [alert release];
+    }
+    
 }
 
 #pragma mark - UIAlertView代理方法 (变更职位)
@@ -243,104 +289,54 @@
 
 #pragma mark -- 转移部门
 - (void)moveToOtherOrgunit{
-    NSLog(@"moveStaffToOtherOrg == %c",moveStaffToOtherOrg);
-    
-    if (moveStaffToOtherOrg) {
-        UIView *getAview = [self.view viewWithTag:1002];
-        [getAview removeFromSuperview];
-        //getAview.hidden = YES;
-        moveStaffToOtherOrg = NO;
+    GetCommonDataModel;
+    if (comData.organization.roleId  >=[self.memberIfo.roleId intValue] &&comData.organization.roleId!=1){
+        nil;
     }else{
-        UIView *orgView = [[[UIView alloc]init]autorelease];
-        [orgView setBackgroundColor:BlueColor];
-        orgView.tag = 1002;
-        
-        UITableView  *orgunitTableView= [[[UITableView alloc]init]autorelease];
-        orgunitTableView.backgroundColor = [UIColor clearColor];
-        [orgunitTableView setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-        orgunitTableView.delegate = self;
-        orgunitTableView.dataSource = self;
-        [orgView addSubview:orgunitTableView];
-        
-        [UIView animateWithDuration:0.5 animations:^{
-            orgView.frame = CGRectMake(Screen_Width/4, Screen_Height/4-45, Screen_Width/2+5, 0);
-            [self.view addSubview:orgView];
-            UILabel *titleLb = [[UILabel alloc]initWithFrame:CGRectMake(0, 10, orgView.frame.size.width, 25)];
-            titleLb.text =  @"选择部门";
-            titleLb.font = [UIFont systemFontOfSize:25];
-            titleLb.textColor = [UIColor whiteColor];
-            titleLb.backgroundColor = [UIColor clearColor];
-            titleLb.textAlignment = NSTextAlignmentCenter;
-            [orgView addSubview:titleLb];
-            orgView.frame = CGRectMake(Screen_Width/4, Screen_Height/4, Screen_Width/2, Screen_Height/2+5);
-            orgunitTableView.frame = CGRectMake(5,46, orgView.frame.size.width-10, orgView.frame.size.height-50);            
+        NSLog(@"#pragma mark - TableViewdelegate");
+        self.alert = [MLTableAlert tableAlertWithTitle:@"选择部门" cancelButtonTitle:@"取消" numberOfRows:^NSInteger(NSInteger section) {
+            return  self.orgNameArr.count;
+        } andCells:^UITableViewCell *(MLTableAlert *alert, NSIndexPath *indexPath) {
+            NSLog(@"indexPath");
+            static NSString *CellIdentifier = @"CellIdentifier";
+            UITableViewCell *cell = [alert.table dequeueReusableCellWithIdentifier:CellIdentifier];
+            if (cell == nil)
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            cell.textLabel.text = [[self.orgNameArr objectAtIndex:indexPath.row]objectForKey:@"name"];
+            return cell;
         }];
-        moveStaffToOtherOrg = YES;
-    }
-    NSLog(@"转移部门");
-    
-    
-    
-}
-
-#pragma mark - 表格视图代理方法
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return self.orgNameArr.count;
-}
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    static NSString *cellID = @"cellID";
-    UITableViewCell *myCell = [tableView dequeueReusableHeaderFooterViewWithIdentifier:cellID];
-    if (!myCell) {
-        myCell = [[[UITableViewCell alloc]initWithStyle:0 reuseIdentifier:cellID]autorelease];
-    }
-    NSLog(@"[[orgNameArr objectAtIndex:indexPath.row]objectForKey:@ = %@",[[self.orgNameArr objectAtIndex:indexPath.row]objectForKey:@"name"]);
-    myCell.textLabel.backgroundColor = [UIColor clearColor];
-    myCell.textLabel.text = [[self.orgNameArr objectAtIndex:indexPath.row]objectForKey:@"name"];
-    myCell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
-    myCell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
-    return myCell;
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 45.0;
-}
-
--(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [SVProgressHUD showSuccessWithStatus:@"更新…"];
-    //[tableView deselectRowAtIndexPath:indexPath animated:NO];
-        NSLog(@"selected == %d",indexPath.row);
-        GetCommonDataModel;
         
-        HBServerKit *hbKit = [[HBServerKit alloc]init];
-        [hbKit changeMemberToOtherOrgWihtOrganizationId:comData.organization.organizationId andOrgunitId:self.memberIfo.orgunitId andTarOrgunitId:[[self.orgNameArr objectAtIndex:indexPath.row]objectForKey:@"orgunitId"] andUserName:self.memberIfo.username andUpdateUser:comData.userModel.username];
-        [hbKit release];
-        [SVProgressHUD showSuccessWithStatus:@"完成转移"];
-        [self.navigationController popToRootViewControllerAnimated:YES];
+        self.alert.height = 250;
+        // configure actions to perform
+        [self.alert configureSelectionBlock:^(NSIndexPath *selectedIndex){
+            GetCommonDataModel;
+            HBServerKit *hbKit = [[HBServerKit alloc]init];
+            [hbKit changeMemberToOtherOrgWihtOrganizationId:comData.organization.organizationId andOrgunitId:self.memberIfo.orgunitId andTarOrgunitId:[[self.orgNameArr objectAtIndex:selectedIndex.row]objectForKey:@"orgunitId"] andUserName:self.memberIfo.username andUpdateUser:comData.userModel.username];
+            [hbKit release];
+            [SVProgressHUD showSuccessWithStatus:@"完成转移"];
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        } andCompletionBlock:^{
+            NSLog(@"取消");
+        }];
+        
+        // show the alert
+        [self.alert show];
+    }
     
 }
-
-
-
 #pragma mark -- 删除员工
 - (void)deleteOrgunitUser{
     //GetCommonDataModel;
-    switchAlerDelegate = NO;
-    //NSString *changeRoleUrlStr = [NSString stringWithFormat:@"http://hb.m.gitom.com/3.0/organization/deleteOrgunitUser?organizationId=%ld&orgunitId=%ld&username=%@&updateUser=%@&cookie=%@&operations=4",(long)comData.organization.organizationId,(long)comData.organization.orgunitId,self.memberIfo.username,comData.userModel.username,comData.cookie];
-    //NSLog(@"ReleaseAnnounceVC UrlStr %@",changeRoleUrlStr);
-    //NSURL *releaseUrl = [NSURL URLWithString:changeRoleUrlStr];
-   // NSURLRequest *req = [NSURLRequest requestWithURL:releaseUrl];
-    //[NSURLConnection sendAsynchronousRequest:req queue:nil completionHandler:nil];
-    //UIAlertView *delectedAler = [[UIAlertView alloc]initWithTitle:@"提示" message:@"删除成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-//    [delectedAler show];
-//    [delectedAler release];
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:[NSString stringWithFormat:@"删除员工%@？",self.memberIfo.realName] delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定",@"取消", nil];
-    [alert show];
-    [alert release];
-    NSLog(@"alerAction");
+    GetCommonDataModel;
+    if (comData.organization.roleId  >=[self.memberIfo.roleId intValue] &&comData.organization.roleId!=1){
+        nil;
+    }else{
+        switchAlerDelegate = NO;
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:[NSString stringWithFormat:@"删除员工%@？",self.memberIfo.realName] delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定",@"取消", nil];
+        [alert show];
+        [alert release];
+        NSLog(@"alerAction");
+    }
 }
 
 //获得详细信息

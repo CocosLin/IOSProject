@@ -14,5 +14,6 @@
 @property (nonatomic, copy) NSString *userName;
 @property (nonatomic, copy) NSString *createTime;
 @property (nonatomic, copy) NSString *note;
+//@property (nonatomic, copy) NSString *orgunitId;
 
 @end

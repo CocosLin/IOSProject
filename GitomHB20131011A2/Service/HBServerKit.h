@@ -13,6 +13,7 @@
 #import "WDataParse.h"
 #import "WDataService.h"
 #import "ServerBaseModel.h"
+#import "CommentModle.h"
 
 @interface HBServerKit : BaseService
 @property(nonatomic,retain)ServerBaseModel * serverBaseMessage;
@@ -67,6 +68,21 @@ typedef void(^WbReportJsonArr)(NSArray * arrDicReports,WError * myError);
                          andFirst:(int)first
                            andMax:(int)max
                         andGetArr:(void(^)(NSArray *companyAr))callBack;
+
+#pragma mark -- 查询点评
+- (void) findCommentWithOrganizationId:(NSInteger)organizationId
+                             OrgunitId:(NSInteger)orgunitId
+                              ReportId:(NSString *)reportId
+                      andGetCommentMod:(void(^)(CommentModle *commentMod))callBack;
+
+#pragma mark -- 添加点评
+- (void) addCommentWithOrganizationId:(NSInteger)organizationId
+                            OrgunitId:(NSInteger)orgunitId
+                             ReportId:(NSString *)reportId
+                              Content:(NSString *)content
+                                Score:(NSString *)score
+                           CreateUser:(NSString *)createUser
+                             Username:(NSString *)username;
 
 #pragma mark -- 保存上传汇报数据
 typedef  void(^WbReportSave)(BOOL isReportOk,WError * myError);

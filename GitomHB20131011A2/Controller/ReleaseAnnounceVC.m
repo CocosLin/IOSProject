@@ -86,14 +86,14 @@
                                                                                action:@selector(tpeToDismissAction)];
     [addToBaseView addGestureRecognizer:tap];
     
-    self.hideKeyBoardView = [[UIView alloc]initWithFrame:CGRectMake(0, 20, 50, 50)];
-    self.hideKeyBoardView.backgroundColor = [UIColor clearColor];
-    self.hideKeyBoardView.tag = 1001;
-    UIWindow *window = [[UIApplication sharedApplication].delegate window];
-    [window addSubview:self.hideKeyBoardView];
-    UITapGestureRecognizer  *tap1 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideKeyBoardAciton)];
-    [self.hideKeyBoardView addGestureRecognizer:tap1];
-    self.hideKeyBoardView.hidden= YES;
+//    self.hideKeyBoardView = [[UIView alloc]initWithFrame:CGRectMake(0, 20, 50, 50)];
+//    self.hideKeyBoardView.backgroundColor = [UIColor clearColor];
+//    self.hideKeyBoardView.tag = 1001;
+//    UIWindow *window = [[UIApplication sharedApplication].delegate window];
+//    [window addSubview:self.hideKeyBoardView];
+//    UITapGestureRecognizer  *tap1 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(hideKeyBoardAciton)];
+//    [self.hideKeyBoardView addGestureRecognizer:tap1];
+//    self.hideKeyBoardView.hidden= YES;
     
 }
 
@@ -149,7 +149,7 @@
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
-    self.hideKeyBoardView.hidden = NO;
+    //self.hideKeyBoardView.hidden = NO;
     _baseView.frame = CGRectMake(0, 0, Screen_Width, Screen_Height-190);
     _baseView.contentSize = self.view.frame.size;
     
@@ -160,7 +160,7 @@
     [self.announceContent resignFirstResponder];
     _baseView.frame = self.view.frame;
     _baseView.contentSize = self.view.frame.size;
-    self.hideKeyBoardView.hidden = YES;
+    //self.hideKeyBoardView.hidden = YES;
 }
 - (void)hideKeyBoardAciton{
     [self tpeToDismissAction];
@@ -168,7 +168,7 @@
 - (void)dealloc {
     //[_announceScrollView release];
     [_baseView release];
-    [_hideKeyBoardView release];
+    //[_hideKeyBoardView release];
     [_textTitle release];
     [_announceContent release];
     [super dealloc];

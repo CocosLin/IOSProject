@@ -22,7 +22,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        self.title = @"打卡位置";
     }
     return self;
 }
@@ -43,6 +43,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    UIAlertView *aler = [[UIAlertView alloc]initWithTitle:@"说明" message:@"红色的是公司目前的打卡地点。点击地图的任意位置,出现绿色大头针的地方,将是新的打卡坐标。多个绿色大头针情况下,以最后一个的大头针为新的打卡点！" delegate:nil cancelButtonTitle:@"明白" otherButtonTitles:nil, nil];
+    [aler show];
+    [aler release];
+    
+    
+    
+    
 	UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(0, 0, 50, 44);
     [btn setBackgroundImage:[UIImage imageNamed:@"btnBackFromNavigationBar_On"] forState:UIControlStateNormal];
@@ -67,23 +74,20 @@
     UIBarButtonItem *rbarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:rbtn];
     self.navigationItem.rightBarButtonItem = rbarButtonItem;
     [rbarButtonItem release];
-    //    - (void)mapView:(BMKMapView *)mapView onClickedMapBlank:(CLLocationCoordinate2D)coordinate;
     self.mapVeiw = [[BMKMapView alloc]initWithFrame:CGRectMake(0,45, Screen_Width, Screen_Height)];
     
     self.mapVeiw.delegate = self;
-    //self.mapVeiw.showsUserLocation = YES;
-    //CLLocationCoordinate2D cllocation = CLLocationCoordinate2DMake(24.797424, 118.579995);
     GetGitomSingal;
     CLLocationCoordinate2D cllocation = CLLocationCoordinate2DMake(singal.latitude, singal.longitude);
     NSLog(@"mapVeiw.userLocation == %f  %f ",cllocation.latitude,cllocation.longitude);
-    //[self.mapVeiw setCenterCoordinate:cllocation animated:YES];
     self.mapVeiw.centerCoordinate = cllocation;
     self.mapVeiw.zoomLevel = 19.0;
     self.view = self.mapVeiw;
-//    BMKCoordinateSpan span = BMKCoordinateSpanMake(10, 10);
-//    BMKCoordinateRegion region = BMKCoordinateRegionMake(cllocation, span);
-//    [self.mapVeiw setRegion:region];
-    //[self.mapVeiw release];
+
+    UILabel *buttomLb = [[UILabel alloc]initWithFrame:CGRectMake(0, Screen_Height-105, Screen_Width, 40)];
+    buttomLb.text = @"红色的点是原本打卡坐标,绿色的是新的打卡坐标";
+    [self.view addSubview:buttomLb];
+    
 }
 
 

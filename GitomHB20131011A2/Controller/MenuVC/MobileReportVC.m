@@ -87,7 +87,7 @@ typedef NS_ENUM(NSInteger, TagFlag)
     [_tvbMenuReport.layer setBorderColor:[[UIColor grayColor] CGColor]];
     [_tvbMenuReport.layer setBorderWidth:0.3];
     [_tvbMenuReport.layer setCornerRadius:7];
-    [_tvbMenuReport setScrollEnabled:YES];
+    [_tvbMenuReport setScrollEnabled:NO];
     [_tvbMenuReport setDataSource:self];
     [_tvbMenuReport setDelegate:self];
 }
@@ -160,31 +160,14 @@ typedef NS_ENUM(NSInteger, TagFlag)
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.row == 0 || indexPath.row == 1) {
         //打卡
-        
-        
-      //  GetCommonDataModel;
-       // HBServerKit *hbKit = [[HBServerKit alloc]init];
-       // [hbKit getAttendanceConfigWithOrganizationId:comData.organization.organizationId orgunitId:comData.organization.orgunitId GotDicReports:^(NSDictionary *dicAttenConfig) {
-            AttendanceVC * avc = [[AttendanceVC alloc]init];
-//            if (indexPath.row == 0) {
-//                avc.isAttenWork = YES;
-//            }else if (indexPath.row == 1) {
-//                avc.isAttenWork = NO;
-//            }
-//            NSLog(@"打卡距离 == %@",[[dicAttenConfig objectForKey:@"attenConfig"]objectForKey:@"distance"]);
-//            NSString *distanceStr = [[dicAttenConfig objectForKey:@"attenConfig"]objectForKey:@"distance"];
-//            //avc.rangeAtten2Org = [distanceStr longLongValue];
-//            avc.rangeAtten2Org = [distanceStr longLongValue];
-//            avc.companyLongitude = [[[dicAttenConfig objectForKey:@"attenConfig"]objectForKey:@"longitude"] floatValue];
-//            avc.companyLatitude = [[[dicAttenConfig objectForKey:@"attenConfig"]objectForKey:@"latitude"] floatValue];
-//            NSLog(@"公司 经纬：%f，%f  要求打卡距离：%lld",avc.companyLongitude,avc.companyLatitude,[distanceStr longLongValue]);
-//            
-            [self.navigationController pushViewController:avc animated:YES];
-            [avc release];
-            //[hbKit release];
-       // }];
-        
-       
+        AttendanceVC * avc = [[AttendanceVC alloc]init];
+        if (indexPath.row == 0) {
+                avc.isAttenWork = YES;
+        }else if (indexPath.row == 1) {
+                avc.isAttenWork = NO;
+        }
+        [self.navigationController pushViewController:avc animated:YES];
+        [avc release];
     }else
     {
         //汇报

@@ -77,7 +77,7 @@
     }
     if (indexPath.section==2)
     {
-        NSString *str = @"移动汇报标准版提供公告、移动考勤、日常汇报、出差汇报、外出汇报、汇报点评、汇报记录、记录导出、员工管理等功能，移动汇报支持文字、图片、语音等多形式汇报方式，操作简洁方便，可谓是有图有真相，是移动互联网时代一款不可多得的企业管理助手。";
+        NSString *str = @"移动汇报标准版提供公告、移动考勤、日常汇报、出差汇报、外出汇报、汇报点评、汇报记录、员工管理等功能，移动汇报支持文字、图片、语音等多形式汇报方式，操作简洁方便，可谓是有图有真相，是移动互联网时代一款不可多得的企业管理助手。";
         CGSize labelSize = [str sizeWithFont:[UIFont boldSystemFontOfSize:15.0f]
                            constrainedToSize:CGSizeMake(300,130)
                                lineBreakMode:NSLineBreakByWordWrapping];

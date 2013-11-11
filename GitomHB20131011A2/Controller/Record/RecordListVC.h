@@ -14,8 +14,12 @@
 
 
 #import "VcWithNavBar.h"
+#import "EGORefreshTableFooterView.h"
 
-@interface RecordListVC : VcWithNavBar<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate>
+@interface RecordListVC : VcWithNavBar<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate,EGORefreshTableFooterDelegate>{
+    EGORefreshTableFooterView *refreshView;
+    BOOL reloading;
+}
 
 @property(assign,nonatomic)long long int dtBegin;
 @property(assign,nonatomic)long long int dtEnd;
@@ -26,6 +30,7 @@
 
 @property(nonatomic,assign)NSInteger typeRecord;
 @property(nonatomic,assign)NSArray * arrData;
+
 
 -(id)initWithRecordType:(NSInteger)typeRecord
                Username:(NSString *)username

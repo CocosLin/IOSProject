@@ -15,6 +15,9 @@
     [_organizationId release];
     [_organizationName release];
     [_orgunitId release];
+    [_orgunitIdArray release];
+    [_orgunitNameArray release];
+    [_orgunitPropsArray release];
     [super dealloc];
 }
 @end

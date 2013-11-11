@@ -38,7 +38,7 @@
     {
         self.organizationId = [[dicFromJson objectForKey:@"organizationId"] integerValue];
         self.orgunitId = [[dicFromJson objectForKey:@"orgunitId"] integerValue];
-        self.reportId = [[dicFromJson objectForKey:@"reportId"] longLongValue];
+        self.reportId = [dicFromJson objectForKey:@"reportId"];
         self.note = [dicFromJson objectForKey:@"note"];
         self.longitude = [[dicFromJson objectForKey:@"longitude"] doubleValue];
         self.latitude = [[dicFromJson objectForKey:@"latitude"] doubleValue];

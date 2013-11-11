@@ -13,6 +13,8 @@
 #import "WTool.h"
 #import "OrganizationsModel.h"
 
+
+
 //typedef NS_ENUM(NSInteger, ETypeReport)
 //{
 //    ETypeReport
@@ -180,7 +182,7 @@
              {
                  WError * error = [[WError alloc]initWithWErrorType:WErrorType_Logic wErrorDescription:body.warning];
                  Mark_Custom;
-                 NSLog(@"%@",error.wErrorDescription);
+                 NSLog(@"login error == %@",error.wErrorDescription);
                  callback(nil,error);
                  [error release];
              }
@@ -188,7 +190,7 @@
          {
              WError * error = [[WError alloc]initWithWErrorType:WErrorType_NetworkRequests];
              Mark_Custom;
-             NSLog(@"%@",error.wErrorCode);
+             NSLog(@"request error == %@",error.wErrorCode);
              callback(nil,error);
              [error release];
          }
@@ -366,7 +368,7 @@
     NSString *urlString = [[[NSString alloc]init]autorelease];
     
     if (yesOrNo == YES) {
-        urlString = [NSString stringWithFormat:@"http://hb.m.gitom.com/3.0/attendance/orgunitAttendance?organizationId=%@&orgunitId=%@&beginDate=%lld&endDate=%lld&first=0&max=150&cookie=%@",[NSNumber numberWithInteger:organizationId],[NSNumber numberWithInteger:orgunitId],beginDateLli,endDateLli,_cookie];
+        urlString = [NSString stringWithFormat:@"http://hb.m.gitom.com/3.0/attendance/orgunitAttendance?organizationId=%@&orgunitId=%@&beginDate=%lld&endDate=%lld&first=%d&max=%d&cookie=%@",[NSNumber numberWithInteger:organizationId],[NSNumber numberWithInteger:orgunitId],beginDateLli,endDateLli,firstReportRecord,maxCountReportRecord,_cookie];
         NSLog(@"HBServerKit 部门打卡 urlString == %@",urlString);
     }else{
         urlString = [NSString stringWithFormat:@"http://hb.m.gitom.com/3.0/attendance/userAttendance?organizationId=%@&orgunitId=%@&username=%@&beginDate=%lld&endDate=%lld&first=0&max=150&cookie=%@&reportType=REPORT_TYPE_GO_OUT",[NSNumber numberWithInteger:organizationId],[NSNumber numberWithInteger:orgunitId],[NSNumber numberWithInteger: userName],beginDateLli,endDateLli,_cookie];
@@ -374,7 +376,9 @@
     }
 
     NSURL *url = [NSURL URLWithString:urlString];
+    [ASIHTTPRequest setDefaultCache:[ASIDownloadCache sharedCache]];
     ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:url];
+
     [req setCompletionBlock:^{
         NSData *dataResponse = [req responseData];
         NSLog(@"部门汇报(整个部门打卡) == %@",[req responseString]);
@@ -399,12 +403,6 @@
             [error release];
         }
     }];
-    //获取全局变量
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    //设置缓存方式
-    [req setDownloadCache:appDelegate.myCache];
-    //设置缓存数据存储策略，这里采取的是如果无更新或无法联网就读取缓存数据
-    [req setCacheStoragePolicy:ASICachePermanentlyCacheStoragePolicy];
     [req startAsynchronous];
 }
 
@@ -421,17 +419,15 @@
                                    FirstReportRecord:(NSInteger)firstReportRecord
                                      MaxReportRecord:(NSInteger)maxCountReportRecord
                                        GotArrReports:(WbReportJsonArr)callback{
-    NSString *urlString = [NSString stringWithFormat:@"http://hb.m.gitom.com/3.0/report/findOrgunitReports?organizationId=%@&orgunitId=%@&beginDate=%lld&endDate=%lld&first=0&max=150&cookie=%@&&reportType=%@",[NSNumber numberWithInteger:organizationId],[NSNumber numberWithInteger:orgunitId],beginDateLli,endDateLli,_cookie,reportType];
+    NSString *urlString = [NSString stringWithFormat:@"http://hb.m.gitom.com/3.0/report/findOrgunitReports?organizationId=%@&orgunitId=%@&beginDate=%lld&endDate=%lld&first=%d&max=%d&cookie=%@&&reportType=%@",[NSNumber numberWithInteger:organizationId],[NSNumber numberWithInteger:orgunitId],beginDateLli,endDateLli,firstReportRecord,maxCountReportRecord,_cookie,reportType];
     NSLog(@"HBServerKit urlString == %@",urlString);
     
     NSURL *url = [NSURL URLWithString:urlString];
+     [ASIHTTPRequest setDefaultCache:[ASIDownloadCache sharedCache]];
     ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:url];
-    //获取全局变量
-    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
-    //设置缓存方式
-    [req setDownloadCache:appDelegate.myCache];
-    //设置缓存数据存储策略，这里采取的是如果无更新或无法联网就读取缓存数据
-    [req setCacheStoragePolicy:ASICachePermanentlyCacheStoragePolicy];
+    
+    
+    
     [req setCompletionBlock:^{
         NSData *dataResponse = [req responseData];
         NSLog(@"部门汇报(整个部门) == %@",[req responseString]);
@@ -456,6 +452,12 @@
             [error release];
         }
     }];
+//    //获取全局变量
+//    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+//    //设置缓存方式
+//    [req setDownloadCache:appDelegate.myCache];
+//    //设置缓存数据存储策略，这里采取的是如果无更新或无法联网就读取缓存数据
+//    [req setCacheStoragePolicy:ASICachePermanentlyCacheStoragePolicy];
     [req startAsynchronous];
 }
 
@@ -641,7 +643,7 @@
                        GotArrReports:(WbReportJsonArr)callback
 {
     NSLog(@"HBSserverKit 汇报相关== organizationId:%ld | orgunitId:%ld | username:%@ | typeReport:%@  |  beginDateLli:%lld  | endDateLli:%lld  |  firstReportRecord:%ld  | maxCountReportRecord:%ld  ",(long)organizationId,(long)orgunitId,username,typeReport,beginDateLli,endDateLli,(long)firstReportRecord,(long)maxCountReportRecord);
-    NSString * strPortReport = [NSString stringWithFormat:@"%@/report/findReports",self.strBaseUrl];
+    NSString * strPortReport = @"http://hb.m.gitom.com/3.0/report/findReports";//[NSString stringWithFormat:@"%@/report/findReports",self.strBaseUrl];
     NSLog(@"HBSserverKit == 获取汇报记录数据 %@",strPortReport);
     NSMutableDictionary * dicParams = [NSMutableDictionary dictionaryWithCapacity:6];
     [dicParams setObject:[NSNumber numberWithInteger:organizationId] forKey:ORGANIZATION_ID];
@@ -657,7 +659,7 @@
     WDataService * wds = [WDataService sharedWDataService];
     WDataParse *wdp = [WDataParse sharedWDataParse];
     //使用字典向http://59.57.15.168:6363/report/saveReport存储数据
-    [wds wPostRequestWithIsAsynchronous:YES
+    [wds wPostRequestWithIsAsynchronous:NO
                                     Url:[NSURL URLWithString:strPortReport]
                            DicPostDatas:dicParams
                               GetResult:^(NSData *dataResponse, NSError *errorRequest)
@@ -1240,29 +1242,34 @@
                     
                     NSMutableArray *orgNameArray = [[NSMutableArray alloc]init];
                     NSMutableArray *orgIdArray = [[NSMutableArray alloc]init];
+                    NSMutableArray *orgPropsArray = [[NSMutableArray alloc]init];
                     NSArray *listArray = [[NSArray alloc]init];
                     listArray = [[getArr objectAtIndex:i]objectForKey:@"orgunitList"];
                     NSLog(@"orgunitList arrName == %@",listArray);
                     NSLog(@"orgunitList array == %d",listArray.count);
-                    for (int j=0; j<listArray.count; j++) {
-                        NSLog(@"j==%d",j);
-                        [orgNameArray addObject:[[listArray objectAtIndex:j]objectForKey:@"name"]];
-                        [orgIdArray addObject:[[listArray objectAtIndex:j]objectForKey:@"orgunitId"]];
-                        
-                        NSLog(@"listArrName == %@ %@",[[listArray objectAtIndex:j]objectForKey:@"name"],[[listArray objectAtIndex:j]objectForKey:@"orgunitId"]);
+                    if (listArray.count) {
+                        for (int j=0; j<listArray.count; j++) {
+                            NSLog(@"j==%d",j);
+                            [orgNameArray addObject:[[listArray objectAtIndex:j]objectForKey:@"name"]];
+                            [orgIdArray addObject:[[listArray objectAtIndex:j]objectForKey:@"orgunitId"]];
+                            [orgPropsArray addObject:[[listArray objectAtIndex:j]objectForKey:@"orgunitProps"]];
+                        }
                     }
-                    
-                    orgModel.orgunitName = [[[[getArr objectAtIndex:i]objectForKey:@"orgunitList"]objectAtIndex:0]objectForKey:@"name"];
-                    orgModel.orgunitId = [[[[getArr objectAtIndex:i]objectForKey:@"orgunitList"]objectAtIndex:0]objectForKey:@"orgunitId"];
+
                     orgModel.orgunitIdArray = orgIdArray;
                     orgModel.orgunitNameArray = orgNameArray;
-                    NSLog(@"orgIDARRAY == %@ . %@",orgIdArray,orgNameArray);
-                    
+                    orgModel.orgunitPropsArray = orgPropsArray;
+                    NSLog(@"HBServerKit orgIDARRAY == %@ . %@",orgIdArray,orgNameArray);
+                    NSLog(@"HBServerKit orgPropsArray == %@",orgPropsArray);
                     [companyArr addObject:orgModel];
                     [orgModel release];
                     [orgIdArray release];
                     [orgNameArray release];
+                    [orgPropsArray release];
                 }
+                OrganizationsModel *orgMod = [[OrganizationsModel alloc]init];
+                orgMod = [companyArr objectAtIndex:9];
+                NSLog(@"HBServerKit orgPropsArray ALL ARR == %@  index9 = %@",companyArr,orgMod.orgunitPropsArray);
                 callBack(companyArr);
             }else{
                 callBack(nil);
@@ -1281,7 +1288,70 @@
     [req startAsynchronous];
 }
 
+#pragma mark -- 添加点评http://hb.m.gitom.com/3.0/report/saveReportComment?organizationId=114&orgunitId=1&reportId=1383292928438&content=123&score=10&createUser=90261&username=90261&cookie=5533098A-43F1-4AFC-8641-E64875461345&temp=13838947994114
 
+- (void) addCommentWithOrganizationId:(NSInteger)organizationId
+                            OrgunitId:(NSInteger)orgunitId
+                             ReportId:(NSString *)reportId
+                              Content:(NSString *)content
+                                Score:(NSString *)score
+                           CreateUser:(NSString *)createUser
+                             Username:(NSString *)username{
+    int temp = arc4random()%1000;
+    NSString *urlStr = [NSString stringWithFormat:@"%@/report/saveReportComment?organizationId=%d&orgunitId=%d&reportId=%@&content=%@&score=%@&createUser=%@&username=%@&cookie=%@&temp=%d",self.strBaseUrl,organizationId,orgunitId,reportId,content,score,createUser,username,_cookie,temp];
+    NSLog(@"HBServerKit comment == %@",urlStr);
+    NSURL *url = [NSURL URLWithString:urlStr];
+    ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:url];
+    [req setCompletionBlock:^{
+        [SVProgressHUD showSuccessWithStatus:@"评论成功"];
+    }];
+    [req setFailedBlock:^{
+        [SVProgressHUD showErrorWithStatus:@"已有人做过评价"];
+    }];
+    [req startAsynchronous];
+}
+
+#pragma mark -- 查询点评
+- (void) findCommentWithOrganizationId:(NSInteger)organizationId
+                             OrgunitId:(NSInteger)orgunitId
+                              ReportId:(NSString *)reportId
+                             andGetCommentMod:(void(^)(CommentModle *commentMod))callBack{
+    __block CommentModle *commentModel = [[CommentModle alloc]init];
+    NSString *urlStr = [NSString stringWithFormat:@"%@/report/findReportComments?organizationId=%d&orgunitId=%d&reportId=%@&first=0&max=1&cookie=%@",self.strBaseUrl,organizationId,orgunitId,reportId,_cookie];
+    NSLog(@"HBServerKit comment == %@",urlStr);
+    NSURL *url = [NSURL URLWithString:urlStr];
+    ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:url];
+    [req setCompletionBlock:^{
+        WDataParse *wdp = [WDataParse sharedWDataParse];
+        NSLog(@"查询点评 responseString == %@",[req responseString]);
+        [self getIsServerNoErrorWithHead:[self getHeadWithDataResponse:[req responseData]]];//检查服务器是否没有异常，如果有，就打印
+        Body * body = [self getBodyWithDataResponse:[req responseData]];
+        if (body.success)
+        {
+            NSArray *getArr = [wdp wGetArrJsonWithStringJson:body.data];
+            if (getArr.count) {
+                for (int i=0; i<getArr.count; i++) {
+                    commentModel.createDate = [[getArr objectAtIndex:i]objectForKey:@"createDate"];
+                    commentModel.createUserId = [[getArr objectAtIndex:i]objectForKey:@"createUserId"];
+                    commentModel.level = [[getArr objectAtIndex:i]objectForKey:@"level"];
+                    commentModel.note = [[getArr objectAtIndex:i]objectForKey:@"note"];
+                    commentModel.realname = [[getArr objectAtIndex:i]objectForKey:@"realname"];                    
+                }
+                callBack(commentModel);
+            }else{
+                callBack(nil);
+            }
+            
+        }else
+        {
+            WError * error = [[WError alloc]initWithWErrorType:WErrorType_Logic wErrorDescription:body.warning];
+            NSLog(@"%@",error.wErrorDescription);
+            [error release];
+        }
+    }];
+    [req startAsynchronous];
+    //[commentModel release];
+}
 
 #pragma mark - ServerBaseModel
 //得到data对应的字符串

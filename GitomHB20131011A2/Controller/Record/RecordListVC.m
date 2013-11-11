@@ -142,15 +142,14 @@
              self.dtBegin = self.dtEnd - ((long long int)(componets.day -1)*24*60*60*1000);
              break;
         }
-        case 3://自定义
-        {
-//            UIDatePicker * dp = [[UIDatePicker alloc]initWithFrame:CGRectMake(0, 0, 320, 400)];
-//            [alertView addSubview:dp];
-            NSLog(@"RecordListVC 自定义时间还未定");
-            return;
-            break;
-        }
-        case 4://取消
+//        case 3://年度
+//        {
+//            self.dtEnd = [WTool getEndDateTimeMsWithNSDate:[NSDate date]];
+//            self.dtBegin = self.dtEnd - ((long long int)(componets.month)*30*24*60*60*1000);
+//            return;
+//            break;
+//        }
+        case 3://取消
         {
             return;
             break;
@@ -161,14 +160,27 @@
     _lblRecordPromptTimeInfo.text = [NSString stringWithFormat:@"从%@至%@",_strTimeInfoStart,_strTimeInfoEnd];
     
     GetCommonDataModel;
-    if (!self.typeRecord)
+    if (!self.typeRecord)//打卡记录
     {
-        //考勤记录
         [SVProgressHUD showWithStatus:@"加载…"];
         HBServerKit *hbKit = [[HBServerKit alloc]init];
-        [hbKit findAttendanceReportsOfMembersWithOrganizationId:comData.organization.organizationId orgunitId:comData.organization.orgunitId orgunitAttendance:NO userName:[comData.userModel.username intValue] BeginDateLli:self.dtBegin EndDateLli:self.dtEnd FirstReportRecord:0 MaxReportRecord:150 GotArrReports:^(NSArray *arrDicReports, WError *myError) {
-            self.arrData = arrDicReports;
-            [SVProgressHUD showSuccessWithStatus:@"完成"];
+        [hbKit findAttendanceReportsOfMembersWithOrganizationId:comData.organization.organizationId
+                                                      orgunitId:comData.organization.orgunitId
+                                              orgunitAttendance:NO
+                                                       userName:[comData.userModel.username intValue]
+                                                   BeginDateLli:self.dtBegin
+                                                     EndDateLli:self.dtEnd
+                                              FirstReportRecord:0
+                                                MaxReportRecord:10
+                                                  GotArrReports:^(NSArray *arrDicReports, WError *myError) {
+            if (arrDicReports.count) {
+                self.arrData = arrDicReports;
+                [SVProgressHUD showSuccessWithStatus:@"完成"];
+            }else{
+                self.arrData = nil;
+                [SVProgressHUD showErrorWithStatus:@"无数据"];
+            }
+            
         }];
         [hbKit release];
     }else//汇报记录
@@ -184,11 +196,17 @@
                              BeginDateLli:self.dtBegin
                                EndDateLli:self.dtEnd
                         FirstReportRecord:0
-                          MaxReportRecord:50
+                          MaxReportRecord:10
                             GotArrReports:^(NSArray *arrReports, BOOL isOk)
          {
-             self.arrData = arrReports;
-             NSLog(@"RecordListVC tableView 重新获得数据内容是 == %@",self.arrData);
+             if (arrReports.count) {
+                 self.arrData = arrReports;
+                 [SVProgressHUD showSuccessWithStatus:@"完成"];
+             }else{
+                 self.arrData = nil;
+                 [SVProgressHUD showErrorWithStatus:@"无数据"];
+             }
+             
          }];
     }
 
@@ -201,7 +219,7 @@
                                                     message:@"请选择相应的时间"
                                                    delegate:self
                                           cancelButtonTitle:nil
-                                          otherButtonTitles:@"今天",@"这周内",@"这个月内",@"自定义",@"取消", nil];
+                                          otherButtonTitles:@"今天",@"这周内",@"这个月内",@"取消", nil];
     [alert show];
     [alert release];
 }
@@ -219,7 +237,6 @@
     NSString * strDate = [WTool getStrDateTimeWithDateTimeMS:dtEnd DateTimeStyle:@"yyyy-MM-dd"];
     NSString * strWeekday = [WTool getStrWeekdayWithNSdate:[NSDate dateWithTimeIntervalSince1970:dtEnd/1000]];
     _strTimeInfoEnd = [NSString stringWithFormat:@"%@(%@)",strDate,strWeekday];
-//    _lblRecordPromptTimeInfo.text = [NSString stringWithFormat:@"从%@至%@",_strTimeInfoStart,_strTimeInfoEnd];
 }
 -(void)setTypeRecord:(NSInteger)typeRecord
 {
@@ -257,12 +274,19 @@
 }
 -(void)initRecordInfoTableView
 {
-    _tvbRecordInfo = [[UITableView alloc] initWithFrame:CGRectMake(0, 41, Width_Screen, Height_Screen-41)];
+    _tvbRecordInfo = [[UITableView alloc] initWithFrame:CGRectMake(0, 41, Width_Screen, Height_Screen-102)];
     [_tvbRecordInfo setSeparatorStyle:UITableViewCellSeparatorStyleNone];
     [self.view addSubview:_tvbRecordInfo];
     [_tvbRecordInfo setBackgroundColor:[UIColor whiteColor]];
     [_tvbRecordInfo setDelegate:self];
     [_tvbRecordInfo setDataSource:self];
+    
+    //上拉刷新的控件添加在tableView上
+    refreshView = [[EGORefreshTableFooterView alloc]  initWithFrame:CGRectZero];
+    refreshView.delegate = self;
+    [_tvbRecordInfo addSubview:refreshView];
+    reloading = NO;
+    
 }
 #pragma mark - 生命周期
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -306,36 +330,44 @@
     NSDateComponents * componets = [WTool getDateComponentsWithDate:[NSDate date]];
     if (!self.typeRecord)
     {
+        NSLog(@"考勤记录");
         //考勤记录
-        [self setDtBegin:[WTool getBeginDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.day -1)*24*60*60*1000)];
+        [self setDtBegin:[WTool getBeginDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000)];
         [self setDtEnd:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]];
         _lblRecordPromptTimeInfo.text = [NSString stringWithFormat:@"从%@至%@",_strTimeInfoStart,_strTimeInfoEnd];
         HBServerKit *hbKit = [[HBServerKit alloc]init];
-        [hbKit findAttendanceReportsOfMembersWithOrganizationId:comData.organization.organizationId orgunitId:comData.organization.orgunitId orgunitAttendance:NO userName:[comData.userModel.username intValue] BeginDateLli:[WTool getBeginDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.day -1)*24*60*60*1000) EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]] FirstReportRecord:0 MaxReportRecord:150 GotArrReports:^(NSArray *arrDicReports, WError *myError) {
+        [hbKit findAttendanceReportsOfMembersWithOrganizationId:comData.organization.organizationId
+                                                      orgunitId:comData.organization.orgunitId
+                                              orgunitAttendance:NO
+                                                       userName:[comData.userModel.username intValue]
+                                                   BeginDateLli:[WTool getBeginDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.day -1)*30*24*60*60*1000)
+                                                     EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]
+                                              FirstReportRecord:0
+                                                MaxReportRecord:10
+                                                  GotArrReports:^(NSArray *arrDicReports, WError *myError) {
             self.arrData = arrDicReports;
         }];
         [hbKit release];
     }else//汇报记录
     {
+        NSLog(@"汇报记录");
         NSString * strReportType = TypeReport_Work;
         if (self.typeRecord == 2)
             strReportType = TypeReport_GoOut;
         else if(self.typeRecord == 3)
             strReportType = TypeReport_Travel;
         ReportManager * rm = [ReportManager sharedReportManager];
-        
-        
-        [self setDtBegin:[WTool getBeginDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.day -1)*24*60*60*1000)];
+        [self setDtBegin:[WTool getBeginDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000)];
         [self setDtEnd:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]];
         _lblRecordPromptTimeInfo.text = [NSString stringWithFormat:@"从%@至%@",_strTimeInfoStart,_strTimeInfoEnd];
         [rm findReportsWithOrganizationId:comData.organization.organizationId
                                 OrgunitId:comData.organization.orgunitId
                                  Username:comData.userModel.username
                                ReportType:strReportType
-                             BeginDateLli:[WTool getBeginDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.day -1)*24*60*60*1000)
+                             BeginDateLli:[WTool getBeginDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.day -1)*30*24*60*60*1000)
                                EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]
                         FirstReportRecord:0
-                          MaxReportRecord:50
+                          MaxReportRecord:10
                             GotArrReports:^(NSArray *arrReports, BOOL isOk)
          {
              self.arrData = arrReports;
@@ -359,8 +391,123 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
+
+#pragma mark - 上拉刷新相关
+-(void)viewDidAppear:(BOOL)animated
+{
+    //frame应在表格加载完数据源之后再设置
+    [self setRefreshViewFrame];
+    [super viewDidAppear:animated];
+}
+//请求数据
+-(void)reloadData
+{
+    reloading = YES;
+    //新建一个线程来加载数据
+    [NSThread detachNewThreadSelector:@selector(requestData)
+                             toTarget:self
+                           withObject:nil];
+}
+static int addDataInt=0;
+-(void)requestData
+{   NSLog(@"上拉刷新 addDataInt == %d",addDataInt);
+    addDataInt=addDataInt +10;
+    GetCommonDataModel;
+    if (!self.typeRecord)
+    {
+        //考勤记录
+        HBServerKit *hbKit = [[HBServerKit alloc]init];
+        [hbKit findAttendanceReportsOfMembersWithOrganizationId:comData.organization.organizationId
+                                                      orgunitId:comData.organization.orgunitId
+                                              orgunitAttendance:NO
+                                                       userName:[comData.userModel.username intValue]
+                                                   BeginDateLli:self.dtBegin
+                                                     EndDateLli:self.dtEnd
+                                              FirstReportRecord:0
+                                                MaxReportRecord:10+addDataInt
+                                                  GotArrReports:^(NSArray *arrDicReports, WError *myError) {
+            self.arrData = arrDicReports;
+        }];
+        [hbKit release];
+    }else//汇报记录
+    {
+        //查汇报记录
+        NSString * strReportType = [ReportManager getStrTypeReportWithIntReportType:self.typeRecord];
+        ReportManager * rm = [ReportManager sharedReportManager];
+        
+        [rm findReportsWithOrganizationId:comData.organization.organizationId
+                                OrgunitId:comData.organization.orgunitId
+                                 Username:comData.userModel.username
+                               ReportType:strReportType
+                             BeginDateLli:self.dtBegin
+                               EndDateLli:self.dtEnd
+                        FirstReportRecord:0
+                          MaxReportRecord:10+addDataInt
+                            GotArrReports:^(NSArray *arrReports, BOOL isOk)
+         {
+             self.arrData = arrReports;
+             NSLog(@"RecordListVC tableView 重新获得数据内容是 == %@",self.arrData);
+         }];
+    }
+
+    //[self.arrData addObjectsFromArray:arr];
+    sleep(3);
+    //在主线程中刷新UI
+    [self performSelectorOnMainThread:@selector(reloadUI)
+                           withObject:nil
+                        waitUntilDone:NO];
+}
+
+-(void)reloadUI
+{
+	reloading = NO;
+    
+    //停止下拉的动作,恢复表格的便宜
+	[refreshView egoRefreshScrollViewDataSourceDidFinishedLoading:_tvbRecordInfo];
+    //更新界面
+    [_tvbRecordInfo reloadData];
+    [self setRefreshViewFrame];
+}
+
+-(void)setRefreshViewFrame
+{
+    //如果contentsize的高度比表的高度小，那么就需要把刷新视图放在表的bounds的下面
+    int height = MAX(_tvbRecordInfo.bounds.size.height, _tvbRecordInfo.contentSize.height);
+    refreshView.frame =CGRectMake(0.0f, height, self.view.frame.size.width, _tvbRecordInfo.bounds.size.height);
+}
+#pragma mark - EGORefreshTableFooterDelegate
+//出发下拉刷新动作，开始拉取数据
+- (void)egoRefreshTableFooterDidTriggerRefresh:(EGORefreshTableFooterView*)view
+{
+    [self reloadData];
+}
+//返回当前刷新状态：是否在刷新
+- (BOOL)egoRefreshTableFooterDataSourceIsLoading:(EGORefreshTableFooterView*)view
+{
+    return reloading;
+}
+//返回刷新时间
+-(NSDate *)egoRefreshTableFooterDataSourceLastUpdated:(EGORefreshTableFooterView *)view
+{
+    return [NSDate date];
+}
+
+#pragma mark - UIScrollView
+
+//此代理在scrollview滚动时就会调用
+//在下拉一段距离到提示松开和松开后提示都应该有变化，变化可以在这里实现
+-(void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    [refreshView egoRefreshScrollViewDidScroll:scrollView];
+}
+//松开后判断表格是否在刷新，若在刷新则表格位置偏移，且状态说明文字变化为loading...
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    [refreshView egoRefreshScrollViewDidEndDragging:scrollView];
+}
+
+
 - (void)dealloc
 {
     [_tvbRecordInfo reloadData];

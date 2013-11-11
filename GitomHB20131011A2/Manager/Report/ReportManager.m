@@ -82,7 +82,7 @@ SINGLETON_FOR_CLASS_Implementation(ReportManager)
                        GotArrReports:(WbArrReports)callback
 {
     NSLog(@"ReportManager == 开始获得汇报记录");
-    [SVProgressHUD showWithStatus:@"正在获取汇报记录..." maskType:4];
+    //[SVProgressHUD showWithStatus:@"正在获取汇报记录..." maskType:4];
 //    NSLog(@"dtBeginNow : %@",[WTool getStrDateTimeWithDateTimeMS:beginDateLli DateTimeStyle:@"yyyy-MM-dd HH:mm:ss"]);
 //    NSLog(@"dtEndNow : %@",[WTool getStrDateTimeWithDateTimeMS:endDateLli DateTimeStyle:@"yyyy-MM-dd HH:mm:ss"]);
     [_serverKit findReportsWithOrganizationId:organizationId
@@ -96,7 +96,7 @@ SINGLETON_FOR_CLASS_Implementation(ReportManager)
                                 GotArrReports:^(NSArray *arrDicReports, WError *myError)
      {
          if (arrDicReports.count) {
-             NSLog(@"ReportManager 数组循环次数 ==  %d",arrDicReports.count);
+             NSLog(@"ReportManager 数组循环次数 ==  %d \n %@",arrDicReports.count,arrDicReports);
              NSMutableArray * mArrReports = [NSMutableArray arrayWithCapacity:arrDicReports.count];
              for (NSDictionary * dicReports in arrDicReports)
              {
@@ -106,7 +106,7 @@ SINGLETON_FOR_CLASS_Implementation(ReportManager)
                  [reModel release];
              }
              callback(mArrReports,YES);
-             [SVProgressHUD dismissWithIsOk:YES String:@"获取汇报记录成功!"];
+             //[SVProgressHUD dismissWithIsOk:YES String:@"获取汇报记录成功!"];
          }else
          {
              [SVProgressHUD dismissWithIsOk:NO String:@"无汇报记录"];

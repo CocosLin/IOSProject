@@ -15,7 +15,8 @@
 //部门ID
 @property(assign,nonatomic)NSInteger orgunitId;
 //记录ID
-@property(nonatomic,assign)long long int reportId;
+@property(nonatomic,copy) NSString *reportId;
+//@property(nonatomic,assign)long long int reportId;
 
 @property(nonatomic,copy)NSString *note;//文字汇报内容
 @property(assign,nonatomic)CGFloat longitude;//汇报时坐标的经纬度

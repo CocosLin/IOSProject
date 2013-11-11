@@ -9,9 +9,22 @@
 #import "ApplyNotesVC.h"
 #import "HBServerKit.h"
 #import "GitomSingal.h"
+#import "SVProgressHUD.h"
 
 
-@interface ApplyNotesVC ()
+#define ALWAYS_ACCEPT @"ALWAYS_ACCEPT"
+#define NEED_VERIFY @"NEED_VERIFY"
+#define NEED_QUESTION @"NEED_QUESTION"
+#define ALWAYS_DECLINE @"ALWAYS_DECLINE"
+/*
+ ALWAYS_ACCEPT	("该部门允许任何人加入"),
+ NEED_VERIFY	("提交申请，等待批准"),
+ NEED_QUESTION	("回答问题，自动加入"),
+ ALWAYS_DECLINE	("该部门拒绝任何人加入");
+ */
+@interface ApplyNotesVC (){
+    UITableView *registerTableV;
+}
 
 @end
 
@@ -28,20 +41,48 @@
 
 #pragma mark - 申请加入公司
 - (void)applyAction{
+    HBServerKit *hbKit = [[HBServerKit alloc]init];
     GitomSingal *singal = [GitomSingal getInstance];
     UITextField *text1 = (UITextField*)[self.view viewWithTag:1001];
     UITextField *text2 = (UITextField*)[self.view viewWithTag:1002];
     UITextField *text3 = (UITextField*)[self.view viewWithTag:1003];
     NSString *noteStr = [NSString stringWithFormat:@"%@%@%@",text1.text,text2.text,text3.text];
-    HBServerKit *hbKit = [[HBServerKit alloc]init];
-    [hbKit applyJoinToCompanyWithOrganizationId:self.companyId andOrgunitId:self.orgId andNote:noteStr andUseName:singal.registerName andVerifyType:0];
+    if ([checkWay isEqual:NEED_QUESTION]) {
+        UITextField *text4 = (UITextField*)[self.view viewWithTag:1004];
+        if ([text4.text isEqual:[[self.orgPropsArray objectAtIndex:2]objectForKey:@"propValue"]]) {
+            UIAlertView *aler = [[UIAlertView alloc]initWithTitle:@"提示" message:@"答案错误，审核未通过" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles:nil, nil];
+            [aler show];
+            [aler release];
+        }else{
+            [hbKit applyJoinToCompanyWithOrganizationId:self.companyId andOrgunitId:self.orgId andNote:@"-" andUseName:singal.registerName andVerifyType:0];
+            [SVProgressHUD showSuccessWithStatus:@"成功加入"];
+        }
+    } else if ([checkWay isEqual:ALWAYS_ACCEPT]){
+        [hbKit applyJoinToCompanyWithOrganizationId:self.companyId andOrgunitId:self.orgId andNote:@"-" andUseName:singal.registerName andVerifyType:0];
+    }else if ([checkWay isEqual:ALWAYS_DECLINE]){
+        [SVProgressHUD showErrorWithStatus:@"拒绝任何人加入" duration:0.6];
+    }else{
+        [hbKit applyJoinToCompanyWithOrganizationId:self.companyId andOrgunitId:self.orgId andNote:noteStr andUseName:singal.registerName andVerifyType:0];
+        [SVProgressHUD showSuccessWithStatus:@"成功提交"];
+
+    }
     [hbKit release];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	
+    if (self.orgPropsArray.count>0) {
+        checkWay = [[self.orgPropsArray objectAtIndex:0]objectForKey:@"propValue"];
+        NSLog(@"propValue = %@",checkWay);
+        if (self.orgPropsArray.count>1)checkWay = [[self.orgPropsArray objectAtIndex:1]objectForKey:@"propValue"];
+        NSLog(@"propValue == %@",checkWay);
+        if (self.orgPropsArray.count>2)NSLog(@"propValue = %@",[[self.orgPropsArray objectAtIndex:2]objectForKey:@"propValue"]);
+        
+    }
+    
+    
+    
 	UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(0, 0, 50, 44);
     [btn setBackgroundImage:[UIImage imageNamed:@"btn_title_back_default.png"] forState:UIControlStateNormal];
@@ -53,14 +94,14 @@
     [backItem release];
     
     UIButton *rightbtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [rightbtn setTitle:@"发布" forState:UIControlStateNormal];
+    [rightbtn setTitle:@"确定" forState:UIControlStateNormal];
     [rightbtn setTitleColor:[UIColor colorWithRed:103.0/255.0 green:154.0/255.0 blue:233.0/255.0 alpha:1] forState:UIControlStateNormal];
     rightbtn.frame = CGRectMake(0, 0, 50, 44);
     [rightbtn setBackgroundImage:[UIImage imageNamed:@"btn_title_text_default"] forState:UIControlStateNormal];
     // 高亮
-    [btn  setBackgroundImage:[UIImage imageNamed:@"btn_title_text_pressed"] forState:UIControlStateHighlighted];
-    [btn addTarget:self action:@selector(applyAction) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc]initWithCustomView:btn];
+    [rightbtn  setBackgroundImage:[UIImage imageNamed:@"btn_title_text_pressed"] forState:UIControlStateHighlighted];
+    [rightbtn addTarget:self action:@selector(applyAction) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc]initWithCustomView:rightbtn];
     self.navigationItem.rightBarButtonItem = barButtonItem;
     [barButtonItem release];
     
@@ -71,15 +112,22 @@
     
     [self creatInfomationsView];
     
-    UITableView *registerTableV = [[UITableView alloc]initWithFrame:CGRectMake(10, 85, Screen_Width-20, 130) style:UITableViewStylePlain];
+    registerTableV = [[UITableView alloc]initWithFrame:CGRectMake(10, 85, Screen_Width-20, 0) style:UITableViewStylePlain];
     [registerTableV setSeparatorStyle:UITableViewCellSeparatorStyleSingleLine];
     registerTableV.dataSource = self;
+    registerTableV.delegate = self;
     registerTableV.scrollEnabled = NO;
     registerTableV.layer.borderWidth = 0.7;
     registerTableV.layer.cornerRadius = 7;
     [self.view addSubview:registerTableV];
 
     
+}
+
+- (void) dealloc{
+    [registerTableV release];
+    registerTableV = nil;
+    [super dealloc];
 }
 
 - (void) creatInfomationsView{
@@ -95,7 +143,18 @@
     
     UILabel *method = [[UILabel alloc]initWithFrame:CGRectMake(10, 57.5, Screen_Width-20, 25)];
     method.backgroundColor = BlueColor;
-    method.text = [NSString stringWithFormat:@" 验证:%@",@"默认"];
+    if ([checkWay isEqual: ALWAYS_ACCEPT]) {
+        method.text = [NSString stringWithFormat:@" 验证:%@",@"总是允许"];
+    }else if ([checkWay isEqual:NEED_QUESTION]) {
+        method.text = [NSString stringWithFormat:@" 验证:%@",@"回答问题，自动加入"];
+    }else if ([checkWay isEqual:NEED_VERIFY]) {
+        method.text = [NSString stringWithFormat:@" 验证:%@",@"提交申请，等待批准"];
+    }else if ([checkWay isEqual:ALWAYS_DECLINE]) {
+        method.text = [NSString stringWithFormat:@" 验证:%@",@"不接受加入"];
+    }else{
+        method.text = [NSString stringWithFormat:@" 验证:%@",@"提交申请，等待批准"];
+    }
+    
     [self.view addSubview:method];
     
     [companyName release];
@@ -111,7 +170,26 @@
     return 1;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 3;
+    if ([checkWay isEqual: ALWAYS_ACCEPT]) {
+        NSLog(@"checkWay 2");
+        registerTableV.frame = CGRectMake(10, 85, Screen_Width-20, 80);
+        return 2;
+    }else if ([checkWay isEqual:NEED_QUESTION]) {
+        NSLog(@"checkWay 4");
+        registerTableV.frame = CGRectMake(10, 85, Screen_Width-20, 160);
+        return 4;
+    }else if ([checkWay isEqual:NEED_VERIFY]) {
+        NSLog(@"checkWay 3");
+        registerTableV.frame = CGRectMake(10, 85, Screen_Width-20, 120);
+        return 3;
+    }else if ([checkWay isEqual:ALWAYS_DECLINE]) {
+        NSLog(@"checkWay 0");
+        return 0;
+    }else{
+        NSLog(@"checkWay 3");
+        registerTableV.frame = CGRectMake(10, 85, Screen_Width-20, 120);
+        return 3;
+    }
 }
 
 
@@ -168,33 +246,55 @@
             UILabel * leftViewLb = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 40, 40)];
             [leftViewLb setBackgroundColor:[UIColor clearColor]];
             leftViewLb.textColor = [UIColor grayColor];
-            leftViewLb.text = @"申请";
-            
             UITextField * phoneNumber = [[UITextField alloc]initWithFrame:CGRectMake(10, 0, Screen_Width-20, 40)];
-            phoneNumber.secureTextEntry = YES;
             phoneNumber.tag = 1003;
             phoneNumber.delegate = self;
             phoneNumber.keyboardType = UIKeyboardTypeNumberPad;
-            //phoneNumber.borderStyle = UITextBorderStyleRoundedRect;
             phoneNumber.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
             phoneNumber.leftView = leftViewLb;
             phoneNumber.leftViewMode = UITextFieldViewModeAlways;
-            phoneNumber.placeholder = @"您申请的理由，如市场部“张三”";
+            if ([checkWay isEqual:NEED_QUESTION]) {
+                leftViewLb.text = @"问题";
+                phoneNumber.text = [[self.orgPropsArray objectAtIndex:2]objectForKey:@"propValue"];
+            }else{
+                leftViewLb.text = @"申请";
+                phoneNumber.placeholder = @"您申请的理由，如市场部“张三”";
+            }
+            [cell addSubview:phoneNumber];
+            [phoneNumber release];
+            [leftViewLb release];
+            return cell;
+        }case 3:{
+            UILabel * leftViewLb = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 40, 40)];
+            [leftViewLb setBackgroundColor:[UIColor clearColor]];
+            leftViewLb.textColor = [UIColor grayColor];
+            leftViewLb.text = @"答案";
+            UITextField * phoneNumber = [[UITextField alloc]initWithFrame:CGRectMake(10, 0, Screen_Width-20, 40)];
+            phoneNumber.placeholder = @"输入答案";
+            phoneNumber.secureTextEntry = YES;
+            phoneNumber.tag = 1004;
+            phoneNumber.delegate = self;
+            phoneNumber.keyboardType = UIKeyboardTypeNumberPad;
+            phoneNumber.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+            phoneNumber.leftView = leftViewLb;
+            phoneNumber.leftViewMode = UITextFieldViewModeAlways;
             [cell addSubview:phoneNumber];
             [phoneNumber release];
             [leftViewLb release];
             return cell;
         }
     }
-    return nil;
+    return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    if (indexPath.row == 2) {
-        return 80;
-    }
     return 40;
 }
+
+- (BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath{
+    return NO;
+}
+
 #pragma mark - UITextDelegate
 //#pragma mark -- UITextFiledDelegate
 //- (void)textViewDidBeginEditing:(UITextView *)textView
@@ -221,8 +321,8 @@
 //在用键盘输入内容时候，输入框上移
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
-    [UIView animateWithDuration:1 animations:^{
-        self.view.center = CGPointMake(self.view.center.x, self.view.center.y-90);
+    [UIView animateWithDuration:0.5 animations:^{
+        self.view.center = CGPointMake(self.view.center.x, self.view.center.y-35);
     }];
     return YES;
 }

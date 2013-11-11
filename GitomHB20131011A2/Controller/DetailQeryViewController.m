@@ -13,10 +13,13 @@
 #import "UserManager.h"
 #import "ASIHTTPRequest.h"
 #import "RecordAudio.h"
+#import "SVProgressHUD.h"
 
 #import "UIImageView+MJWebCache.h"
 #import "MJPhotoBrowser.h"
 #import "MJPhoto.h"
+#import "AddCommentVC.h"
+
 
 #define BIG_IMG_WIDTH  200.0
 #define BIG_IMG_HEIGHT 200.0
@@ -101,57 +104,12 @@
     [browser show];
 }
 
-
-/*
-- (void)showBigPicture{
-    NSLog(@"放大图片");
-    //创建灰色透明背景，使其背后内容不可操作
-    self.background = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 548)];
-    [self.background setBackgroundColor:[UIColor colorWithRed:0.3
-                                               green:0.3
-                                                blue:0.3
-                                               alpha:0.7]];
-    [_tvbRecordDetail addSubview:self.background];
-    //创建边框视图
-    UIView *borderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0,BIG_IMG_WIDTH+16, BIG_IMG_HEIGHT+16)];
-    borderView.tag = 1001;
-    //将图层的边框设置为圆脚
-    borderView.layer.cornerRadius = 8;
-    borderView.layer.masksToBounds = YES;
-    //给图层添加一个有色边框
-    borderView.layer.borderWidth = 8;
-    borderView.layer.borderColor = [[UIColor colorWithRed:0.9
-                                                    green:0.9
-                                                     blue:0.9
-                                                    alpha:0.7]CGColor];
-    [borderView setCenter:self.view.center];
-    [self.background addSubview:borderView];
-    [borderView release];
-    //创建关闭按钮
-    UIButton *closeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [closeBtn setImage:[UIImage imageNamed:@"remove.png"] forState:UIControlStateNormal];
-    [closeBtn addTarget:self action:@selector(suoxiao) forControlEvents:UIControlEventTouchUpInside];
-    NSLog(@"borderview is %@",borderView);
-    [closeBtn setFrame:CGRectMake(borderView.frame.origin.x+borderView.frame.size.width-20, borderView.frame.origin.y-6, 26, 27)];
-    [self.background addSubview:closeBtn];
-    //创建显示图像视图
-    UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(8, 8, BIG_IMG_WIDTH, BIG_IMG_HEIGHT)];
-    [imgView setImage:self.attenceImge];
-    [borderView addSubview:imgView];
-    [self shakeToShow:borderView];//放大过程中的动画
-    [imgView release];
-    
-    //动画效果
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    [UIView beginAnimations:nil context:context];
-    [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-    [UIView setAnimationDuration:2.6];//动画时间长度，单位秒，浮点数
-    [self.view exchangeSubviewAtIndex:0 withSubviewAtIndex:1];
-    [UIView setAnimationDelegate:self.background];
-    // 动画完毕后调用animationFinished
-    [UIView setAnimationDidStopSelector:@selector(animationFinished)];
-    [UIView commitAnimations];
-}*/
+#pragma mark - 点评
+- (void)saveReportComment{
+    AddCommentVC *vc = [[AddCommentVC alloc]init];
+    vc.reportMod = self.reportModel;
+    [self.navigationController pushViewController:vc animated:YES];
+}
 
 
 #pragma mark - 表格视图代理方法
@@ -218,7 +176,7 @@
         [label release];
     }else if(indexPath.row == 5)
     {
-        h = 75.0;
+        h = 45.0;
         UITextView * textView = [[UITextView alloc]initWithFrame:CGRectMake(60, 2, 245, h)];
         [myCell addSubview:textView];
         textView.textAlignment = NSTextAlignmentLeft;
@@ -273,6 +231,13 @@
                 imageView.clipsToBounds = YES;
                 imageView.contentMode = UIViewContentModeScaleAspectFill;
             }
+        }else{
+            UIButton *nilButton = [UIButton buttonWithType:UIButtonTypeCustom];
+            nilButton.frame = CGRectMake(60, 2, 45, 40);
+            nilButton.backgroundColor = [UIColor grayColor];
+            [nilButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            [nilButton setTitle:@"无" forState:UIControlStateNormal];
+            [myCell addSubview:nilButton];
         }
         [hbKit release];        
     }else if(indexPath.row ==7){
@@ -281,13 +246,14 @@
         self.soundStirng = [hbKit getSoundStringWith:self.reportModel.soundUrl];
         UIButton *soundButton = [UIButton buttonWithType:UIButtonTypeCustom];
         soundButton.frame = CGRectMake(60, 2, 45, 40);
-        if (self.soundStirng != nil) {
+        NSRange range = [self.soundStirng rangeOfString:@"null"];
+        if (self.soundStirng != nil && range.location == NSNotFound) {
             NSLog(@"声音文件存在");
             [soundButton addTarget:self action:@selector(showSound) forControlEvents:UIControlEventTouchUpInside];
             [soundButton setBackgroundImage:[UIImage imageNamed:@"111_19.png"] forState:UIControlStateNormal];
         }else{
             NSLog(@"sound nil");
-            [soundButton setBackgroundImage:[[UIImage imageNamed:@"list_08.png"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
+            soundButton.backgroundColor = [UIColor grayColor];
             [soundButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
             [soundButton setTitle:@"无" forState:UIControlStateNormal];
         }
@@ -317,9 +283,9 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 5) {
-        return 80.0;
-    }
+//    if (indexPath.row == 5) {
+//        return 80.0;
+//    }
     return 45.0;
 }
 -(BOOL)tableView:(UITableView *)tableView shouldHighlightRowAtIndexPath:(NSIndexPath *)indexPath
@@ -363,7 +329,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        self.title = @"汇报详情";
     }
     return self;
 }
@@ -371,26 +337,94 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    //导航条按钮
 	UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(0, 0, 50, 44);
     [btn setBackgroundImage:[UIImage imageNamed:@"btnBackFromNavigationBar_On"] forState:UIControlStateNormal];
-    // 高亮
     [btn  setBackgroundImage:[UIImage imageNamed:@"btnBackFromNavigationBar_Off"] forState:UIControlStateHighlighted];
     [btn addTarget:self action:@selector(btnBack:) forControlEvents:UIControlEventTouchUpInside];
-    
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc]initWithCustomView:btn];
     [self.navigationItem setLeftBarButtonItem:backItem];
     [backItem release];
     
-    _tvbRecordDetail = [[UITableView alloc]initWithFrame:CGRectMake(10, 10, Width_Screen - 20 , 390)];
+    self.scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, Width_Screen, 370)];
+    
+    self.scrollView.delegate = self;
+    self.scrollView.pagingEnabled = NO;
+    [self.view addSubview:self.scrollView];
+    
+    HBServerKit *hbKit = [[HBServerKit alloc]init];
+    [hbKit findCommentWithOrganizationId:self.reportModel.organizationId
+                               OrgunitId:self.reportModel.orgunitId
+                                ReportId:self.reportModel.reportId
+                        andGetCommentMod:^(CommentModle *commentMod) {
+        //评论界面
+        if (commentMod.realname.length >0) {
+            UILabel *commentName = [[UILabel alloc]initWithFrame:CGRectMake(0, 370, Screen_Width, 24)];
+            commentName.backgroundColor = BlueColor;
+            commentName.font = [UIFont systemFontOfSize:15];
+            commentName.text = [NSString stringWithFormat:@"   评论者：%@(%@)        %@分",commentMod.realname,commentMod.createUserId,commentMod.level];
+            
+            UILabel *creatDate = [[UILabel alloc ]initWithFrame:CGRectMake(0, 390, Screen_Width, 20)];
+            creatDate.textColor = [UIColor grayColor];
+            creatDate.backgroundColor = BlueColor;
+            creatDate.font = [UIFont systemFontOfSize:13];
+            creatDate.text = [NSString stringWithFormat:@"    时间：%@",[WTool getStrDateTimeWithDateTimeMS:[commentMod.createDate longLongValue] DateTimeStyle:@"YYYY-MM-dd HH:mm:ss"]];
+
+            //内容
+            UITextView *contentText = [[UITextView alloc]initWithFrame:CGRectMake(0, 410, Screen_Width, 200)];
+            contentText.backgroundColor = [UIColor clearColor];
+            contentText.editable = NO;
+            contentText.font = [UIFont systemFontOfSize:15];
+            if (commentMod.note != NULL) {
+                contentText.textAlignment = UITextAlignmentLeft;
+                contentText.contentMode = UIControlContentVerticalAlignmentCenter;
+                CGRect orgRect=contentText.frame;//获取原始UITextView的frame
+                CGSize  size = [[NSString stringWithFormat:@" 评语：%@",commentMod.note] sizeWithFont:[UIFont systemFontOfSize:15] constrainedToSize:CGSizeMake(240, 2000) lineBreakMode:UILineBreakModeWordWrap];
+                orgRect.size.height=size.height+10;//获取自适应文本内容高度
+                contentText.frame=orgRect;//重设UITextView的frame
+                self.scrollView.contentSize = CGSizeMake(Screen_Width, 414+orgRect.size.height);
+                contentText.text=[NSString stringWithFormat:@" 评语：%@",commentMod.note];
+                [self.scrollView addSubview:contentText];
+                [contentText release];
+                contentText = nil;
+            }
+            [self.scrollView addSubview:commentName];
+            [self.scrollView addSubview:creatDate];
+            
+            [commentName release];
+            [creatDate release];
+        }else{
+            self.scrollView.contentSize = CGSizeMake(Screen_Width, 410);
+            UILabel *commentName = [[UILabel alloc]initWithFrame:CGRectMake(0, 370, Screen_Width, 24)];
+            commentName.backgroundColor = BlueColor;
+            commentName.font = [UIFont systemFontOfSize:15];
+            commentName.text = @"暂无评论";
+            commentName.textAlignment = NSTextAlignmentCenter;
+            [self.scrollView addSubview:commentName];
+        }
+    }];
+    
+    _tvbRecordDetail = [[UITableView alloc]initWithFrame:CGRectMake(10, 10, Width_Screen - 20 , 360)];
     _tvbRecordDetail.scrollEnabled = NO;
     [_tvbRecordDetail setSeparatorStyle:UITableViewCellSeparatorStyleNone];
-    [self.view addSubview:_tvbRecordDetail];
+    [self.scrollView addSubview:_tvbRecordDetail];
     _tvbRecordDetail.delegate = self;
     _tvbRecordDetail.dataSource = self;
     [_tvbRecordDetail.layer setCornerRadius:7];
     [_tvbRecordDetail.layer setBorderWidth:0.7];
     [_tvbRecordDetail release];
+    NSLog(@"self.reportModel.reportId == %@",self.reportModel.reportId);
+
+    
+    
+    UIButton *but1 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [but1 setTitle:@"添加点评" forState:UIControlStateNormal];
+    but1.frame = CGRectMake(10, Screen_Height-110, Screen_Width-20, 42);
+    [but1 setBackgroundImage:[[UIImage imageNamed:@"03.png"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
+    [but1 setBackgroundImage:[[UIImage imageNamed:@"04.png"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateHighlighted];
+    [but1 addTarget: self action:@selector(saveReportComment) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:but1];
 }
 
 - (void)didReceiveMemoryWarning

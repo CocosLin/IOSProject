@@ -19,7 +19,7 @@
 }
 -(NSString *)strBaseUrl
 {
-    return @"http://59.57.15.168:6363";
-//    return @"http://hb.m.gitom.com/3.0";
+//    return @"http://59.57.15.168:6363";
+    return @"http://hb.m.gitom.com/3.0";
 }
 @end

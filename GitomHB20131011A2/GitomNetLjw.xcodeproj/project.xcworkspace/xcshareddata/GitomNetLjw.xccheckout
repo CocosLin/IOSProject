@@ -5,41 +5,36 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>DBD5D76B-675C-4F16-B024-7A0566DA1DC7</string>
+	<string>275D8071-A805-4F31-8E5A-B726B1425D81</string>
 	<key>IDESourceControlProjectName</key>
 	<string>GitomNetLjw</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>6CCDBBFE-43CA-4847-8DE5-F64D61AB0AB5</key>
-		<string>http://192.168.100.118:8080/svn/app-android/panch_ios/GitomHB20131011</string>
+		<key>4CAF9996-C4B8-4A86-AA84-B8AEDEA827B7</key>
+		<string>https://github.com/CocosLin/IOSProject.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>GitomNetLjw.xcodeproj/project.xcworkspace</string>
+	<string>GitomHB20131011A2/GitomNetLjw.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>6CCDBBFE-43CA-4847-8DE5-F64D61AB0AB5</key>
-		<string>../..</string>
-	</dict>
-	<key>IDESourceControlProjectRepositoryRootDictionary</key>
-	<dict>
-		<key>6CCDBBFE-43CA-4847-8DE5-F64D61AB0AB5</key>
-		<string>http://192.168.100.118:8080/svn/app-android</string>
+		<key>4CAF9996-C4B8-4A86-AA84-B8AEDEA827B7</key>
+		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>http://192.168.100.118:8080/svn/app-android/panch_ios/GitomHB20131011/GitomNetLjw.xcodeproj</string>
+	<string>https://github.com/CocosLin/IOSProject.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>6CCDBBFE-43CA-4847-8DE5-F64D61AB0AB5</string>
+	<string>4CAF9996-C4B8-4A86-AA84-B8AEDEA827B7</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
-			<string>public.vcs.subversion</string>
+			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>6CCDBBFE-43CA-4847-8DE5-F64D61AB0AB5</string>
+			<string>4CAF9996-C4B8-4A86-AA84-B8AEDEA827B7</string>
 			<key>IDESourceControlWCCName</key>
-			<string>GitomHB20131011A</string>
+			<string>IOSProject</string>
 		</dict>
 	</array>
 </dict>
