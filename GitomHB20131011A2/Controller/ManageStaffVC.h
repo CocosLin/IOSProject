@@ -12,4 +12,5 @@
 @interface ManageStaffVC : VcWithNavBar<UITableViewDataSource,UITableViewDelegate>
 @property (retain, nonatomic) UITableView *manageTableView;
 @property (nonatomic,strong) NSArray *orgArray;
+- (void)refreshAction;
 @end

@@ -105,7 +105,7 @@
 
 - (void)saveActionSetting{
     GetGitomSingal;
-    if (onOrOff) {//是否勾选“开启”
+    if (onOrOff==YES) {//是否勾选“开启”
         if (pickerTage == kHadeSet) {
             switch (self.setTimeType) {
                 case 0:

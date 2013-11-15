@@ -11,5 +11,6 @@
 @interface RecordQeryDetialVC : VcWithNavBar<UITableViewDataSource,UITableViewDelegate>
 @property (retain, nonatomic) UITableView *organizationTableView;
 @property (nonatomic,retain) NSArray *orgArray;
+@property (nonatomic,assign) NSInteger orgNumber;
 @property (nonatomic,assign) NSInteger seledBtIdx;
 @end

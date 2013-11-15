@@ -7,11 +7,13 @@
 //
 
 #import "VcWithNavBar.h"
+#import "OrganizationsModel.h"
 
 @interface ManageDepartmentVC : VcWithNavBar<UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate>{
     int configType;
 }
 
-@property (nonatomic, retain) NSArray *arrSet;
-
+@property (nonatomic,retain) NSArray *arrSet;
+@property (nonatomic,retain) OrganizationsModel *orgMod;
+@property (nonatomic,assign) BOOL createrUser;
 @end

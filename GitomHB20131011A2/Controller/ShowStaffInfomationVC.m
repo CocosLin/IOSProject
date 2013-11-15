@@ -37,7 +37,7 @@
     
     GetCommonDataModel;
     HBServerKit *hbKit = [[HBServerKit alloc]init];
-    [hbKit findReportsWithOrganizationId:comData.organization.organizationId GotArrReports:^(NSArray *arrDicReports, WError *myError) {
+    [hbKit findReportsWithOrganizationId:comData.organization.organizationId Refresh:NO GotArrReports:^(NSArray *arrDicReports, WError *myError) {
         self.orgNameArr = arrDicReports;
     }];
     NSLog(@"orgNameArr.count == %d",self.orgNameArr.count);

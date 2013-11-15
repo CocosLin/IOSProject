@@ -164,7 +164,7 @@
                     if (singal.offTime3){
                         NSLog(@"offTime3 == %@",[WTool getStrDateTimeWithDateTimeMS:singal.offTime3 DateTimeStyle:@"HH:mm:ss"]);
                         NSLog(@"onTime3 == %@",[WTool getStrDateTimeWithDateTimeMS:singal.oneTime3 DateTimeStyle:@"HH:mm:ss"]);
-                         cell.textLabel.text = [NSString stringWithFormat:@"时间段3：%@-%@",[WTool getStrDateTimeWithDateTimeMS:singal.offTime3 DateTimeStyle:@"HH:mm:ss"],[WTool getStrDateTimeWithDateTimeMS:singal.oneTime3 DateTimeStyle:@"HH:mm:ss"]];
+                         cell.textLabel.text = [NSString stringWithFormat:@"时间段3：%@-%@",[WTool getStrDateTimeWithDateTimeMS:singal.oneTime3 DateTimeStyle:@"HH:mm:ss"],[WTool getStrDateTimeWithDateTimeMS:singal.offTime3 DateTimeStyle:@"HH:mm:ss"]];
                     }else{
                         cell.textLabel.text = @"--";
                     }

@@ -12,7 +12,13 @@
 #import "SVProgressHUD.h"
 #import "ASIHTTPRequest.h"
 
-@interface OrganizationNoticVC ()
+#import "UIImageView+MJWebCache.h"
+#import "MJPhotoBrowser.h"
+#import "MJPhoto.h"
+
+@interface OrganizationNoticVC (){
+    NSMutableArray *_urls;
+}
 
 @end
 
@@ -87,6 +93,38 @@
             [self.view addSubview:imgView];
         }];
         [req startAsynchronous];
+        
+        [_urls addObject:imgUrlStr];
+        //        CGFloat margin = 20;
+        //        CGFloat startX = (self.view.frame.size.width - 3 * width - 2 * margin) * 0.5;
+        //        CGFloat startY = 50;
+        for (int i = 0; i<1; i++) {
+            //UIImageView *imageView = [[UIImageView alloc] init];
+            //[self.view addSubview:imageView];
+            NSLog(@"下载图片0");
+            
+            //[self.view addSubview:imageView];
+            
+            // 计算位置
+            //int row = i/3;
+            //int column = i%3;
+            //CGFloat x = 60;
+            //CGFloat y = 2;
+            //imageView.frame = CGRectMake(x, y, width, height);
+            NSLog(@"下载图片1");
+            // 下载图片
+            //[imageView setImageURLStr:imgString placeholder:placeholder];
+            NSLog(@"下载图片2");
+            // 事件监听
+            imgView.tag = 1000+i;
+            NSLog(@"imageView.tag == %d",imgView.tag);
+            imgView.userInteractionEnabled = YES;
+            [imgView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapImage:)]];
+            //[myCell addSubview:imageView];
+            // 内容模式
+            imgView.clipsToBounds = YES;
+            imgView.contentMode = UIViewContentModeScaleAspectFill;
+        }
     }
     
     
@@ -114,6 +152,37 @@
     [imgView release];
     //[imgUrlStr release];
 }
+
+#pragma mark -- 放大图片
+- (void)tapImage:(UITapGestureRecognizer *)tap
+{
+    int count = 1;
+    NSLog(@"封装图片数据 %@",_urls);
+    //NSLog(@"_urls == %@",_urls);
+    // 1.封装图片数据
+    NSMutableArray *photos = [NSMutableArray arrayWithCapacity:count];
+    for (int i = 0; i<1; i++) {
+        NSLog(@"替换为中等尺寸图片");
+        // 替换为中等尺寸图片
+        //NSString *url = [_urls[i] stringByReplacingOccurrencesOfString:@"thumbnail" withString:@"bmiddle"];
+        NSString *url = [_urls objectAtIndex:0];
+        NSLog(@"url == %@",url);
+        
+        MJPhoto *photo = [[MJPhoto alloc] init];
+        photo.url = [NSURL URLWithString:url]; // 图片路径
+        UIImageView *imgView = (UIImageView *)[self.view viewWithTag:1000+i];
+        photo.srcImageView = imgView; // 来源于哪个UIImageView
+        [photos addObject:photo];
+    }
+    NSLog(@"显示相册");
+    // 2.显示相册
+    MJPhotoBrowser *browser = [[MJPhotoBrowser alloc] init];
+    //browser.is
+    browser.currentPhotoIndex = 0; // 弹出相册时显示的第一张图片是？
+    browser.photos = photos; // 设置所有的图片
+    [browser show];
+}
+
 
 - (void)didReceiveMemoryWarning
 {

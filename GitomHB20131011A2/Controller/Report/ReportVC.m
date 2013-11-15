@@ -512,9 +512,6 @@ typedef NS_ENUM(NSInteger, Tag_ReportVC) {
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    //初始化录音vc
-  //  recorderVC = [[ChatVoiceRecorderVC alloc]init];
- //   recorderVC.vrbDelegate = self;
     
     //导航条设置
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];

@@ -96,7 +96,7 @@
     } else {
         self.scrollEnabled = NO;
         // 直接显示进度条
-        [_photoLoadingView showLoading];
+        //[_photoLoadingView showLoading];
         [self addSubview:_photoLoadingView];
         
         __unsafe_unretained MJPhotoView *photoView = self;

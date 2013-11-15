@@ -35,7 +35,18 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
+    
+    UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btn1 setTitle:@"刷新" forState:UIControlStateNormal];
+    [btn1 setTitleColor:[UIColor colorWithRed:103.0/255.0 green:154.0/255.0 blue:233.0/255.0 alpha:1] forState:UIControlStateNormal];
+    btn1.frame = CGRectMake(0, 0, 50, 44);
+    [btn1 setBackgroundImage:[UIImage imageNamed:@"btn_title_text_default"] forState:UIControlStateNormal];
+    [btn1  setBackgroundImage:[UIImage imageNamed:@"btn_title_text_pressed"] forState:UIControlStateHighlighted];
+    [btn1 addTarget:self action:@selector(refreshAction) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc]initWithCustomView:btn1];
+    self.navigationItem.rightBarButtonItem = barButtonItem;
+    [barButtonItem release];
+    
     self.manageTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, Screen_Width, Screen_Height-66)];
     self.manageTableView.delegate = self;
     self.manageTableView.dataSource = self;
@@ -51,6 +62,39 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+
+#pragma mark - 刷新
+- (void)refreshAction{
+    NSLog(@"refreshAction - 刷新");
+    HBServerKit *hbKit = [[HBServerKit alloc]init];
+    GetCommonDataModel;
+    [hbKit findReportsWithOrganizationId:comData.organization.organizationId Refresh:YES GotArrReports:^(NSArray *arrDicReports, WError *myError) {
+        if (arrDicReports.count) {
+            NSLog(@"ReportManager 数组循环次数 ==  %d",arrDicReports.count);
+            NSMutableArray * mArrReports = [NSMutableArray arrayWithCapacity:arrDicReports.count];
+            for (NSDictionary * dicReports in arrDicReports)
+            {
+                NSLog(@"444ReportManager 获得数据内容 == %@",dicReports);
+                
+                NSLog(@"444name == %@",[dicReports objectForKey:@"name"]);
+                OrganizationsModel *orgIfo = [[OrganizationsModel alloc]init];
+                orgIfo.organizationName = [dicReports objectForKey:@"name"];
+                orgIfo.orgunitId = [dicReports objectForKey:@"orgunitId"];
+                orgIfo.organizationId = [dicReports objectForKey:@"organizationId"];
+                [mArrReports addObject:orgIfo];
+            }
+            self.orgArray = mArrReports;
+            [self.manageTableView reloadData];
+        }else
+        {
+            [SVProgressHUD showErrorWithStatus:@"无部门"];
+        }
+    }];
+    
+    
+    
 }
 
 #pragma mark - Table view data source
@@ -151,7 +195,7 @@
     NSInteger intS = [orgIdStr intValue];
     [hbKit findOrgunitMembersWithOrganizationId:comData.organization.organizationId
                                       orgunitId:intS
-                                        Refresh:YES
+                                        Refresh:NO
                                   GotArrReports:^(NSArray *arrDicReports, WError *myError)
      {
          if (arrDicReports.count) {

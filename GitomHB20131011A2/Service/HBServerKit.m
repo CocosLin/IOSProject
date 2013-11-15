@@ -339,6 +339,7 @@
 #pragma mark --查询公司的部门列表
 //http://hb.m.gitom.com/3.0/organization/rootOrgunits?organizationId=114&voidFlag=1&cookie=5533098A-43F1-4AFC-8641-E64875461345
 -(void)findReportsWithOrganizationId:(NSInteger)organizationId
+                             Refresh:(BOOL)refreshOrNot
                        GotArrReports:(WbReportJsonArr)callback
 {
     NSString *urlStr = [NSString stringWithFormat:@"%@/organization/rootOrgunits?organizationId=%ld&voidFlag=1&cookie=%@",self.strBaseUrl,(long)organizationId,_cookie];
@@ -348,7 +349,7 @@
     [req setDelegate:self];
     NSString *key = [NSString stringWithFormat:@"rootOrgunits%ld",(long)organizationId];
     NSData *dataResponse = [FTWCache objectForKey:key];
-    if (dataResponse) {
+    if (dataResponse&&refreshOrNot == NO) {
         NSLog(@"部门列表 有缓存");
         WDataParse *wdp = [WDataParse sharedWDataParse];
         //[self getIsServerNoErrorWithHead:[self getHeadWithDataResponse:dataResponse]];//检查服务器是否没有异常，如果有，就打印
@@ -514,59 +515,6 @@
         }];
         [req startAsynchronous];
     }
-    
-    /*
-     NSLog(@"HBSserverKit 汇报相关== organizationId:%ld | orgunitId:%ld | username:%@ | typeReport:%@  |  beginDateLli:%lld  | endDateLli:%lld  |  firstReportRecord:%ld  | maxCountReportRecord:%ld  ",(long)organizationId,(long)orgunitId,username,typeReport,beginDateLli,endDateLli,(long)firstReportRecord,(long)maxCountReportRecord);
-     NSString * strPortReport = @"http://hb.m.gitom.com/3.0/report/findReports";//[NSString stringWithFormat:@"%@/report/findReports",self.strBaseUrl];
-     NSLog(@"HBSserverKit == 获取汇报记录数据 %@",strPortReport);
-     NSMutableDictionary * dicParams = [NSMutableDictionary dictionaryWithCapacity:6];
-     [dicParams setObject:[NSNumber numberWithInteger:organizationId] forKey:ORGANIZATION_ID];
-     [dicParams setObject:[NSNumber numberWithInteger:orgunitId] forKey:ORGUNIT_ID];
-     [dicParams setObject:username forKey:USERNAME];
-     [dicParams setObject:typeReport forKey:REPORT_TYPE];
-     [dicParams setObject:[NSNumber numberWithLongLong:beginDateLli] forKey:BEGIN_DATE];
-     NSLog(@"[NSNumber numberWithLongLong:beginDateLli]  = %@",[NSNumber numberWithLongLong:beginDateLli]);
-     [dicParams setObject:[NSNumber numberWithLongLong:endDateLli] forKey:END_DATE];
-     [dicParams setObject:[NSNumber numberWithInteger:firstReportRecord] forKey:FIRST];
-     [dicParams setObject:[NSNumber numberWithInteger:maxCountReportRecord] forKey:MAX_RecordCount];
-     [dicParams setObject:_cookie forKey:@"cookie"];
-     WDataService * wds = [WDataService sharedWDataService];
-     WDataParse *wdp = [WDataParse sharedWDataParse];
-     
-     //使用字典向http://59.57.15.168:6363/report/saveReport存储数据
-     [wds wPostRequestWithIsAsynchronous:NO
-     Url:[NSURL URLWithString:strPortReport]
-     DicPostDatas:dicParams
-     GetResult:^(NSData *dataResponse, NSError *errorRequest)
-     {
-     if (!errorRequest){
-     [self getIsServerNoErrorWithHead:[self getHeadWithDataResponse:dataResponse]];//检查服务器是否没有异常，如果有，就打印
-     NSLog(@"HBServerKit 从服务端获得的完整json格式数据 == %@",[[NSString alloc]initWithData:dataResponse encoding:NSUTF8StringEncoding]);
-     Body * body = [self getBodyWithDataResponse:dataResponse];
-     NSLog(@"HBServerKit 完整数据之中取得body %@",body);
-     if (body.success)//如果查汇报成功
-     {
-     NSArray * arrReportsGot = [wdp wGetArrJsonWithStringJson:body.data];
-     NSLog(@"HBServerKit 从body取得data == %@",arrReportsGot);
-     callback(arrReportsGot,nil);
-     }else//如果查汇报不成功
-     {
-     WError * error = [[WError alloc]initWithWErrorType:WErrorType_Logic wErrorDescription:body.warning];
-     Mark_Custom;
-     NSLog(@"%@",error.wErrorDescription);
-     callback(nil,error);
-     [error release];
-     }
-     }else
-     {
-     WError * error = [[WError alloc]initWithWErrorType:WErrorType_NetworkRequests];
-     Mark_Custom;
-     NSLog(@"%@",error.wErrorCode);
-     callback(nil,error);
-     [error release];
-     }
-     }];
-     */
 }
 
 
@@ -852,21 +800,22 @@
     [req startAsynchronous];
 }
 
-#pragma mark - 获取考勤配置
+#pragma mark -- 获取考勤配置
 //http://hb.m.gitom.com/3.0/attendance/attendanceConfig?organizationId=204&orgunitId=1&cookie=5533098A-43F1-4AFC-8641-E64875461345
 -(void)getAttendanceConfigWithOrganizationId:(NSInteger)organizationId
                                    orgunitId:(NSInteger)orgunitId
+                                     Refresh:(BOOL)refresh
                                GotDicReports:(void(^)(NSDictionary * dicAttenConfig))callback{
-    [SVProgressHUD showWithStatus:@"刷新…"];
+    //[SVProgressHUD showWithStatus:@"刷新…"];
     NSString *urlStr = [NSString stringWithFormat:@"http://hb.m.gitom.com/3.0/attendance/attendanceConfig?organizationId=%d&orgunitId=%d&cookie=%@",organizationId,orgunitId,_cookie];
     NSURL *url = [NSURL URLWithString:urlStr];
     ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:url];
-    [req setCompletionBlock:^{
-        NSData *dataResponse = [req responseData];
-        NSLog(@"HBServerKit 从服务端获得的完整 获取考勤配置json == %@",[req responseString]);
+    WDataParse *wdp = [WDataParse sharedWDataParse];
+    NSString *key = [NSString stringWithFormat:@"attendanceattendanceConfig%ld%ld",(long)organizationId,(long)orgunitId];
+    NSData *dataResponse = [FTWCache objectForKey:key];
+    if (dataResponse&&refresh==NO) {
+        NSLog(@"考勤配 有缓存");
         
-        
-        WDataParse *wdp = [WDataParse sharedWDataParse];
         [self getIsServerNoErrorWithHead:[self getHeadWithDataResponse:dataResponse]];//检查服务器是否没有异常，如果有，就打印
         NSLog(@"HBServerKit 从服务端获得的完整json格式数据 获取考勤配置== %@",[[NSString alloc]initWithData:dataResponse encoding:NSUTF8StringEncoding]);
         Body * body = [self getBodyWithDataResponse:dataResponse];
@@ -875,7 +824,7 @@
         if (body.success)//如果查汇报成功
         {
             NSDictionary * dicReportsGot = [wdp wGetDicJsonWithStringJson:body.data];
-            [SVProgressHUD showSuccessWithStatus:@"完成刷新"];
+            [SVProgressHUD showSuccessWithStatus:@"获得配置"];
             NSLog(@"HBServerKit 从body取得data 获取考勤配置== %@",dicReportsGot);
             callback(dicReportsGot);
         }else//如果查汇报不成功
@@ -887,8 +836,37 @@
             callback(nil);
             [error release];
         }
-    }];
-    [req startAsynchronous];
+    }else{
+        [SVProgressHUD showWithStatus:@"加载…"];
+        [req setCompletionBlock:^{
+            NSData *dataResponse = [req responseData];
+            NSLog(@"HBServerKit 从服务端获得的完整 获取考勤配置json == %@",[req responseString]);
+            [FTWCache setObject:dataResponse forKey:key];
+            
+            [self getIsServerNoErrorWithHead:[self getHeadWithDataResponse:dataResponse]];//检查服务器是否没有异常，如果有，就打印
+            NSLog(@"HBServerKit 从服务端获得的完整json格式数据 获取考勤配置== %@",[[NSString alloc]initWithData:dataResponse encoding:NSUTF8StringEncoding]);
+            Body * body = [self getBodyWithDataResponse:dataResponse];
+            NSLog(@"HBServerKit 完整数据之中取得body 获取考勤配置 %@",body);
+            //NSLog(@"body.success == %c",body.success);
+            if (body.success)//如果查汇报成功
+            {
+                NSDictionary * dicReportsGot = [wdp wGetDicJsonWithStringJson:body.data];
+                [SVProgressHUD showSuccessWithStatus:@"获得配置"];
+                NSLog(@"HBServerKit 从body取得data 获取考勤配置== %@",dicReportsGot);
+                callback(dicReportsGot);
+            }else//如果查汇报不成功
+            {
+                WError * error = [[WError alloc]initWithWErrorType:WErrorType_Logic wErrorDescription:body.warning];
+                Mark_Custom;
+                NSLog(@"获取考勤配置 ERROR == %@",error.wErrorDescription);
+                [SVProgressHUD showErrorWithStatus:@"未获得"];
+                callback(nil);
+                [error release];
+            }
+        }];
+        [req startAsynchronous];
+    }
+    
 }
 
 #pragma mark -- 部门的员工列表
@@ -959,50 +937,6 @@
         }];
         [req startAsynchronous];
     }
-
-    /*
-    NSString * strPortReport = [NSString stringWithFormat:@"%@/user/findUsers",self.strBaseUrl];
-    NSLog(@"HBSserverKit == 获取查询部门员工url %@",strPortReport);
-    NSMutableDictionary * dicParams = [NSMutableDictionary dictionaryWithCapacity:6];
-    [dicParams setObject:[NSNumber numberWithInteger:organizationId] forKey:ORGANIZATION_ID];
-    [dicParams setObject:[NSNumber numberWithInteger:orgunitId] forKey:ORGUNIT_ID];
-    [dicParams setObject:[NSNumber numberWithInteger:1] forKey:@"voidFlag"];
-    [dicParams setObject:_cookie forKey:@"cookie"];
-    WDataService * wds = [WDataService sharedWDataService];
-    WDataParse *wdp = [WDataParse sharedWDataParse];
-    
-    [wds wPostRequestWithIsAsynchronous:YES
-                                    Url:[NSURL URLWithString:strPortReport]
-                           DicPostDatas:dicParams
-                              GetResult:^(NSData *dataResponse, NSError *errorRequest)
-     {
-         if (!errorRequest){
-             [self getIsServerNoErrorWithHead:[self getHeadWithDataResponse:dataResponse]];//检查服务器是否没有异常，如果有，就打印
-             NSLog(@"HBServerKit 从服务端获得的完整json格式数据 部门员工== %@",[[NSString alloc]initWithData:dataResponse encoding:NSUTF8StringEncoding]);
-             Body * body = [self getBodyWithDataResponse:dataResponse];
-             NSLog(@"HBServerKit 完整数据之中取得body 部门员工 %@",body);
-             if (body.success)//如果查汇报成功
-             {
-                 NSArray * arrReportsGot = [wdp wGetArrJsonWithStringJson:body.data];
-                 NSLog(@"HBServerKit 从body取得data == %@",arrReportsGot);
-                 callback(arrReportsGot,nil);
-             }else//如果查汇报不成功
-             {
-                 WError * error = [[WError alloc]initWithWErrorType:WErrorType_Logic wErrorDescription:body.warning];
-                 Mark_Custom;
-                 NSLog(@"%@",error.wErrorDescription);
-                 callback(nil,error);
-                 [error release];
-             }
-         }else
-         {
-             WError * error = [[WError alloc]initWithWErrorType:WErrorType_NetworkRequests];
-             Mark_Custom;
-             NSLog(@"%@",error.wErrorCode);
-             callback(nil,error);
-             [error release];
-         }
-     }];*/
 }
 
 #pragma mark - 汇报相关
@@ -1434,6 +1368,54 @@
     [req startAsynchronous];
     [req release];
 }
+
+#pragma mark -- 更改部门名称
+- (void)changeOrgNameWith:(NSInteger)organizationId
+             andOrgunitId:(NSInteger)orgunitId
+              andUsername:(NSString *)username
+                  andName:(NSString *)name {
+    NSString *changeRoleUrlStr = [NSString stringWithFormat:@"http://hb.m.gitom.com/3.0/organization/updateOrgunit?organizationId=%ld&orgunitId=%ld&username=%@&name=%@&cookie=%@",(long)organizationId,(long)orgunitId,username,name,_cookie];
+    ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:changeRoleUrlStr]];
+    [req setCompletionBlock:^{
+        [SVProgressHUD showSuccessWithStatus:@"修改成功"];
+    }];
+    [req setFailedBlock:^{
+        [SVProgressHUD showErrorWithStatus:@"失败"];
+    }];
+    [req startAsynchronous];
+}
+
+#pragma mark -- 更改坐标上传的间隔
+- (void)changeSendPositionPointIntervalorganitzationId:(NSInteger)organizationId
+                                          andOrgunitId:(NSInteger)orgunitId
+                                            andInterval:(NSString *)intervalTime
+                                           andUsername:(NSString *)username{
+    NSString *changeRoleUrlStr = [NSString stringWithFormat:@"http://hb.m.gitom.com/3.0/util/saveUploadLocationTime?organizationId=%ld&orgunitId=%ld&time==%@&updateUser=%@&cookie=%@",(long)organizationId,(long)orgunitId,intervalTime,username,_cookie];
+    ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:changeRoleUrlStr]];
+    [req setCompletionBlock:^{
+        [SVProgressHUD showSuccessWithStatus:@"完成修改"];
+    }];
+    [req setFailedBlock:^{
+        [SVProgressHUD showErrorWithStatus:@"修改失败"];
+    }];
+    [req startAsynchronous];
+}
+
+#pragma mark -- 添加部门 
+- (void)addOrgunitWithrganitzationId:(NSInteger)organizationId
+                      andOrgunitName:(NSString *)creatName
+                         andUsername:(NSString *)username{
+    NSString *urlStr = [NSString stringWithFormat:@"%@/organization/saveOrgunit?organizationId=%ld&pid=0&username=%@&name=%@&cookie=%@",self.strBaseUrl,(long)organizationId,username,creatName,_cookie];
+    ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:urlStr]];
+    [req setCompletionBlock:^{
+        [SVProgressHUD showSuccessWithStatus:@"完成部门添加"];
+    }];
+    [req setFailedBlock:^{
+        [SVProgressHUD showErrorWithStatus:@"操作失败"];
+    }];
+    [req startAsynchronous];
+}
+
 #pragma mark - 获取考勤
 //得到考勤配置(工作时间段，考勤距离，公司坐标等)
 -(void)getAttendanceConfigWithOrganizationID:(NSInteger)organizationId

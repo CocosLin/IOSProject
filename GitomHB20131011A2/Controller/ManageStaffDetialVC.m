@@ -12,6 +12,8 @@
 #import "HBServerKit.h"
 #import "UserManager.h"
 #import "ShowStaffInfomationVC.h"//显示员工详细信息界面
+#import "SVProgressHUD.h"
+
 @interface ManageStaffDetialVC ()
 
 @end
@@ -29,6 +31,7 @@
 
 #pragma mark - 刷新
 - (void)refreshAction{
+    NSLog(@"refreshAction - 刷新");
     HBServerKit *hbKit = [[HBServerKit alloc]init];
     GetCommonDataModel;
     [hbKit findOrgunitMembersWithOrganizationId:comData.organization.organizationId
@@ -55,16 +58,22 @@
                  [mArrReports addObject:memberIfo];
              }
              self.orgArray = mArrReports;
+             [self.organizationTableView reloadData];
          }else
          {
-             //[SVProgressHUD dismissWithIsOk:NO String:@"无人员数据"];
+             [SVProgressHUD showErrorWithStatus:@"无人员数据"];
          }
      }];
-    
-    [self.organizationTableView reloadData];
-    [self viewDidLoad];
-}
 
+    
+    
+}
+/*
+- (void)viewWillAppear:(BOOL)animated{
+    NSLog(@"viewWillAppear - 刷新");
+    [super viewWillAppear:animated];
+    [self.organizationTableView reloadData];
+}*/
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -74,10 +83,8 @@
     [btn1 setTitleColor:[UIColor colorWithRed:103.0/255.0 green:154.0/255.0 blue:233.0/255.0 alpha:1] forState:UIControlStateNormal];
     btn1.frame = CGRectMake(0, 0, 50, 44);
     [btn1 setBackgroundImage:[UIImage imageNamed:@"btn_title_text_default"] forState:UIControlStateNormal];
-    // 高亮
     [btn1  setBackgroundImage:[UIImage imageNamed:@"btn_title_text_pressed"] forState:UIControlStateHighlighted];
     [btn1 addTarget:self action:@selector(refreshAction) forControlEvents:UIControlEventTouchUpInside];
-    
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc]initWithCustomView:btn1];
     self.navigationItem.rightBarButtonItem = barButtonItem;
     [barButtonItem release];
@@ -258,19 +265,14 @@
 #pragma mark - Table view delegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-
      ShowStaffInfomationVC *detailViewController = [[ShowStaffInfomationVC alloc] initWithNibName:@"ShowStaffInfomationVC" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
     MemberOrgModel *memberIfo = [[MemberOrgModel alloc]init];
     memberIfo = [self.orgArray objectAtIndex:indexPath.row];
     NSLog(@"self.orgArray = %@",memberIfo.photoUrl);
-     detailViewController.memberIfo = [self.orgArray objectAtIndex:indexPath.row];
+    detailViewController.memberIfo = [self.orgArray objectAtIndex:indexPath.row];
     detailViewController.unitName = self.unitName;
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     [detailViewController release];
-    
+    [self.navigationController pushViewController:detailViewController animated:YES];
+    [detailViewController release];
 }
 
 

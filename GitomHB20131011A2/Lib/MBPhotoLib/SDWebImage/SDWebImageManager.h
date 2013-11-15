@@ -103,7 +103,7 @@ SDWebImageManager *manager = [SDWebImageManager sharedManager];
  */
 @interface SDWebImageManager : NSObject
 
-@property (assign, nonatomic) id<SDWebImageManagerDelegate> delegate;
+@property (weak, nonatomic) id<SDWebImageManagerDelegate> delegate;
 
 @property (strong, nonatomic, readonly) SDImageCache *imageCache;
 @property (strong, nonatomic, readonly) SDWebImageDownloader *imageDownloader;

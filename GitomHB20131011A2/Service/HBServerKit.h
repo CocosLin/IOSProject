@@ -134,6 +134,7 @@ typedef  void(^WbReportSave)(BOOL isReportOk,WError * myError);
                                                   andInTime2:(int)inTime2
                                                  SetOutTime3:(int)outTime3
                                                   andInTime3:(int)inTime3;
+
 #pragma mark - 发布部门消息
 -(void)saveReportWithOrganizationId:(NSInteger)organizationId
                           OrgunitId:(NSInteger)orgunitId
@@ -152,12 +153,31 @@ typedef  void(^WbReportSave)(BOOL isReportOk,WError * myError);
 - (void)deleteOrgunitWithOrganizationId:(NSInteger)organizationId
                            andOrgunitId:(NSInteger)orgunitId
                           andUpdateUser:(NSString *)updateUser;
+
 #pragma mark -- 转移部门
 - (void)changeMemberToOtherOrgWihtOrganizationId:(NSInteger)organizationId
                                     andOrgunitId:(NSString *)orgunitId
                                  andTarOrgunitId:(NSString *)tarOrgunitId
                                      andUserName:(NSString *)userName
                                    andUpdateUser:(NSString *)updateUser;
+
+#pragma mark -- 添加部门
+- (void)addOrgunitWithrganitzationId:(NSInteger)organizationId
+                      andOrgunitName:(NSString *)creatName
+                         andUsername:(NSString *)username;
+
+#pragma mark -- 更改部门名称
+- (void)changeOrgNameWith:(NSInteger)organizationId
+             andOrgunitId:(NSInteger)orgunitId
+              andUsername:(NSString *)username
+                  andName:(NSString *)name;
+
+#pragma mark - 更改坐标上传的间隔
+- (void)changeSendPositionPointIntervalorganitzationId:(NSInteger)organizationId
+                                          andOrgunitId:(NSInteger)orgunitId
+                                           andInterval:(NSString *)intervalTime
+                                           andUsername:(NSString *)username;
+
 #pragma mark - 考勤
 //得到考勤配置(工作时间段，考勤距离，公司坐标等)
 -(void)getAttendanceConfigWithOrganizationID:(NSInteger)organizationId
@@ -171,6 +191,7 @@ typedef  void(^WbReportSave)(BOOL isReportOk,WError * myError);
 
 #pragma mark - 查询公司部门
 -(void)findReportsWithOrganizationId:(NSInteger)organizationId
+                             Refresh:(BOOL)refreshOrNot
                        GotArrReports:(WbReportJsonArr)callback;
 
 #pragma mark - 查询部门成员
@@ -219,8 +240,9 @@ typedef  void(^WbReportSave)(BOOL isReportOk,WError * myError);
 
 #pragma mark - 获取考勤配置
 -(void)getAttendanceConfigWithOrganizationId:(NSInteger)organizationId
-                         orgunitId:(NSInteger)orgunitId
-                     GotDicReports:(void(^)(NSDictionary * dicAttenConfig))callback;
+                                   orgunitId:(NSInteger)orgunitId
+                                     Refresh:(BOOL)refresh
+                               GotDicReports:(void(^)(NSDictionary * dicAttenConfig))callback;
 
 #pragma mark -- 获取公司、部门公告
 -(void)getNewsWithOrganizationId:(NSInteger)organizationId

@@ -9,7 +9,7 @@
 @protocol MJPhotoBrowserDelegate;
 @interface MJPhotoBrowser : UIViewController <UIScrollViewDelegate>
 // 代理
-@property (nonatomic, assign) id<MJPhotoBrowserDelegate> delegate;
+@property (nonatomic, weak) id<MJPhotoBrowserDelegate> delegate;
 // 所有的图片对象
 @property (nonatomic, strong) NSArray *photos;
 // 当前展示的图片索引

@@ -34,6 +34,8 @@
 #import "ApplyModel.h"//申请者实体类
 #import "WTool.h"
 #import "UserLoggingInfo.h"
+#import "CreaterUserManageDeparmentVC.h"
+
 
 typedef NS_ENUM(NSInteger, TagFlag)
 {
@@ -74,7 +76,10 @@ typedef NS_ENUM(NSInteger, TagFlag)
     GetCommonDataModel;
     GetGitomSingal;
     HBServerKit *hbKit = [[HBServerKit alloc]init];
-    [hbKit getAttendanceConfigWithOrganizationId:comData.organization.organizationId orgunitId:comData.organization.orgunitId GotDicReports:^(NSDictionary *dicAttenConfig) {
+    [hbKit getAttendanceConfigWithOrganizationId:comData.organization.organizationId
+                                       orgunitId:comData.organization.orgunitId
+                                         Refresh:YES
+                                   GotDicReports:^(NSDictionary *dicAttenConfig) {
         NSLog(@"向单例存放考勤设置");
         NSString * offTimeStr1 = [[[dicAttenConfig objectForKey:@"attenWorktime"]objectAtIndex:0]objectForKey:@"offTime"];
         NSString * onTimeStr1 = [[[dicAttenConfig objectForKey:@"attenWorktime"]objectAtIndex:0]objectForKey:@"onTime"];
@@ -441,6 +446,7 @@ typedef NS_ENUM(NSInteger, TagFlag)
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     GetCommonDataModel;
+    HBServerKit *hbKit = [[HBServerKit alloc]init];
     if (_currentSeletedMenuFlag == 1)
     {
         //@[@"移动汇报",@"我的记录",@"我的资料"];
@@ -478,10 +484,10 @@ typedef NS_ENUM(NSInteger, TagFlag)
              arrFuncNames = @[@"员工记录查询",@"公告发布",@"加入申请",@"管理员工",@"管理部门",@"管理公司"];
              */
             
-            if (indexPath.row==0) //员工纪录查询
+            if (indexPath.row==0) //纪录查询
             {//http://hb.m.gitom.com/3.0/organization/rootOrgunits?organizationId=114&voidFlag=1&cookie=5533098A-43F1-4AFC-8641-E64875461345
-                HBServerKit *hbKit = [[HBServerKit alloc]init];
-                [hbKit findReportsWithOrganizationId:comData.organization.organizationId GotArrReports:^(NSArray *arrDicReports, WError *myError)
+                
+                [hbKit findReportsWithOrganizationId:comData.organization.organizationId Refresh:NO GotArrReports:^(NSArray *arrDicReports, WError *myError)
                  {
                      if (arrDicReports.count) {
                          NSLog(@"ReportManager 数组循环次数 ==  %d",arrDicReports.count);
@@ -510,7 +516,6 @@ typedef NS_ENUM(NSInteger, TagFlag)
                          //[SVProgressHUD dismissWithIsOk:NO String:@"无汇报记录"];
                      }
                  }];
-                //NSLog(@"MenuVC OrganizationsModel == %@ ",mArrReports);
                 
             }else if (indexPath.row==1) //公告发布
                 //http://hb.m.gitom.com/3.0/organization/saveNews?organizationId=114&orgunitId=1&title=ddddd&content=dddddd&username=90261&newsType=1&cookie=5533098A-43F1-4AFC-8641-E64875461345
@@ -527,7 +532,6 @@ typedef NS_ENUM(NSInteger, TagFlag)
                 NSLog(@"加入申请");
                 
                 [SVProgressHUD showWithStatus:@"加载数据…"];
-                HBServerKit *hbKit = [[HBServerKit alloc]init];
                 [hbKit findApplyWithOrganizationId:comData.organization.organizationId
                                          orgunitId:comData.organization.orgunitId
                                      GotArrReports:^(NSArray *arrDicReports, WError *myError)
@@ -562,9 +566,7 @@ typedef NS_ENUM(NSInteger, TagFlag)
             else if (indexPath.row==3) //管理员工
             {
                 NSLog(@"%@",@"管理员工");
-                //[SVProgressHUD showWithStatus:@"加载数据…"];
-                HBServerKit *hbKit = [[HBServerKit alloc]init];
-                [hbKit findReportsWithOrganizationId:comData.organization.organizationId GotArrReports:^(NSArray *arrDicReports, WError *myError)
+                [hbKit findReportsWithOrganizationId:comData.organization.organizationId Refresh:NO  GotArrReports:^(NSArray *arrDicReports, WError *myError)
                  {
                      if (arrDicReports.count) {
                          NSLog(@"ReportManager 数组循环次数 ==  %d",arrDicReports.count);
@@ -597,18 +599,54 @@ typedef NS_ENUM(NSInteger, TagFlag)
                          [SVProgressHUD dismissWithIsOk:NO String:@"无数据内容"];
                      }
                  }];
-                
-                
             }
             else if (indexPath.row==4) //管理部门
             {
-                NSLog(@"%@",@"管理部门");
-                ManageDepartmentVC *manageDepartment = [[ManageDepartmentVC alloc]init];
-                manageDepartment.title = @"管理部门";
-                UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:manageDepartment];
-                self.sidePanelController.centerPanel = nav;
-                [manageDepartment release];
-                [nav release];
+                if (comData.organization.roleId == 1) {//创建者可以管理多个部门
+                    
+                    [hbKit findReportsWithOrganizationId:comData.organization.organizationId Refresh:NO  GotArrReports:^(NSArray *arrDicReports, WError *myError)
+                     {
+                         if (arrDicReports.count) {
+                             NSLog(@"MenuVC ReportManager 数组循环次数 ==  %d",arrDicReports.count);
+                             NSMutableArray * mArrReports = [NSMutableArray arrayWithCapacity:arrDicReports.count];
+                             for (NSDictionary * dicReports in arrDicReports)
+                             {
+                                 NSLog(@"MenuVC dicReports == %@",dicReports);
+                                 OrganizationsModel *orgIfo = [[OrganizationsModel alloc]init];
+                                 orgIfo.orgunitName = [dicReports objectForKey:@"name"];
+                                 orgIfo.orgunitId = [dicReports objectForKey:@"orgunitId"];
+                                 [mArrReports addObject:orgIfo];
+                                 [orgIfo release];
+                             }
+                             NSLog(@"获取汇报记录成功! %@",mArrReports);
+                             CreaterUserManageDeparmentVC *vc = [[CreaterUserManageDeparmentVC alloc]init];
+                             vc.orgArray =  mArrReports;
+                             UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:vc];
+                             self.sidePanelController.centerPanel = nav;
+                             [vc release];
+                             [nav release];
+                         }else
+                         {
+                             [SVProgressHUD dismissWithIsOk:NO String:@"无数据内容"];
+                         }
+                     }];
+                    
+                }else{
+                    NSLog(@"%@",@"管理部门");
+                    OrganizationsModel *orgMod = [[OrganizationsModel alloc]init];
+                    orgMod.orgunitName = comData.userModel.unitName;
+                    orgMod.orgunitId = [NSString stringWithFormat:@"%ld",(long)comData.organization.orgunitId];
+                    
+                    ManageDepartmentVC *manageDepartment = [[ManageDepartmentVC alloc]init];
+                    manageDepartment.orgMod = orgMod;
+                    NSLog(@"manageDepartment.orgMod.orgunitName = comData.userModel.unitName = %@ - %@   %@",comData.userModel.unitName,manageDepartment.orgMod.orgunitName,manageDepartment.orgMod.orgunitId);
+                    manageDepartment.title = @"管理部门";
+                    UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:manageDepartment];
+                    self.sidePanelController.centerPanel = nav;
+                    [manageDepartment release];
+                    [nav release];
+                }
+                
             }
             else if (indexPath.row==5) //管理公司
                 //http://hb.m.gitom.com/3.0/organization/updateOrganization?organizationId=204&updateUser=58200&name=WTO&cookie=5533098A-43F1-4AFC-8641-E64875461345
@@ -670,6 +708,7 @@ typedef NS_ENUM(NSInteger, TagFlag)
                     [self dismissViewControllerAnimated:YES completion:^{}];
                 }
             }
+    [hbKit release];
 }
 
 #pragma mark - UIAlertView代理方法
