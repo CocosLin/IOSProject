@@ -15,6 +15,10 @@
 #import "ServerBaseModel.h"
 #import "CommentModle.h"
 
+#import "FTWCache.h"
+#import "NSString+MD5.h"
+
+
 @interface HBServerKit : BaseService
 @property(nonatomic,retain)ServerBaseModel * serverBaseMessage;
 @property (nonatomic,assign) BOOL success;
@@ -38,17 +42,9 @@ typedef void(^WbLoginJsonDic)(NSDictionary * dicUserLogged,WError * myError);
                VersionCode:(NSString *)versionCode
                 GotJsonDic:(WbLoginJsonDic)callback;
 
-#pragma mark -- 获得汇报记录
+
 typedef void(^WbReportJsonArr)(NSArray * arrDicReports,WError * myError);
--(void)findReportsWithOrganizationId:(NSInteger)organizationId
-                           OrgunitId:(NSInteger)orgunitId
-                            Username:(NSString *)username
-                          ReportType:(NSString *)typeReport
-                        BeginDateLli:(long long int)beginDateLli
-                          EndDateLli:(long long int)endDateLli
-                   FirstReportRecord:(NSInteger)firstReportRecord
-                     MaxReportRecord:(NSInteger)maxCountReportRecord
-                       GotArrReports:(WbReportJsonArr)callback;
+
 
 #pragma mark - 注册用户
 - (void)registerWithPhoneNumber:(NSString *)phoneNumber;
@@ -83,6 +79,12 @@ typedef void(^WbReportJsonArr)(NSArray * arrDicReports,WError * myError);
                                 Score:(NSString *)score
                            CreateUser:(NSString *)createUser
                              Username:(NSString *)username;
+
+#pragma mark -- 保存更改信息内容telephone  http://hb.m.gitom.com/3.0/user/updateUser?username=90261&realname=婷婷01&telephone=90261&photo=nil&cookie=5533098A-43F1-4AFC-8641-E64875461345
+- (void) saveUserDocumentWithUsername:(NSString *)userName
+                          andRealName:(NSString *)realName
+                         andTelephone:(NSString *)telephone
+                             andPhoto:(NSString *)photo;
 
 #pragma mark -- 保存上传汇报数据
 typedef  void(^WbReportSave)(BOOL isReportOk,WError * myError);
@@ -174,6 +176,7 @@ typedef  void(^WbReportSave)(BOOL isReportOk,WError * myError);
 #pragma mark - 查询部门成员
 -(void)findOrgunitMembersWithOrganizationId:(NSInteger)organizationId
                                   orgunitId:(NSInteger)orgunitId
+                                    Refresh:(BOOL)refreshYesOrNot
                               GotArrReports:(WbReportJsonArr)callback;
 
 #pragma mark - 查看部门打卡(整个部门、个人:打卡)
@@ -185,7 +188,19 @@ typedef  void(^WbReportSave)(BOOL isReportOk,WError * myError);
                                           EndDateLli:(long long int)endDateLli
                                    FirstReportRecord:(NSInteger)firstReportRecord
                                      MaxReportRecord:(NSInteger)maxCountReportRecord
+                                         RefreshData:(BOOL)refshOrNot
                                        GotArrReports:(WbReportJsonArr)callback;
+#pragma mark -- 获得汇报记录(单个员工)
+-(void)findReportsWithOrganizationId:(NSInteger)organizationId
+                           OrgunitId:(NSInteger)orgunitId
+                            Username:(NSString *)username
+                          ReportType:(NSString *)typeReport
+                        BeginDateLli:(long long int)beginDateLli
+                          EndDateLli:(long long int)endDateLli
+                   FirstReportRecord:(NSInteger)firstReportRecord
+                     MaxReportRecord:(NSInteger)maxCountReportRecord
+                         RefreshData:(BOOL)refshOrNot
+                       GotArrReports:(WbReportJsonArr)callback;
 
 #pragma mark - 查看部门汇报(整个部门:上班、出差)
 -(void)findOrgunitReportsOfMembersWithOrganizationId:(NSInteger)organizationId
@@ -195,6 +210,7 @@ typedef  void(^WbReportSave)(BOOL isReportOk,WError * myError);
                                           EndDateLli:(long long int)endDateLli
                                    FirstReportRecord:(NSInteger)firstReportRecord
                                      MaxReportRecord:(NSInteger)maxCountReportRecord
+                                         RefreshData:(BOOL)refshOrNot
                                        GotArrReports:(WbReportJsonArr)callback;
 #pragma mark -查询申请
 -(void)findApplyWithOrganizationId:(NSInteger)organizationId
@@ -210,6 +226,7 @@ typedef  void(^WbReportSave)(BOOL isReportOk,WError * myError);
 -(void)getNewsWithOrganizationId:(NSInteger)organizationId
                          orgunitId:(NSInteger)orgunitId
                          newsType:(NSString *)newsType
+                         Refresh:(BOOL)refreshOrNot
                      GotArrReports:(WbReportJsonArr)callback;
 
 @end

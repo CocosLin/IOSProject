@@ -8,12 +8,13 @@
 
 #import "VcWithNavBar.h"
 
-@interface MyDocumentVC : VcWithNavBar
+@interface MyDocumentVC : VcWithNavBar<UITextFieldDelegate,UIAlertViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
 @property (retain, nonatomic) UIImageView *headImage;//头像
 
 @property (retain, nonatomic) UITextField *name,*phoneNumber;//可输入文本框
 @property (retain, nonatomic) NSString *unitName;//部门名称
-
+@property (copy, nonatomic) NSString *headImgUrlStr;//服务器图片路径
+@property (nonatomic, retain) UIImage *imgdata;
 
 @end

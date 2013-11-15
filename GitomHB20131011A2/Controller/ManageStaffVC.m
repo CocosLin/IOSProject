@@ -141,7 +141,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [SVProgressHUD showWithStatus:@"加载部门数据…"];
+    //[SVProgressHUD showWithStatus:@"加载部门数据…"];
     
     HBServerKit *hbKit = [[HBServerKit alloc]init];
     GetCommonDataModel;
@@ -151,6 +151,7 @@
     NSInteger intS = [orgIdStr intValue];
     [hbKit findOrgunitMembersWithOrganizationId:comData.organization.organizationId
                                       orgunitId:intS
+                                        Refresh:YES
                                   GotArrReports:^(NSArray *arrDicReports, WError *myError)
      {
          if (arrDicReports.count) {
@@ -175,14 +176,14 @@
              ManageStaffDetialVC *detailViewController = [[ManageStaffDetialVC alloc] initWithNibName:nil bundle:nil];
              detailViewController.orgArray = mArrReports;
              detailViewController.unitName = [[self.orgArray objectAtIndex:indexPath.row] organizationName];
-             
-             [SVProgressHUD dismissWithIsOk:YES String:@"加载成功"];
+             detailViewController.orgNumber = intS;
+             //[SVProgressHUD dismissWithIsOk:YES String:@"加载成功"];
              
              [self.navigationController pushViewController:detailViewController animated:YES];
              [detailViewController release];
          }else
          {
-             [SVProgressHUD dismissWithIsOk:NO String:@"无人员数据"];
+             //[SVProgressHUD dismissWithIsOk:NO String:@"无人员数据"];
          }
      }];
 }

@@ -161,8 +161,13 @@
                     cell.textLabel.text = [NSString stringWithFormat:@"时间段2：%@-%@",[WTool getStrDateTimeWithDateTimeMS:singal.oneTime2 DateTimeStyle:@"HH:mm:ss"],[WTool getStrDateTimeWithDateTimeMS:singal.offTime2 DateTimeStyle:@"HH:mm:ss"]];
                     break;
                 case 2:
-                    if (singal.offTime3>1)cell.textLabel.text = [NSString stringWithFormat:@"时间段3：%@-%@",[WTool getStrDateTimeWithDateTimeMS:singal.oneTime3 DateTimeStyle:@"HH:mm:ss"],[WTool getStrDateTimeWithDateTimeMS:singal.offTime3 DateTimeStyle:@"HH:mm:ss"]];
-                    cell.textLabel.text = @"--";
+                    if (singal.offTime3){
+                        NSLog(@"offTime3 == %@",[WTool getStrDateTimeWithDateTimeMS:singal.offTime3 DateTimeStyle:@"HH:mm:ss"]);
+                        NSLog(@"onTime3 == %@",[WTool getStrDateTimeWithDateTimeMS:singal.oneTime3 DateTimeStyle:@"HH:mm:ss"]);
+                         cell.textLabel.text = [NSString stringWithFormat:@"时间段3：%@-%@",[WTool getStrDateTimeWithDateTimeMS:singal.offTime3 DateTimeStyle:@"HH:mm:ss"],[WTool getStrDateTimeWithDateTimeMS:singal.oneTime3 DateTimeStyle:@"HH:mm:ss"]];
+                    }else{
+                        cell.textLabel.text = @"--";
+                    }
                     break;
                 default:
                     break;
@@ -249,6 +254,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
         switch (indexPath.section) {
+                [SVProgressHUD showWithStatus:@""];
         case 0:
             NSLog(@"%d",indexPath.section);
             SetMapPositionVC *setVC = [[SetMapPositionVC alloc]init];

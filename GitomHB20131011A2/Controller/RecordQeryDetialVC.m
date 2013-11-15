@@ -248,7 +248,9 @@
                                                               userName:[orgMod.username integerValue]
                                                           BeginDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000)
                                                             EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]FirstReportRecord:0
-                                                       MaxReportRecord:150 GotArrReports:^(NSArray *arrDicReports, WError *myError) {
+                                                       MaxReportRecord:10
+                                                           RefreshData:YES
+                                                         GotArrReports:^(NSArray *arrDicReports, WError *myError) {
                 if (arrDicReports.count) {
                     NSMutableArray * mArrReports = [NSMutableArray arrayWithCapacity:arrDicReports.count];
                     for (NSDictionary * dicReports in arrDicReports)
@@ -297,7 +299,8 @@
                                        BeginDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000)
                                          EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]
                                   FirstReportRecord:0
-                                    MaxReportRecord:150
+                                    MaxReportRecord:10
+                                        RefreshData:YES
                                       GotArrReports:^(NSArray *arrDicReports, WError *myError)
              {
                  if (arrDicReports.count) {
@@ -366,7 +369,8 @@
                                        BeginDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000)
                                          EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]
                                   FirstReportRecord:0
-                                    MaxReportRecord:150
+                                    MaxReportRecord:10
+                                        RefreshData:YES
                                       GotArrReports:^(NSArray *arrDicReports, WError *myError)
              {
                  if (arrDicReports.count) {
@@ -425,7 +429,7 @@
     }
         case 3://出差汇报查询
         {
-            [SVProgressHUD showWithStatus:@"加载出差汇报…"];
+            //[SVProgressHUD showWithStatus:@"加载出差汇报…"];
             NSLog(@"出差汇报查询");
             HBServerKit *hbServer = [[HBServerKit alloc]init];
             [hbServer findReportsWithOrganizationId:comData.organization.organizationId
@@ -434,7 +438,8 @@
                                        BeginDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000)
                                          EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]
                                   FirstReportRecord:0
-                                    MaxReportRecord:150
+                                    MaxReportRecord:10
+                                        RefreshData:YES
                                       GotArrReports:^(NSArray *arrDicReports, WError *myError)
              {
                  if (arrDicReports.count) {
@@ -478,12 +483,12 @@
                      rdVC.title = [NSString stringWithFormat:@"%@记录",orgMod.realName];
                      rdVC.dtBegin = [WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000);
                      
-                     [SVProgressHUD dismissWithSuccess:@"加载成功"];
+                     //[SVProgressHUD dismissWithSuccess:@"加载成功"];
                      [self.navigationController pushViewController:rdVC animated:YES];
                      [rdVC release];
                  }else
                  {
-                     [SVProgressHUD dismissWithIsOk:NO String:@"无出差记录"];
+                     //[SVProgressHUD dismissWithIsOk:NO String:@"无出差记录"];
                  }
              }];
             

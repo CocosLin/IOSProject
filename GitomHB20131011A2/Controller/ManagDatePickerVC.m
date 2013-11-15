@@ -13,6 +13,10 @@
 #define kHadeSet 1000
 
 @interface ManagDatePickerVC (){
+    UIImage * _imageCheckBox_on;
+    UIImage * _imageCheckBox_off;
+    UIImageView * _checkBoxRememberView;
+    
     long long onTimeTemp;
     long long offTimeTemp;
     int pickerTage;
@@ -101,38 +105,61 @@
 
 - (void)saveActionSetting{
     GetGitomSingal;
-    if (pickerTage == kHadeSet) {
-        switch (self.setTimeType) {
-            case 0:
-                [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"时间段%d：%@-%@",self.setTimeType+1,[WTool getStrDateTimeWithDateTimeMS:singal.oneTime1 DateTimeStyle:@"HH:mm:ss"],[WTool getStrDateTimeWithDateTimeMS:singal.offTime1 DateTimeStyle:@"HH:mm:ss"]]];
-                break;
-            case 1:
-                [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"时间段%d：%@-%@",self.setTimeType+1,[WTool getStrDateTimeWithDateTimeMS:singal.oneTime2 DateTimeStyle:@"HH:mm:ss"],[WTool getStrDateTimeWithDateTimeMS:singal.offTime2 DateTimeStyle:@"HH:mm:ss"]]];
-                break;
-            case 2:
-                [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"时间段%d：%@-%@",self.setTimeType+1,[WTool getStrDateTimeWithDateTimeMS:singal.oneTime3 DateTimeStyle:@"HH:mm:ss"],[WTool getStrDateTimeWithDateTimeMS:singal.offTime3 DateTimeStyle:@"HH:mm:ss"]]];
-                break;
-            default:
-                break;
+    if (onOrOff) {//是否勾选“开启”
+        if (pickerTage == kHadeSet) {
+            switch (self.setTimeType) {
+                case 0:
+                    [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"时间段%d：%@-%@",self.setTimeType+1,[WTool getStrDateTimeWithDateTimeMS:singal.oneTime1 DateTimeStyle:@"HH:mm:ss"],[WTool getStrDateTimeWithDateTimeMS:singal.offTime1 DateTimeStyle:@"HH:mm:ss"]]];
+                    break;
+                case 1:
+                    [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"时间段%d：%@-%@",self.setTimeType+1,[WTool getStrDateTimeWithDateTimeMS:singal.oneTime2 DateTimeStyle:@"HH:mm:ss"],[WTool getStrDateTimeWithDateTimeMS:singal.offTime2 DateTimeStyle:@"HH:mm:ss"]]];
+                    break;
+                case 2:
+                    [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"时间段%d：%@-%@",self.setTimeType+1,[WTool getStrDateTimeWithDateTimeMS:singal.oneTime3 DateTimeStyle:@"HH:mm:ss"],[WTool getStrDateTimeWithDateTimeMS:singal.offTime3 DateTimeStyle:@"HH:mm:ss"]]];
+                    break;
+                default:
+                    break;
+            }
+            [self.navigationController popViewControllerAnimated:YES];
+        }else{
+            UIAlertView *aler = [[UIAlertView alloc]initWithTitle:@"提示" message:@"您没有确定新的时间，我们将沿用之前的" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles:nil, nil];
+            [aler show];
+            [aler release];
         }
-        [self.navigationController popViewControllerAnimated:YES];
     }else{
-        UIAlertView *aler = [[UIAlertView alloc]initWithTitle:@"提示" message:@"您没有确定新的时间，我们将沿用之前的" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles:nil, nil];
+        UIAlertView *aler = [[UIAlertView alloc]initWithTitle:@"提示" message:@"您没有开启设置" delegate:nil cancelButtonTitle:@"好的" otherButtonTitles:nil, nil];
         [aler show];
         [aler release];
     }
+    
 }
 
 - (void)dealloc{
     [self.dateTableView release];
     self.dateTableView = nil;
+    [_checkBoxRememberView release];
+    _checkBoxRememberView = nil;
     [super dealloc];
 }
+static BOOL  onOrOff = NO;
+- (void)tapOpenOrOffAction{
+    _checkBoxRememberView.image = _imageCheckBox_on;
+    NSLog(@"TAP");
+    if (onOrOff) {
+        _checkBoxRememberView.image = _imageCheckBox_off;
+        onOrOff = NO;
+    }else{
+        _checkBoxRememberView.image = _imageCheckBox_on;
+        onOrOff = YES;
+    }
+}
+
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
+        
     [self setMyVcTitle:[NSString stringWithFormat:@"更改时间段%d",self.setTimeType+1]];
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(0, 0, 50, 44);
@@ -181,10 +208,30 @@
     [baseView addSubview:datePicker];
     [datePicker addSubview:hideView];
     
+    UIView *openVeiw = [[UIView alloc]initWithFrame:CGRectMake(45, 35, 85, 30)];
+    [self.view addSubview:openVeiw];
+    UILabel *lb = [[UILabel alloc]initWithFrame:CGRectMake(40, 5, 60, 20)];
+    lb.text = @"开启";
+    lb.backgroundColor = [UIColor clearColor];
+    lb.font = [UIFont systemFontOfSize:15];
+    [openVeiw addSubview:lb];
+    [lb release];
+    _imageCheckBox_on = [UIImage imageNamed:imageName_checkBox_on];
+    _imageCheckBox_off = [UIImage imageNamed:imageName_checkBox_off];
+    _checkBoxRememberView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
+    _checkBoxRememberView.image = _imageCheckBox_off;
+    [openVeiw addSubview:_checkBoxRememberView];
+    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapOpenOrOffAction)];
+    [openVeiw addGestureRecognizer:tap];
+    
+    
+    [openVeiw release];
     [calendar release];
     [datePicker release];
     [hideView release];
     [baseView release];
+   // [tap release];
+
 }
 
 - (void)didReceiveMemoryWarning

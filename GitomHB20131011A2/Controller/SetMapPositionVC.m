@@ -43,7 +43,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    UIAlertView *aler = [[UIAlertView alloc]initWithTitle:@"说明" message:@"红色的是公司目前的打卡地点。点击地图的任意位置,出现绿色大头针的地方,将是新的打卡坐标。多个绿色大头针情况下,以最后一个的大头针为新的打卡点！" delegate:nil cancelButtonTitle:@"明白" otherButtonTitles:nil, nil];
+    UIAlertView *aler = [[UIAlertView alloc]initWithTitle:@"说明" message:@"1、紫色标记为公司目前的打卡地点\n2、点击出现的绿色标记,将是新的打卡坐标；多个绿色大头针情况下,以最后一个绿标为最终打卡点！\n3、缩小地图,蓝色圆点为您当前位置" delegate:nil cancelButtonTitle:@"明白" otherButtonTitles:nil, nil];
     [aler show];
     [aler release];
     
@@ -70,23 +70,19 @@
     // 高亮
     [rbtn  setBackgroundImage:[UIImage imageNamed:@"btn_title_text_pressed"] forState:UIControlStateHighlighted];
     [rbtn addTarget:self action:@selector(setNewPositionAction) forControlEvents:UIControlEventTouchUpInside];
-    
     UIBarButtonItem *rbarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:rbtn];
     self.navigationItem.rightBarButtonItem = rbarButtonItem;
     [rbarButtonItem release];
-    self.mapVeiw = [[BMKMapView alloc]initWithFrame:CGRectMake(0,45, Screen_Width, Screen_Height)];
     
+    self.mapVeiw = [[BMKMapView alloc]initWithFrame:CGRectMake(0,45, Screen_Width, Screen_Height)];
     self.mapVeiw.delegate = self;
     GetGitomSingal;
     CLLocationCoordinate2D cllocation = CLLocationCoordinate2DMake(singal.latitude, singal.longitude);
     NSLog(@"mapVeiw.userLocation == %f  %f ",cllocation.latitude,cllocation.longitude);
     self.mapVeiw.centerCoordinate = cllocation;
+    self.mapVeiw.showsUserLocation = YES;
     self.mapVeiw.zoomLevel = 19.0;
     self.view = self.mapVeiw;
-
-    UILabel *buttomLb = [[UILabel alloc]initWithFrame:CGRectMake(0, Screen_Height-105, Screen_Width, 40)];
-    buttomLb.text = @"红色的点是原本打卡坐标,绿色的是新的打卡坐标";
-    [self.view addSubview:buttomLb];
     
 }
 

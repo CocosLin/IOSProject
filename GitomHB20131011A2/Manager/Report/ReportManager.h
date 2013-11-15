@@ -42,6 +42,7 @@ typedef void(^WbArrReports)(NSArray * arrReports,BOOL isOk);
                           EndDateLli:(long long int)endDateLli
                    FirstReportRecord:(NSInteger)firstReportRecord
                      MaxReportRecord:(NSInteger)maxCountReportRecord
+                              Refrsh:(BOOL)refreshOrNot
                        GotArrReports:(WbArrReports)callback;
 
 

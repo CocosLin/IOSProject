@@ -33,6 +33,7 @@
 #import "ApplyViewController.h"
 #import "ApplyModel.h"//申请者实体类
 #import "WTool.h"
+#import "UserLoggingInfo.h"
 
 typedef NS_ENUM(NSInteger, TagFlag)
 {
@@ -95,6 +96,7 @@ typedef NS_ENUM(NSInteger, TagFlag)
         
         if (countAr.count>2) {
             NSString * offTimeStr3 = [[[dicAttenConfig objectForKey:@"attenWorktime"]objectAtIndex:2]objectForKey:@"offTime"];
+            NSLog(@"offTimeStr 3 = %@",offTimeStr3);
             NSString * onTimeStr3 = [[[dicAttenConfig objectForKey:@"attenWorktime"]objectAtIndex:2]objectForKey:@"onTime"];
             singal.offTime3 = [onTimeStr3 intValue] ;
             singal.oneTime3 = [offTimeStr3 intValue];
@@ -109,8 +111,44 @@ typedef NS_ENUM(NSInteger, TagFlag)
 #pragma mark -- 刷新部分数据
 - (void)refreshAction{
     [self loadConfingSitting];
+    //[SVProgressHUD showWithStatus:@"刷新公告…"];
+    [self refreshNews];
+    GetCommonDataModel;
+    
+    HBServerKit *hbKit = [[HBServerKit alloc]init];
+    [hbKit getNewsWithOrganizationId:comData.organization.organizationId
+                           orgunitId:comData.organization.orgunitId newsType:@"orgunitNews"
+                             Refresh:YES
+                       GotArrReports:^(NSArray *arrDicReports, WError *myError) {
+                           nil;
+                       }];
+    //[SVProgressHUD showSuccessWithStatus:@"完成"];
+    [hbKit release];
 }
 
+- (void)refreshUserInfomations{
+    UserLoggingInfo *userLogInfo = [[UserLoggingInfo alloc]init];
+    
+    HBServerKit *hbKit = [[HBServerKit alloc]init];
+    [hbKit loggingWithUsername:userLogInfo.username Md5PasswordUp:userLogInfo.password VersionCode:@"999" GotJsonDic:^(NSDictionary *dicUserLogged, WError *myError) {
+        nil;
+    }];
+    [userLogInfo release];
+    [hbKit release];
+}
+
+- (void)refreshNews{
+    GetCommonDataModel;
+    HBServerKit *hbKit = [[HBServerKit alloc]init];
+    [hbKit getNewsWithOrganizationId:comData.organization.organizationId
+                           orgunitId:comData.organization.orgunitId
+                            newsType:@"organizationNews"
+                             Refresh:NO
+                       GotArrReports:^(NSArray *arrDicReports, WError *myError) {
+                           nil;
+                       }];
+    [hbKit release];
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -427,6 +465,7 @@ typedef NS_ENUM(NSInteger, TagFlag)
 //            [SVProgressHUD dismissWithIsOk:YES String:@"获取数据成功!"];
             MyDocumentVC *myDoc = [[MyDocumentVC alloc]init];
             UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:myDoc];
+            myDoc.imgdata = _imgUserPhoto;
             self.sidePanelController.centerPanel = nav;
             [myDoc release];
             [nav release];
@@ -441,7 +480,6 @@ typedef NS_ENUM(NSInteger, TagFlag)
             
             if (indexPath.row==0) //员工纪录查询
             {//http://hb.m.gitom.com/3.0/organization/rootOrgunits?organizationId=114&voidFlag=1&cookie=5533098A-43F1-4AFC-8641-E64875461345
-                [SVProgressHUD showWithStatus:@"加载数据…"];
                 HBServerKit *hbKit = [[HBServerKit alloc]init];
                 [hbKit findReportsWithOrganizationId:comData.organization.organizationId GotArrReports:^(NSArray *arrDicReports, WError *myError)
                  {
@@ -460,7 +498,6 @@ typedef NS_ENUM(NSInteger, TagFlag)
                              [mArrReports addObject:orgIfo];
                          }
                          NSLog(@"获取汇报记录成功! %@",mArrReports);
-                         [SVProgressHUD dismissWithIsOk:YES String:@"获取数据成功!"];
                          RecordQeryVC *recordview = [[RecordQeryVC alloc]init];
                          recordview.title = @"记录查询";
                          recordview.orgArray = mArrReports;
@@ -470,7 +507,7 @@ typedef NS_ENUM(NSInteger, TagFlag)
                          [nav release];
                      }else
                      {
-                         [SVProgressHUD dismissWithIsOk:NO String:@"无汇报记录"];
+                         //[SVProgressHUD dismissWithIsOk:NO String:@"无汇报记录"];
                      }
                  }];
                 //NSLog(@"MenuVC OrganizationsModel == %@ ",mArrReports);
@@ -525,7 +562,7 @@ typedef NS_ENUM(NSInteger, TagFlag)
             else if (indexPath.row==3) //管理员工
             {
                 NSLog(@"%@",@"管理员工");
-                [SVProgressHUD showWithStatus:@"加载数据…"];
+                //[SVProgressHUD showWithStatus:@"加载数据…"];
                 HBServerKit *hbKit = [[HBServerKit alloc]init];
                 [hbKit findReportsWithOrganizationId:comData.organization.organizationId GotArrReports:^(NSArray *arrDicReports, WError *myError)
                  {
@@ -547,7 +584,7 @@ typedef NS_ENUM(NSInteger, TagFlag)
                          }
                          //                         callback(mArrReports,YES);
                          NSLog(@"获取汇报记录成功! %@",mArrReports);
-                         [SVProgressHUD dismissWithIsOk:YES String:@"获取数据成功!"];
+                         //[SVProgressHUD dismissWithIsOk:YES String:@"获取数据成功!"];
                          ManageStaffVC *staffmanagement = [[ManageStaffVC alloc]init];
                          staffmanagement.title = @"管理员工";
                          staffmanagement.orgArray = mArrReports;
@@ -649,11 +686,12 @@ typedef NS_ENUM(NSInteger, TagFlag)
             if (tf.text.length > 0) {
                 NSString *changeRoleUrlStr = [NSString stringWithFormat:@"http://hb.m.gitom.com/3.0/organization/updateOrganization?organizationId=%ld&updateUser=%@&name=%@&cookie=%@",(long)comData.organization.organizationId,comData.userModel.username,orgNameString,comData.cookie];
                 NSLog(@"ManageDepartmentVC url = %@ ||ManageDepartmentVC UrlStr %@",changeRoleUrlStr,tf.text);
+                self.organizationName = tf.text;
                 NSURL *releaseUrl = [NSURL URLWithString:changeRoleUrlStr];
                 NSURLRequest *req = [NSURLRequest requestWithURL:releaseUrl];
                 [NSURLConnection sendAsynchronousRequest:req queue:nil completionHandler:nil];
             }else{
-                [SVProgressHUD showErrorWithStatus:@"部门名称不能设置为空!"];
+                [SVProgressHUD showErrorWithStatus:@"名称不能设置为空!"];
             }
         }
             break;
@@ -676,9 +714,13 @@ typedef NS_ENUM(NSInteger, TagFlag)
         {
             
             NSLog(@"公司公告");
-            [SVProgressHUD showWithStatus:@"加载…"];
+            //[SVProgressHUD showWithStatus:@"加载…"];
             HBServerKit *hbKit = [[HBServerKit alloc]init];
-            [hbKit getNewsWithOrganizationId:comData.organization.organizationId orgunitId:comData.organization.orgunitId newsType:@"organizationNews" GotArrReports:^(NSArray *arrDicReports, WError *myError) {
+            [hbKit getNewsWithOrganizationId:comData.organization.organizationId
+                                   orgunitId:comData.organization.orgunitId
+                                    newsType:@"organizationNews"
+                                     Refresh:NO
+                               GotArrReports:^(NSArray *arrDicReports, WError *myError) {
                 if (arrDicReports.count) {
                     NSLog(@"获得公告内容数量 == %d",arrDicReports.count);
                     NSDictionary *dicNew = [arrDicReports objectAtIndex:0];
@@ -690,11 +732,11 @@ typedef NS_ENUM(NSInteger, TagFlag)
                     notVc.realName = [dicNew objectForKey:@"realname"];
                     UINavigationController *nv = [[UINavigationController alloc]initWithRootViewController:notVc];
                     self.sidePanelController.centerPanel = nv;
-                    [SVProgressHUD showSuccessWithStatus:@"获得公司公告"];
+                    //[SVProgressHUD showSuccessWithStatus:@"获得公司公告"];
                     [nv release];
                     [notVc release];
                 }else{
-                    [SVProgressHUD showErrorWithStatus:@"无公司公告"];
+                    //[SVProgressHUD showErrorWithStatus:@"无公司公告"];
                 }
             }];
             [hbKit release];
@@ -704,9 +746,12 @@ typedef NS_ENUM(NSInteger, TagFlag)
         case TagFlag_BtnOrgunitNotice://部门公告
         {
             NSLog(@"部门公告");
-            [SVProgressHUD showWithStatus:@"加载…"];
+            //[SVProgressHUD showWithStatus:@"加载…"];
             HBServerKit *hbKit = [[HBServerKit alloc]init];
-            [hbKit getNewsWithOrganizationId:comData.organization.organizationId orgunitId:comData.organization.orgunitId newsType:@"orgunitNews" GotArrReports:^(NSArray *arrDicReports, WError *myError) {
+            [hbKit getNewsWithOrganizationId:comData.organization.organizationId
+                                   orgunitId:comData.organization.orgunitId newsType:@"orgunitNews"
+                                     Refresh:NO
+                               GotArrReports:^(NSArray *arrDicReports, WError *myError) {
                 if (arrDicReports.count) {
                     NSLog(@"获得公告内容数量 == %d",arrDicReports.count);
                     NSDictionary *dicNew = [arrDicReports objectAtIndex:0];
@@ -718,11 +763,11 @@ typedef NS_ENUM(NSInteger, TagFlag)
                     notVc.realName = [dicNew objectForKey:@"realname"];
                     UINavigationController *nv = [[UINavigationController alloc]initWithRootViewController:notVc];
                     self.sidePanelController.centerPanel = nv;
-                    [SVProgressHUD showSuccessWithStatus:@"获得部门公告"];
+                    //[SVProgressHUD showSuccessWithStatus:@"获得部门公告"];
                     [nv release];
                     [notVc release];
                 }else{
-                    [SVProgressHUD showErrorWithStatus:@"无部门公告"];
+                    //[SVProgressHUD showErrorWithStatus:@"无部门公告"];
                 }
             }];
             [hbKit release];

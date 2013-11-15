@@ -151,7 +151,7 @@
         case 0://打卡考勤查询
         {
             NSLog(@"打卡考勤查询");
-            [SVProgressHUD showWithStatus:@"加载工作汇报…"];
+            //[SVProgressHUD showWithStatus:@"加载工作汇报…"];
             NSLog(@"工作汇报查询");
             HBServerKit *hbServer = [[HBServerKit alloc]init];
             [hbServer findAttendanceReportsOfMembersWithOrganizationId:[orgMod.organizationId integerValue]
@@ -159,7 +159,9 @@
                                                               userName:nil
                                                           BeginDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000)
                                                             EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]FirstReportRecord:0
-                                                       MaxReportRecord:10 GotArrReports:^(NSArray *arrDicReports, WError *myError) {
+                                                       MaxReportRecord:10
+                                                           RefreshData:NO
+                                                         GotArrReports:^(NSArray *arrDicReports, WError *myError) {
                 if (arrDicReports.count) {
                     NSMutableArray * mArrReports = [NSMutableArray arrayWithCapacity:arrDicReports.count];
                     for (NSDictionary * dicReports in arrDicReports)
@@ -184,14 +186,47 @@
                     rdVC.title = [NSString stringWithFormat:@"%@记录",@"打卡"];
                     rdVC.dtBegin = [WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000);//[WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.day-1)*24*60*60*1000);
                     rdVC.orgunitId = orgMod.orgunitId;
-                    [SVProgressHUD dismissWithSuccess:@"加载成功"];
+                    //[SVProgressHUD dismissWithSuccess:@"加载成功"];
                     [self.navigationController pushViewController:rdVC animated:YES];
                     [rdVC release];
                     
                     [SVProgressHUD dismissWithSuccess:@"加载成功"];
                 }else
                 {
-                    [SVProgressHUD dismissWithIsOk:NO String:@"无记录"];
+                    [hbServer findAttendanceReportsOfMembersWithOrganizationId:[orgMod.organizationId integerValue]
+                                                                     orgunitId:[orgMod.orgunitId integerValue]orgunitAttendance:YES
+                                                                      userName:nil
+                                                                  BeginDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000)
+                                                                    EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]FirstReportRecord:0
+                                                               MaxReportRecord:10
+                                                                   RefreshData:NO
+                                                                 GotArrReports:^(NSArray *arrDicReports, WError *myError) {
+               if (arrDicReports.count) {
+                     NSMutableArray * mArrReports = [NSMutableArray arrayWithCapacity:arrDicReports.count];
+                   for (NSDictionary * dicReports in arrDicReports)
+                          {
+                                         AttendanceModel *repMod = [[AttendanceModel alloc]init];
+                                         repMod.realName = [dicReports objectForKey:@"realname"];
+                                         repMod.userName = [dicReports objectForKey:@"username"];
+                                         repMod.note = [dicReports objectForKey:@"note"];
+                                         repMod.createTime = [dicReports objectForKey:@"createDate"];
+                                         [mArrReports addObject:repMod];
+                                         [repMod release];
+                                                                         }
+                                RecordQeryReportsVC *rdVC= [[RecordQeryReportsVC alloc]init];
+                                rdVC.playCard = YES;
+                                rdVC.arrData = mArrReports;//存放具体汇报内容的数组
+                                rdVC.title = [NSString stringWithFormat:@"%@记录",@"打卡"];
+                                rdVC.dtBegin = [WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000);
+                                rdVC.orgunitId = orgMod.orgunitId;
+                                [self.navigationController pushViewController:rdVC animated:YES];
+                                [rdVC release];
+                                [SVProgressHUD dismissWithSuccess:@"加载成功"];
+                    }else
+                    {
+                    nil;
+                    }
+                }];
                 }
             }];
             [hbServer release];
@@ -199,7 +234,7 @@
         }
         case 1://工作汇报查询
         {
-            [SVProgressHUD showWithStatus:@"加载工作汇报…"];
+            //[SVProgressHUD showWithStatus:@"加载工作汇报…"];
             NSLog(@"工作汇报查询");
             HBServerKit *hbServer = [[HBServerKit alloc]init];
             [hbServer findOrgunitReportsOfMembersWithOrganizationId:[orgMod.organizationId integerValue]
@@ -209,6 +244,7 @@
                                                          EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]
                                                   FirstReportRecord:0
                                                     MaxReportRecord:10
+                                                        RefreshData:NO
                                                       GotArrReports:^(NSArray *arrDicReports, WError *myError)
              {
                  if (arrDicReports.count) {
@@ -249,12 +285,63 @@
                      rdVC.title = [NSString stringWithFormat:@"%@记录",orgMod.organizationName];
                      rdVC.dtBegin = [WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000);//[WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.day-1)*24*60*60*1000);
                      
-                     [SVProgressHUD dismissWithSuccess:@"加载成功"];
+                     //[SVProgressHUD dismissWithSuccess:@"加载成功"];
                      [self.navigationController pushViewController:rdVC animated:YES];
                      [rdVC release];
                  }else
                  {
-                     [SVProgressHUD dismissWithIsOk:NO String:@"无记录"];
+                     [hbServer findOrgunitReportsOfMembersWithOrganizationId:[orgMod.organizationId integerValue]
+                                                                   orgunitId:[orgMod.orgunitId integerValue]
+                                                                  ReportType:@"REPORT_TYPE_DAY_REPORT"
+                                                                BeginDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000)
+                                                                  EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]
+                                                           FirstReportRecord:0
+                                                             MaxReportRecord:10
+                                                                 RefreshData:YES
+                                                               GotArrReports:^(NSArray *arrDicReports, WError *myError)
+                      {
+                          if (arrDicReports.count) {
+                              NSMutableArray * mArrReports = [NSMutableArray arrayWithCapacity:arrDicReports.count];
+                              for (NSDictionary * dicReports in arrDicReports)
+                              {
+                                  NSLog(@"realname == %@",dicReports);
+                                  
+                                  NSLog(@"444name == %@",[dicReports objectForKey:@"name"]);
+                                  ReportModel *repMod = [[ReportModel alloc]init];
+                                  repMod.imageUrl = [dicReports objectForKey:@"imageUrl"];
+                                  repMod.latitude = [[dicReports objectForKey:@"latitude"]floatValue];
+                                  repMod.longitude = [[dicReports objectForKey:@"longitude"]floatValue];
+                                  repMod.note = [dicReports objectForKey:@"note"];
+                                  repMod.soundUrl = [dicReports objectForKey:@"soundUrl"];
+                                  repMod.telephone = [dicReports objectForKey:@"telephone"];
+                                  repMod.updateDate = [[dicReports objectForKey:@"updateDate"]longLongValue];
+                                  repMod.address = [dicReports objectForKey:@"address"];
+                                  repMod.realName = [dicReports objectForKey:@"realname"];
+                                  repMod.userName = [dicReports objectForKey:@"updateUserId"];
+                                  repMod.reportId = [dicReports objectForKey:@"reportId"];
+                                  repMod.organizationId = [[dicReports objectForKey:@"organizationId"]integerValue];
+                                  repMod.orgunitId = [[dicReports objectForKey:@"orgunitId"]integerValue];
+                                  NSLog(@"RecordQeryVC repMod.address= %@",repMod.address);
+                                  [mArrReports addObject:repMod];
+                                  [repMod release];
+                              }
+                              RecordQeryReportsVC *rdVC= [[RecordQeryReportsVC alloc]init];
+                              rdVC.arrData = arrDicReports;//存放公司信息的数组
+                              rdVC.strTypeRecord = @"REPORT_TYPE_DAY_REPORT";
+                              rdVC.userRealname = orgMod.organizationName;
+                              rdVC.organizationId = orgMod.organizationId;
+                              rdVC.orgunitId = orgMod.orgunitId;
+                              
+                              rdVC.reportArrData = mArrReports;//存放具体汇报内容的数组
+                              rdVC.title = [NSString stringWithFormat:@"%@记录",orgMod.organizationName];
+                              rdVC.dtBegin = [WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000);
+                              [self.navigationController pushViewController:rdVC animated:YES];
+                              [rdVC release];
+                          }else
+                          {
+                              nil;
+                          }
+                      }];
                  }
              }];
             
@@ -264,7 +351,7 @@
         case 2://外出汇报查询
         {
             NSLog(@"外出汇报查询");
-            [SVProgressHUD showWithStatus:@"加载工作汇报…"];
+            //[SVProgressHUD showWithStatus:@"加载工作汇报…"];
             HBServerKit *hbServer = [[HBServerKit alloc]init];
             [hbServer findOrgunitReportsOfMembersWithOrganizationId:[orgMod.organizationId integerValue]
                                                           orgunitId:[orgMod.orgunitId integerValue]
@@ -273,6 +360,7 @@
                                                          EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]
                                                   FirstReportRecord:0
                                                     MaxReportRecord:10
+                                                        RefreshData:NO
                                                       GotArrReports:^(NSArray *arrDicReports, WError *myError)
              {
                  if (arrDicReports.count) {
@@ -300,8 +388,6 @@
                          [mArrReports addObject:repMod];
                          [repMod release];
                      }
-                     NSLog(@"RecordQeryVC ReportManager 数组循环次数 ==  %d",arrDicReports.count);
-                     NSLog(@"RecordQeryVC == 工作汇报查询成功! %@",arrDicReports);
                      RecordQeryReportsVC *rdVC= [[RecordQeryReportsVC alloc]init];
                      rdVC.arrData = arrDicReports;//存放公司信息的数组
                      rdVC.strTypeRecord = @"REPORT_TYPE_GO_OUT";
@@ -311,14 +397,61 @@
                      
                      rdVC.reportArrData = mArrReports;//存放具体汇报内容的数组
                      rdVC.title = [NSString stringWithFormat:@"%@记录",orgMod.organizationName];
-                     rdVC.dtBegin = [WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000);//[WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.day-1)*24*60*60*1000);
-                     
-                     [SVProgressHUD dismissWithSuccess:@"加载成功"];
+                     rdVC.dtBegin = [WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000);
                      [self.navigationController pushViewController:rdVC animated:YES];
                      [rdVC release];
                  }else
                  {
-                     [SVProgressHUD dismissWithIsOk:NO String:@"无记录"];
+                     [hbServer findOrgunitReportsOfMembersWithOrganizationId:[orgMod.organizationId integerValue]
+                                                                   orgunitId:[orgMod.orgunitId integerValue]
+                                                                  ReportType:@"REPORT_TYPE_GO_OUT"
+                                                                BeginDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000)
+                                                                  EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]
+                                                           FirstReportRecord:0
+                                                             MaxReportRecord:10
+                                                                 RefreshData:YES
+                                                               GotArrReports:^(NSArray *arrDicReports, WError *myError)
+                      {
+                          if (arrDicReports.count) {
+                              NSMutableArray * mArrReports = [NSMutableArray arrayWithCapacity:arrDicReports.count];
+                              for (NSDictionary * dicReports in arrDicReports)
+                              {
+                                  ReportModel *repMod = [[ReportModel alloc]init];
+                                  repMod.imageUrl = [dicReports objectForKey:@"imageUrl"];
+                                  repMod.latitude = [[dicReports objectForKey:@"latitude"]floatValue];
+                                  repMod.longitude = [[dicReports objectForKey:@"longitude"]floatValue];
+                                  repMod.note = [dicReports objectForKey:@"note"];
+                                  repMod.soundUrl = [dicReports objectForKey:@"soundUrl"];
+                                  repMod.telephone = [dicReports objectForKey:@"telephone"];
+                                  repMod.updateDate = [[dicReports objectForKey:@"updateDate"]longLongValue];
+                                  repMod.address = [dicReports objectForKey:@"address"];
+                                  repMod.realName = [dicReports objectForKey:@"realname"];
+                                  repMod.userName = [dicReports objectForKey:@"updateUserId"];
+                                  repMod.reportId = [dicReports objectForKey:@"reportId"];
+                                  repMod.organizationId = [[dicReports objectForKey:@"organizationId"]integerValue];
+                                  repMod.orgunitId = [[dicReports objectForKey:@"orgunitId"]integerValue];
+                                  NSLog(@"RecordQeryVC repMod.address= %@",repMod.address);
+                                  [mArrReports addObject:repMod];
+                                  [repMod release];
+                              }
+                              RecordQeryReportsVC *rdVC= [[RecordQeryReportsVC alloc]init];
+                              rdVC.arrData = arrDicReports;//存放公司信息的数组
+                              rdVC.strTypeRecord = @"REPORT_TYPE_GO_OUT";
+                              rdVC.userRealname = orgMod.organizationName;
+                              rdVC.organizationId = orgMod.organizationId;
+                              rdVC.orgunitId = orgMod.orgunitId;
+                              
+                              rdVC.reportArrData = mArrReports;//存放具体汇报内容的数组
+                              rdVC.title = [NSString stringWithFormat:@"%@记录",orgMod.organizationName];
+                              rdVC.dtBegin = [WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000);
+                              [self.navigationController pushViewController:rdVC animated:YES];
+                              [rdVC release];
+                          }else
+                          {
+                              nil;
+                          }
+                      }];
+
                  }
              }];
             
@@ -328,7 +461,7 @@
         case 3://出差汇报查询
         {
             NSLog(@"出差汇报查询");
-            [SVProgressHUD showWithStatus:@"加载工作汇报…"];
+            //[SVProgressHUD showWithStatus:@"加载工作汇报…"];
             HBServerKit *hbServer = [[HBServerKit alloc]init];
             [hbServer findOrgunitReportsOfMembersWithOrganizationId:[orgMod.organizationId integerValue]
                                                           orgunitId:[orgMod.orgunitId integerValue]
@@ -337,6 +470,7 @@
                                                          EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]
                                                   FirstReportRecord:0
                                                     MaxReportRecord:10
+                                                        RefreshData:NO
                                                       GotArrReports:^(NSArray *arrDicReports, WError *myError)
              {
                  if (arrDicReports.count) {
@@ -368,20 +502,66 @@
                      NSLog(@"RecordQeryVC == 工作汇报查询成功! %@",arrDicReports);
                      RecordQeryReportsVC *rdVC= [[RecordQeryReportsVC alloc]init];
                      rdVC.arrData = arrDicReports;//存放公司信息的数组
-                     rdVC.strTypeRecord = @"REPORT_TYPE_GO_OUT";
+                     rdVC.strTypeRecord = @"REPORT_TYPE_TRAVEL";
                      rdVC.userRealname = orgMod.organizationName;
                      rdVC.organizationId = orgMod.organizationId;
                      rdVC.orgunitId = orgMod.orgunitId;
                      
                      rdVC.reportArrData = mArrReports;//存放具体汇报内容的数组
                      rdVC.title = [NSString stringWithFormat:@"%@记录",orgMod.organizationName];
-                     rdVC.dtBegin = [WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000);//[WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.day-1)*24*60*60*1000);
-                     [SVProgressHUD dismissWithSuccess:@"加载成功"];
+                     rdVC.dtBegin = [WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000);
                      [self.navigationController pushViewController:rdVC animated:YES];
                      [rdVC release];
                  }else
                  {
-                     [SVProgressHUD dismissWithIsOk:NO String:@"无记录"];
+                     [hbServer findOrgunitReportsOfMembersWithOrganizationId:[orgMod.organizationId integerValue]
+                                                                   orgunitId:[orgMod.orgunitId integerValue]
+                                                                  ReportType:@"REPORT_TYPE_TRAVEL"
+                                                                BeginDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000)
+                                                                  EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]
+                                                           FirstReportRecord:0
+                                                             MaxReportRecord:10
+                                                                 RefreshData:YES
+                                                               GotArrReports:^(NSArray *arrDicReports, WError *myError)
+                      {
+                          if (arrDicReports.count) {
+                              NSMutableArray * mArrReports = [NSMutableArray arrayWithCapacity:arrDicReports.count];
+                              for (NSDictionary * dicReports in arrDicReports)
+                              {
+                                  ReportModel *repMod = [[ReportModel alloc]init];
+                                  repMod.imageUrl = [dicReports objectForKey:@"imageUrl"];
+                                  repMod.latitude = [[dicReports objectForKey:@"latitude"]floatValue];
+                                  repMod.longitude = [[dicReports objectForKey:@"longitude"]floatValue];
+                                  repMod.note = [dicReports objectForKey:@"note"];
+                                  repMod.soundUrl = [dicReports objectForKey:@"soundUrl"];
+                                  repMod.telephone = [dicReports objectForKey:@"telephone"];
+                                  repMod.updateDate = [[dicReports objectForKey:@"updateDate"]longLongValue];
+                                  repMod.address = [dicReports objectForKey:@"address"];
+                                  repMod.realName = [dicReports objectForKey:@"realname"];
+                                  repMod.userName = [dicReports objectForKey:@"updateUserId"];
+                                  repMod.reportId = [dicReports objectForKey:@"reportId"];
+                                  repMod.organizationId = [[dicReports objectForKey:@"organizationId"]integerValue];
+                                  repMod.orgunitId = [[dicReports objectForKey:@"orgunitId"]integerValue];
+                                  [mArrReports addObject:repMod];
+                                  [repMod release];
+                              }
+                              RecordQeryReportsVC *rdVC= [[RecordQeryReportsVC alloc]init];
+                              rdVC.arrData = arrDicReports;//存放公司信息的数组
+                              rdVC.strTypeRecord = @"REPORT_TYPE_TRAVEL";
+                              rdVC.userRealname = orgMod.organizationName;
+                              rdVC.organizationId = orgMod.organizationId;
+                              rdVC.orgunitId = orgMod.orgunitId;
+                              
+                              rdVC.reportArrData = mArrReports;//存放具体汇报内容的数组
+                              rdVC.title = [NSString stringWithFormat:@"%@记录",orgMod.organizationName];
+                              rdVC.dtBegin = [WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000);
+                              [self.navigationController pushViewController:rdVC animated:YES];
+                              [rdVC release];
+                          }else
+                          {
+                              nil;
+                          }
+                      }];
                  }
              }];
             [hbServer release];
@@ -401,7 +581,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     //[SVProgressHUD showErrorWithStatus:@"加载人员数据…" duration:1.0];
-    [SVProgressHUD showWithStatus:@"加载部门数据…"];
+    //[SVProgressHUD showWithStatus:@"加载部门数据…"];
     
     // Navigation logic may go here. Create and push another view controller.
     HBServerKit *hbKit = [[HBServerKit alloc]init];
@@ -435,13 +615,13 @@
              RecordQeryDetialVC *detailViewController = [[RecordQeryDetialVC alloc] initWithNibName:nil bundle:nil];
              detailViewController.orgArray = mArrReports;
              //[SVProgressHUD showSuccessWithStatus:@"加载人员数据…"];
-             [SVProgressHUD dismissWithIsOk:YES String:@"加载成功"];//显示出结果
+             //[SVProgressHUD dismissWithIsOk:YES String:@"加载成功"];//显示出结果
              [self.navigationController pushViewController:detailViewController animated:YES];
              [detailViewController release];
          }else
          {
              //[SVProgressHUD dismissWithIsOk:NO String:@"无汇报记录"];
-             [SVProgressHUD showErrorWithStatus:@"无人员数据"];
+             //[SVProgressHUD showErrorWithStatus:@"无人员数据"];
          }
      }];
 }

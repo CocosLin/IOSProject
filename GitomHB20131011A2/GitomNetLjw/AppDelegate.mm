@@ -19,18 +19,66 @@
 
 //百度地图-移动汇报Key
 #define Key_BaiduMap @"6C5DEAD96FFFEEAAF3F0F2289BC52F9E078ADA72"
+#define APP_DownloadURL @"http://59.57.15.168/HB.html"
 #import "NewsManager.h"
 
-@implementation AppDelegate
+@implementation AppDelegate{
+    BOOL isAlertUpdateShowed;
+}
+
 
 - (void)dealloc
 {
     [_window release];
     [super dealloc];
 }
+#pragma mark -- 版本更新检测
+-(void)checkUpdate
+{
+    //获得服务器上的版本信息
+    NSURL *url = [NSURL URLWithString:@"http://59.57.15.168/GitomHB.plist"];
+    NSDictionary *getXMLdic = [[NSDictionary alloc]initWithContentsOfURL:url];
+    NSLog(@"NSDidctionary = %@",getXMLdic);
+    NSLog(@"服务器应用版本 = %@",[[[[getXMLdic objectForKey:@"items"]objectAtIndex:0]objectForKey:@"metadata"]objectForKey:@"bundle-version"]);
+    
+    
+    NSString* sLastVersion=[[[[getXMLdic objectForKey:@"items"]objectAtIndex:0]objectForKey:@"metadata"]objectForKey:@"bundle-version"]; //取服务器最新的版本
+    NSString* sLastVersionInfo=@"Test Update Check！"; //服务器最新的版本与系统版本进行判断
+    
+    NSString *versionString = [[NSBundle mainBundle]objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    NSLog(@"本应用版本 == %@",versionString);
+    if (![sLastVersion isEqualToString:versionString])
+    {
+        [self alertUpdate:sLastVersionInfo];
+        
+    }
+}
 
+-(void)alertUpdate:(NSString *)strContent
+{
+    NSLog(@"是否更新");
+    if (!isAlertUpdateShowed) {
+        isAlertUpdateShowed=YES;
+        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"升级提示"
+                                                     message:strContent
+                                                    delegate:self //委托给Self，才会执行上面的调用
+                                           cancelButtonTitle:@"以后再说"
+                                           otherButtonTitles:@"马上更新",nil] ;
+        [av show];
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    if (buttonIndex != [alertView cancelButtonIndex])
+    {
+        NSLog(@"更新");
+        NSURL *url = [NSURL URLWithString:APP_DownloadURL];
+        [[UIApplication sharedApplication] openURL:url];
+    }
+}
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    /*
     //自定义缓存
     self.myCache = [[ASIDownloadCache alloc] init];
     
@@ -42,8 +90,10 @@
     
     
     self.networkQueue = [[ASINetworkQueue alloc] init];
-    [self.networkQueue reset];
-    
+    [self.networkQueue reshttp://59.57.15.168/et];
+    */
+     
+     
     NewsManager *manger = [[NewsManager alloc]init];
     [manger getNewsOforganizationId:114 andOrgunitId:1 andCookie:@"5533098A-43F1-4AFC-8641-E64875461345"];
     

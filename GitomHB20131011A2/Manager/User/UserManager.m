@@ -25,7 +25,11 @@ SINGLETON_FOR_CLASS_Implementation(UserManager)
 -(void)getUserPhotoImageWithStrUserPhotoUrl:(NSString *)strUserPhotoUrl
                                   GotResult:(void(^)(UIImage *imgUserPhoto, BOOL isOK))callback
 {
+
+    
     strUserPhotoUrl = [strUserPhotoUrl stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSLog(@"strUserPhotoUrl imgurl = %@",strUserPhotoUrl);
+    
     [_serverKit getUserPhotoImageWithStrUserPhotoUrl:strUserPhotoUrl GotResult:^(UIImage *imgUserPhoto, WError *myError)
      {
          if (!myError) {

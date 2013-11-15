@@ -10,10 +10,9 @@
 
 #import "UserModel.h"
 #import "UserManager.h"
-
-
+#import "HBServerKit.h"
+#define kMyPhotoName @"headImg.jpg"
 @interface MyDocumentVC ()
-
 @end
 
 @implementation MyDocumentVC
@@ -28,9 +27,108 @@
     return self;
 }
 
+#pragma mark - 更换用户头像
+- (void)chooseHeadPhoto{
+    UIAlertView *aler = [[UIAlertView alloc]initWithTitle:@"选择拍照" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"拍照",@"选择图片", nil];
+    [aler show];
+    [aler release];
+}
+#pragma mark - UIAlerViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    switch (buttonIndex) {
+            
+        case 1:
+        {
+            NSLog(@"camera");
+            if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+                UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+                picker.delegate = self;
+                //picker.allowsEditing = YES; //是否可编辑
+                //打开相册选择照片
+                picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+                //开启图片选取动画
+                [self presentModalViewController:picker animated:YES];
+                //释放内存
+                
+                [picker release];
+            }else {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"你没有摄像头" delegate:nil cancelButtonTitle:@"知道" otherButtonTitles:nil];
+                [alert show];
+            }
+        }
+            break;
+        case 2:{
+            NSLog(@"album");
+            if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeSavedPhotosAlbum]) {
+                UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+                picker.delegate = self;
+                //picker.allowsEditing = YES; //是否可编辑
+                //打开相册选择照片
+                picker.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+                //开启图片选取动画
+                [self presentModalViewController:picker animated:YES];
+                //释放内存
+                
+                [picker release];
+            }else {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:@"相册中没有图片" delegate:nil cancelButtonTitle:@"知道" otherButtonTitles:nil];
+                [alert show];
+            }
+        }
+        default:
+            break;
+    }
+}
+
+#pragma mark -- UIImagePickerControllerDelegate
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)image editingInfo:(NSDictionary *)editingInfo{
+    NSData *photoData = UIImageJPEGRepresentation(image, 0.0001);
+    NSString *photoPath = [NSTemporaryDirectory() stringByAppendingString:kMyPhotoName];
+    NSLog(@"photoPath == %@",photoPath);
+    self.headImage.image = image;
+    [photoData writeToFile:photoPath atomically:NO];
+    
+    [self dismissModalViewControllerAnimated:YES];
+}
+
+#pragma mark -- 获得服务器存放图片路径
+- (void)sendFileToServe{
+    NSLog(@"获得服务器存放图片路径");
+    NSString *photoPath = [NSString stringWithFormat:@"%@%@",NSTemporaryDirectory(),kMyPhotoName];
+    HBServerKit *hbKit = [[HBServerKit alloc]init];
+    [hbKit saveImageReportsOfMembersWithData:photoPath GotArrReports:^(NSArray *arrDicReports, WError *myError) {
+        NSLog(@"arrDicReports == %@",arrDicReports);
+        NSString *group = [[[NSString alloc]init]autorelease];
+        NSString *filename = [[[NSString alloc]init]autorelease];
+        NSString *server = [[[NSString alloc]init]autorelease];
+        group = [[arrDicReports objectAtIndex:0]objectForKey:@"group"];
+        filename = [[arrDicReports objectAtIndex:0]objectForKey:@"filename"];
+        server = [[arrDicReports objectAtIndex:0]objectForKey:@"server"];
+        NSString *urlOfImg = [NSString stringWithFormat:@"http://%@/%@/%@",server,group,filename];
+        self.headImgUrlStr = urlOfImg;
+        NSLog(@"server imgPath == %@",self.headImgUrlStr);
+        
+    }];
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    UIButton *rbtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [rbtn setTitle:@"保存" forState:UIControlStateNormal];
+    [rbtn setTitleColor:[UIColor colorWithRed:103.0/255.0 green:154.0/255.0 blue:233.0/255.0 alpha:1] forState:UIControlStateNormal];
+    rbtn.frame = CGRectMake(0, 0, 50, 44);
+    [rbtn setBackgroundImage:[UIImage imageNamed:@"btn_title_text_default"] forState:UIControlStateNormal];
+    // 高亮
+    [rbtn  setBackgroundImage:[UIImage imageNamed:@"btn_title_text_pressed"] forState:UIControlStateHighlighted];
+    [rbtn addTarget:self action:@selector(saveUserDocumentAction) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *rbarButtonItem = [[UIBarButtonItem alloc]initWithCustomView:rbtn];
+    self.navigationItem.rightBarButtonItem = rbarButtonItem;
+    [rbarButtonItem release];
+    
+    UITapGestureRecognizer *tapHideKey = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapHideKeyBoard)];
+    [self.view addGestureRecognizer:tapHideKey];
+    
 	//创建基本信息栏
     [self creatBaseInformationViews];
     
@@ -39,22 +137,37 @@
     
     //详细信息
     [self creatDetileInformationViews];
-    
+    [tapHideKey release];
 }
 
+#pragma mark - 更改用户信息
+- (void)saveUserDocumentAction{
+    [self sendFileToServe];
+    GetCommonDataModel;
+    HBServerKit *hbKit = [[HBServerKit alloc]init];
+    NSString * nameEncod = (NSString *)CFURLCreateStringByAddingPercentEscapes( kCFAllocatorDefault, (CFStringRef)_name.text, NULL, NULL,  kCFStringEncodingUTF8 );
+    [hbKit saveUserDocumentWithUsername:comData.userModel.username andRealName:nameEncod andTelephone:_phoneNumber.text andPhoto:self.headImgUrlStr];
+    [self tapHideKeyBoard];
+    [hbKit release];
+}
 //连接图片
 - (void)loadImage
 {
     //获得头像信息
+    /*
     GetCommonDataModel;
-    NSString *imgUrl = comData.userModel.photo;
-    NSLog(@"imgUrl==%@",imgUrl);
-    if (imgUrl != nil) {
-        NSURL *url = [NSURL URLWithString:[imgUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-        NSData *pthotoData  = [NSData dataWithContentsOfURL:url];
-        self.headImage.image = [UIImage imageWithData:pthotoData];
-    }
+    HBServerKit *hbKit = [[HBServerKit alloc]init];
     
+    NSString *imgUrl = comData.userModel.photo;
+    //if (imgUrl != nil) {
+        [hbKit getUserPhotoImageWithStrUserPhotoUrl:imgUrl GotResult:^(UIImage *imgUserPhoto, WError *myError) {
+            
+            self.headImage.image = imgUserPhoto;
+        }];
+    //}*/
+    if (self.imgdata != nil) {
+        self.headImage.image = self.imgdata;
+    }
     
         
 }
@@ -68,18 +181,23 @@
     
     [baseInformaton release];
     
+    UIImageView *card_head_camera = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"card_head_camera.png"]];
+    card_head_camera.frame = CGRectMake(0, 0, 10, 10);
     
-    UIImageView * tempHeadImageView= [[UIImageView alloc]initWithFrame:CGRectMake(10, 10, 60, 60)];
     
-    self.headImage = tempHeadImageView;
+    self.headImage= [[UIImageView alloc]initWithFrame:CGRectMake(10, 10, 60, 60)];
     UIImage *imgHead = [UIImage imageNamed:@"icon_avatar_user.png"];
-    //self.headImage.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"icon_avatar_user.png"]];
     self.headImage.image = imgHead;
     [baseInformaton addSubview:self.headImage];
-    [tempHeadImageView release];
-    //UIView *cameraImg = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 31, 28)];
-    //[tempHeadImageView addSubview:cameraImg];
-    //[cameraImg release];
+    [self.headImage addSubview:card_head_camera];
+    
+    UIButton *chooseHeadBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    chooseHeadBtn.frame = CGRectMake(10, 10, 60, 60);
+    [chooseHeadBtn addTarget:self action:@selector(chooseHeadPhoto) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:chooseHeadBtn];
+//    UITapGestureRecognizer *tapChooseHead = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(chooseHeadPhoto)];
+//    [self.headImage addGestureRecognizer:tapChooseHead];
+//    
     
     UIView *link = [[UIView alloc]initWithFrame:CGRectMake(85, 39, 210, 2)];
     link.backgroundColor = [UIColor colorWithRed:119/255.0 green:136/255.0 blue:153/255.0 alpha:1];//RGB(119,136,153)（浅石板灰）
@@ -102,7 +220,8 @@
     
     //可编辑名字
     _name = [[UITextField alloc]initWithFrame:CGRectMake(140, 10, 130, 25)];
-    _name.enabled= NO;
+    _name.enabled= YES;
+    _name.delegate = self;
     [baseInformaton addSubview:self.name];
     _name.backgroundColor = [UIColor clearColor];
     GetCommonDataModel;
@@ -114,22 +233,24 @@
     [img1 release];
     
     //可编辑号码
-    UITextField * tempPhoneNumber    = [[UITextField alloc]initWithFrame:CGRectMake(140, 45, 130, 25)];
-    tempPhoneNumber.enabled = NO;
-    tempPhoneNumber.backgroundColor = [UIColor clearColor];
-    tempPhoneNumber.text = comData.userModel.telephone;
+    _phoneNumber    = [[UITextField alloc]initWithFrame:CGRectMake(140, 45, 130, 25)];
+    _phoneNumber.enabled = YES;
+    _phoneNumber.delegate = self;
+    _phoneNumber.backgroundColor = [UIColor clearColor];
+    _phoneNumber.text = comData.userModel.telephone;
     NSLog(@"comData.userModel.cellphone==%@",comData.userModel.telephone);
-    self.phoneNumber = tempPhoneNumber;
     UIImageView *img2 = [[UIImageView alloc]initWithFrame:CGRectMake(271, 45, 25, 25)];
     img2.image = [UIImage imageNamed:@"info_edit.png"];
     [baseInformaton addSubview:img2];
     [img2 release];
-    [baseInformaton addSubview:self.phoneNumber];
-    
-    [tempPhoneNumber release];
+    [baseInformaton addSubview:_phoneNumber];
     
 }
 
+- (void)tapHideKeyBoard{
+    [_name resignFirstResponder];
+    [_phoneNumber resignFirstResponder];
+}
 //获得详细信息
 - (void) creatDetileInformationViews
 {

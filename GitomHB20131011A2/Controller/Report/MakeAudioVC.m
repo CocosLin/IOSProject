@@ -180,13 +180,16 @@ static double endRecordTime=0;
 }
 
 -(void) startRecord {
-    [recordAudio stopPlay];
+    //[recordAudio stopPlay];
     [recordAudio startRecord];
     startRecordTime = [NSDate timeIntervalSinceReferenceDate];
     
     [curAudio release],curAudio=nil;
 }
 -(void)stopRecord {
+    m = 0;
+    ss = 0;
+    s = 0;
     endRecordTime = [NSDate timeIntervalSinceReferenceDate];
     
     NSURL *url = [recordAudio stopRecord];
@@ -255,7 +258,7 @@ static double endRecordTime=0;
         [[AVAudioSession sharedInstance]setActive:YES error:nil];
         [recorder record];
         */
-        secTimer = [NSTimer scheduledTimerWithTimeInterval:.01f target:self selector:@selector(timerUpdate) userInfo:nil repeats:YES];
+        secTimer = [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(timerUpdate) userInfo:nil repeats:YES];
         
         timer = [NSTimer scheduledTimerWithTimeInterval:0.3 target:self selector:@selector(recordTimer) userInfo:nil repeats:YES];
         num = 3;
@@ -360,13 +363,22 @@ static double endRecordTime=0;
     _imgViewAudio.image = [UIImage imageWithContentsOfFile:path];
     num--;
 }
-
+static int s = 0;
+static int m = 0;
+static int ss = 0;
 - (void)timerUpdate
 {
-    int m = recorder.currentTime / 60;
-    int s = ((int)recorder.currentTime) % 60;
-    int ss = (recorder.currentTime - ((int)recorder.currentTime)) *100;
-    _lblShowTime.text = [NSString stringWithFormat:@"%.2d:%.2d:%.2d",m,s,ss];
+    _lblShowTime.text = [NSString stringWithFormat:@"%d:%d:%d",m,s,ss];
+    ss++;
+    if (ss>60) {
+        s++;
+        ss=0;
+        if (s>60) {
+            m++;
+            s=0;
+        }
+    }
+    
 }
 
 - (NSInteger) formatIndexToEnum:(NSInteger) index

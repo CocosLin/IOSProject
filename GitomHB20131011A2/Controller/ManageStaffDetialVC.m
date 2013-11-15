@@ -22,14 +22,65 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        self.title = @"员工列表";
     }
     return self;
+}
+
+#pragma mark - 刷新
+- (void)refreshAction{
+    HBServerKit *hbKit = [[HBServerKit alloc]init];
+    GetCommonDataModel;
+    [hbKit findOrgunitMembersWithOrganizationId:comData.organization.organizationId
+                                      orgunitId:self.orgNumber
+                                        Refresh:YES
+                                  GotArrReports:^(NSArray *arrDicReports, WError *myError)
+     {
+         if (arrDicReports.count) {
+             NSLog(@"RecordQeryVC 数组循环次数 ==  %d",arrDicReports.count);
+             NSMutableArray * mArrReports = [NSMutableArray arrayWithCapacity:arrDicReports.count];
+             for (NSDictionary * dicReports in arrDicReports)
+             {
+                 NSLog(@"RecordQeryVC ReportManager 获得数据内容 == %@",dicReports);
+                 
+                 NSLog(@"RecordQeryVC  realname == %@",[dicReports objectForKey:@"realname"]);
+                 NSLog(@"RecordQeryVC  roleId == %@",[dicReports objectForKey:@"roleId"]);
+                 MemberOrgModel *memberIfo = [[MemberOrgModel alloc]init];
+                 memberIfo.realName = [dicReports objectForKey:@"realname"];
+                 memberIfo.username = [dicReports objectForKey:@"username"];
+                 memberIfo.roleId = [dicReports objectForKey:@"roleId"];
+                 memberIfo.photoUrl = [dicReports objectForKey:@"photo"];
+                 memberIfo.telePhone = [dicReports objectForKey:@"telephone"];
+                 memberIfo.orgunitId = [dicReports objectForKey:@"orgunitId"];
+                 [mArrReports addObject:memberIfo];
+             }
+             self.orgArray = mArrReports;
+         }else
+         {
+             //[SVProgressHUD dismissWithIsOk:NO String:@"无人员数据"];
+         }
+     }];
+    
+    [self.organizationTableView reloadData];
+    [self viewDidLoad];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [btn1 setTitle:@"刷新" forState:UIControlStateNormal];
+    [btn1 setTitleColor:[UIColor colorWithRed:103.0/255.0 green:154.0/255.0 blue:233.0/255.0 alpha:1] forState:UIControlStateNormal];
+    btn1.frame = CGRectMake(0, 0, 50, 44);
+    [btn1 setBackgroundImage:[UIImage imageNamed:@"btn_title_text_default"] forState:UIControlStateNormal];
+    // 高亮
+    [btn1  setBackgroundImage:[UIImage imageNamed:@"btn_title_text_pressed"] forState:UIControlStateHighlighted];
+    [btn1 addTarget:self action:@selector(refreshAction) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc]initWithCustomView:btn1];
+    self.navigationItem.rightBarButtonItem = barButtonItem;
+    [barButtonItem release];
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(0, 0, 50, 44);

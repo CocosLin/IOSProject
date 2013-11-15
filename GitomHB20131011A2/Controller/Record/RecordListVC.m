@@ -204,6 +204,7 @@
                                                      EndDateLli:self.dtEnd
                                               FirstReportRecord:0
                                                 MaxReportRecord:10
+                                                    RefreshData:YES
                                                   GotArrReports:^(NSArray *arrDicReports, WError *myError) {
             if (arrDicReports.count) {
                 self.arrData = arrDicReports;
@@ -218,6 +219,7 @@
     }else//汇报记录
     {
         //查汇报记录
+        [SVProgressHUD showWithStatus:@"加载…"];
         NSString * strReportType = [ReportManager getStrTypeReportWithIntReportType:self.typeRecord];
         ReportManager * rm = [ReportManager sharedReportManager];
         
@@ -229,6 +231,7 @@
                                EndDateLli:self.dtEnd
                         FirstReportRecord:0
                           MaxReportRecord:10
+                                   Refrsh:YES
                             GotArrReports:^(NSArray *arrReports, BOOL isOk)
          {
              if (arrReports.count) {
@@ -376,8 +379,29 @@
                                                      EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]
                                               FirstReportRecord:0
                                                 MaxReportRecord:10
+                                                    RefreshData:NO
                                                   GotArrReports:^(NSArray *arrDicReports, WError *myError) {
-            self.arrData = arrDicReports;
+             if (arrDicReports.count) {
+                 self.arrData = arrDicReports;
+             }else{
+                 [hbKit findAttendanceReportsOfMembersWithOrganizationId:comData.organization.organizationId
+                                                               orgunitId:comData.organization.orgunitId
+                                                       orgunitAttendance:NO
+                                                                userName:[comData.userModel.username intValue]
+                                                            BeginDateLli:[WTool getBeginDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.day -1)*30*24*60*60*1000)
+                                                              EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]
+                                                       FirstReportRecord:0
+                                                         MaxReportRecord:10
+                                                             RefreshData:YES
+                                                           GotArrReports:^(NSArray *arrDicReports, WError *myError) {
+                                                               if (arrDicReports.count) {
+                                                                   self.arrData = arrDicReports;
+                                 }else{
+                            nil;
+                     }
+                  }];
+             }
+            
         }];
         [hbKit release];
     }else//汇报记录
@@ -400,10 +424,34 @@
                                EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]
                         FirstReportRecord:0
                           MaxReportRecord:10
+                                   Refrsh:NO
                             GotArrReports:^(NSArray *arrReports, BOOL isOk)
          {
-             self.arrData = arrReports;
-             NSLog(@"RecordListVC arrData == %@",self.arrData);
+             if (arrReports.count) {
+                 self.arrData = arrReports;
+                 NSLog(@"RecordListVC arrData == %@",self.arrData);
+             }else{
+                 [rm findReportsWithOrganizationId:comData.organization.organizationId
+                                         OrgunitId:comData.organization.orgunitId
+                                          Username:comData.userModel.username
+                                        ReportType:strReportType
+                                      BeginDateLli:[WTool getBeginDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.day -1)*30*24*60*60*1000)
+                                        EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]
+                                 FirstReportRecord:0
+                                   MaxReportRecord:10
+                                            Refrsh:YES
+                                     GotArrReports:^(NSArray *arrReports, BOOL isOk)
+                  {
+                      if (arrReports.count) {
+                          self.arrData = arrReports;
+                          NSLog(@"RecordListVC arrData == %@",self.arrData);
+                      }else{
+                          nil;
+                      }
+                      
+                  }];
+             }
+             
          }];
     }
 }
@@ -458,6 +506,7 @@ static int addDataInt=0;
                                                      EndDateLli:self.dtEnd
                                               FirstReportRecord:0
                                                 MaxReportRecord:10+addDataInt
+                                                    RefreshData:YES
                                                   GotArrReports:^(NSArray *arrDicReports, WError *myError) {
             self.arrData = arrDicReports;
         }];
@@ -476,6 +525,7 @@ static int addDataInt=0;
                                EndDateLli:self.dtEnd
                         FirstReportRecord:0
                           MaxReportRecord:10+addDataInt
+                                   Refrsh:YES
                             GotArrReports:^(NSArray *arrReports, BOOL isOk)
          {
              self.arrData = arrReports;

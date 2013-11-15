@@ -185,6 +185,7 @@
                                                             EndDateLli:self.dtEnd
                                                      FirstReportRecord:0
                                                        MaxReportRecord:10+addDataInt
+                                                           RefreshData:YES
                                                          GotArrReports:^(NSArray *arrDicReports, WError *myError)
              {
                  if (arrDicReports.count) {
@@ -220,6 +221,7 @@
                                                             EndDateLli:self.dtEnd
                                                      FirstReportRecord:0
                                                        MaxReportRecord:10+addDataInt
+                                                           RefreshData:YES
                                                          GotArrReports:^(NSArray *arrDicReports, WError *myError)
              {
                  if (arrDicReports.count) {
@@ -257,6 +259,7 @@
                                          EndDateLli:self.dtEnd
                                   FirstReportRecord:0
                                     MaxReportRecord:10
+                                        RefreshData:YES
                                       GotArrReports:^(NSArray *arrDicReports, WError *myError)
              {
                  if (arrDicReports.count) {
@@ -301,6 +304,7 @@
                                                          EndDateLli:self.dtEnd
                                                   FirstReportRecord:0
                                                     MaxReportRecord:10
+                                                        RefreshData:YES
                                                       GotArrReports:^(NSArray *arrDicReports, WError *myError)
              {
                  if (arrDicReports.count) {
@@ -489,7 +493,8 @@
                              BeginDateLli:self.dtBegin
                                EndDateLli:self.dtEnd
                         FirstReportRecord:0
-                          MaxReportRecord:50
+                          MaxReportRecord:10
+                                   Refrsh:NO
                             GotArrReports:^(NSArray *arrReports, BOOL isOk)
          {
              self.arrData = arrReports;
@@ -545,6 +550,7 @@ static int addDataInt=0;
                                                             EndDateLli:self.dtEnd
                                                      FirstReportRecord:0
                                                        MaxReportRecord:10+addDataInt
+                                                           RefreshData:YES
                                                          GotArrReports:^(NSArray *arrDicReports, WError *myError)
             {
              if (arrDicReports.count) {
@@ -578,6 +584,7 @@ static int addDataInt=0;
                                                             EndDateLli:self.dtEnd
                                                      FirstReportRecord:0
                                                        MaxReportRecord:10+addDataInt
+                                                           RefreshData:YES
                                                          GotArrReports:^(NSArray *arrDicReports, WError *myError)
             {
                   if (arrDicReports.count) {
@@ -613,6 +620,7 @@ static int addDataInt=0;
                                          EndDateLli:self.dtEnd
                                   FirstReportRecord:0
                                     MaxReportRecord:10+addDataInt
+                                        RefreshData:YES
                                       GotArrReports:^(NSArray *arrDicReports, WError *myError)
              {
                  if (arrDicReports.count) {
@@ -658,6 +666,7 @@ static int addDataInt=0;
                                                          EndDateLli:self.dtEnd
                                                   FirstReportRecord:0
                                                     MaxReportRecord:10+addDataInt
+                                                        RefreshData:YES
                                                       GotArrReports:^(NSArray *arrDicReports, WError *myError)
              {
                  if (arrDicReports.count) {

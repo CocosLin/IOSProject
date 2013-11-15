@@ -12,4 +12,5 @@
 @property (retain, nonatomic) UITableView *organizationTableView;
 @property (nonatomic,retain) NSArray *orgArray;
 @property (nonatomic, copy) NSString *unitName;
+@property (nonatomic,assign) int orgNumber;
 @end

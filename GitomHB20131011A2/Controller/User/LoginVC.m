@@ -28,8 +28,7 @@
 #define imageName_btnLoginBackgroundNormal @"btnLoginBackgroundNormal"
 #define imageName_btnLoginBackgroundHighlighted @"btnLoginBackgroundHighlight.png"
 
-#define imageName_checkBox_off @"checkbox_normal"
-#define imageName_checkBox_on @"checkbox_checked"
+
 
 #define kAutoLog @"autoLog"//用于标记是否自动登入
 #define kNoautoLog @"noAutoLog"
@@ -75,7 +74,13 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
 -(void)initUserInputView:(CGRect)frame
 {
     CGFloat y_start = 0;
-    _tbvUserLoginInput = [[UITableView alloc]initWithFrame:CGRectMake(10, y_start + 30, frame.size.width - 10*2,Height_Cell_LoginInput * Count_Cell_LoginInput)];
+    if ([[[UIDevice currentDevice]systemVersion]floatValue]>7.0) {
+        _tbvUserLoginInput = [[UITableView alloc]initWithFrame:CGRectMake(10, 60, frame.size.width - 10*2,Height_Cell_LoginInput * Count_Cell_LoginInput)];
+    }else{
+        _tbvUserLoginInput = [[UITableView alloc]initWithFrame:CGRectMake(10, y_start + 30, frame.size.width - 10*2,Height_Cell_LoginInput * Count_Cell_LoginInput)];
+    }
+    
+    
     _tbvUserLoginInput.tag = Tag_Tbv_LoginInput;
     [self.view addSubview:_tbvUserLoginInput];
     _tbvUserLoginInput.scrollEnabled = NO;
@@ -288,9 +293,9 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
         myCell.textLabel.text = _userIfo.userName;
         UIButton *removeBut = [UIButton buttonWithType:UIButtonTypeCustom];
         removeBut.tag = indexPath.row+100;
-        [removeBut setBackgroundImage:[UIImage imageNamed:@"remove.png"] forState:UIControlStateNormal];
+        [removeBut setBackgroundImage:[UIImage imageNamed:@"ad_close_icon.png"] forState:UIControlStateNormal];
         [removeBut addTarget:self action:@selector(removeUserHistoryAction:) forControlEvents:UIControlEventTouchUpInside];
-        removeBut.frame = CGRectMake(Screen_Width-55, 7, 26, 26);
+        removeBut.frame = CGRectMake(Screen_Width-45, 7, 26, 26);
         [myCell addSubview:removeBut];
         return myCell;
     }

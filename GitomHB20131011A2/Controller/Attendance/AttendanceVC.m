@@ -108,16 +108,16 @@
     self.companyLongitude = singal.longitude;
     
     //上视图320/3=106.3  480/6=80
-    up=[[UIImageView alloc]initWithFrame:CGRectMake(Screen_Width/3,Screen_Height/6-10, Screen_Width/3, Screen_Height/6)];
+    up=[[UIImageView alloc]initWithFrame:CGRectMake(Screen_Width/3,Screen_Height/6, Screen_Width/3, Screen_Height/6-20)];
     up.image=[UIImage imageNamed:@"shake_logo_up.png"];
     [self.view addSubview:up];
     
     //下视图
-    down=[[UIImageView alloc]initWithFrame:CGRectMake(Screen_Width/3, Screen_Height/3-10, Screen_Width/3, Screen_Height/6)];
+    down=[[UIImageView alloc]initWithFrame:CGRectMake(Screen_Width/3, Screen_Height/3-10, Screen_Width/3, Screen_Height/6-20)];
     down.image=[UIImage imageNamed:@"shake_logo_down.png"];
     [self.view addSubview:down];
-    up.center=CGPointMake(Screen_Width/2, Screen_Height/2-Screen_Height/12);
-    down.center=CGPointMake(Screen_Width/2, Screen_Height/2+Screen_Height/12);
+    up.center=CGPointMake(Screen_Width/2, Screen_Height/2-Screen_Height/16);
+    down.center=CGPointMake(Screen_Width/2, Screen_Height/2+Screen_Height/16);
     
     //----------------------------------------设置导航条----------------------------------------
     [self.navigationController setNavigationBarHidden:NO animated:YES];
@@ -188,6 +188,14 @@
     
     [self.view addSubview:viewDistance];
     [viewDistance release];
+    
+    UIButton *but1 = [UIButton buttonWithType:UIButtonTypeCustom];
+    [but1 setTitle:@"打卡" forState:UIControlStateNormal];
+    but1.frame = CGRectMake(10, Screen_Height-110, Screen_Width-20, 42);
+    [but1 setBackgroundImage:[[UIImage imageNamed:@"03.png"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
+    [but1 setBackgroundImage:[[UIImage imageNamed:@"04.png"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateHighlighted];
+    [but1 addTarget: self action:@selector(motionEnded:withEvent:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:but1];
 }
 
 
@@ -223,8 +231,8 @@ static SystemSoundID shake_sound_male_id = 0;
         down.center=CGPointMake(Screen_Width/2, Screen_Height/2+Screen_Height/12+30);
     } completion:^(BOOL finished) {
         [UIView animateWithDuration:0.8 animations:^{
-            up.center=CGPointMake(Screen_Width/2, Screen_Height/2-Screen_Height/12);
-            down.center=CGPointMake(Screen_Width/2, Screen_Height/2+Screen_Height/12);
+            up.center=CGPointMake(Screen_Width/2, Screen_Height/2-Screen_Height/16);
+            down.center=CGPointMake(Screen_Width/2, Screen_Height/2+Screen_Height/16);
         }];
     }];
 

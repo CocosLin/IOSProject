@@ -19,7 +19,7 @@
 #import "MJPhotoBrowser.h"
 #import "MJPhoto.h"
 #import "AddCommentVC.h"
-
+#import "UserPositionVC.h"
 
 #define BIG_IMG_WIDTH  200.0
 #define BIG_IMG_HEIGHT 200.0
@@ -165,6 +165,13 @@
         label.lineBreakMode=NSLineBreakByCharWrapping;
         label.text = [NSString stringWithFormat:@"%lf,%lf",self.reportModel.longitude,self.reportModel.latitude];
         [label release];
+        
+        UIButton *positionBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        positionBtn.frame = CGRectMake(250, 5, 35, 35);
+        [positionBtn setBackgroundImage:[UIImage imageNamed:@"location_icon.png"] forState:UIControlStateNormal];
+        [positionBtn addTarget:self action:@selector(findPositionAction) forControlEvents:UIControlEventTouchUpInside];
+        [myCell addSubview:positionBtn];
+        
     }else if(indexPath.row == 4)
     {
         UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake(60, 2, 200, h)];
@@ -298,6 +305,16 @@
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 #pragma mark - 属性控制
+#pragma mark -- 汇报人员位置
+- (void)findPositionAction{
+    ReportModel * report = (ReportModel *)self.reportModel;
+    UserPositionVC *vc = [[UserPositionVC alloc]init];
+    vc.latitude = report.latitude;
+    vc.longitude = report.longitude;
+    [self.navigationController pushViewController:vc animated:YES];
+    [vc release];
+}
+
 -(void)setReportModel:(ReportModel *)reportModel
 {
     if (reportModel != _reportModel)

@@ -79,6 +79,7 @@ SINGLETON_FOR_CLASS_Implementation(ReportManager)
                           EndDateLli:(long long int)endDateLli
                    FirstReportRecord:(NSInteger)firstReportRecord
                      MaxReportRecord:(NSInteger)maxCountReportRecord
+                              Refrsh:(BOOL)refreshOrNot
                        GotArrReports:(WbArrReports)callback
 {
     NSLog(@"ReportManager == 开始获得汇报记录");
@@ -93,6 +94,7 @@ SINGLETON_FOR_CLASS_Implementation(ReportManager)
                                    EndDateLli:endDateLli
                             FirstReportRecord:firstReportRecord
                               MaxReportRecord:maxCountReportRecord
+                                  RefreshData:refreshOrNot
                                 GotArrReports:^(NSArray *arrDicReports, WError *myError)
      {
          if (arrDicReports.count) {

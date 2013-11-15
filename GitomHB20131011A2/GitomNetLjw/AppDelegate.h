@@ -12,17 +12,17 @@
 #import "CommonDataModel.h"
 #import "UIViewController+JASidePanel.h"
 #import "BMapKit.h"
-#import "ASIDownloadCache.h"
-#import "ASINetworkQueue.h"
+//#import "ASIDownloadCache.h"
+//#import "ASINetworkQueue.h"
 
 @class JASidePanelController;
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 {
     BMKMapManager* _mapManager;
-    ASIDownloadCache *myCache;
+    //ASIDownloadCache *myCache;
 }
 @property (strong, nonatomic) JWMotionRecognizingWindow * window;
 @property(retain,nonatomic)CommonDataModel * comData;
-@property (nonatomic,retain) ASIDownloadCache *myCache;
-@property (nonatomic, retain) ASINetworkQueue *networkQueue;    //asi下载队列
+//@property (nonatomic,retain) ASIDownloadCache *myCache;
+//@property (nonatomic, retain) ASINetworkQueue *networkQueue;    //asi下载队列
 @end

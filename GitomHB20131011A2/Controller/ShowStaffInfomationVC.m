@@ -263,7 +263,7 @@
         {
             GetCommonDataModel;
             if (switchAlerDelegate == YES) {
-                NSString *changeRoleUrlStr = [NSString stringWithFormat:@"http://hb.m.gitom.com/3.0/organization/updateOrgunitUser?organizationId=%ld&orgunitId=%ld&roleId=%@&username=%@&updateUser=%@&cookie=%@&operations=8",(long)comData.organization.organizationId,(long)comData.organization.orgunitId,@"2",self.memberIfo.username,comData.userModel.username,comData.cookie];
+                NSString *changeRoleUrlStr = [NSString stringWithFormat:@"http://hb.m.gitom.com/3.0/organization/updateOrgunitUser?organizationId=%ld&orgunitId=%@&roleId=%@&username=%@&updateUser=%@&cookie=%@&operations=8",(long)comData.organization.organizationId,self.memberIfo.orgunitId,@"2",self.memberIfo.username,comData.userModel.username,comData.cookie];
                 NSLog(@"ReleaseAnnounceVC UrlStr %@",changeRoleUrlStr);
                 NSURL *releaseUrl = [NSURL URLWithString:changeRoleUrlStr];
                 NSURLRequest *req = [NSURLRequest requestWithURL:releaseUrl];
@@ -271,7 +271,11 @@
                 //[self alerAction];
                 NSLog(@"alerAction");
             }else{
-                NSString *changeRoleUrlStr = [NSString stringWithFormat:@"http://hb.m.gitom.com/3.0/organization/deleteOrgunitUser?organizationId=%ld&orgunitId=%ld&username=%@&updateUser=%@&cookie=%@&operations=4",(long)comData.organization.organizationId,(long)comData.organization.orgunitId,self.memberIfo.username,comData.userModel.username,comData.cookie];
+                if (comData.organization.roleId!=1 && comData.organization.orgunitId!=[self.memberIfo.orgunitId integerValue]) {
+                    [SVProgressHUD showErrorWithStatus:@"您不能对非本部门的员工进行删除操作！" duration:0.8];
+                    return;
+                }
+                NSString *changeRoleUrlStr = [NSString stringWithFormat:@"http://hb.m.gitom.com/3.0/organization/deleteOrgunitUser?organizationId=%ld&orgunitId=%@&username=%@&updateUser=%@&cookie=%@&operations=4",(long)comData.organization.organizationId,self.memberIfo.orgunitId,self.memberIfo.username,comData.userModel.username,comData.cookie];
                 NSLog(@"ReleaseAnnounceVC UrlStr %@",changeRoleUrlStr);
                 NSURL *releaseUrl = [NSURL URLWithString:changeRoleUrlStr];
                 NSURLRequest *req = [NSURLRequest requestWithURL:releaseUrl];

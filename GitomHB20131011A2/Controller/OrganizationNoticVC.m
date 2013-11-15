@@ -31,6 +31,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    NSLog(@"biaoti");
     //标题
     UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, Screen_Width-20, 40)];
     titleLabel.backgroundColor = [UIColor clearColor];
