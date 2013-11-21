@@ -64,9 +64,12 @@
             cell.addressLabel.text = [[self.arrData objectAtIndex:indexPath.row] objectForKey:@"address"];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
-        cell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
-        cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
-        
+        UIImageView *tempBackgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]];
+        cell.backgroundView = tempBackgroundView;
+        [tempBackgroundView release];
+        UIImageView *selectedBackgroundView =[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]];
+        cell.selectedBackgroundView = selectedBackgroundView;
+        [selectedBackgroundView release];
         return cell;
         
     }else{

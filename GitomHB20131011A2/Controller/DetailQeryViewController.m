@@ -229,7 +229,7 @@
         
         HBServerKit *hbKit = [[HBServerKit alloc]init];
         NSArray *_urls = [[[NSArray alloc]init]autorelease];
-        _urls = [[NSArray alloc]init];
+        //_urls = [[NSArray alloc]init];
         _urls = [hbKit getImgStringWith:self.reportModel.imageUrl];
         NSLog(@"tup == %@",_urls);
         NSLog(@"tup count == %d",_urls.count);

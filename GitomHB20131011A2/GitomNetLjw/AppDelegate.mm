@@ -97,9 +97,9 @@
     //更新检测
     [self checkUpdate];
      
-    NewsManager *manger = [[NewsManager alloc]init];
-    [manger getNewsOforganizationId:114 andOrgunitId:1 andCookie:@"5533098A-43F1-4AFC-8641-E64875461345"];
-    
+//    NewsManager *manger = [[NewsManager alloc]init];
+//    [manger getNewsOforganizationId:114 andOrgunitId:1 andCookie:@"5533098A-43F1-4AFC-8641-E64875461345"];
+//    [manger release];
     BOOL isExistenceNetwork = YES;
     Reachability *r = [Reachability reachabilityWithHostName:@"www.apple.com"];
     switch ([r currentReachabilityStatus]) {

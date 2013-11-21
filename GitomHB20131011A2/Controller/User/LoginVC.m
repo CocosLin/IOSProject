@@ -517,8 +517,6 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
         [self.view addSubview:_tbvUserHistoryIfo];
         hideHistoryUserIfo = YES;
     }
-    
-    //[self userInfoRecorded1];
 }
 
 //处理用户事件

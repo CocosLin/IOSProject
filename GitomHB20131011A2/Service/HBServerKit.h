@@ -236,10 +236,20 @@ typedef  void(^WbReportSave)(BOOL isReportOk,WError * myError);
                                      MaxReportRecord:(NSInteger)maxCountReportRecord
                                          RefreshData:(BOOL)refshOrNot
                                        GotArrReports:(WbReportJsonArr)callback;
+
 #pragma mark -查询申请
 -(void)findApplyWithOrganizationId:(NSInteger)organizationId
                                   orgunitId:(NSInteger)orgunitId
                               GotArrReports:(WbReportJsonArr)callback;
+
+#pragma mark -- 获取消息通知
+- (void)getNotcFromMemberOrgId:(NSInteger)organizationId
+                     orgunitId:(NSInteger)orgunitId
+                   andUserName:(NSString *)username
+                  andBeginTime:(NSString *)beginTime
+                      andFirst:(int)first
+                        andMax:(int)max
+          getQueryMessageArray:(void(^)(NSArray *messageArray))callBack;
 
 #pragma mark - 获取考勤配置
 -(void)getAttendanceConfigWithOrganizationId:(NSInteger)organizationId

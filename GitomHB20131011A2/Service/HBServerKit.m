@@ -12,7 +12,7 @@
 #import "SVProgressHUD.h"
 #import "WTool.h"
 #import "OrganizationsModel.h"
-
+#import "QueryMessageModel.h"
 
 
 //typedef NS_ENUM(NSInteger, ETypeReport)
@@ -185,7 +185,7 @@
 
 
 #pragma mark - 用户操作
-#pragma mark -登录
+#pragma mark --登录
 -(void)loggingWithUsername:(NSString *)username
              Md5PasswordUp:(NSString *)md5PassUp
                VersionCode:(NSString *)versionCode
@@ -769,7 +769,7 @@
     
 }
 
-#pragma mark -查询申请
+#pragma mark -- 查询申请
 //http://hb.m.gitom.com/3.0/organization/applys?organizationId=114&orgunitId=1&cookie=5533098A-43F1-4AFC-8641-E64875461345
 -(void)findApplyWithOrganizationId:(NSInteger)organizationId
                          orgunitId:(NSInteger)orgunitId
@@ -804,6 +804,64 @@
         }
     }];
     [req startAsynchronous];
+}
+
+#pragma mark -- 获取消息通知
+- (void)getNotcFromMemberOrgId:(NSInteger)organizationId
+                     orgunitId:(NSInteger)orgunitId
+                   andUserName:(NSString *)username
+                  andBeginTime:(NSString *)beginTime
+                      andFirst:(int)first
+                        andMax:(int)max
+        getQueryMessageArray:(void(^)(NSArray *messageArray))callBack{
+    NSString *urlStr = [NSString stringWithFormat:@"%@/util/queryMessage?organizationId=%d&orgunitId=%d&username=%@&beginTime=%@&first=%d&max=%d&cookie=%@",self.strBaseUrl,organizationId,organizationId,username,beginTime,first,max,_cookie];
+    NSLog(@"获取消息通知 url == %@",urlStr);
+    ASIHTTPRequest *req = [[ASIHTTPRequest alloc]initWithURL:[NSURL URLWithString:urlStr]];
+    WDataParse *wdp = [WDataParse sharedWDataParse];
+    [req setCompletionBlock:^{
+        NSData *dataResponse = [req responseData];
+        [self getIsServerNoErrorWithHead:[self getHeadWithDataResponse:dataResponse]];//检查服务器是否没有异常，如果有，就打印
+        NSLog(@"HBServerKit 从服务端获得的完整json格式数据 获取消息通知 == %@",[[NSString alloc]initWithData:dataResponse encoding:NSUTF8StringEncoding]);
+        Body * body = [self getBodyWithDataResponse:dataResponse];
+        
+        NSLog(@"HBServerKit 完整数据之中取得body 获取消息通知 %@",body);
+        if (body.success)//如果查汇报成功
+        {
+            
+            NSArray * arrReportsGot = [wdp wGetArrJsonWithStringJson:body.data];
+            NSMutableArray *massageMutableAr = [[NSMutableArray alloc]initWithCapacity:arrReportsGot.count];
+            for (NSDictionary *massageDic in arrReportsGot) {
+                QueryMessageModel *messageMod = [[QueryMessageModel alloc]init];
+                messageMod.organizationId = [massageDic objectForKey:@"organizationId"];
+                messageMod.createDate = [massageDic objectForKey:@"createDate"];
+                messageMod.dtx = [massageDic objectForKey:@"dtx"];
+                messageMod.extend = [massageDic objectForKey:@"extend"];
+                messageMod.messageId = [massageDic objectForKey:@"messageId"];
+                messageMod.orgunitId = [massageDic objectForKey:@"orgunitId"];
+                messageMod.readUser = [massageDic objectForKey:@"readUser"];
+                messageMod.sender = [massageDic objectForKey:@"sender"];
+                messageMod.senderReadname = [massageDic objectForKey:@"senderReadname"];
+                messageMod.username = [massageDic objectForKey:@"username"];
+                messageMod.voidFlag = [[massageDic objectForKey:@"voidFlag"] intValue];
+                [massageMutableAr addObject:messageMod];
+                [messageMod release];
+            }
+            callBack(massageMutableAr);
+            [SVProgressHUD showSuccessWithStatus:@"获得配置"];
+            NSLog(@"HBServerKit 从body取得data 获取消息通知 == %@",arrReportsGot);
+            //[arrReportsGot release];
+        }else//如果查汇报不成功
+        {
+            WError * error = [[WError alloc]initWithWErrorType:WErrorType_Logic wErrorDescription:body.warning];
+            Mark_Custom;
+            NSLog(@"获取消息通知 ERROR == %@",error.wErrorDescription);
+            callBack(nil);
+            [SVProgressHUD showErrorWithStatus:@"未获得"];
+            [error release];
+        }
+    }];
+    [req startAsynchronous];
+    [req release];
 }
 
 #pragma mark -- 获取考勤配置
@@ -1116,18 +1174,15 @@
     [dicParams setObject:[NSNumber numberWithDouble:longitude] forKey:@"longitude"];
     [dicParams setObject:[NSNumber numberWithDouble:latitude] forKey:@"latitude"];
     [dicParams setObject:_cookie forKey:@"cookie"];
-//    WDataParse *wdp = [WDataParse sharedWDataParse];
     WDataService * wds = [WDataService sharedWDataService];
     [wds wPostRequestWithIsAsynchronous:YES Url:[NSURL URLWithString:strPortReport] DicPostDatas:dicParams
                               GetResult:^(NSData *dataResponse, NSError *errorRequest)
     {
         if (!errorRequest){
-            //[self getIsServerNoErrorWithHead:[self getHeadWithDataResponse:dataResponse]];//检查服务器是否没有异常，如果有，就打印
             Body * body = [self getBodyWithDataResponse:dataResponse];
             if (body.success)//如果保存汇报成功
             {
                 NSLog(@"保存汇报成功 == %@",body.data);
-//                NSArray * arrReportsGot = [wdp wGetArrJsonWithStringJson:body.data];
                 callback(YES,nil);
             }else//如果查汇报不成功
             {
@@ -1149,7 +1204,7 @@
     }];
 
 }
-#pragma mark - 考勤数据处理
+#pragma mark -- 考勤数据处理
 /*{"inTime":-14400000,"ordinal":1,"outTime":60000,"voidFlag":false}*/
 #pragma mark -- 将考勤的打卡配置数据转换为字典
 - (NSMutableArray *)getAttenWorktimeArrayBySetOutTime1:(int)outTime1
@@ -1285,7 +1340,7 @@
     [req startAsynchronous];
 }
 
-#pragma mark - 发布部门消息
+#pragma mark -- 发布部门消息
 -(void)saveReportWithOrganizationId:(NSInteger)organizationId
                           OrgunitId:(NSInteger)orgunitId
                            Username:(NSString *)username
@@ -1457,7 +1512,7 @@
     [req startAsynchronous];
 }
 
-#pragma mark - 获取考勤
+#pragma mark -- 获取考勤
 //得到考勤配置(工作时间段，考勤距离，公司坐标等)
 -(void)getAttendanceConfigWithOrganizationID:(NSInteger)organizationId
                                    OrgunitID:(NSInteger)orgunitID
@@ -1494,7 +1549,7 @@
 }
 
 //http://uc.gitom.com/api/user/send_resister_smscode?mobile=13328786791
-#pragma mark - 注册用户
+#pragma mark -- 注册用户
 - (void)registerWithPhoneNumber:(NSString *)phoneNumber{
     NSString *urlStr = [NSString stringWithFormat:@"http://uc.gitom.com/api/user/send_resister_smscode?mobile=%@",phoneNumber];
     NSURL *url = [NSURL URLWithString:urlStr];

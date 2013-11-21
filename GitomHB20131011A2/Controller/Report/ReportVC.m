@@ -112,12 +112,12 @@ static int makeSoundFlag;
         NSMutableDictionary *dic1 = [[NSMutableDictionary alloc]init];
         [hbKit saveImageReportsOfMembersWithData:imgUrl GotArrReports:^(NSArray *arrDicReports, WError *myError) {
             NSLog(@"arrDicReports == %@",arrDicReports);
-            NSString *group = [[[NSString alloc]init]autorelease];
-            NSString *filename = [[[NSString alloc]init]autorelease];
-            NSString *server = [[[NSString alloc]init]autorelease];
-            group = [[arrDicReports objectAtIndex:0]objectForKey:@"group"];
-            filename = [[arrDicReports objectAtIndex:0]objectForKey:@"filename"];
-            server = [[arrDicReports objectAtIndex:0]objectForKey:@"server"];
+//            NSString *group = [[[NSString alloc]init]autorelease];
+//            NSString *filename = [[[NSString alloc]init]autorelease];
+//            NSString *server = [[[NSString alloc]init]autorelease];
+            NSString * group = [[arrDicReports objectAtIndex:0]objectForKey:@"group"];
+            NSString * filename = [[arrDicReports objectAtIndex:0]objectForKey:@"filename"];
+            NSString * server = [[arrDicReports objectAtIndex:0]objectForKey:@"server"];
             NSString *urlOfImg = [NSString stringWithFormat:@"http://%@/%@/%@",server,group,filename];
             [dic1 setObject:@" " forKey:@"id"];
             [dic1 setObject:urlOfImg forKey:@"thumb"];
@@ -161,12 +161,12 @@ static int makeSoundFlag;
         NSMutableDictionary *dic1 = [[NSMutableDictionary alloc]init];
         [hbKit saveSoundReportsOfMembersWithData:soundPath GotArrReports:^(NSArray *arrDicReports, WError *myError) {
             NSLog(@"arrDicReports == %@",arrDicReports);
-            NSString *group = [[[NSString alloc]init]autorelease];
-            NSString *filename = [[[NSString alloc]init]autorelease];
-            NSString *server = [[[NSString alloc]init]autorelease];
-            group = [[arrDicReports objectAtIndex:0]objectForKey:@"group"];
-            filename = [[arrDicReports objectAtIndex:0]objectForKey:@"filename"];
-            server = [[arrDicReports objectAtIndex:0]objectForKey:@"server"];
+//            NSString *group = [[[NSString alloc]init]autorelease];
+//            NSString *filename = [[[NSString alloc]init]autorelease];
+//            NSString *server = [[[NSString alloc]init]autorelease];
+            NSString *group = [[arrDicReports objectAtIndex:0]objectForKey:@"group"];
+            NSString *filename = [[arrDicReports objectAtIndex:0]objectForKey:@"filename"];
+            NSString *server = [[arrDicReports objectAtIndex:0]objectForKey:@"server"];
             
             NSLog(@"server soundgeUrl == %@",[NSString stringWithFormat:@"http://%@/%@/%@",server,group,filename]);
             NSString *urlOfSound = [NSString stringWithFormat:@"http://%@/%@/%@",server,group,filename];

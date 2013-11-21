@@ -72,14 +72,14 @@
 }
 
 - (void)dealloc{
-    [self.note release];
-    [self.address release];
-    [self.imageUrl release];
-    [self.soundUrl release];
-    [self.reportType release];
-    [self.telephone release];
-    [self.realName release];
-    [self.userName release];
+    //[self.note release];
+//    [self.address release];
+//    [self.imageUrl release];
+//    [self.soundUrl release];
+//    [self.reportType release];
+//    [self.telephone release];
+//    [self.realName release];
+//    [self.userName release];
     [super dealloc];
 }
 @end

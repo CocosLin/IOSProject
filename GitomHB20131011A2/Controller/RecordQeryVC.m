@@ -54,9 +54,9 @@
     self.organizationTableView.delegate = self;
     self.organizationTableView.dataSource = self;
     [self.view addSubview:self.organizationTableView];
-    OrganizationsModel *orgModel = [[OrganizationsModel alloc]init];
-    orgModel = [self.orgArray objectAtIndex:0];
-    NSLog(@"[self.orgArray objectAtIndex:0]%@  %@  [[self.orgArray objectAtIndex:indexPath.row]orgunitId]%@",[[self.orgArray objectAtIndex:0] organizationName],orgModel.organizationName,orgModel.orgunitId);
+//    OrganizationsModel *orgModel = [[OrganizationsModel alloc]init];
+//    orgModel = [self.orgArray objectAtIndex:0];
+//    NSLog(@"[self.orgArray objectAtIndex:0]%@  %@  [[self.orgArray objectAtIndex:indexPath.row]orgunitId]%@",[[self.orgArray objectAtIndex:0] organizationName],orgModel.organizationName,orgModel.orgunitId);
 }
 
 - (void)didReceiveMemoryWarning
@@ -84,6 +84,7 @@
                 orgIfo.orgunitId = [dicReports objectForKey:@"orgunitId"];
                 orgIfo.organizationId = [dicReports objectForKey:@"organizationId"];
                 [mArrReports addObject:orgIfo];
+                [orgIfo release];
             }
             self.orgArray = mArrReports;
             [self.organizationTableView reloadData];
@@ -165,9 +166,10 @@
 #pragma mark - 部门查询种类
 -(void)btnAction:(NSInteger)index
 {
-    OrganizationsModel *orgMod = [[OrganizationsModel alloc]init];
-    orgMod = [self.orgArray objectAtIndex:index];
-    NSLog(@"%@ %@ %@",orgMod.organizationId,orgMod.organizationName,orgMod.orgunitId);
+//    OrganizationsModel *orgMod = [[OrganizationsModel alloc]init];
+//    orgMod = [self.orgArray objectAtIndex:index];
+//    [orgMod release];
+    //NSLog(@"%@ %@ %@",orgMod.organizationId,orgMod.organizationName,orgMod.orgunitId);
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"查询部门"
                                                     message:@"请选择查询类别"
                                                    delegate:self

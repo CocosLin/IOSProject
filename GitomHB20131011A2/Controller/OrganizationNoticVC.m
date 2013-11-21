@@ -16,10 +16,14 @@
 #import "MJPhotoBrowser.h"
 #import "MJPhoto.h"
 #import "UIImageView+WebCache.h"
-
+#import "QueryMessageModel.h"
+#import "HBServerKit.h"
+#import "WTool.h"
+#import "RecordQeryReportsVcCellForios5.h"
 
 @interface OrganizationNoticVC (){
     NSMutableArray *_urls;
+    NSArray *tableArray;
 }
 
 @end
@@ -30,54 +34,41 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
         self.title = @"公告";
     }
     return self;
 }
-/*
-#pragma mark - 刷新
-- (void)refreshAction{
-    NSLog(@"refreshAction - 刷新");
-    HBServerKit *hbKit = [[HBServerKit alloc]init];
-    GetCommonDataModel;
-    [hbKit findReportsWithOrganizationId:comData.organization.organizationId Refresh:YES GotArrReports:^(NSArray *arrDicReports, WError *myError) {
-        if (arrDicReports.count) {
-            NSLog(@"ReportManager 数组循环次数 ==  %d",arrDicReports.count);
-            NSMutableArray * mArrReports = [NSMutableArray arrayWithCapacity:arrDicReports.count];
-            for (NSDictionary * dicReports in arrDicReports)
-            {
-                NSLog(@"444ReportManager 获得数据内容 == %@",dicReports);
-                
-                NSLog(@"444name == %@",[dicReports objectForKey:@"name"]);
-                OrganizationsModel *orgIfo = [[OrganizationsModel alloc]init];
-                orgIfo.organizationName = [dicReports objectForKey:@"name"];
-                orgIfo.orgunitId = [dicReports objectForKey:@"orgunitId"];
-                orgIfo.organizationId = [dicReports objectForKey:@"organizationId"];
-                [mArrReports addObject:orgIfo];
-            }
-            self.orgArray = mArrReports;
-            [self.manageTableView reloadData];
-        }else
-        {
-            [SVProgressHUD showErrorWithStatus:@"无部门"];
-        }
-    }];
-    
-    
-    
-}
 
-*/
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    if (self.querMessage == YES) {
+        GetCommonDataModel;
+        HBServerKit *hbKit = [[HBServerKit alloc]init];
+        [hbKit getNotcFromMemberOrgId:comData.organization.organizationId orgunitId:comData.organization.orgunitId andUserName:comData.userModel.username andBeginTime:@"1279865600000" andFirst:0 andMax:10 getQueryMessageArray:^(NSArray *messageArray) {
+            tableArray = messageArray;
+            for (QueryMessageModel *messageMod in messageArray) {
+                NSLog(@"Menu meassageMod nst =  /%@ / %@ / %@ / %@ / %@ /%@",messageMod.username,messageMod.readUser,messageMod.messageId,messageMod.organizationId,messageMod.dtx,messageMod.senderReadname);
+                NSLog(@"tableArray.count == %d",tableArray.count);
+                massageTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, Screen_Width, Screen_Height-65)];
+                massageTableView.delegate = self;
+                massageTableView.dataSource = self;
+                [self.view addSubview:massageTableView];
+                
+            }
+        }];
+        
+    }else{
+        [self creatNewsView];
+    }
+}
+
+- (void)creatNewsView{
     NSLog(@"biaoti %@",self.userId);
     //标题
     UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, Screen_Width-20, 40)];
     titleLabel.backgroundColor = [UIColor clearColor];
-    NSCharacterSet *set = [NSCharacterSet characterSetWithCharactersInString:@"@／：；（）¥「」＂、[]{}#%-*+=_\\|~＜＞$€^•'@#$%^&*()_+'\""]; //过滤字符串    
+    NSCharacterSet *set = [NSCharacterSet characterSetWithCharactersInString:@"@／：；（）¥「」＂、[]{}#%-*+=_\\|~＜＞$€^•'@#$%^&*()_+'\""]; //过滤字符串
     titleLabel.text = [self.textTitle stringByTrimmingCharactersInSet:set];
     titleLabel.font = [UIFont systemFontOfSize:30.0];
     [self.view addSubview:titleLabel];
@@ -94,7 +85,7 @@
         realNameLabel.text = realStr;
         
         [self.view addSubview:realNameLabel];
-        }
+    }
     //发布时间
     UILabel *timeLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 70, Screen_Width-20, 30)];
     timeLabel.backgroundColor = [UIColor clearColor];
@@ -112,7 +103,7 @@
     NSString *contentStr = [separatImgAndStr objectAtIndex:0];
     NSString *imgUrlStr = [[[NSString alloc]init]autorelease];
     if (separatImgAndStr.count>1) {
-     imgUrlStr = [separatImgAndStr objectAtIndex:1];
+        imgUrlStr = [separatImgAndStr objectAtIndex:1];
     }
     NSLog(@"imgUrlStr == %@",imgUrlStr);
     //图片
@@ -156,10 +147,10 @@
         [contentText release];
     }else{
         [SVProgressHUD showErrorWithStatus:@"暂时无通知"];
-    }    
+    }
     [imgView release];
 }
-
+         
 #pragma mark -- 放大图片
 - (void)tapImage:(UITapGestureRecognizer *)tap
 {
@@ -189,6 +180,38 @@
     [browser show];
 }
 
+#pragma mark -- UITableViewDelegate
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section;
+{
+    NSLog(@"%d",tableArray.count);
+    return tableArray.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    NSLog(@"tableArray.count %d",tableArray.count);
+    static NSString *CellIdentifier = @"Cell";
+    RecordQeryReportsVcCellForios5 *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[RecordQeryReportsVcCellForios5 alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    }
+    
+    QueryMessageModel *messageMod = [[QueryMessageModel alloc]init];
+    messageMod = [tableArray objectAtIndex:indexPath.row];
+    
+    cell.nameLabel.text = [NSString stringWithFormat:@"%@(%@)",messageMod.senderReadname,messageMod.username];
+    cell.timeLabel.text = [WTool getStrDateTimeWithDateTimeMS:[messageMod.createDate doubleValue] DateTimeStyle:@"yyyy-MM-dd HH:mm:ss"];
+    cell.addressLabel.text = messageMod.dtx;
+
+    UIImageView *tempBackgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]];
+    cell.backgroundView = tempBackgroundView;
+    [tempBackgroundView release];
+    UIImageView *selectedBackgroundView =[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]];
+    cell.selectedBackgroundView = selectedBackgroundView;
+    [selectedBackgroundView release];
+    return cell;
+
+    
+}
 
 - (void)didReceiveMemoryWarning
 {

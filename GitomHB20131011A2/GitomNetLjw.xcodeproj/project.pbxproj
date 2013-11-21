@@ -86,6 +86,7 @@
 		97567F33183065480044F030 /* whiteArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 97567F2B183065480044F030 /* whiteArrow.png */; };
 		97567F34183065480044F030 /* whiteArrow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 97567F2C183065480044F030 /* whiteArrow@2x.png */; };
 		975C4835183DAB3800865FC4 /* ChangePassWordVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 975C4834183DAB3800865FC4 /* ChangePassWordVC.m */; };
+		975C4838183DF73000865FC4 /* QueryMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 975C4837183DF73000865FC4 /* QueryMessageModel.m */; };
 		975C7E29180F760500EB7E4A /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 975C7E26180F760500EB7E4A /* Icon.png */; };
 		975C7E2A180F760500EB7E4A /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 975C7E27180F760500EB7E4A /* Icon@2x.png */; };
 		975C7E2C180F769500EB7E4A /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 975C7E2B180F769500EB7E4A /* Icon.png */; };
@@ -602,6 +603,8 @@
 		97567F2C183065480044F030 /* whiteArrow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "whiteArrow@2x.png"; path = "../../whiteArrow@2x.png"; sourceTree = "<group>"; };
 		975C4833183DAB3800865FC4 /* ChangePassWordVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangePassWordVC.h; sourceTree = "<group>"; };
 		975C4834183DAB3800865FC4 /* ChangePassWordVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangePassWordVC.m; sourceTree = "<group>"; };
+		975C4836183DF73000865FC4 /* QueryMessageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QueryMessageModel.h; sourceTree = "<group>"; };
+		975C4837183DF73000865FC4 /* QueryMessageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QueryMessageModel.m; sourceTree = "<group>"; };
 		975C7E26180F760500EB7E4A /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Icon.png; sourceTree = "<group>"; };
 		975C7E27180F760500EB7E4A /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon@2x.png"; sourceTree = "<group>"; };
 		975C7E2B180F769500EB7E4A /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = ../../Icon.png; sourceTree = "<group>"; };
@@ -1434,6 +1437,8 @@
 				975EA2B3180B87590091051D /* ApplyModel.m */,
 				97F01926182CE43B000D4DD2 /* CommentModle.h */,
 				97F01927182CE43B000D4DD2 /* CommentModle.m */,
+				975C4836183DF73000865FC4 /* QueryMessageModel.h */,
+				975C4837183DF73000865FC4 /* QueryMessageModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -2684,6 +2689,7 @@
 				975664861836288A00AADD32 /* UIImageView+WebCache.m in Sources */,
 				975CB9AF183C4556006E3BDE /* EGORefreshTableHeaderView.m in Sources */,
 				975C4835183DAB3800865FC4 /* ChangePassWordVC.m in Sources */,
+				975C4838183DF73000865FC4 /* QueryMessageModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

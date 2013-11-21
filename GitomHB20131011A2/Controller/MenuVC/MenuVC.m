@@ -35,7 +35,7 @@
 #import "WTool.h"
 #import "UserLoggingInfo.h"
 #import "CreaterUserManageDeparmentVC.h"
-
+//#import "QueryMessageModel.h"
 
 typedef NS_ENUM(NSInteger, TagFlag)
 {
@@ -202,6 +202,13 @@ typedef NS_ENUM(NSInteger, TagFlag)
              NSLog(@"error");
          }
      }];
+    /*
+    [hbServerKit getNotcFromMemberOrgId:204 orgunitId:1 andUserName:@"58200" andBeginTime:@"1279865600000" andFirst:0 andMax:100 getQueryMessageArray:^(NSArray *messageArray) {
+        for (QueryMessageModel *messageMod in messageArray) {
+            NSLog(@"Menu meassageMod nst =  /%@ / %@ / %@ / %@ / %@ /%@",messageMod.username,messageMod.readUser,messageMod.messageId,messageMod.organizationId,messageMod.dtx,messageMod.senderReadname);
+        }
+        
+    }];*/
 }
 
 - (void)didReceiveMemoryWarning
@@ -516,6 +523,7 @@ typedef NS_ENUM(NSInteger, TagFlag)
                              orgIfo.orgunitId = [dicReports objectForKey:@"orgunitId"];
                              orgIfo.organizationId = [dicReports objectForKey:@"organizationId"];
                              [mArrReports addObject:orgIfo];
+                             [orgIfo release];
                          }
                          NSLog(@"获取汇报记录成功! %@",mArrReports);
                          RecordQeryVC *recordview = [[RecordQeryVC alloc]init];
@@ -776,6 +784,7 @@ typedef NS_ENUM(NSInteger, TagFlag)
                     NSLog(@"获得公告内容数量 == %d",arrDicReports.count);
                     NSDictionary *dicNew = [arrDicReports objectAtIndex:0];
                     OrganizationNoticVC *notVc = [[OrganizationNoticVC alloc]init];
+                    notVc.querMessage = NO;
                     notVc.content = [dicNew objectForKey:@"content"];
                     notVc.creatDate = [WTool getStrDateTimeWithDateTimeMS:[[dicNew objectForKey:@"createDate"] longLongValue] DateTimeStyle:@"yyyy-MM-dd HH:mm:ss"];
                     notVc.textTitle = [dicNew objectForKey:@"title"];
@@ -807,6 +816,7 @@ typedef NS_ENUM(NSInteger, TagFlag)
                     NSDictionary *dicNew = [arrDicReports objectAtIndex:0];
                     NSLog(@"获得公告内容 == %@",dicNew);
                     OrganizationNoticVC *notVc = [[OrganizationNoticVC alloc]init];
+                    notVc.querMessage = NO;
                     notVc.content = [dicNew objectForKey:@"content"];
                     notVc.creatDate = [WTool getStrDateTimeWithDateTimeMS:[[dicNew objectForKey:@"createDate"] longLongValue] DateTimeStyle:@"yyyy-MM-dd HH:mm:ss"];
                     notVc.textTitle = [dicNew objectForKey:@"title"];
@@ -815,7 +825,6 @@ typedef NS_ENUM(NSInteger, TagFlag)
                     notVc.realName = [dicNew objectForKey:@"realname"];
                     UINavigationController *nv = [[UINavigationController alloc]initWithRootViewController:notVc];
                     self.sidePanelController.centerPanel = nv;
-                    //[SVProgressHUD showSuccessWithStatus:@"获得部门公告"];
                     [nv release];
                     [notVc release];
                 }else{
@@ -828,9 +837,9 @@ typedef NS_ENUM(NSInteger, TagFlag)
         }
         case TagFlag_BtnMessageNotice://消息通知
         {
-//            MBProgressHUD *hud = [MBProgressHUD alloc]ini
             NSLog(@"消息通知");
             OrganizationNoticVC *organizationNotic = [[OrganizationNoticVC alloc]init];
+            organizationNotic.querMessage = YES;
             organizationNotic.title= @"消息通知";
             UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:organizationNotic];
             self.sidePanelController.centerPanel = nav;
