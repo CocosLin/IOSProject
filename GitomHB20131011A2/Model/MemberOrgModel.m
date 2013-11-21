@@ -8,6 +8,14 @@
 
 #import "MemberOrgModel.h"
 
-@implementation MemberOrgModel
+@implementation MemberOrgModel//realName;
 
+- (void)dealloc{
+//    [self.username release];
+//    [self.roleId release];
+//    [self.photoUrl release];
+//    [self.telePhone release];
+//    [self.orgunitId release];
+    [super dealloc];
+}
 @end

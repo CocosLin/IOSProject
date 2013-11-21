@@ -77,7 +77,7 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString * myCellID =@"MyCellID";
-    NSLog(@"breakOne");
+    NSLog(@"MyRecord breakOne");
     //UITableViewCell * myCell = [tableView dequeueReusableHeaderFooterViewWithIdentifier:myCellID];
     UITableViewCell *myCell = [tableView dequeueReusableCellWithIdentifier:myCellID];
     if (!myCell)

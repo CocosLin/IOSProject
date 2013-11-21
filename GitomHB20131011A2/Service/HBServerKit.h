@@ -27,8 +27,8 @@
 -(void)getUserPhotoImageWithStrUserPhotoUrl:(NSString *)strUserPhotoUrl
                                   GotResult:(void(^)(UIImage *imgUserPhoto, WError * myError))callback;
 #pragma mark -- 获得汇报图片
-- (NSString *) getImgStringWith:(NSString *)jsonStr;
-- (NSString *) getSoundStringWith:(NSString *)jsonStr;
+- (NSArray *) getImgStringWith:(NSString *)jsonStr;
+- (NSArray *) getSoundStringWith:(NSString *)jsonStr;
 #pragma mark -信息
 -(void)findReportsWithOrganizationId:(NSInteger)organizationId
                    FirstReportRecord:(NSInteger)firstReportRecord
@@ -45,7 +45,10 @@ typedef void(^WbLoginJsonDic)(NSDictionary * dicUserLogged,WError * myError);
 
 typedef void(^WbReportJsonArr)(NSArray * arrDicReports,WError * myError);
 
-
+#pragma mark -- 修改密码
+- (void)changePassWordWithName:(NSString *)username
+                     andOldPwd:(NSString *)oldPwd
+                     andNewPwd:(NSString *)newPwd;
 #pragma mark - 注册用户
 - (void)registerWithPhoneNumber:(NSString *)phoneNumber;
 - (BOOL)registerRealWithPhoneNumber:(NSString *)phoneNumber

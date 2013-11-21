@@ -52,7 +52,7 @@ typedef NS_ENUM(NSInteger, TagFlag)
     
     _lblServerTime = [[UILabel alloc]initWithFrame:CGRectMake(10, 40, 280, 40)];
     NSDate *getTime = [NSDate date];
-    NSDateFormatter *dateForma = [[NSDateFormatter alloc]init];
+    NSDateFormatter *dateForma = [[[NSDateFormatter alloc]init]autorelease];
     [dateForma setDateFormat:@"HH:mm"];
     NSString *nowTime = [dateForma stringFromDate:getTime];
     _lblServerTime.text = nowTime;
@@ -63,7 +63,6 @@ typedef NS_ENUM(NSInteger, TagFlag)
     _lblServerTime.textAlignment = NSTextAlignmentLeft;
     [_imgViewConfigBg addSubview:_lblServerTime];
     [_lblServerTime release];
-    
 }
 -(void)initViewWorkTime
 {
@@ -211,7 +210,7 @@ typedef NS_ENUM(NSInteger, TagFlag)
     
     [self initViewWorkTime];
 
-    NSMutableArray * arrDic = [NSMutableArray arrayWithCapacity:3];
+    NSMutableArray * arrDic = [[NSMutableArray alloc]initWithCapacity:3];
     
     [[AttendanceManager sharedAttendanceManager] getAttendanceConfigWithOrganizationID:comData.organization.organizationId OrgunitID:comData.organization.orgunitId GotAttenConfig:^(AttendanceConfigModel * attenConfig)
     {
@@ -224,6 +223,7 @@ typedef NS_ENUM(NSInteger, TagFlag)
             self.arrStrWorkTime = arrDic;
             [_tvbWorktimeShow reloadData];
         }
+        [arrDic release];
     }];
     
 }

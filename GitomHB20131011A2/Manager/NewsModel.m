@@ -10,4 +10,10 @@
 
 @implementation NewsModel
 
+- (void)dealloc{
+//    [self.title release];
+//    [self.realName release];
+//    [self.content release];
+    [super dealloc];
+}
 @end

@@ -268,6 +268,8 @@
                 NSURL *releaseUrl = [NSURL URLWithString:changeRoleUrlStr];
                 NSURLRequest *req = [NSURLRequest requestWithURL:releaseUrl];
                 [NSURLConnection sendAsynchronousRequest:req queue:nil completionHandler:nil];
+                [SVProgressHUD showSuccessWithStatus:@"成功修改权限"];
+                [self.navigationController popToRootViewControllerAnimated:YES];
                 //[self alerAction];
                 NSLog(@"alerAction");
             }else{
@@ -280,6 +282,8 @@
                 NSURL *releaseUrl = [NSURL URLWithString:changeRoleUrlStr];
                 NSURLRequest *req = [NSURLRequest requestWithURL:releaseUrl];
                 [NSURLConnection sendAsynchronousRequest:req queue:nil completionHandler:nil];
+                [SVProgressHUD showSuccessWithStatus:@"成功删除"];
+                [self.navigationController popToRootViewControllerAnimated:YES];
             }
             
             break;

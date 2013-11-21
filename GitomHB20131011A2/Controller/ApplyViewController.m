@@ -42,6 +42,7 @@
         }
         applyMod = [self.arrData objectAtIndex:indexPath.row];
         myCell.nameLabel.text = [NSString stringWithFormat:@"%@(%@)申请加入[%@]",applyMod.realname,applyMod.createUserId,applyMod.orgunitName];
+        myCell.nameLabel.font = [UIFont systemFontOfSize:12];
         myCell.timeLabel.text = [NSString stringWithFormat:@"申请时间:%@",[WTool getStrDateTimeWithDateTimeMS:[applyMod.updateDate doubleValue] DateTimeStyle:@"yyyy-MM-dd HH:mm:ss"]];
         myCell.addressLabel.text = [NSString stringWithFormat:@"申请理由:%@",applyMod.note];
         myCell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
@@ -68,7 +69,7 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 53;
+    return 60;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -95,6 +96,7 @@
             BOOL bo = [[jsonDic objectForKey:@"success"] boolValue];
             if (bo) {
                 NSLog(@"success %c",bo);
+                [SVProgressHUD showSuccessWithStatus:@"接受申请"];
             }else{
                 NSString *warningStr = [dic1 objectForKey:@"warning"];
                 [SVProgressHUD showErrorWithStatus:[NSString stringWithFormat:@"%@%@",applyMod.realname,warningStr]];
@@ -135,6 +137,7 @@
     NSString *recordType = [[NSString alloc]init];
     GetCommonDataModel;
     _lblRecordPromptUserInfo.text = [NSString stringWithFormat:@"%@的申请列表",comData.userModel.unitName];
+    _lblRecordPromptUserInfo.font = [UIFont systemFontOfSize:18];
     [recordType release];
     [_lblRecordPromptUserInfo setBackgroundColor:[UIColor clearColor]];
     [self.view addSubview:viewRecordPromptInfo];

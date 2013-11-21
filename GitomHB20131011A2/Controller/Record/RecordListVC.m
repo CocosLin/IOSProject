@@ -133,7 +133,9 @@
         dvc.realname = self.userRealname;
         GetCommonDataModel;
         dvc.phone =comData.userModel.telephone;
+        NSLog(@"self.arrData == %@",self.arrData);
         dvc.reportModel = [self.arrData objectAtIndex:indexPath.row];
+        NSLog(@"self.obj == %@",[self.arrData objectAtIndex:indexPath.row]);
         [self.navigationController pushViewController:dvc animated:YES];
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         [dvc release];
@@ -322,7 +324,12 @@
     [_tvbRecordInfo addSubview:refreshView];
     reloading = NO;
     
+    //下拉刷新
+    [self initHeadRefreshVeiw];
+    
 }
+
+
 #pragma mark - 生命周期
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -337,6 +344,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(0, 0, 50, 44);
     [btn setBackgroundImage:[UIImage imageNamed:@"btnBackFromNavigationBar_On"] forState:UIControlStateNormal];
@@ -396,15 +405,15 @@
                                                            GotArrReports:^(NSArray *arrDicReports, WError *myError) {
                                                                if (arrDicReports.count) {
                                                                    self.arrData = arrDicReports;
-                                 }else{
-                            nil;
-                     }
-                  }];
-             }
+                                                               }else{
+                                                                   nil;
+                                                               }
+                                                           }];
+                                                            }
             
-        }];
-        [hbKit release];
-    }else//汇报记录
+                                                    }];
+                                [hbKit release];
+                }else//汇报记录
     {
         NSLog(@"汇报记录");
         NSString * strReportType = TypeReport_Work;
@@ -429,7 +438,7 @@
          {
              if (arrReports.count) {
                  self.arrData = arrReports;
-                 NSLog(@"RecordListVC arrData == %@",self.arrData);
+                 NSLog(@"RecordListVC 个人汇报记录 arrData == %@",self.arrData);
              }else{
                  [rm findReportsWithOrganizationId:comData.organization.organizationId
                                          OrgunitId:comData.organization.orgunitId
@@ -444,7 +453,7 @@
                   {
                       if (arrReports.count) {
                           self.arrData = arrReports;
-                          NSLog(@"RecordListVC arrData == %@",self.arrData);
+                          NSLog(@"RecordListVC 个人汇报记录 再次获得 arrData == %@",self.arrData);
                       }else{
                           nil;
                       }
@@ -454,6 +463,8 @@
              
          }];
     }
+    
+    
 }
 
 -(void)setArrData:(NSArray *)arrData
@@ -491,7 +502,8 @@
 }
 static int addDataInt=0;
 -(void)requestData
-{   NSLog(@"上拉刷新 addDataInt == %d",addDataInt);
+{
+    NSLog(@"上拉刷新 addDataInt == %d",addDataInt);
     addDataInt=addDataInt +10;
     GetCommonDataModel;
     if (!self.typeRecord)
@@ -581,18 +593,120 @@ static int addDataInt=0;
 //在下拉一段距离到提示松开和松开后提示都应该有变化，变化可以在这里实现
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
+    [_refreshHeaderView egoRefreshScrollViewDidScroll:scrollView];
     [refreshView egoRefreshScrollViewDidScroll:scrollView];
 }
 //松开后判断表格是否在刷新，若在刷新则表格位置偏移，且状态说明文字变化为loading...
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
+    [_refreshHeaderView egoRefreshScrollViewDidEndDragging:scrollView];
     [refreshView egoRefreshScrollViewDidEndDragging:scrollView];
 }
 
 
+#pragma mark - 下拉刷新相关
+#pragma mark - 创建下拉刷新界面
+- (void)initHeadRefreshVeiw{
+    NSLog(@"reloading1 bool == %d",reloading1);
+    if (_refreshHeaderView == nil) {
+		
+		EGORefreshTableHeaderView *view = [[EGORefreshTableHeaderView alloc] initWithFrame:CGRectMake(0.0f, 0.0f - self.view.bounds.size.height, self.view.frame.size.width, self.view.bounds.size.height)];
+		view.delegate = self;
+		[_tvbRecordInfo addSubview:view];
+		_refreshHeaderView = view;
+		[view release];
+		
+	}
+    [_refreshHeaderView refreshLastUpdatedDate];
+}
+
+
+#pragma mark EGORefreshTableHeaderDelegate Methods
+
+- (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView*)view{
+	NSLog(@"reloading1 bool == %c",reloading1);
+    NSLog(@"下拉刷新数据");
+	GetCommonDataModel;
+    if (!self.typeRecord)
+    {
+        //考勤记录
+        HBServerKit *hbKit = [[HBServerKit alloc]init];
+        [hbKit findAttendanceReportsOfMembersWithOrganizationId:comData.organization.organizationId
+                                                      orgunitId:comData.organization.orgunitId
+                                              orgunitAttendance:NO
+                                                       userName:[comData.userModel.username intValue]
+                                                   BeginDateLli:self.dtBegin
+                                                     EndDateLli:self.dtEnd
+                                              FirstReportRecord:0
+                                                MaxReportRecord:10
+                                                    RefreshData:YES
+                                                  GotArrReports:^(NSArray *arrDicReports, WError *myError) {
+                                                      self.arrData = arrDicReports;
+                                                  }];
+        [hbKit release];
+    }else//汇报记录
+    {
+        //查汇报记录
+        NSString * strReportType = [ReportManager getStrTypeReportWithIntReportType:self.typeRecord];
+        ReportManager * rm = [ReportManager sharedReportManager];
+        
+        [rm findReportsWithOrganizationId:comData.organization.organizationId
+                                OrgunitId:comData.organization.orgunitId
+                                 Username:comData.userModel.username
+                               ReportType:strReportType
+                             BeginDateLli:self.dtBegin
+                               EndDateLli:self.dtEnd
+                        FirstReportRecord:0
+                          MaxReportRecord:10
+                                   Refrsh:YES
+                            GotArrReports:^(NSArray *arrReports, BOOL isOk)
+         {
+             self.arrData = arrReports;
+             NSLog(@"RecordListVC tableView 重新获得数据内容是 == %@",self.arrData);
+         }];
+    }
+	[_tvbRecordInfo reloadData];
+	[self performSelector:@selector(doneLoadingTableViewData) withObject:nil afterDelay:2.0];
+	
+}
+
+- (BOOL)egoRefreshTableHeaderDataSourceIsLoading:(EGORefreshTableHeaderView*)view{
+	NSLog(@"return reloading");
+    //reloading1 = YES;
+	return reloading1; // should return if data source model is reloading
+	
+}
+
+- (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView*)view{
+	NSLog(@"return [NSDate date]");
+	return [NSDate date]; // should return date data source was last changed
+	
+}
+
+
+#pragma mark Data Source Loading / Reloading Methods
+
+- (void)reloadTableViewDataSource{
+	
+	//  should be calling your tableviews data source model to reload
+	//  put here just for demo
+    NSLog(@"reloading = YES;");
+	reloading1 = YES;
+    
+}
+
+- (void)doneLoadingTableViewData{
+	
+	//  model should call this when its done loading
+    NSLog(@"reloading = NO;");
+	reloading1 = NO;
+	[_refreshHeaderView egoRefreshScrollViewDataSourceDidFinishedLoading:_tvbRecordInfo];
+	
+}
+
 - (void)dealloc
 {
-    [_tvbRecordInfo reloadData];
+    [_tvbRecordInfo release];
     [_lblRecordPromptUserInfo release];
     [_lblRecordPromptTimeInfo release];
     [_username release];

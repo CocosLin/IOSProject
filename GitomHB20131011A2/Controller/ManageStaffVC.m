@@ -215,6 +215,7 @@
                  memberIfo.telePhone = [dicReports objectForKey:@"telephone"];
                  memberIfo.orgunitId = [dicReports objectForKey:@"orgunitId"];
                  [mArrReports addObject:memberIfo];
+                 [memberIfo release];
              }
              NSLog(@"RecordQeryVC 获取部门成员信息成功! %@",mArrReports);
              ManageStaffDetialVC *detailViewController = [[ManageStaffDetialVC alloc] initWithNibName:nil bundle:nil];

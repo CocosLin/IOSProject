@@ -15,6 +15,8 @@
 #import "UIImageView+MJWebCache.h"
 #import "MJPhotoBrowser.h"
 #import "MJPhoto.h"
+#import "UIImageView+WebCache.h"
+
 
 @interface OrganizationNoticVC (){
     NSMutableArray *_urls;
@@ -33,11 +35,45 @@
     }
     return self;
 }
+/*
+#pragma mark - 刷新
+- (void)refreshAction{
+    NSLog(@"refreshAction - 刷新");
+    HBServerKit *hbKit = [[HBServerKit alloc]init];
+    GetCommonDataModel;
+    [hbKit findReportsWithOrganizationId:comData.organization.organizationId Refresh:YES GotArrReports:^(NSArray *arrDicReports, WError *myError) {
+        if (arrDicReports.count) {
+            NSLog(@"ReportManager 数组循环次数 ==  %d",arrDicReports.count);
+            NSMutableArray * mArrReports = [NSMutableArray arrayWithCapacity:arrDicReports.count];
+            for (NSDictionary * dicReports in arrDicReports)
+            {
+                NSLog(@"444ReportManager 获得数据内容 == %@",dicReports);
+                
+                NSLog(@"444name == %@",[dicReports objectForKey:@"name"]);
+                OrganizationsModel *orgIfo = [[OrganizationsModel alloc]init];
+                orgIfo.organizationName = [dicReports objectForKey:@"name"];
+                orgIfo.orgunitId = [dicReports objectForKey:@"orgunitId"];
+                orgIfo.organizationId = [dicReports objectForKey:@"organizationId"];
+                [mArrReports addObject:orgIfo];
+            }
+            self.orgArray = mArrReports;
+            [self.manageTableView reloadData];
+        }else
+        {
+            [SVProgressHUD showErrorWithStatus:@"无部门"];
+        }
+    }];
+    
+    
+    
+}
 
+*/
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSLog(@"biaoti");
+    
+    NSLog(@"biaoti %@",self.userId);
     //标题
     UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, Screen_Width-20, 40)];
     titleLabel.backgroundColor = [UIColor clearColor];
@@ -53,7 +89,8 @@
     realNameLabel.textColor = [UIColor grayColor];
     if (self.realName != NULL) {
         
-        NSString *realStr = [NSString stringWithFormat:@"来源：%@（%ld）",[self.realName stringByTrimmingCharactersInSet:set],(long)self.userId];
+        NSString *realStr = [NSString stringWithFormat:@"来源：%@（%@）",[self.realName stringByTrimmingCharactersInSet:set],self.userId];
+        NSLog(@"OrganizationNoticVC 来源：%@",realStr);
         realNameLabel.text = realStr;
         
         [self.view addSubview:realNameLabel];
@@ -81,49 +118,22 @@
     //图片
     UIImageView *imgView = [[UIImageView alloc]init];
     if (imgUrlStr.length >1) {
-        imgView = [[UIImageView alloc]initWithFrame:CGRectMake(10, 100, Screen_Width-20, 160)];
-        imgView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"icon_image_load_ing.png"]];
-        NSURL *imgurl = [NSURL URLWithString:imgUrlStr];
-        ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:imgurl];
-        [req setCompletionBlock:^{
-            imgView.image = [UIImage imageWithData:[req responseData]];
-            imgView.backgroundColor = [UIColor clearColor];
-            imgView.layer.borderWidth = 0.8;
-            imgView.contentMode = UIViewContentModeScaleAspectFit;
-            [self.view addSubview:imgView];
-        }];
-        [req startAsynchronous];
-        
+        imgView.frame = CGRectMake(10, 100, Screen_Width-20, 160);
+        [imgView setImageURL:[NSURL URLWithString:imgUrlStr] placeholder:[UIImage imageNamed:@"icon_image_load_ing.png"]];
+        imgView.backgroundColor = [UIColor clearColor];
+        imgView.layer.borderWidth = 0.8;
+        imgView.contentMode = UIViewContentModeScaleAspectFit;
+        [self.view addSubview:imgView];
         [_urls addObject:imgUrlStr];
-        //        CGFloat margin = 20;
-        //        CGFloat startX = (self.view.frame.size.width - 3 * width - 2 * margin) * 0.5;
-        //        CGFloat startY = 50;
         for (int i = 0; i<1; i++) {
-            //UIImageView *imageView = [[UIImageView alloc] init];
-            //[self.view addSubview:imageView];
-            NSLog(@"下载图片0");
-            
-            //[self.view addSubview:imageView];
-            
-            // 计算位置
-            //int row = i/3;
-            //int column = i%3;
-            //CGFloat x = 60;
-            //CGFloat y = 2;
-            //imageView.frame = CGRectMake(x, y, width, height);
-            NSLog(@"下载图片1");
-            // 下载图片
-            //[imageView setImageURLStr:imgString placeholder:placeholder];
             NSLog(@"下载图片2");
             // 事件监听
             imgView.tag = 1000+i;
             NSLog(@"imageView.tag == %d",imgView.tag);
             imgView.userInteractionEnabled = YES;
             [imgView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapImage:)]];
-            //[myCell addSubview:imageView];
             // 内容模式
             imgView.clipsToBounds = YES;
-            imgView.contentMode = UIViewContentModeScaleAspectFill;
         }
     }
     
@@ -146,40 +156,36 @@
         [contentText release];
     }else{
         [SVProgressHUD showErrorWithStatus:@"暂时无通知"];
-    }
-    
-    
+    }    
     [imgView release];
-    //[imgUrlStr release];
 }
 
 #pragma mark -- 放大图片
 - (void)tapImage:(UITapGestureRecognizer *)tap
 {
     int count = 1;
-    NSLog(@"封装图片数据 %@",_urls);
-    //NSLog(@"_urls == %@",_urls);
     // 1.封装图片数据
     NSMutableArray *photos = [NSMutableArray arrayWithCapacity:count];
     for (int i = 0; i<1; i++) {
         NSLog(@"替换为中等尺寸图片");
-        // 替换为中等尺寸图片
-        //NSString *url = [_urls[i] stringByReplacingOccurrencesOfString:@"thumbnail" withString:@"bmiddle"];
         NSString *url = [_urls objectAtIndex:0];
         NSLog(@"url == %@",url);
         
         MJPhoto *photo = [[MJPhoto alloc] init];
-        photo.url = [NSURL URLWithString:url]; // 图片路径
+        // 图片路径
+        photo.url = [NSURL URLWithString:url]; 
         UIImageView *imgView = (UIImageView *)[self.view viewWithTag:1000+i];
-        photo.srcImageView = imgView; // 来源于哪个UIImageView
+        // 来源于哪个UIImageView
+        photo.srcImageView = imgView; 
         [photos addObject:photo];
     }
     NSLog(@"显示相册");
     // 2.显示相册
     MJPhotoBrowser *browser = [[MJPhotoBrowser alloc] init];
-    //browser.is
-    browser.currentPhotoIndex = 0; // 弹出相册时显示的第一张图片是？
-    browser.photos = photos; // 设置所有的图片
+    // 弹出相册时显示的第一张图片是？
+    browser.currentPhotoIndex = 0;
+    // 设置所有的图片
+    browser.photos = photos; 
     [browser show];
 }
 

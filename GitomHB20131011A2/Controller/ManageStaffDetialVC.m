@@ -13,7 +13,7 @@
 #import "UserManager.h"
 #import "ShowStaffInfomationVC.h"//显示员工详细信息界面
 #import "SVProgressHUD.h"
-
+#import "UIImageView+WebCache.h"
 @interface ManageStaffDetialVC ()
 
 @end
@@ -134,15 +134,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{/*
-  static NSString *CellIdentifier = @"Cell";
-  UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-  if (cell == nil) {
-  cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-  
-  }
-  // Configure the cell...
-  cell.textLabel.text = [[self.orgArray objectAtIndex:indexPath.row] organizationName];*/
+{
     if ([[[UIDevice currentDevice]systemVersion]floatValue] <6.0) {
         static NSString *CellIdentifier = @"Cell";
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -166,18 +158,7 @@
         }
         cell.detailTextLabel.backgroundColor  = [UIColor clearColor];
         cell.imageView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"icon_avatar_user.png"]];
-        UserManager * um = [UserManager sharedUserManager];
-        if (memberInfo.photoUrl != nil) {
-            [um getUserPhotoImageWithStrUserPhotoUrl:memberInfo.photoUrl GotResult:^(UIImage *imgUserPhoto, BOOL isOK)
-             {
-                 if (isOK)
-                 {
-                     cell.imageView.image = imgUserPhoto;
-                 }
-             }];
-        }else{
-            cell.imageView.image = [UIImage imageNamed:@"icon_avatar_user.png"];
-        }
+        [cell.imageView setImageWithURL:[NSURL URLWithString:memberInfo.photoUrl] placeholderImage:[UIImage imageNamed:@"icon_avatar_user.png"]];
         cell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
         cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -203,19 +184,8 @@
         }else{
             cell.roleId.text = @"员工";
         }
-        //只要设置了图片地址，就去下载图片
-        UserManager * um = [UserManager sharedUserManager];
         
-        if (memberInfo.photoUrl != nil) {
-            [um getUserPhotoImageWithStrUserPhotoUrl:memberInfo.photoUrl GotResult:^(UIImage *imgUserPhoto, BOOL isOK)
-             {
-                 if (isOK)
-                 {
-                     //_imgUserPhoto = imgUserPhoto;
-                     cell.headImg.image = imgUserPhoto;
-                 }
-             }];
-        }
+        [cell.headImg setImageWithURL:[NSURL URLWithString:memberInfo.photoUrl] placeholderImage:[UIImage imageNamed:@"icon_avatar_user.png"]];
         cell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
         cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
         return cell;

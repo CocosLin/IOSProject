@@ -152,18 +152,7 @@
         }
         cell.detailTextLabel.backgroundColor  = [UIColor clearColor];
         cell.imageView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"icon_avatar_user.png"]];
-        UserManager * um = [UserManager sharedUserManager];
-        if (memberInfo.photoUrl != nil) {
-            [um getUserPhotoImageWithStrUserPhotoUrl:memberInfo.photoUrl GotResult:^(UIImage *imgUserPhoto, BOOL isOK)
-             {
-                 if (isOK)
-                 {
-                     cell.imageView.image = imgUserPhoto;
-                 }
-             }];
-        }else{
-            cell.imageView.image = [UIImage imageNamed:@"icon_avatar_user.png"];
-        }
+        [cell.imageView setImageWithURL:[NSURL URLWithString:memberInfo.photoUrl] placeholderImage:[UIImage imageNamed:@"icon_avatar_user.png"]];
         cell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
         cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -189,16 +178,7 @@
             cell.roleId.text = @"员工";
         }
         
-        UserManager * um = [UserManager sharedUserManager];
-        if (memberInfo.photoUrl != nil) {
-            [um getUserPhotoImageWithStrUserPhotoUrl:memberInfo.photoUrl GotResult:^(UIImage *imgUserPhoto, BOOL isOK)
-             {
-                 if (isOK)
-                 {
-                     cell.headImg.image = imgUserPhoto;
-                 }
-             }];
-        }
+        [cell.headImg setImageWithURL:[NSURL URLWithString:memberInfo.photoUrl] placeholderImage:[UIImage imageNamed:@"icon_avatar_user.png"]];
         cell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
         cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
         return cell;

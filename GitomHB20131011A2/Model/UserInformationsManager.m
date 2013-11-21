@@ -28,28 +28,30 @@
         
         while (sqlite3_step(st)==SQLITE_ROW) {//是否查询到记录
             UserInformationsManager *userInfo=[[UserInformationsManager alloc]init];
-            userInfo.userId=sqlite3_column_int(st, 0);
-            userInfo.userName =[NSString stringWithCString:(char *)sqlite3_column_text(st, 1) encoding:NSUTF8StringEncoding];
-            userInfo.userPassWord = [NSString stringWithCString:(char *)sqlite3_column_text(st, 2) encoding:NSUTF8StringEncoding];
+            userInfo.userName = sqlite3_column_int(st, 0);
+            userInfo.userPassWord = [NSString stringWithCString:(char *)sqlite3_column_text(st, 1) encoding:NSUTF8StringEncoding];
             [userIfomationArray addObject:userInfo];
+            [userInfo release];
         }
     }
     
     sqlite3_finalize(st);
     return userIfomationArray;
-    
+    [userIfomationArray release];
 }
 
 #pragma mark - 插入
-+ (void)insertWithUserName:(NSString *)userName andUserPassWord:(NSString *)passWord andUserId:(int)userId{
++ (void)insertWithUserName:(int)userName andUserPassWord:(NSString *)passWord{
         sqlite3 *sql3=[ConnectDataBase createDB];
         
-        NSString *sql=@"insert into userinfo (userid,userName,userPassWord) values (?,?,?)";
+//        NSString *sql=@"insert into userinfo (userid,userName,userPassWord) values (?,?,?)";
+        NSString *sql=@"insert into userinfo (userName,userPassWord) values (?,?)";
+
         sqlite3_stmt *st;
         if (sqlite3_prepare_v2(sql3, [sql UTF8String], -1, &st, nil)==SQLITE_OK) {
-            sqlite3_bind_int(st, 1, userId);
-            sqlite3_bind_text(st, 2, [userName UTF8String], -1, SQLITE_STATIC);
-            sqlite3_bind_text(st, 3, [passWord UTF8String], -1, SQLITE_STATIC);
+            //sqlite3_bind_int(st, 1, userId);
+            sqlite3_bind_int(st, 1, userName);
+            sqlite3_bind_text(st, 2, [passWord UTF8String], -1, SQLITE_STATIC);
             
             if (sqlite3_step(st)==SQLITE_ERROR) {
                 NSLog(@"error:failed in kit update database");
@@ -113,10 +115,10 @@
     
 }
 */
-+ (void)deleteWithId:(int)userId{
++ (void)deleteWithId:(int)userName{
     sqlite3 *sql3=[ConnectDataBase createDB];//类似单例 的指针型
     
-    NSString *sql=[NSString stringWithFormat:@"delete from userinfo where userid=%d",userId];
+    NSString *sql=[NSString stringWithFormat:@"delete from userinfo where userName=%d",userName];
     
     sqlite3_stmt *st;
     if (sqlite3_prepare_v2(sql3, [sql UTF8String], -1, &st, nil)==SQLITE_OK) {

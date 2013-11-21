@@ -16,12 +16,13 @@
 @property (copy,nonatomic) NSString * username;
 @property (nonatomic,copy) NSString * realname;
 @property (nonatomic,copy) NSString * phone;
-//@property (nonatomic,copy) NSString * reportId;
 @property (nonatomic,retain) UIImage *attenceImge;//汇报时上传的图片
 @property (nonatomic,retain) NSData * soundData;//汇报时上传的声音
 @property (nonatomic,retain) UIView * background;
 @property (retain,nonatomic) ReportModel * reportModel;
-@property(nonatomic,copy) NSString *soundStirng;
+@property (nonatomic,retain) NSArray *soundStirngAr;
 @property (nonatomic,retain) UIScrollView *scrollView;
+@property (nonatomic,retain) AVAudioPlayer *player;
+@property (nonatomic,retain) NSTimer *timer;
 
 @end

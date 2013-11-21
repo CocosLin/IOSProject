@@ -87,7 +87,12 @@
     
     UIButton * btnMakePicture = [UIButton buttonWithType:UIButtonTypeCustom];
     btnMakePicture.tag = 10001;
-    [btnMakePicture addTarget:self action:@selector(postMyImage) forControlEvents:UIControlEventTouchUpInside];
+    if ([[[UIDevice currentDevice]systemVersion]floatValue]<6.0) {
+        [btnMakePicture addTarget:self action:@selector(postMyImage) forControlEvents:UIControlEventTouchDown];
+    }else{
+        [btnMakePicture addTarget:self action:@selector(postMyImage) forControlEvents:UIControlEventTouchUpInside];
+    }
+    
     [btnMakePicture setBackgroundImage:[[UIImage imageNamed:@"btn_group_normal"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
     [btnMakePicture setTitle:@"图片" forState:UIControlStateNormal];
     [btnMakePicture setBackgroundImage:[[UIImage imageNamed:@"btn_group_highlighted"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateHighlighted];
@@ -200,6 +205,7 @@
 
 #pragma mark - 上传图片相关
 - (void)postMyImage{
+    NSLog(@"上传图片按钮");
     UIButton *but = (UIButton *)[self.view viewWithTag:10001];
     [but setTitle:@"重新选择" forState:UIControlStateNormal];
     self.releaseImage.frame = CGRectMake(20, 120, Screen_Width-80, 100);
@@ -213,7 +219,7 @@
 #pragma mark -- UIAlerViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     switch (buttonIndex) {
-            
+            NSLog(@"选取图片");
         case 1:
         {
             NSLog(@"camera");

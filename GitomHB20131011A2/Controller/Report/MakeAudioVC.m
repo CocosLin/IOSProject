@@ -13,6 +13,7 @@
 #import "HBServerKit.h"
 #import "ReportVC.h"
 #import "GitomSingal.h"
+#import "SVProgressHUD.h"
 
 typedef NS_ENUM(NSInteger, Tag_MakeAudioVC) {
     TAG_BtnStartAudio = 101,
@@ -197,24 +198,23 @@ static double endRecordTime=0;
     endRecordTime -= startRecordTime;
     if (endRecordTime<2.00f) {
         NSLog(@"录音时间过短");
+        [SVProgressHUD showErrorWithStatus:@"录音过短"];
         return;
     } else if (endRecordTime>30.00f){
         NSLog(@"录音时间过长,应小于30秒");
+        [SVProgressHUD showErrorWithStatus:@"录音应少于30秒"];
         return;
     }
     
     
     if (url != nil) {
         curAudio = EncodeWAVEToAMR([NSData dataWithContentsOfURL:url],1,16);
-        
-//        [soundPath release];
-        if (curAudio) {
+            if (curAudio) {
             [curAudio retain];
         }
     }
-    NSString *soundPath = [[NSTemporaryDirectory() stringByAppendingPathComponent:@"coverToAMR"]stringByAppendingPathExtension:@"amr"];
-        NSLog(@"wav to amr path = %@",soundPath);
-        [curAudio writeToFile:soundPath atomically:NO];
+    [self.delegate hadeRecoredAndShowPicture:curAudio];
+    
     if (curAudio.length >0) {
         
     } else {
@@ -276,6 +276,7 @@ static double endRecordTime=0;
         [btnStart setHidden:NO];
         NSLog(@"停止录音");
          */
+        
         
         [timer invalidate];
         [secTimer invalidate];

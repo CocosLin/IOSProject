@@ -11,10 +11,16 @@
 //#import <CoreAudio/CoreAudioTypes.h> 
 #import "RecordAudio.h"
 
+@protocol MakeAudioVCprotocol <NSObject>
+
+- (void) hadeRecoredAndShowPicture:(NSData *)soundData;
+
+@end
+
 @interface MakeAudioVC : VcWithNavBar<RecordAudioDelegate>{
     RecordAudio *recordAudio;
     NSData *curAudio;
-
 }
+@property (nonatomic, assign) id<MakeAudioVCprotocol>delegate;
 
 @end

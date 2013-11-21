@@ -239,7 +239,7 @@
                                                                   BeginDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000)
                                                                     EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]FirstReportRecord:0
                                                                MaxReportRecord:10
-                                                                   RefreshData:NO
+                                                                   RefreshData:YES
                                                                  GotArrReports:^(NSArray *arrDicReports, WError *myError) {
                if (arrDicReports.count) {
                      NSMutableArray * mArrReports = [NSMutableArray arrayWithCapacity:arrDicReports.count];

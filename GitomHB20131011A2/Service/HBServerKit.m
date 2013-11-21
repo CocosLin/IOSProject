@@ -102,33 +102,39 @@
 }
 
 #pragma mark -- 获得汇报图片
-- (NSString *) getImgStringWith:(NSString *)jsonStr{
+- (NSArray *) getImgStringWith:(NSString *)jsonStr{
     WDataParse *wdParse = [WDataParse sharedWDataParse];
     NSDictionary *dic = [wdParse wGetDicJsonWithStringJson:jsonStr];
     NSLog(@"汇报图片字典 == %@ ",dic);
     NSArray *getArr = [dic objectForKey:@"imageUrl"];
-    if (getArr.count) {
-        NSDictionary *dic2 = [getArr objectAtIndex:0];
-        NSString *url = [dic2 objectForKey:@"url"];
-        NSLog(@"图片url == %@",url);
-        return url;
+    NSMutableArray *urlArray = [[[NSMutableArray alloc]init]autorelease];
+    if (!getArr.count) return nil;
+    for (NSDictionary *dic in getArr) {
+        NSLog(@"HBServerKit dictionary == %@",dic);
+        NSString *url = [[[NSString alloc]init]autorelease];
+        url = [dic objectForKey:@"url"];
+        [urlArray addObject:url];
     }
-    return nil;
+    NSLog(@"HBServerKit urlArray%@",urlArray);
+    return urlArray;
 }
+
 #pragma mark -- 获得汇报声音
-- (NSString *) getSoundStringWith:(NSString *)jsonStr{
+- (NSArray *) getSoundStringWith:(NSString *)jsonStr{
     WDataParse *wdParse = [WDataParse sharedWDataParse];
     NSDictionary *dic = [wdParse wGetDicJsonWithStringJson:jsonStr];
     NSLog(@"汇报声音字典 == %@ ",dic);
     NSArray *getArr = [dic objectForKey:@"soundUrl"];
-    if (getArr.count) {
-        NSDictionary *dic2 = [getArr objectAtIndex:0];
-        NSString *url = [dic2 objectForKey:@"url"];
+    NSMutableArray *urlArray = [[[NSMutableArray alloc]init]autorelease];
+    for (NSDictionary *soundDic in getArr) {
+        NSString *url = [[[NSString alloc]init]autorelease];
+        url = [soundDic objectForKey:@"url"];
         NSLog(@"声音url == %@",url);
-        return url;
+        [urlArray addObject:url];
     }
-    return nil;
+    return urlArray;
 }
+
 #pragma mark - 信息
 #pragma mark -- 公司公告 部门公告 消息通知
 -(void)findReportsWithOrganizationId:(NSInteger)organizationId
@@ -201,8 +207,8 @@
      {
          if (!errorRequest){
              [self getIsServerNoErrorWithHead:[self getHeadWithDataResponse:dataResponse]];
-             NSString *responseStrFromDic = [[NSString alloc]initWithData:dataResponse encoding:NSUTF8StringEncoding];
-             NSLog(@"HBServerKit 来自服务器的完整数据 strOfdataResponse == %@",responseStrFromDic);
+//             NSString *responseStrFromDic = [[NSString alloc]initWithData:dataResponse encoding:NSUTF8StringEncoding];
+//             NSLog(@"HBServerKit 来自服务器的完整数据 strOfdataResponse == %@",responseStrFromDic);
              Body * body = [self getBodyWithDataResponse:dataResponse];
              if (body.success)//如果登录成功
              {
@@ -708,7 +714,7 @@
         NSLog(@"有缓存");
         WDataParse *wdp = [WDataParse sharedWDataParse];
         //[self getIsServerNoErrorWithHead:[self getHeadWithDataResponse:dataResponse]];//检查服务器是否没有异常，如果有，就打印
-        NSLog(@"HBServerKit 从服务端获得的完整json格式数据 获取公司、部门公告== %@",[[NSString alloc]initWithData:dataResponse encoding:NSUTF8StringEncoding]);
+        
         Body * body = [self getBodyWithDataResponse:dataResponse];
         NSLog(@"HBServerKit 完整数据之中取得body 获取公司、部门公告 %@",body);
         NSLog(@"body.success == %c",body.success);
@@ -1024,6 +1030,9 @@
     ASIFormDataRequest* request = [ASIFormDataRequest requestWithURL:[NSURL URLWithString:urlString]];
     
     [request addFile:imgData forKey:@"file"];
+//    NSString *photoPath = [NSString stringWithFormat:@"%@myPhoto3010.jpg",NSTemporaryDirectory()];
+//    NSData *photoData = [NSData dataWithContentsOfFile:photoPath];
+    //[request addData:imgData forKey:@"file"];
     [request setPostValue:[NSNumber numberWithInt:200] forKey:@"width"];
     [request setPostValue:[NSNumber numberWithInt:200] forKey:@"height"];
     NSLog(@"request url == %@",request);
@@ -1088,14 +1097,16 @@
     if (reportType) [dicParams setObject:reportType forKey:@"reportType"];
     if (address) [dicParams setObject:address forKey:@"address"];
     if (note) [dicParams setObject:note forKey:@"note"];
-    if (!imgUrl){
+    
+    if (!imgUrl ){
         NSLog(@"imgeUrl nil");
         imgUrl = @"{\"imageUrl\":[]}";
     }else{
         
     }
     [dicParams setObject:imgUrl forKey:@"imgUrl"];
-    if (!soundUrl) {
+    NSRange range = [soundUrl rangeOfString:@"null"];
+    if (!soundUrl&& range.location != NSNotFound) {
         NSLog(@"soundUrl nil");
         soundUrl = @"{\"soundUrl\":[]}";
     }else{
@@ -1111,7 +1122,7 @@
                               GetResult:^(NSData *dataResponse, NSError *errorRequest)
     {
         if (!errorRequest){
-            [self getIsServerNoErrorWithHead:[self getHeadWithDataResponse:dataResponse]];//检查服务器是否没有异常，如果有，就打印
+            //[self getIsServerNoErrorWithHead:[self getHeadWithDataResponse:dataResponse]];//检查服务器是否没有异常，如果有，就打印
             Body * body = [self getBodyWithDataResponse:dataResponse];
             if (body.success)//如果保存汇报成功
             {
@@ -1401,7 +1412,37 @@
     [req startAsynchronous];
 }
 
-#pragma mark -- 添加部门 
+#pragma mark -- 修改密码
+- (void)changePassWordWithName:(NSString *)username
+                     andOldPwd:(NSString *)oldPwd
+                     andNewPwd:(NSString *)newPwd{
+    NSString *urlStr = [[NSString alloc]initWithFormat:@"%@/util/changePwd?username=%@&oldPwd=%@&newPwd=%@&cookie=%@",self.strBaseUrl,username,oldPwd,newPwd,_cookie ];
+    ASIHTTPRequest *req = [[ASIHTTPRequest alloc]initWithURL:[NSURL URLWithString:urlStr]];
+    [req setCompletionBlock:^{
+        Body * body = [self getBodyWithDataResponse:[req responseData]];
+        NSLog(@"HBServerKit 修改密码 %@",body);
+        if (body.success)//如果查汇报成功
+        {
+            [SVProgressHUD showSuccessWithStatus:@"完成修改"];
+        }else//如果查汇报不成功
+        {
+            WError * error = [[WError alloc]initWithWErrorType:WErrorType_Logic wErrorDescription:body.warning];
+            Mark_Custom;
+            [SVProgressHUD showErrorWithStatus:[NSString stringWithFormat:@"%@",error]];
+            [error release];
+        }
+    }];
+    [req setFailedBlock:^{
+        [SVProgressHUD showErrorWithStatus:@"修改失败"];
+    }];
+    [req startAsynchronous];
+    [req release];
+    [urlStr release];
+    
+}
+    
+
+#pragma mark -- 添加部门
 - (void)addOrgunitWithrganitzationId:(NSInteger)organizationId
                       andOrgunitName:(NSString *)creatName
                          andUsername:(NSString *)username{
@@ -1630,7 +1671,7 @@
                              OrgunitId:(NSInteger)orgunitId
                               ReportId:(NSString *)reportId
                              andGetCommentMod:(void(^)(CommentModle *commentMod))callBack{
-    __block CommentModle *commentModel = [[CommentModle alloc]init];
+    //__block CommentModle *commentModel = [[CommentModle alloc]init];
     NSString *urlStr = [NSString stringWithFormat:@"%@/report/findReportComments?organizationId=%d&orgunitId=%d&reportId=%@&first=0&max=1&cookie=%@",self.strBaseUrl,organizationId,orgunitId,reportId,_cookie];
     NSLog(@"HBServerKit comment == %@",urlStr);
     NSURL *url = [NSURL URLWithString:urlStr];
@@ -1644,6 +1685,7 @@
         {
             NSArray *getArr = [wdp wGetArrJsonWithStringJson:body.data];
             if (getArr.count) {
+                CommentModle *commentModel = [[CommentModle alloc]init];
                 for (int i=0; i<getArr.count; i++) {
                     commentModel.createDate = [[getArr objectAtIndex:i]objectForKey:@"createDate"];
                     commentModel.createUserId = [[getArr objectAtIndex:i]objectForKey:@"createUserId"];
@@ -1652,6 +1694,7 @@
                     commentModel.realname = [[getArr objectAtIndex:i]objectForKey:@"realname"];                    
                 }
                 callBack(commentModel);
+                [commentModel release];
             }else{
                 callBack(nil);
             }

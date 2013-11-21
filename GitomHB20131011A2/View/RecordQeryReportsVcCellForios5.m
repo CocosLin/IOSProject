@@ -20,13 +20,13 @@
         self.nameLabel.font = [UIFont systemFontOfSize:16];
         [self addSubview:self.nameLabel];
         
-        self.timeLabel = [[UILabel alloc]initWithFrame:CGRectMake(12, 19, 260, 21)];
+        self.timeLabel = [[UILabel alloc]initWithFrame:CGRectMake(12, 21, 260, 21)];
         self.timeLabel.backgroundColor = [UIColor clearColor];
         self.timeLabel.font = [UIFont systemFontOfSize:12];
         self.timeLabel.textColor = [UIColor lightGrayColor];
         [self addSubview:self.timeLabel];
 
-        self.addressLabel = [[UILabel alloc]initWithFrame:CGRectMake(12, 34, 260, 21)];
+        self.addressLabel = [[UILabel alloc]initWithFrame:CGRectMake(12, 36, 260, 21)];
         self.addressLabel.font = [UIFont systemFontOfSize:12];
         self.addressLabel.backgroundColor = [UIColor clearColor];
         self.addressLabel.textColor = [UIColor lightGrayColor];

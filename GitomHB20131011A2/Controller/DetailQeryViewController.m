@@ -26,7 +26,10 @@
 
 @interface DetailQeryViewController (){
     UITableView *_tvbRecordDetail;
-    NSMutableArray *_urls;
+//    AVAudioPlayer *player;
+    UIProgressView *soundProgress;
+    UIView *soundProgressView;
+    
 }
 @end
 
@@ -49,7 +52,14 @@
     [self.attenceImge release];
     self.attenceImge = nil;
     [self.background release];
-    self.background = nil;    
+    self.background = nil;
+    [self.player release];
+    self.player = nil;
+    self.timer = nil;
+    [soundProgressView release];
+    soundProgressView = nil;
+    [soundProgress release];
+    //player = nil;
     [super dealloc];
 }
 
@@ -63,45 +73,63 @@
 }
 
 #pragma mark -- 播放声音
-- (void)showSound{
+- (void)showSound:(UIButton *)sender{
     NSLog(@"播放声音");
-    NSURL *url = [NSURL URLWithString:self.soundStirng];
+    NSURL *url = [NSURL URLWithString:[self.soundStirngAr objectAtIndex:sender.tag - 5000]];
     ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:url];
     [req setCompletionBlock:^{
         NSData *getSound = DecodeAMRToWAVE([req responseData]);
-        AVAudioPlayer *player = [[AVAudioPlayer alloc]initWithData:getSound error:nil];
-        player.delegate = self;
-        [player play];
+        self.player = [[AVAudioPlayer alloc]initWithData:getSound error:nil];
+        //[self.player prepareToPlay];
+        self.player.delegate = self;
+        [self.player play];
+        soundProgressView.hidden = NO;
+        self.timer = [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(showtime:) userInfo:nil repeats:YES];
     }];
     [req startAsynchronous];
 }
+
+#pragma mark -- AVPlayerDelegate
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
+{
+    [self.timer invalidate];//停止计时
+    self.timer = nil;
+    NSLog(@"停止时间");
+    soundProgressView.hidden = YES; 
+}
+
+-(void)showtime:(id)sender{
+    NSLog(@"显示时间");
+    soundProgress.progress = ((double)self.player.currentTime)/self.player.duration;
+    
+}
+
 #pragma mark -- 放大图片
 - (void)tapImage:(UITapGestureRecognizer *)tap
 {
-    int count = 1;
-    NSLog(@"封装图片数据 %@",_urls);
-    //NSLog(@"_urls == %@",_urls);
+    NSLog(@"放大图片");
+    HBServerKit *hbKit = [[HBServerKit alloc]init];
+    NSArray * urlArray = [hbKit getImgStringWith:self.reportModel.imageUrl];
+    [hbKit release];
     // 1.封装图片数据
-    NSMutableArray *photos = [NSMutableArray arrayWithCapacity:count];
-    for (int i = 0; i<1; i++) {
-        NSLog(@"替换为中等尺寸图片");
-        // 替换为中等尺寸图片
-        //NSString *url = [_urls[i] stringByReplacingOccurrencesOfString:@"thumbnail" withString:@"bmiddle"];
-        NSString *url = [_urls objectAtIndex:0];
-        NSLog(@"url == %@",url);
-        
+    NSMutableArray *photos = [[NSMutableArray arrayWithCapacity:urlArray.count]retain];
+    for (int i = 0; i<urlArray.count; i++) {
+        NSLog(@"url == %@",urlArray);
         MJPhoto *photo = [[MJPhoto alloc] init];
-        photo.url = [NSURL URLWithString:url]; // 图片路径
         UIImageView *imgView = (UIImageView *)[self.view viewWithTag:1000+i];
         photo.srcImageView = imgView; // 来源于哪个UIImageView
         [photos addObject:photo];
+        [photo release];
+        photo = nil;
     }
     NSLog(@"显示相册");
     // 2.显示相册
     MJPhotoBrowser *browser = [[MJPhotoBrowser alloc] init];
-    browser.currentPhotoIndex = 0; // 弹出相册时显示的第一张图片是？
+    browser.currentPhotoIndex = tap.view.tag-1000; // 弹出相册时显示的第一张图片是？
     browser.photos = photos; // 设置所有的图片
     [browser show];
+    [browser release];
+    browser = nil;
 }
 
 #pragma mark - 点评
@@ -200,35 +228,27 @@
         NSLog(@"DetailRecordVC 上传的汇报图片url  == %@",self.reportModel.imageUrl);
         
         HBServerKit *hbKit = [[HBServerKit alloc]init];
-        NSString *imgString = [hbKit getImgStringWith:self.reportModel.imageUrl];
-        NSLog(@"tup == %@",imgString);
-        
+        NSArray *_urls = [[[NSArray alloc]init]autorelease];
+        _urls = [[NSArray alloc]init];
+        _urls = [hbKit getImgStringWith:self.reportModel.imageUrl];
+        NSLog(@"tup == %@",_urls);
+        NSLog(@"tup count == %d",_urls.count);
         // 1.创建个UIImageView
         UIImage *placeholder = [UIImage imageNamed:@"timeline_image_loading.png"];
         CGFloat width = 45;
         CGFloat height = 40;
-        if (imgString) {
-            [_urls addObject:imgString];
-            //        CGFloat margin = 20;
-            //        CGFloat startX = (self.view.frame.size.width - 3 * width - 2 * margin) * 0.5;
-            //        CGFloat startY = 50;
-            for (int i = 0; i<1; i++) {
+        if (_urls) {
+            for (int i = 0; i<_urls.count; i++) {
                 UIImageView *imageView = [[UIImageView alloc] init];
-                //[self.view addSubview:imageView];
-                NSLog(@"下载图片0");
-                
+                NSLog(@"下载图片%d",i);
                 [self.view addSubview:imageView];
-                
-                // 计算位置
-                //int row = i/3;
                 //int column = i%3;
                 CGFloat x = 60;
                 CGFloat y = 2;
-                imageView.frame = CGRectMake(x, y, width, height);
-                NSLog(@"下载图片1");
+                imageView.frame = CGRectMake(x+46*i, y, width, height);
+                
                 // 下载图片
-                [imageView setImageURLStr:imgString placeholder:placeholder];
-                NSLog(@"下载图片2");
+                [imageView setImageURLStr:_urls[i] placeholder:placeholder];
                 // 事件监听
                 imageView.tag = 1000+i;
                 NSLog(@"imageView.tag == %d",imageView.tag);
@@ -237,36 +257,45 @@
                 [myCell addSubview:imageView];
                 // 内容模式
                 imageView.clipsToBounds = YES;
-                imageView.contentMode = UIViewContentModeScaleAspectFill;
+                imageView.contentMode = UIViewContentModeScaleAspectFit;
+                [imageView release];
             }
         }else{
-            UIButton *nilButton = [UIButton buttonWithType:UIButtonTypeCustom];
-            nilButton.frame = CGRectMake(60, 2, 45, 40);
-            nilButton.backgroundColor = [UIColor grayColor];
-            [nilButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-            [nilButton setTitle:@"无" forState:UIControlStateNormal];
-            [myCell addSubview:nilButton];
+            nil;
         }
         [hbKit release];        
     }else if(indexPath.row ==7){
+        
+        
+        
         HBServerKit *hbKit = [[HBServerKit alloc]init];
         NSLog(@"soundUrl == %@ ,%@",self.reportModel.soundUrl,[hbKit getSoundStringWith:self.reportModel.soundUrl]);
-        self.soundStirng = [hbKit getSoundStringWith:self.reportModel.soundUrl];
-        UIButton *soundButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        soundButton.frame = CGRectMake(60, 2, 45, 40);
-        NSRange range = [self.soundStirng rangeOfString:@"null"];
-        if (self.soundStirng != nil && range.location == NSNotFound) {
-            NSLog(@"声音文件存在");
-            [soundButton addTarget:self action:@selector(showSound) forControlEvents:UIControlEventTouchUpInside];
-            [soundButton setBackgroundImage:[UIImage imageNamed:@"111_19.png"] forState:UIControlStateNormal];
-        }else{
-            NSLog(@"sound nil");
-            soundButton.backgroundColor = [UIColor grayColor];
-            [soundButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-            [soundButton setTitle:@"无" forState:UIControlStateNormal];
+        self.soundStirngAr = [hbKit getSoundStringWith:self.reportModel.soundUrl];
+        for (int i=0;i<self.soundStirngAr.count;i++) {
+            UIButton *soundButton = [UIButton buttonWithType:UIButtonTypeCustom];
+            soundButton.tag = 5000+i;
+            soundButton.frame = CGRectMake(60+i*47, 2, 45, 40);
+            [myCell addSubview:soundButton];
+            NSRange range = [[self.soundStirngAr objectAtIndex:i] rangeOfString:@"null"];
+            if ([self.soundStirngAr objectAtIndex:i]!=nil && range.location == NSNotFound) {
+                NSLog(@"声音文件存在");
+                [soundButton addTarget:self action:@selector(showSound:) forControlEvents:UIControlEventTouchUpInside];
+                [soundButton setBackgroundImage:[UIImage imageNamed:@"111_19.png"] forState:UIControlStateNormal];
+            }else{
+                nil;
+            }
+            
         }
-        [myCell addSubview:soundButton];
         [hbKit release];
+        
+        soundProgress = [[UIProgressView alloc]initWithFrame:CGRectMake(0, 15, Screen_Width-80, 30)];
+        //[_tvbRecordDetail addSubview:soundProgress];
+        //soundProgress.hidden = YES;
+        soundProgressView = [[UIView alloc]initWithFrame:CGRectMake(60, 2, Screen_Width-80, 41)];
+        [soundProgressView addSubview:soundProgress];
+        soundProgressView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"cell_bg.png"]];
+        soundProgressView.hidden = YES;
+        [myCell addSubview:soundProgressView];
     }
               
     
@@ -352,9 +381,19 @@
     return self;
 }
 
+-(void)btnBack:(UIButton *)btn
+{
+    NSLog(@"VcWithNavBar popViewControllerAnimated");
+    [self.player stop];
+    [self.timer invalidate];
+    //self.timer = nil;
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     //导航条按钮
 	UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(0, 0, 50, 44);
@@ -378,12 +417,12 @@
                         andGetCommentMod:^(CommentModle *commentMod) {
         //评论界面
         if (commentMod.realname.length >0) {
-            UILabel *commentName = [[UILabel alloc]initWithFrame:CGRectMake(0, 370, Screen_Width, 24)];
+            UILabel *commentName = [[UILabel alloc]initWithFrame:CGRectMake(0, 380, Screen_Width, 24)];
             commentName.backgroundColor = BlueColor;
             commentName.font = [UIFont systemFontOfSize:15];
             commentName.text = [NSString stringWithFormat:@"   评论者：%@(%@)        %@分",commentMod.realname,commentMod.createUserId,commentMod.level];
             
-            UILabel *creatDate = [[UILabel alloc ]initWithFrame:CGRectMake(0, 390, Screen_Width, 20)];
+            UILabel *creatDate = [[UILabel alloc ]initWithFrame:CGRectMake(0, 400, Screen_Width, 20)];
             creatDate.textColor = [UIColor grayColor];
             creatDate.backgroundColor = BlueColor;
             creatDate.font = [UIFont systemFontOfSize:13];
@@ -433,9 +472,8 @@
     [_tvbRecordDetail.layer setBorderWidth:0.7];
     [_tvbRecordDetail release];
     NSLog(@"self.reportModel.reportId == %@",self.reportModel.reportId);
+    
 
-    
-    
     UIButton *but1 = [UIButton buttonWithType:UIButtonTypeCustom];
     [but1 setTitle:@"添加点评" forState:UIControlStateNormal];
     but1.frame = CGRectMake(10, Screen_Height-110, Screen_Width-20, 42);

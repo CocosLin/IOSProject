@@ -16,21 +16,21 @@
     NSLog(@"urlstr == %@",urlStr);
     NSURL *url = [[NSURL alloc]initWithString:urlStr];
     __block ASIHTTPRequest *asiReq = [ASIHTTPRequest requestWithURL:url];
-    __block NewsManager *newsManger = [[NewsManager alloc]init];
+    [url release];
+    NewsManager *newsManger = [[NewsManager alloc]init];
     [asiReq setCompletionBlock:^{
         NSData *getDta = [asiReq responseData];
         NSError *error = nil;
         NSDictionary *jsonDic = [NSJSONSerialization JSONObjectWithData:getDta options:NSJSONReadingAllowFragments error:&error];
         NSDictionary *bodyDic = [jsonDic objectForKey:@"body"];
         NSString *dataDic = [bodyDic objectForKey:@"data"];
-//        newsManger.title = [dataDic objectForKey:@"title"];
-//        newsManger.content = [dataDic objectForKey:@"content"];
-//        newsManger.realName = [dataDic objectForKey:@"realname"];
+
         NSLog(@"%@",bodyDic);
         NSLog(@"%@",dataDic);
         NSString *cutStr1 = [dataDic stringByReplacingOccurrencesOfString:@"," withString:@":"];
-        NSArray *cutAr = [cutStr1 componentsSeparatedByString:@":"];
-        //NSDictionary *contentDic = [dataDic objectAtIndex:0];
+        NSArray *cutAr = [[NSArray alloc]init];
+        cutAr = [cutStr1 componentsSeparatedByString:@":"];
+        
         NSLog(@"%@",cutAr);
         newsManger.content = [cutAr objectAtIndex:1];
         NSLog(@"%@",[cutAr objectAtIndex:1]);
@@ -43,5 +43,7 @@
 //    NSLog(@"NewsManger content %@",newsManger.content);
     NSLog(@"newsManger.content%@==",newsManger.content);
     [asiReq startAsynchronous];
+    [newsManger release];
+    
 }
 @end

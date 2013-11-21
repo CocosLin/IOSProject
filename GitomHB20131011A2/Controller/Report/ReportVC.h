@@ -10,9 +10,11 @@
 #import "BMKMapView.h"
 #import "ReportManager.h"
 //#import "ChatVoiceRecorderVC.h"
+#import "MakeAudioVC.h"
+
 
 @interface ReportVC : VcWithNavBar
-<UITableViewDataSource,UITableViewDelegate,UITextViewDelegate,BMKMapViewDelegate,BMKSearchDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+<UITableViewDataSource,UITableViewDelegate,UITextViewDelegate,BMKMapViewDelegate,BMKSearchDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,MakeAudioVCprotocol>
 
 @property(retain,nonatomic)BMKMapView * bMapView;
 @property(nonatomic,assign)BOOL isShowRecord;//是否是查汇报记录(因为查记录的时候，不能上传)

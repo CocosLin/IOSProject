@@ -157,6 +157,19 @@ typedef NS_ENUM(NSInteger, TagFlag)
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    NSLog(@"登入主界面成功");
+    for (int i =0; i<4; i++) {
+        NSString *photoPath = [NSString stringWithFormat:@"%@%@",NSTemporaryDirectory(),[NSString stringWithFormat:@"myPhoto%d.jpg",3010+i]];
+        NSData *photoData = [NSData dataWithContentsOfFile:photoPath];
+        if (photoData) {
+            NSLog(@"photo have %@",photoPath);
+            NSFileManager *manger = [NSFileManager defaultManager];
+            [manger removeItemAtPath:photoPath error:nil];
+        }else{
+            NSLog(@"photo nil %@",photoPath);
+        }
+        
+    }
     [self loadConfingSitting];
     [self.view setBackgroundColor:Color_Background];
     [self.view setBackgroundColor:[UIColor whiteColor]];
@@ -285,7 +298,7 @@ typedef NS_ENUM(NSInteger, TagFlag)
         btnNoticeOne.backgroundColor=[UIColor clearColor];
         [btnNoticeOne setBackgroundImage:[UIImage imageNamed:@"ex_list_group_default.png"] forState:UIControlStateHighlighted];
         btnNoticeOne.tag= TagFlag_BtnBaseNotice + i + 1;
-        [btnNoticeOne setFrame:CGRectMake(0+i*wNoticeOne,0,wNoticeOne,50)];
+        [btnNoticeOne setFrame:CGRectMake(0+i*wNoticeOne,5,wNoticeOne,50)];
         [viewNoticeALL addSubview:btnNoticeOne];
         [btnNoticeOne addTarget:self action:@selector(btnAction:) forControlEvents:UIControlEventTouchUpInside];
         
@@ -295,8 +308,9 @@ typedef NS_ENUM(NSInteger, TagFlag)
         [btnNoticeOne addSubview:imgViewNotice];
         [imgViewNotice release];
         
-        UILabel *label=[[UILabel alloc]initWithFrame:CGRectMake(0,25,wNoticeOne,24)];
+        UILabel *label=[[UILabel alloc]initWithFrame:CGRectMake(0,22,wNoticeOne,24)];
         label.text=[arrNoticeTitle objectAtIndex:i];
+        label.font = [UIFont systemFontOfSize:12];
         label.textAlignment=NSTextAlignmentCenter;
         label.backgroundColor=[UIColor clearColor];
         [btnNoticeOne addSubview:label];
@@ -400,16 +414,16 @@ typedef NS_ENUM(NSInteger, TagFlag)
     
     
     static NSString * cellID = @"cellForRightMenu";
-    NSLog(@"breakOne");
+    NSLog(@"------");
     //UITableViewCell * cell = [tableView dequeueReusableHeaderFooterViewWithIdentifier:cellID];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellID];
     if (!cell) {
         cell = [[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID]autorelease];
     }
-    cell.textLabel.text = [NSString stringWithFormat:@"   %@",arrFuncNames[indexPath.row]];
+    cell.textLabel.text = [NSString stringWithFormat:@"      %@",arrFuncNames[indexPath.row]];
     cell.textLabel.backgroundColor = [UIColor clearColor];
     cell.textLabel.lineBreakMode = 1;
-    cell.textLabel.font = [UIFont systemFontOfSize:22];
+    cell.textLabel.font = [UIFont systemFontOfSize:17];
     cell.textLabel.textAlignment=NSTextAlignmentLeft;
     cell.textLabel.textColor = [UIColor blackColor];
     cell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]]autorelease];
@@ -751,14 +765,12 @@ typedef NS_ENUM(NSInteger, TagFlag)
     {
         case TagFlag_BtnOrganizationNotice://公司公告
         {
-            
             NSLog(@"公司公告");
-            //[SVProgressHUD showWithStatus:@"加载…"];
             HBServerKit *hbKit = [[HBServerKit alloc]init];
             [hbKit getNewsWithOrganizationId:comData.organization.organizationId
                                    orgunitId:comData.organization.orgunitId
                                     newsType:@"organizationNews"
-                                     Refresh:NO
+                                     Refresh:YES
                                GotArrReports:^(NSArray *arrDicReports, WError *myError) {
                 if (arrDicReports.count) {
                     NSLog(@"获得公告内容数量 == %d",arrDicReports.count);
@@ -771,11 +783,10 @@ typedef NS_ENUM(NSInteger, TagFlag)
                     notVc.realName = [dicNew objectForKey:@"realname"];
                     UINavigationController *nv = [[UINavigationController alloc]initWithRootViewController:notVc];
                     self.sidePanelController.centerPanel = nv;
-                    //[SVProgressHUD showSuccessWithStatus:@"获得公司公告"];
                     [nv release];
                     [notVc release];
                 }else{
-                    //[SVProgressHUD showErrorWithStatus:@"无公司公告"];
+                    [SVProgressHUD showErrorWithStatus:@"暂无公告"];
                 }
             }];
             [hbKit release];
@@ -789,16 +800,18 @@ typedef NS_ENUM(NSInteger, TagFlag)
             HBServerKit *hbKit = [[HBServerKit alloc]init];
             [hbKit getNewsWithOrganizationId:comData.organization.organizationId
                                    orgunitId:comData.organization.orgunitId newsType:@"orgunitNews"
-                                     Refresh:NO
+                                     Refresh:YES
                                GotArrReports:^(NSArray *arrDicReports, WError *myError) {
                 if (arrDicReports.count) {
                     NSLog(@"获得公告内容数量 == %d",arrDicReports.count);
                     NSDictionary *dicNew = [arrDicReports objectAtIndex:0];
+                    NSLog(@"获得公告内容 == %@",dicNew);
                     OrganizationNoticVC *notVc = [[OrganizationNoticVC alloc]init];
                     notVc.content = [dicNew objectForKey:@"content"];
                     notVc.creatDate = [WTool getStrDateTimeWithDateTimeMS:[[dicNew objectForKey:@"createDate"] longLongValue] DateTimeStyle:@"yyyy-MM-dd HH:mm:ss"];
                     notVc.textTitle = [dicNew objectForKey:@"title"];
-                    notVc.userId = [dicNew objectForKey:@"createUserId"];
+                    notVc.userId = [dicNew objectForKey:@"username"];
+                    NSLog(@"获得公告内容 userid == %@ %@",notVc.userId,[dicNew objectForKey:@"username"]);
                     notVc.realName = [dicNew objectForKey:@"realname"];
                     UINavigationController *nv = [[UINavigationController alloc]initWithRootViewController:notVc];
                     self.sidePanelController.centerPanel = nv;
@@ -806,7 +819,7 @@ typedef NS_ENUM(NSInteger, TagFlag)
                     [nv release];
                     [notVc release];
                 }else{
-                    //[SVProgressHUD showErrorWithStatus:@"无部门公告"];
+                    [SVProgressHUD showErrorWithStatus:@"无部门公告"];
                 }
             }];
             [hbKit release];

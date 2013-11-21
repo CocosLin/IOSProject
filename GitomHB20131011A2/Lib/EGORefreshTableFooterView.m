@@ -167,8 +167,7 @@
                 [CATransaction commit];
 			}
 			
-//			_statusLabel.text = NSLocalizedString(@"Pull down to refresh...", @"Pull down to refresh status");
-            _statusLabel.text = NSLocalizedString(@"上拉刷新", @"");
+            _statusLabel.text = NSLocalizedString(@"上拉更多", @"");
 			[_activityView stopAnimating];
 
             [CATransaction begin];

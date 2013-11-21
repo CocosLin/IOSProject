@@ -8,10 +8,14 @@
 
 #import "ReportVC.h"
 #import "WCommonMacroDefine.h"
-#import "MakeAudioVC.h"
+//#import "MakeAudioVC.h"
 #import <QuartzCore/QuartzCore.h>
 #import "HBServerKit.h"
 #import "GitomSingal.h"
+#import "UIImageView+MJWebCache.h"
+#import "MJPhotoBrowser.h"
+#import "MJPhoto.h"
+
 #define kMyPhotoName @"myPhoto.jpg"
 
 typedef NS_ENUM(NSInteger, Tag_ReportVC) {
@@ -28,7 +32,10 @@ typedef NS_ENUM(NSInteger, Tag_ReportVC) {
     BMKUserLocation * _userLocation;
     BMKSearch * _bMapSearch;
     NSString * _strReportType;
-    UIImageView * imgViewPhoto;
+//    UIImageView * imgViewPhoto1;
+//    UIImageView * imgViewPhoto2;
+//    UIImageView * imgViewPhoto3;
+//    UIImageView * imgViewPhoto4;
 }
 @end
 
@@ -41,96 +48,152 @@ typedef NS_ENUM(NSInteger, Tag_ReportVC) {
 
 -(void)btnAction:(UIButton *)btn
 {
-    if (btn.tag == TAG_BtnSaveReport)
-    {
+//    if (btn.tag == TAG_BtnSaveReport)
+//    {
         GitomSingal *singal = [GitomSingal getInstance];
         singal.recordedSound = NO;
         [self sendSoundFileToServe];
         //上传汇报
         [self saveMyReport];
-    }else if(btn.tag == TAG_BtnRecording)
-    {
-        //录音
-        MakeAudioVC * mavc = [[MakeAudioVC alloc]init];
-        [self.navigationController pushViewController:mavc animated:YES];
-        [mavc release];
-    }
+//    }else if(btn.tag == TAG_BtnRecording)
+//    {
+//        //录音
+//        MakeAudioVC * mavc = [[MakeAudioVC alloc]init];
+//        [self.navigationController pushViewController:mavc animated:YES];
+//        [mavc release];
+//    }
 }
 
-
+#pragma mark -- 录音
+static int makeSoundFlag;
+- (void)saveSoundAction:(UIButton *)sender{
+    makeSoundFlag = sender.tag;
+    //录音
+    MakeAudioVC * mavc = [[MakeAudioVC alloc]init];
+    mavc.delegate = self;
+    [self.navigationController pushViewController:mavc animated:YES];
+    [mavc release];
+}
+#pragma mark - MakeAudioVC代理方法(录音)
+- (void)hadeRecoredAndShowPicture:(NSData *)soundData{
+    NSString *soundName = [NSString stringWithFormat:@"coverToAMR%d",makeSoundFlag+10];
+    NSString *soundPath = [[NSTemporaryDirectory() stringByAppendingPathComponent:soundName]stringByAppendingPathExtension:@"amr"];
+    NSLog(@"wav to amr path = %@",soundPath);
+    UIImageView *imgViewSound = (UIImageView *)[self.view viewWithTag:makeSoundFlag+10];
+    imgViewSound.image =[UIImage imageNamed:@"111_19.png"];
+    [soundData writeToFile:soundPath atomically:NO];
+}
 
 #pragma mark -- 获得服务器存放图片路径
+// tmp里的： myPhoto3010.jpg、myPhoto3011.jpg、myPhoto3012.jpg、myPhoto3013.jpg  四张图片
+
 - (void)sendFileToServe{
     NSLog(@"获得服务器存放图片路径");
-    NSString *photoPath = [NSString stringWithFormat:@"%@%@",NSTemporaryDirectory(),kMyPhotoName];
+    /*
+     "imageUrl":"{"imageUrl":[{"id":" ","thumb":"http://imgcdn1.gitom.com/group1/M00/02/17/OzkPqFKHGfSATbLoAAAHORP77pg438.jpg","url":"http://imgcdn1.gitom.com/group1/M00/02/17/OzkPqFKHGfSASaQ6AAYOaLwhHsk136.jpg"},{"id":" ","thumb":"http://imgcdn1.gitom.com/group1/M00/02/17/OzkPqFKHGfWABYi4AAALCCsZ5iU806.jpg","url":"http://imgcdn1.gitom.com/group1/M00/02/17/OzkPqFKHGfWAOmWOAAbuZKfxxvU674.jpg"},{"id":" ","thumb":"http://imgcdn1.gitom.com/group1/M00/02/17/OzkPqFKHGfaAKEkqAAALR3h_srI016.jpg","url":"http://imgcdn1.gitom.com/group1/M00/02/17/OzkPqFKHGfaATYzqAAb_KCI8tl4008.jpg"},{"id":" ","thumb":"http://imgcdn1.gitom.com/group1/M00/02/17/OzkPqFKHGfeAaqPSAAALd8glIPg646.jpg","url":"http://imgcdn1.gitom.com/group1/M00/02/17/OzkPqFKHGfeAFMkTAAcLzJh395U092.jpg"}]}\"
+     */
+    
+    NSMutableArray *imgpathStr = [[NSMutableArray alloc]init];
+    for (int i =0; i<4; i++) {
+        NSString *photoPath = [NSString stringWithFormat:@"%@%@",NSTemporaryDirectory(),[NSString stringWithFormat:@"myPhoto%d.jpg",3010+i]];
+        NSData *photoData = [NSData dataWithContentsOfFile:photoPath];
+    if (photoData) {
+        [imgpathStr addObject:photoPath];
+    }
+    }
+    //NSLog(@"ReportVC imgpathAr count == %d",imgpathAr.count);
     HBServerKit *hbKit = [[HBServerKit alloc]init];
-    [hbKit saveImageReportsOfMembersWithData:photoPath GotArrReports:^(NSArray *arrDicReports, WError *myError) {
-        NSLog(@"arrDicReports == %@",arrDicReports);
-        NSString *group = [[[NSString alloc]init]autorelease];
-        NSString *filename = [[[NSString alloc]init]autorelease];
-        NSString *server = [[[NSString alloc]init]autorelease];
-        group = [[arrDicReports objectAtIndex:0]objectForKey:@"group"];
-        filename = [[arrDicReports objectAtIndex:0]objectForKey:@"filename"];
-        server = [[arrDicReports objectAtIndex:0]objectForKey:@"server"];
-        NSString *urlOfImg = [NSString stringWithFormat:@"http://%@/%@/%@",server,group,filename];
+    
+    NSMutableArray *photoUrlAr = [[NSMutableArray alloc]init];
+    NSMutableDictionary *imageUrlDic = [[NSMutableDictionary alloc]init];
+
+    for (NSString *imgUrl in imgpathStr) {
+        NSLog(@"RportVC phtotDatauRL == %@",imgUrl);
         NSMutableDictionary *dic1 = [[NSMutableDictionary alloc]init];
-        [dic1 setObject:@" " forKey:@"id"];
-        [dic1 setObject:@" " forKey:@"thumb"];
-        [dic1 setObject:urlOfImg forKey:@"url"];
-        
-        NSArray *imgArr = [NSArray arrayWithObject:dic1];
-        
-        NSMutableDictionary *imgDic = [[NSMutableDictionary alloc]init];
-        [imgDic setObject:imgArr forKey:@"imageUrl"];
-        NSLog(@"imgDic == %@",imgDic);
-        NSData *getData = [NSJSONSerialization dataWithJSONObject:imgDic
-                                                          options:kNilOptions
-                                                            error:nil];
-        NSString *getStr = [[NSString alloc]initWithData:getData encoding:NSUTF8StringEncoding];
-        NSLog(@"getStr == %@",getStr);
-        self.imgUrlStr = getStr;
-        NSLog(@"server imgPath == %@",self.imgUrlStr);
-        
-    }];
+        [hbKit saveImageReportsOfMembersWithData:imgUrl GotArrReports:^(NSArray *arrDicReports, WError *myError) {
+            NSLog(@"arrDicReports == %@",arrDicReports);
+            NSString *group = [[[NSString alloc]init]autorelease];
+            NSString *filename = [[[NSString alloc]init]autorelease];
+            NSString *server = [[[NSString alloc]init]autorelease];
+            group = [[arrDicReports objectAtIndex:0]objectForKey:@"group"];
+            filename = [[arrDicReports objectAtIndex:0]objectForKey:@"filename"];
+            server = [[arrDicReports objectAtIndex:0]objectForKey:@"server"];
+            NSString *urlOfImg = [NSString stringWithFormat:@"http://%@/%@/%@",server,group,filename];
+            [dic1 setObject:@" " forKey:@"id"];
+            [dic1 setObject:urlOfImg forKey:@"thumb"];
+            [dic1 setObject:urlOfImg forKey:@"url"];
+            NSLog(@"dic1 = %@",dic1);
+        }];
+        [photoUrlAr addObject:dic1];
+        [dic1 release];
+        NSLog(@"photoUrlAr content == %@",photoUrlAr);
+    }
+    [imageUrlDic setObject:photoUrlAr forKey:@"imageUrl"];
+    NSLog(@"imageUrlDic == %@",imageUrlDic);
+    NSData *getData = [NSJSONSerialization dataWithJSONObject:imageUrlDic
+                                                  options:kNilOptions
+                                                    error:nil];
+    NSString *getStr = [[NSString alloc]initWithData:getData encoding:NSUTF8StringEncoding];
+    NSLog(@"getStr == %@",getStr);
+    self.imgUrlStr = getStr;
+    NSLog(@"server imgPath == %@",self.imgUrlStr);
 }
 #pragma mark -- 获得服务器存放声音路径
 - (void)sendSoundFileToServe{
     NSLog(@"获得服务器存放声音路径");
-    NSString *soundPath = [NSString stringWithFormat:@"%@",[[NSTemporaryDirectory() stringByAppendingPathComponent:@"coverToAMR"]stringByAppendingPathExtension:@"amr"]];
+    
+    NSMutableArray *soundpathStrAr = [[NSMutableArray alloc]init];
+    for (int i =0; i<4; i++) {
+        NSString *soundPath = [NSString stringWithFormat:@"%@%@",NSTemporaryDirectory(),[NSString stringWithFormat:@"coverToAMR%d.amr",4010+i]];
+        NSData *soundData = [NSData dataWithContentsOfFile:soundPath];
+        if (soundData) {
+            [soundpathStrAr addObject:soundPath];
+        }
+    }
+    //NSString *soundPath = [NSString stringWithFormat:@"%@",[[NSTemporaryDirectory() stringByAppendingPathComponent:@"coverToAMR"]stringByAppendingPathExtension:@"amr"]];
+    /*
+     "soundUrl":"{"soundUrl":[{"id":" ","url":"http://imgcdn1.gitom.com/group1/M00/02/15/OzkPqFKF-CqAZZSaAAAMxiYAzFg299.amr"}]}\"
+     */
+    NSMutableArray *soundUrlAr = [[NSMutableArray alloc]init];
+    NSMutableDictionary *soundUrlDic = [[NSMutableDictionary alloc]init];
     HBServerKit *hbKit = [[HBServerKit alloc]init];
-    [hbKit saveSoundReportsOfMembersWithData:soundPath GotArrReports:^(NSArray *arrDicReports, WError *myError) {
-        NSLog(@"arrDicReports == %@",arrDicReports);
-        NSString *group = [[[NSString alloc]init]autorelease];
-        NSString *filename = [[[NSString alloc]init]autorelease];
-        NSString *server = [[[NSString alloc]init]autorelease];
-        group = [[arrDicReports objectAtIndex:0]objectForKey:@"group"];
-        filename = [[arrDicReports objectAtIndex:0]objectForKey:@"filename"];
-        server = [[arrDicReports objectAtIndex:0]objectForKey:@"server"];
-        
-        NSLog(@"server soundgeUrl == %@",[NSString stringWithFormat:@"http://%@/%@/%@",server,group,filename]);
-        NSString *urlOfSound = [NSString stringWithFormat:@"http://%@/%@/%@",server,group,filename];
+    for (NSString *soundPath in soundpathStrAr) {
         NSMutableDictionary *dic1 = [[NSMutableDictionary alloc]init];
-        [dic1 setObject:@" " forKey:@"id"];
-        [dic1 setObject:urlOfSound forKey:@"url"];
-        
-        NSArray *imgArr = [NSArray arrayWithObject:dic1];
-                NSMutableDictionary *soundDic = [[NSMutableDictionary alloc]init];
-        [soundDic setObject:imgArr forKey:@"soundUrl"];
-        NSLog(@"soundDic == %@",soundDic);
-        //self.imgUrlStr = imgDic;
-        NSData *getData = [NSJSONSerialization dataWithJSONObject:soundDic
-                                                          options:kNilOptions
-                                                            error:nil];
-        NSString *getStr = [[NSString alloc]initWithData:getData encoding:NSUTF8StringEncoding];
-        self.soundUrlStr = getStr;
-        NSLog(@"server soundPath == %@",self.soundUrlStr);
-    }];
+        [hbKit saveSoundReportsOfMembersWithData:soundPath GotArrReports:^(NSArray *arrDicReports, WError *myError) {
+            NSLog(@"arrDicReports == %@",arrDicReports);
+            NSString *group = [[[NSString alloc]init]autorelease];
+            NSString *filename = [[[NSString alloc]init]autorelease];
+            NSString *server = [[[NSString alloc]init]autorelease];
+            group = [[arrDicReports objectAtIndex:0]objectForKey:@"group"];
+            filename = [[arrDicReports objectAtIndex:0]objectForKey:@"filename"];
+            server = [[arrDicReports objectAtIndex:0]objectForKey:@"server"];
+            
+            NSLog(@"server soundgeUrl == %@",[NSString stringWithFormat:@"http://%@/%@/%@",server,group,filename]);
+            NSString *urlOfSound = [NSString stringWithFormat:@"http://%@/%@/%@",server,group,filename];
+            //NSMutableDictionary *dic1 = [[NSMutableDictionary alloc]init];
+            [dic1 setObject:@" " forKey:@"id"];
+            [dic1 setObject:urlOfSound forKey:@"url"];
+        }];
+        [soundUrlAr addObject:dic1];
+    }
+    NSLog(@"soundUrlAr == %@",soundUrlAr);
+    [soundUrlDic setObject:soundUrlAr forKey:@"soundUrl"];
+    NSData *getData = [NSJSONSerialization dataWithJSONObject:soundUrlDic
+                                                      options:kNilOptions
+                                                        error:nil];
+    NSString *getStr = [[NSString alloc]initWithData:getData encoding:NSUTF8StringEncoding];
+    self.soundUrlStr = getStr;
+    NSLog(@"server soundPath == %@",self.soundUrlStr);
+
 }
 
 #pragma mark -- 拍照
-- (void)saveMyImage{
-    NSLog(@"拍照");
-    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+static int pickerImgFlag;
+- (void)saveMyImage:(UIButton *)sender{
+    
+    NSLog(@"拍照按钮tag == %ld",(long)sender.tag);
+    pickerImgFlag = sender.tag;
+    if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
         picker.delegate = self;
         //picker.allowsEditing = YES; //是否可编辑
@@ -149,12 +212,19 @@ typedef NS_ENUM(NSInteger, Tag_ReportVC) {
 
 #pragma mark -- UIImagePickerControllerDelegate
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingImage:(UIImage *)image editingInfo:(NSDictionary *)editingInfo{
+     NSLog(@"拍照按钮tag得到对应的ImageView == %d",pickerImgFlag);
     NSData *photoData = UIImageJPEGRepresentation(image, 0.0001);
-    NSString *photoPath = [NSTemporaryDirectory() stringByAppendingString:kMyPhotoName];
-    NSLog(@"photoPath == %@",photoPath);
-    imgViewPhoto.image = image;
+    NSString *myPhotoPath = [NSString stringWithFormat:@"myPhoto%d.jpg",pickerImgFlag+10];//myPhoto3010.jpg\myPhoto3011.jpg\myPhoto3012.jpg\myPhoto3013.jpg  四张图片
+    NSString *photoPath = [NSTemporaryDirectory() stringByAppendingString:myPhotoPath];
+    NSLog(@".jpg%@",photoPath);
+    UIButton *btn =(UIButton *)[self.view viewWithTag:pickerImgFlag];
+    [btn setTitle:@"重拍" forState:UIControlStateNormal];
+    UIImageView *imgViewPhoto1 = (UIImageView *)[self.view viewWithTag:pickerImgFlag+10];
+    imgViewPhoto1.image = image;
     [photoData writeToFile:photoPath atomically:NO];
-    [self sendFileToServe];
+    
+    
+    
     [self dismissModalViewControllerAnimated:YES];
 }
 
@@ -187,7 +257,8 @@ typedef NS_ENUM(NSInteger, Tag_ReportVC) {
 -(void)saveMyReport
 {
     
-    
+    [self sendFileToServe];//将图片上传服务器，返回图片链接
+    [self sendSoundFileToServe];//将音频上传服务器，返回图片链接
     ReportModel * report = [[ReportModel alloc]init];
     GetCommonDataModel;
     report.organizationId = comData.organization.organizationId;
@@ -203,19 +274,46 @@ typedef NS_ENUM(NSInteger, Tag_ReportVC) {
      */
     
     report.imageUrl = self.imgUrlStr;
-//    if ([[NSTemporaryDirectory() stringByAppendingPathComponent:@"coverToAMR"]stringByAppendingPathExtension:@"amr"]) {
-//        [self sendSoundFileToServe];
-//        report.soundUrl = self.soundUrlStr;
-//    }else{
-//        NSLog(@"不存在soundURL路径");
-//        report.soundUrl = nil;
-//    }
     NSLog(@"report.soundUrl == %@",self.soundUrlStr);
     report.soundUrl = self.soundUrlStr;
     ReportManager * rm = [ReportManager sharedReportManager];
     [rm saveReportWithReportModel:report GotIsReportOk:^(BOOL isReportOk)
      {NSLog(@"ReportVC == 上传汇报 ");}];
     [report release];
+    //汇报结束删除图片，节约内存
+    NSFileManager *manger = [NSFileManager defaultManager];
+    for (int i =0; i<4; i++) {
+        NSString *photoPath = [NSString stringWithFormat:@"%@%@",NSTemporaryDirectory(),[NSString stringWithFormat:@"myPhoto%d.jpg",3010+i]];
+        NSData *photoData = [NSData dataWithContentsOfFile:photoPath];
+        if (photoData) {
+            NSLog(@"photo have %@",photoPath);
+            [manger removeItemAtPath:photoPath error:nil];
+        }else{
+            NSLog(@"photo nil %@",photoPath);
+        }
+
+    }
+    //汇报结束删除录音，节约内存
+    for (int i =0; i<4; i++) {
+        NSString *soundPath = [NSString stringWithFormat:@"%@%@",NSTemporaryDirectory(),[NSString stringWithFormat:@"coverToAMR%d.amr",4010+i]];
+        NSData *soundData = [NSData dataWithContentsOfFile:soundPath];
+        if (soundData) {
+            NSLog(@"sound have %@",soundPath);
+            [manger removeItemAtPath:soundPath error:nil];
+        }else{
+            NSLog(@"sound nil %@",soundPath);
+        }
+        
+    }
+    NSString *soundOtherPath = [NSString stringWithFormat:@"%@soundRecord.caf",NSTemporaryDirectory()];
+    NSData *soundOtherData = [NSData dataWithContentsOfFile:soundOtherPath];
+    if (soundOtherData) {
+        [manger removeItemAtPath:soundOtherPath error:nil];
+    }else{
+        NSLog(@"sound nil");
+    }
+    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - 表格代理方法
@@ -224,7 +322,7 @@ typedef NS_ENUM(NSInteger, Tag_ReportVC) {
 {
     
     static NSString * sCellID = @"sCellID";
-    NSLog(@"breakOne");
+    NSLog(@"ReportVC breakOne");
     //UITableViewCell * myCell = [tableView dequeueReusableHeaderFooterViewWithIdentifier:sCellID];
     UITableViewCell *myCell = [tableView dequeueReusableCellWithIdentifier:sCellID];
     if (!myCell) {
@@ -276,33 +374,74 @@ typedef NS_ENUM(NSInteger, Tag_ReportVC) {
     }else if(indexPath.row == 3)//附加图片
     {
         h = 90.0;
-        UIView * view = [[UIView alloc]initWithFrame:CGRectMake(60, 0, myCell.frame.size.width - 75, h)];
-        UIColor *color = [UIColor colorWithRed:(208/255.0) green:(208/255.0) blue:(208/255.0) alpha:1];
-        view.layer.borderColor = color.CGColor;
-        view.layer.borderWidth = 1.0;
-        view.tag = 100;
-        [myCell addSubview:view];
+        for (int i=0; i<4; i++) {
+            UIView * view = [[UIView alloc]initWithFrame:CGRectMake(61+(myCell.frame.size.width-80)/4*i, 0, (myCell.frame.size.width-80)/4, h)];
+            UIColor *color = [UIColor colorWithRed:(208/255.0) green:(208/255.0) blue:(208/255.0) alpha:1];
+            view.layer.borderColor = color.CGColor;
+            view.layer.borderWidth = 1.0;
+            view.tag = 100;
+            [myCell addSubview:view];
+            
+            UIImageView * imgViewPhoto1 = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, view.frame.size.width, 50)];
+            imgViewPhoto1.tag = 3010+i;
+            imgViewPhoto1.userInteractionEnabled = YES;
+            imgViewPhoto1.clipsToBounds = YES;
+            [imgViewPhoto1 addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapImage:)]];
+            imgViewPhoto1.image = [UIImage imageNamed:@"report_picture"];
+            imgViewPhoto1.contentMode = UIViewContentModeScaleAspectFit;
+            [view addSubview:imgViewPhoto1];
+            
+            UIButton * btnMakePicture = [UIButton buttonWithType:UIButtonTypeCustom];
+            [btnMakePicture setBackgroundImage:[[UIImage imageNamed:@"btn_group_normal"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
+            [btnMakePicture setTitle:@"拍照" forState:UIControlStateNormal];
+            [btnMakePicture setBackgroundImage:[[UIImage imageNamed:@"btn_group_highlighted"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateHighlighted];
+            [btnMakePicture setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            [btnMakePicture.titleLabel setFont:[UIFont systemFontOfSize:13]];
+            btnMakePicture.layer.borderColor = color.CGColor;
+            btnMakePicture.layer.borderWidth = 1.0;
+            btnMakePicture.frame = CGRectMake(0+5, view.frame.size.height - 35, view.frame.size.width-10, 30);
+            [view addSubview:btnMakePicture];
+            [btnMakePicture addTarget:self action:@selector(saveMyImage:) forControlEvents:UIControlEventTouchUpInside];
+            btnMakePicture.tag = 3000+i;
+            [view release];
+        }
         
-        imgViewPhoto = [[UIImageView alloc]initWithFrame:CGRectMake(view.frame.size.width/2 - 50/2, 0, 50, 50)];
-        imgViewPhoto.image = [UIImage imageNamed:@"report_picture"];
-        [view addSubview:imgViewPhoto];
-        
-        UIButton * btnMakePicture = [UIButton buttonWithType:UIButtonTypeCustom];
-        [btnMakePicture setBackgroundImage:[[UIImage imageNamed:@"btn_group_normal"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
-        [btnMakePicture setTitle:@"拍照" forState:UIControlStateNormal];
-        [btnMakePicture setBackgroundImage:[[UIImage imageNamed:@"btn_group_highlighted"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateHighlighted];
-        [btnMakePicture setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-        [btnMakePicture.titleLabel setFont:[UIFont systemFontOfSize:13]];
-        btnMakePicture.layer.borderColor = color.CGColor;
-        btnMakePicture.layer.borderWidth = 1.0;
-        btnMakePicture.frame = CGRectMake(0+5, view.frame.size.height - 35, view.frame.size.width-10, 30);
-        [view addSubview:btnMakePicture];
-        [btnMakePicture addTarget:self action:@selector(saveMyImage) forControlEvents:UIControlEventTouchUpInside];
-        btnMakePicture.tag = TAG_BtnRecording;
-        [view release];
     }
     else if(indexPath.row == 4)//附加录音
     {
+        h = 90.0;
+        for (int i=0; i<4; i++) {
+            UIView * view = [[UIView alloc]initWithFrame:CGRectMake(61+(myCell.frame.size.width-80)/4*i, 0, (myCell.frame.size.width-80)/4, h)];
+            UIColor *color = [UIColor colorWithRed:(208/255.0) green:(208/255.0) blue:(208/255.0) alpha:1];
+            view.layer.borderColor = color.CGColor;
+            view.layer.borderWidth = 1.0;
+            view.tag = 200;
+            [myCell addSubview:view];
+            
+            UIImageView * imgViewSound = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, view.frame.size.width, 50)];
+            imgViewSound.tag = 4010+i;
+            imgViewSound.userInteractionEnabled = YES;
+            //imgViewSound.clipsToBounds = YES;
+           // [imgViewSound addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapImage:)]];
+            imgViewSound.image = [UIImage imageNamed:@"report_recording"];
+            imgViewSound.contentMode = UIViewContentModeScaleAspectFit;
+            [view addSubview:imgViewSound];
+            
+            UIButton * btnMakeSound = [UIButton buttonWithType:UIButtonTypeCustom];
+            [btnMakeSound setBackgroundImage:[[UIImage imageNamed:@"btn_group_normal"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
+            [btnMakeSound setTitle:@"录音" forState:UIControlStateNormal];
+            [btnMakeSound setBackgroundImage:[[UIImage imageNamed:@"btn_group_highlighted"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateHighlighted];
+            [btnMakeSound setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            [btnMakeSound.titleLabel setFont:[UIFont systemFontOfSize:13]];
+            btnMakeSound.layer.borderColor = color.CGColor;
+            btnMakeSound.layer.borderWidth = 1.0;
+            btnMakeSound.frame = CGRectMake(0+5, view.frame.size.height - 35, view.frame.size.width-10, 30);
+            [view addSubview:btnMakeSound];
+            [btnMakeSound addTarget:self action:@selector(saveSoundAction:) forControlEvents:UIControlEventTouchUpInside];
+            btnMakeSound.tag = 4000+i;
+            [view release];
+        }
+        /*
         h = 90.0;
         UIView * view = [[UIView alloc]initWithFrame:CGRectMake(60, 0, myCell.frame.size.width - 75, h)];
         UIColor *color = [UIColor colorWithRed:(208/255.0) green:(208/255.0) blue:(208/255.0) alpha:1];
@@ -312,6 +451,7 @@ typedef NS_ENUM(NSInteger, Tag_ReportVC) {
         [myCell addSubview:view];
         
         UIImageView * imgViewSound = [[UIImageView alloc]initWithFrame:CGRectMake(view.frame.size.width/2 - 50/2, 0, 50, 50)];
+        imgViewSound.tag = 4000;
         GitomSingal *singal = [GitomSingal getInstance];
         if (singal.recordedSound) {
             imgViewSound.image = [UIImage imageNamed:@"111_19.png"];
@@ -336,7 +476,7 @@ typedef NS_ENUM(NSInteger, Tag_ReportVC) {
         btnMakeSound.tag = TAG_BtnRecording;
         
         
-        [view release];
+        [view release];*/
     }
     
     UILabel * lbl = [[UILabel alloc]initWithFrame:CGRectMake(5, 0, 50,h)];
@@ -356,6 +496,28 @@ typedef NS_ENUM(NSInteger, Tag_ReportVC) {
     
     return myCell;
 }
+
+#pragma mark -- 放大图片
+- (void)tapImage:(UITapGestureRecognizer *)tap
+{
+    NSLog(@"放大图片");
+    // 1.封装图片数据
+    NSMutableArray *photos = [[NSMutableArray arrayWithCapacity:4]retain];
+    for (int i = 0; i<4; i++) {
+        MJPhoto *photo = [[MJPhoto alloc] init];
+        UIImageView *imgView = (UIImageView *)[self.view viewWithTag:3010+i];
+        photo.srcImageView = imgView; // 来源于哪个UIImageView
+        [photos addObject:photo];
+    }
+    NSLog(@"显示相册");
+    // 2.显示相册
+    MJPhotoBrowser *browser = [[MJPhotoBrowser alloc] init];
+    browser.currentPhotoIndex = tap.view.tag-3010; // 弹出相册时显示的第一张图片是？
+    browser.photos = photos; // 设置所有的图片
+    [browser show];
+}
+
+
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return 5;
@@ -492,6 +654,49 @@ typedef NS_ENUM(NSInteger, Tag_ReportVC) {
     
 }
 
+
+#pragma mark - 重载父类方法
+-(void)btnBack:(UIButton *)btn
+{
+    NSLog(@"VcWithNavBar popViewControllerAnimated");
+    //退出汇报删除图片，节约内存
+    NSFileManager *manger = [NSFileManager defaultManager];
+    for (int i =0; i<4; i++) {
+        NSString *photoPath = [NSString stringWithFormat:@"%@%@",NSTemporaryDirectory(),[NSString stringWithFormat:@"myPhoto%d.jpg",3010+i]];
+        NSData *photoData = [NSData dataWithContentsOfFile:photoPath];
+        if (photoData) {
+            NSLog(@"photo have %@",photoPath);
+            [manger removeItemAtPath:photoPath error:nil];
+        }else{
+            NSLog(@"photo nil %@",photoPath);
+        }
+        
+    }
+    
+    
+    //退出汇报删除录音，节约内存
+    for (int i =0; i<4; i++) {
+        NSString *soundPath = [NSString stringWithFormat:@"%@%@",NSTemporaryDirectory(),[NSString stringWithFormat:@"coverToAMR%d.amr",4010+i]];
+        NSData *soundData = [NSData dataWithContentsOfFile:soundPath];
+        if (soundData) {
+            NSLog(@"sound have %@",soundPath);
+            [manger removeItemAtPath:soundPath error:nil];
+        }else{
+            NSLog(@"sound nil %@",soundPath);
+        }
+        
+    }
+    NSString *soundOtherPath = [NSString stringWithFormat:@"%@soundRecord.caf",NSTemporaryDirectory()];
+    NSData *soundOtherData = [NSData dataWithContentsOfFile:soundOtherPath];
+    if (soundOtherData) {
+        [manger removeItemAtPath:soundOtherPath error:nil];
+    }else{
+        NSLog(@"sound nil");
+    }
+
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 #pragma mark - 生命周期
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -532,7 +737,6 @@ typedef NS_ENUM(NSInteger, Tag_ReportVC) {
     [btnSaveReoprt setBackgroundImage:[[UIImage imageNamed:@"commit_btn_normal"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
     [btnSaveReoprt  setBackgroundImage:[[UIImage imageNamed:@"commit_btn_highlighted"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateHighlighted];
     [btnSaveReoprt setTitle:@"上传汇报" forState:UIControlStateNormal];
-    [btnSaveReoprt setTitle:@"放手上传吧..." forState:UIControlStateHighlighted];
     [btnSaveReoprt setFrame:CGRectMake(5, Height_Screen - 40 - 44 - 20, Width_Screen - 10, 40)];
     [btnSaveReoprt addTarget:self action:@selector(btnAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btnSaveReoprt];
@@ -544,6 +748,15 @@ typedef NS_ENUM(NSInteger, Tag_ReportVC) {
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    UIImageView *imgViewSound = (UIImageView *)[self.view viewWithTag:4010];
+    /*
+    GitomSingal *singal = [GitomSingal getInstance];
+    if (singal.recordedSound) {
+        imgViewSound.image = [UIImage imageNamed:@"111_19.png"];
+    }else{
+        imgViewSound.image = [UIImage imageNamed:@"report_recording"];
+    }
+    singal.recordedSound = NO;*/
     [self startPosition];
     _bMapSearch = [[BMKSearch alloc]init];
     [_bMapSearch setDelegate:self];

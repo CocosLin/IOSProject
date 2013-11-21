@@ -30,7 +30,6 @@
     [_headImg release];
 //    [_nameLbel release];
 //    [_roleIdLbel release];
-    [_headImg release];
     [_name release];
     [_roleId release];
     [super dealloc];

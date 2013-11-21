@@ -18,6 +18,7 @@
 #import "SVProgressHUD.h"
 #import "ApplyForCompany.h"
 #import "GitomSingal.h"
+#import "ChangePassWordVC.h"
 
 #define Height_Cell_LoginInput 40.0
 #define Count_Cell_LoginInput 2
@@ -289,8 +290,8 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
         return myCell;
     }else if (tableView.tag == Tag_Tbv_LoginHistory){
         _userIfo = [_userIfoAr objectAtIndex:indexPath.row];
-        NSLog(@"——userIfo = %@ ,%d ,%@",_userIfo.userName,_userIfo.userId,_userIfo.userPassWord);
-        myCell.textLabel.text = _userIfo.userName;
+        NSLog(@"——userIfo =,%d ,%@",_userIfo.userName,_userIfo.userPassWord);
+        myCell.textLabel.text = [NSString stringWithFormat:@"%d",_userIfo.userName];
         UIButton *removeBut = [UIButton buttonWithType:UIButtonTypeCustom];
         removeBut.tag = indexPath.row+100;
         [removeBut setBackgroundImage:[UIImage imageNamed:@"ad_close_icon.png"] forState:UIControlStateNormal];
@@ -312,7 +313,7 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
 {
     if (tableView.tag == Tag_Tbv_LoginHistory) {
         _userIfo = [_userIfoAr objectAtIndex:indexPath.row];
-        _tfUsername.text = _userIfo.userName;
+        _tfUsername.text = [NSString stringWithFormat:@"%d",_userIfo.userName];
         _tfPassword.text = _userIfo.userPassWord;
         tableView.hidden = YES;
         UIButton *btnHistoryUsername = (UIButton *)[self.view viewWithTag:Tag_BtnHistoryUsername];
@@ -423,18 +424,31 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
     //更多操作，自动登录，记住密码等
     [self addViewForMoreLoginOperaWithBtnLoginFrame:frameBtnLogin];
     
+    //注册用户
     UIButton *registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
     registerButton.backgroundColor = [UIColor clearColor];
-    [registerButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
-    [registerButton setTitle:@"注册帐号" forState:UIControlStateNormal];
+    [registerButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [registerButton setTitle:@"注册帐号|" forState:UIControlStateNormal];
+    registerButton.titleLabel.font = [UIFont systemFontOfSize:13];
+    registerButton.titleLabel.textAlignment = UITextAlignmentRight;
     [registerButton addTarget:self action:@selector(registerAction) forControlEvents:UIControlEventTouchUpInside];
-    registerButton.frame = CGRectMake(10, Height_Screen - 150, Width_Screen - 20, 30);
+    registerButton.frame = CGRectMake(Width_Screen/2-55, Height_Screen - 150,60, 20);
     [self.view addSubview:registerButton];
     
-    
+    //修改密码
+    UIButton *changePassWordButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    changePassWordButton.backgroundColor = [UIColor clearColor];
+    [changePassWordButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [changePassWordButton setTitle:@"修改密码" forState:UIControlStateNormal];
+    changePassWordButton.titleLabel.font = [UIFont systemFontOfSize:13];
+    changePassWordButton.titleLabel.textAlignment = UITextAlignmentRight;
+    [changePassWordButton addTarget:self action:@selector(changePassWordAction) forControlEvents:UIControlEventTouchUpInside];
+    changePassWordButton.frame = CGRectMake(Width_Screen/2, Height_Screen - 150, 60, 20);
+    [self.view addSubview:changePassWordButton];
     
     UILabel *lblVersionInfo = [[UILabel alloc]initWithFrame:CGRectMake(10, Height_Screen - 120, Width_Screen - 20, 30)];
     lblVersionInfo.text = @"内测版 : v1.0.0";
+    lblVersionInfo.font = [UIFont systemFontOfSize:15];
     lblVersionInfo.textColor = [UIColor grayColor];
     lblVersionInfo.backgroundColor = [UIColor clearColor];
     [self.view addSubview:lblVersionInfo];
@@ -467,16 +481,22 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
 - (void) registerAction{
     registerVC *reg = [[registerVC alloc]init];
     [self.navigationController pushViewController:reg animated:YES];
+    [reg release];
 }
-
+#pragma mark -- 重置密码
+- (void)changePassWordAction{
+    ChangePassWordVC *chang = [[ChangePassWordVC alloc]init];
+    [self.navigationController pushViewController:chang animated:YES];
+    [chang release];
+}
 
 #pragma mark -- 删除历史帐号
 - (void)removeUserHistoryAction:(id)sender{
     int index = ((UIButton *)sender).tag-100;
     NSLog(@"remove button %d",index);
     _userIfo = [_userIfoAr objectAtIndex:index];
-    NSLog(@"remove useerid %d",_userIfo.userId);
-    [UserInformationsManager deleteWithId:_userIfo.userId];
+    NSLog(@"remove useerid %d",_userIfo.userName);
+    [UserInformationsManager deleteWithId:_userIfo.userName];
     _userIfoAr = [UserInformationsManager findAll];
     [_tbvUserHistoryIfo reloadData];
 }
@@ -506,7 +526,6 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
 -(void)btnAction:(UIButton *)btn
 {
     NSLog(@"开始登入");
-    //if (btn.tag == Tag_BtnLogin){
         NSString * username = _tfUsername.text;
         NSString * password = _tfPassword.text;
         //登录参数
@@ -514,10 +533,6 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
         //以下为测试的时候用
         if (![username length] && ![password length]) {
             NSLog(@"空的用户名、密码");
-//            loggingInfo.username = @"90261";
-//            loggingInfo.password = @"121212";//HBSserverKit == 获取数据 http://59.57.15.168:6363/report/findReports
-            //loggingInfo.username = @"1073";
-            //loggingInfo.password = @"gitom.com2012";//HBSserverKit == 获取数据 http://59.57.15.168:6363/report/findReports
         }else
         {
             //将登入时填写的信息存储进LoggingInfo中
@@ -542,10 +557,15 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
                     NSLog(@"aaccountDefaults objectForKey%@ %@",[accountDefaults objectForKey:kMinZi],[accountDefaults objectForKey:kMiMa]);
                     [accountDefaults synchronize];
                 
-                /*将成功登入的密码存进数据库*/
-                //查询数据库，判断表中是否存在相同的数据
-                //UserInformationsManager *manager = [[UserInformationsManager alloc]init];
-                [UserInformationsManager insertWithUserName:loggingInfo.username andUserPassWord:loggingInfo.password andUserId:_userIfoAr.count+1];
+                if ([[accountDefaults objectForKey:kRemberPassWord] isEqualToString:kPassWord]){
+                    /*将成功登入的密码存进数据库*/
+                    //查询数据库，判断表中是否存在相同的数据
+                    //UserInformationsManager *manager = [[UserInformationsManager alloc]init];
+                    //[UserInformationsManager insertWithUserName:loggingInfo.username andUserPassWord:loggingInfo.password andUserId:_userIfoAr.count+1];
+                    [UserInformationsManager insertWithUserName:[loggingInfo.username integerValue] andUserPassWord:loggingInfo.password];
+                    NSLog(@"LoginVC 插入的数据 == %@,%@,%d",loggingInfo.username,loggingInfo.password,_userIfoAr.count+1);
+                }
+                
                 
                 
                 /*

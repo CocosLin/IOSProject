@@ -56,7 +56,9 @@
         }else{
             [hbKit applyJoinToCompanyWithOrganizationId:self.companyId andOrgunitId:self.orgId andNote:@"-" andUseName:singal.registerName andVerifyType:0];
             [SVProgressHUD showSuccessWithStatus:@"成功加入"];
+            [self.navigationController popToRootViewControllerAnimated:YES];
         }
+        
     } else if ([checkWay isEqual:ALWAYS_ACCEPT]){
         [hbKit applyJoinToCompanyWithOrganizationId:self.companyId andOrgunitId:self.orgId andNote:@"-" andUseName:singal.registerName andVerifyType:0];
     }else if ([checkWay isEqual:ALWAYS_DECLINE]){
@@ -64,7 +66,7 @@
     }else{
         [hbKit applyJoinToCompanyWithOrganizationId:self.companyId andOrgunitId:self.orgId andNote:noteStr andUseName:singal.registerName andVerifyType:0];
         [SVProgressHUD showSuccessWithStatus:@"成功提交"];
-
+        [self.navigationController popToRootViewControllerAnimated:YES];
     }
     [hbKit release];
 }

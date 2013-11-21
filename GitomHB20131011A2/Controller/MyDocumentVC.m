@@ -29,6 +29,7 @@
 
 #pragma mark - 更换用户头像
 - (void)chooseHeadPhoto{
+    NSLog(@"更换用户头像");
     UIAlertView *aler = [[UIAlertView alloc]initWithTitle:@"选择拍照" message:nil delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"拍照",@"选择图片", nil];
     [aler show];
     [aler release];
@@ -134,6 +135,10 @@
     
     //头像
     [self loadImage];
+//    UIButton *aBut = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+//    aBut.frame = CGRectMake(10, 10, 60, 60);
+//    [aBut addTarget:self action:@selector(chooseHeadPhoto) forControlEvents:UIControlEventTouchUpInside];
+//    [self.view addSubview:aBut];
     
     //详细信息
     [self creatDetileInformationViews];
@@ -175,11 +180,11 @@
 //基本信息
 - (void)creatBaseInformationViews
 {
-    UIView *baseInformaton = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 320, 80)];
+    UIView *baseInformaton = [[UIView alloc]initWithFrame:CGRectMake(0, 0, Screen_Width, 80)];
     baseInformaton.backgroundColor = [UIColor colorWithRed:176/255.0 green:196/255.0 blue:222/255.0 alpha:1];//RGB(176,196,222)
     [self.view addSubview:baseInformaton];
     
-    [baseInformaton release];
+    
     
     UIImageView *card_head_camera = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"card_head_camera.png"]];
     card_head_camera.frame = CGRectMake(0, 0, 10, 10);
@@ -193,11 +198,12 @@
     
     UIButton *chooseHeadBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     chooseHeadBtn.frame = CGRectMake(10, 10, 60, 60);
-    [chooseHeadBtn addTarget:self action:@selector(chooseHeadPhoto) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:chooseHeadBtn];
-//    UITapGestureRecognizer *tapChooseHead = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(chooseHeadPhoto)];
-//    [self.headImage addGestureRecognizer:tapChooseHead];
-//    
+    if ([[[UIDevice currentDevice]systemVersion]floatValue] < 6.0) {
+        [chooseHeadBtn addTarget:self action:@selector(chooseHeadPhoto) forControlEvents:UIControlEventTouchDown];
+    }else{
+        [chooseHeadBtn addTarget:self action:@selector(chooseHeadPhoto) forControlEvents:UIControlEventTouchUpInside];
+    }
+    [baseInformaton addSubview:chooseHeadBtn];
     
     UIView *link = [[UIView alloc]initWithFrame:CGRectMake(85, 39, 210, 2)];
     link.backgroundColor = [UIColor colorWithRed:119/255.0 green:136/255.0 blue:153/255.0 alpha:1];//RGB(119,136,153)（浅石板灰）
@@ -245,6 +251,7 @@
     [img2 release];
     [baseInformaton addSubview:_phoneNumber];
     
+    [baseInformaton release];
 }
 
 - (void)tapHideKeyBoard{

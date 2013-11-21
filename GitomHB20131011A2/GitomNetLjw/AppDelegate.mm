@@ -52,6 +52,8 @@
         [self alertUpdate:sLastVersionInfo];
         
     }
+    [getXMLdic release];
+    
 }
 
 -(void)alertUpdate:(NSString *)strContent
@@ -92,7 +94,8 @@
     self.networkQueue = [[ASINetworkQueue alloc] init];
     [self.networkQueue reshttp://59.57.15.168/et];
     */
-     
+    //更新检测
+    [self checkUpdate];
      
     NewsManager *manger = [[NewsManager alloc]init];
     [manger getNewsOforganizationId:114 andOrgunitId:1 andCookie:@"5533098A-43F1-4AFC-8641-E64875461345"];
