@@ -452,7 +452,76 @@
      }];*/
 }
 
-#pragma mark -- 获得汇报记录(单个员工)http://hb.m.gitom.com/3.0/report/findReports?organizationId=1&orgunitId=1&username=90261&beginDate=1279865600000&endDate=1399951999000&first=0&max=150&cookie=5533098A-43F1-4AFC-8641-E64875461345&reportType=REPORT_TYPE_DAY_REPORT
+#pragma mark -- 获取单个记录
+/**
+ * 查找单个汇报
+ * @param organizationId
+ * @param orgunitId
+ * @param reportId    1381457232757
+ */
+- (void)findReportWithOrganizationId:(NSInteger)organizationId
+                           OrgunitId:(NSInteger)orgunitId
+                         andReportId:(NSString *)reportId
+                        getReportMod:(void(^)(ReportModel *reportMod))callBack{
+    
+    [SVProgressHUD showWithStatus:@"加载…"];
+    NSString *urlString = [NSString stringWithFormat:@"%@/report/findReport?organizationId=%d&orgunitId=%d&reportId=%@&cookie=%@",self.strBaseUrl,organizationId,orgunitId,reportId,_cookie];
+    NSLog(@"HBServerKit 获取单个记录 urlString == %@",urlString);
+    NSURL *url = [NSURL URLWithString:urlString];
+    WDataParse *wdp = [WDataParse sharedWDataParse];
+    ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:url];
+    [req setCompletionBlock:^{
+        NSData *dataResponse = [req responseData];
+        [self getIsServerNoErrorWithHead:[self getHeadWithDataResponse:dataResponse]];//检查服务器是否没有异常，如果有，就打印
+        Body * body = [self getBodyWithDataResponse:dataResponse];
+        
+        NSLog(@"HBServerKit 完整数据之中取得body 获取单个记录 %@",body);
+        if (body.success)//如果查汇报成功
+        {
+            
+            NSArray * reportArray = [wdp wGetArrJsonWithStringJson:body.data];
+            for (NSDictionary *massageDic in reportArray) {
+                ReportModel *reportMod = [[ReportModel alloc]init];
+                reportMod.address = [massageDic objectForKey:@"address"];
+                reportMod.createDate = [[massageDic objectForKey:@"createDate"] longLongValue];
+                reportMod.soundUrl = [massageDic objectForKey:@"soundUrl"];
+                reportMod.imageUrl = [massageDic objectForKey:@"imageUrl"];
+                reportMod.userName = [massageDic objectForKey:@"createUserId"];
+                reportMod.realName = [massageDic objectForKey:@"realname"];
+                reportMod.latitude = [[massageDic objectForKey:@"latitude"] floatValue];
+                reportMod.longitude = [[massageDic objectForKey:@"longitude"] floatValue];
+                reportMod.note = [massageDic objectForKey:@"note"];
+                reportMod.telephone = [massageDic objectForKey:@"telephone"];
+                reportMod.organizationId = [[massageDic objectForKey:@"organizationId"] integerValue];
+                reportMod.orgunitId = [[massageDic objectForKey:@"orgunitId"] integerValue];
+                reportMod.reportId = [massageDic objectForKey:@"reportId"];
+                reportMod.reportType = [massageDic objectForKey:@"reportType"];
+                reportMod.telephone = [massageDic objectForKey:@"telephone"];
+                reportMod.voidFlag = [[massageDic objectForKey:@"voidFlag"] intValue];
+                NSLog(@"HBServerKit reportMod.realName == %@",reportMod.realName);
+                callBack(reportMod);
+                [SVProgressHUD showSuccessWithStatus:@"获得"];
+                [reportMod release];
+            }
+        }else//如果查汇报不成功
+        {
+            WError * error = [[WError alloc]initWithWErrorType:WErrorType_Logic wErrorDescription:body.warning];
+            Mark_Custom;
+            NSLog(@"获取消息通知 ERROR == %@",error.wErrorDescription);
+            callBack(nil);
+            [SVProgressHUD showErrorWithStatus:@"未获得"];
+            [error release];
+            
+        }
+    }]; 
+    [req setFailedBlock:^{
+        [SVProgressHUD showErrorWithStatus:@"数据获取失败"];
+    }];
+    
+    [req startAsynchronous];
+}
+
+#pragma mark -- 获得汇报记录(单个员工)
 -(void)findReportsWithOrganizationId:(NSInteger)organizationId
                            OrgunitId:(NSInteger)orgunitId
                             Username:(NSString *)username
@@ -805,6 +874,47 @@
     }];
     [req startAsynchronous];
 }
+#pragma mark 消息通知相关
+#pragma mark -- 获取设置读取通知的帐号 
+//http://hb.m.gitom.com/3.0/report/reportReader?reader=58200&cookie=5533098A-43F1-4AFC-8641-E64875461345
+- (void)reportReaderWithReader:(NSString *)reader
+            GetReportNSDictionary:(void(^)(NSDictionary *readerDic))callBack{
+    NSString *urlStr = [NSString stringWithFormat:@"%@/report/reportReader?reader=%@&cookie=%@",self.strBaseUrl,reader,_cookie];
+    NSLog(@"获取设置读取通知的帐号 url == %@",urlStr);
+    ASIHTTPRequest *req = [[ASIHTTPRequest alloc]initWithURL:[NSURL URLWithString:urlStr]];
+    [req setCompletionBlock:^{
+        NSData *dataResponse = [req responseData];
+        WDataParse *wdp = [WDataParse sharedWDataParse];
+        [self getIsServerNoErrorWithHead:[self getHeadWithDataResponse:dataResponse]];//检查服务器是否没有异常，如果有，就打印
+        Body * body = [self getBodyWithDataResponse:dataResponse];
+        NSLog(@"HBServerKit 完整数据之中取得body 获取设置读取通知的帐号 %@",body);
+        if (body.success)//如果查汇报成功
+        {
+            NSDictionary * arrReportsGot = [wdp wGetDicJsonWithStringJson:body.data];
+            NSLog(@"HBServerKit 从body取得data 获取设置读取通知的帐号== %@",arrReportsGot);
+            callBack(arrReportsGot);
+        }else//如果查汇报不成功
+        {
+            WError * error = [[WError alloc]initWithWErrorType:WErrorType_Logic wErrorDescription:body.warning];
+            Mark_Custom;
+            NSLog(@"加入申请 ERROR == %@",error.wErrorDescription);
+            callBack(nil);
+            [error release];
+        }
+    }]; 
+    [req startAsynchronous];
+}
+
+#pragma mark -- 设置消息已读状态
+- (void)setMsgReadStatusOrgId:(NSInteger)organizationId
+                    orgunitId:(NSInteger)orgunitId
+                 andMessageId:(NSString *)messageId
+                  andUsername:(NSString *)username{
+    NSString *urlStr = [NSString stringWithFormat:@"%@/util/updateMsgReadStatus?organizationId=%d&orgunitId=%d&messageId=%@&username=%@&cookie=%@",self.strBaseUrl,organizationId,orgunitId,messageId,username,_cookie];
+    NSLog(@"设置消息已读状态 url == %@",urlStr);
+    ASIHTTPRequest *req = [[ASIHTTPRequest alloc]initWithURL:[NSURL URLWithString:urlStr]];
+    [req startAsynchronous];
+}
 
 #pragma mark -- 获取消息通知
 - (void)getNotcFromMemberOrgId:(NSInteger)organizationId
@@ -814,7 +924,8 @@
                       andFirst:(int)first
                         andMax:(int)max
         getQueryMessageArray:(void(^)(NSArray *messageArray))callBack{
-    NSString *urlStr = [NSString stringWithFormat:@"%@/util/queryMessage?organizationId=%d&orgunitId=%d&username=%@&beginTime=%@&first=%d&max=%d&cookie=%@",self.strBaseUrl,organizationId,organizationId,username,beginTime,first,max,_cookie];
+    [SVProgressHUD showWithStatus:@"读取消息"];
+    NSString *urlStr = [NSString stringWithFormat:@"%@/util/queryMessage?organizationId=%d&orgunitId=%d&username=%@&beginTime=%@&first=%d&max=%d&cookie=%@",self.strBaseUrl,organizationId,orgunitId,username,beginTime,first,max,_cookie];
     NSLog(@"获取消息通知 url == %@",urlStr);
     ASIHTTPRequest *req = [[ASIHTTPRequest alloc]initWithURL:[NSURL URLWithString:urlStr]];
     WDataParse *wdp = [WDataParse sharedWDataParse];
@@ -847,7 +958,7 @@
                 [messageMod release];
             }
             callBack(massageMutableAr);
-            [SVProgressHUD showSuccessWithStatus:@"获得配置"];
+            [SVProgressHUD showSuccessWithStatus:@"获得"];
             NSLog(@"HBServerKit 从body取得data 获取消息通知 == %@",arrReportsGot);
             //[arrReportsGot release];
         }else//如果查汇报不成功
@@ -862,6 +973,26 @@
     }];
     [req startAsynchronous];
     [req release];
+}
+
+#pragma mark -- 添加对应帐号消息通知http://hb.m.gitom.com/3.0/report/saveReportReader?reader=58200&username=71781&cookie=5533098A-43F1-4AFC-8641-E64875461345
+- (void)saveReportReaderWithReader:(NSString *)reader
+                        andUsernae:(NSString *)username
+{
+    NSString *urlStr = [NSString stringWithFormat:@"%@/report/saveReportReader?reader=%@&username=%@&cookie=%@",self.strBaseUrl,reader,username,_cookie];
+    NSLog(@"添加对应帐号消息通知 url == %@",urlStr);
+    ASIHTTPRequest *req = [[ASIHTTPRequest alloc]initWithURL:[NSURL URLWithString:urlStr]];
+    [req startAsynchronous];
+}
+
+#pragma mark -- 取消对应帐号消息通知http://hb.m.gitom.com/3.0/report/removeReportReader?reader=58200&username=71781&cookie=5533098A-43F1-4AFC-8641-E64875461345
+- (void)removeReportReaderWithReader:(NSString *)reader
+                        andUsernae:(NSString *)username
+{
+    NSString *urlStr = [NSString stringWithFormat:@"%@/report/removeReportReader?reader=%@&username=%@&cookie=%@",self.strBaseUrl,reader,username,_cookie];
+    NSLog(@"添加对应帐号消息通知 url == %@",urlStr);
+    ASIHTTPRequest *req = [[ASIHTTPRequest alloc]initWithURL:[NSURL URLWithString:urlStr]];
+    [req startAsynchronous];
 }
 
 #pragma mark -- 获取考勤配置
@@ -1357,7 +1488,7 @@
     if (title) [dicParams setObject:title forKey:@"title"];
     if (content) [dicParams setObject:content forKey:@"content"];
     [dicParams setObject:_cookie forKey:@"cookie"];
-    //    WDataParse *wdp = [WDataParse sharedWDataParse];
+    
     WDataService * wds = [WDataService sharedWDataService];
     [wds wPostRequestWithIsAsynchronous:YES Url:[NSURL URLWithString:strPortReport] DicPostDatas:dicParams
                               GetResult:^(NSData *dataResponse, NSError *errorRequest)
@@ -1762,8 +1893,22 @@
         }
     }];
     [req startAsynchronous];
-    //[commentModel release];
 }
+
+#pragma mark --上传位置 http://hb.m.gitom.com/3.0/util/saveLocation?username=204&location=0000&longitude=58200&latitude=WTO&cookie=5533098A-43F1-4AFC-8641-E64875461345
+- (void) saveLocationWithUserName:(NSInteger)username
+                      andLocation:(NSString *)location
+                     andLongitude:(NSString *)longitude
+                      andLatitude:(NSString *)latitude{
+    
+    NSString *urlStr = [NSString stringWithFormat:@"%@/util/saveLocation?username=%d&location=%@&longitude=%@&latitude=%@&cookie=%@",self.strBaseUrl,username,location,longitude,latitude,_cookie];
+    NSLog(@"HBServerKit 上传位置 url == %@",urlStr);
+    NSURL *url = [NSURL URLWithString:urlStr];
+    ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:url];
+    [req startAsynchronous];
+    
+}
+
 
 #pragma mark - ServerBaseModel
 //得到data对应的字符串

@@ -136,7 +136,7 @@
     
     NSString *recordType = [[NSString alloc]init];
     GetCommonDataModel;
-    _lblRecordPromptUserInfo.text = [NSString stringWithFormat:@"%@的申请列表",comData.userModel.unitName];
+    _lblRecordPromptUserInfo.text = @"加入申请";
     _lblRecordPromptUserInfo.font = [UIFont systemFontOfSize:18];
     [recordType release];
     [_lblRecordPromptUserInfo setBackgroundColor:[UIColor clearColor]];

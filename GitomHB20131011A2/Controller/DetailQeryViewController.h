@@ -19,7 +19,7 @@
 @property (nonatomic,retain) UIImage *attenceImge;//汇报时上传的图片
 @property (nonatomic,retain) NSData * soundData;//汇报时上传的声音
 @property (nonatomic,retain) UIView * background;
-@property (retain,nonatomic) ReportModel * reportModel;
+@property (nonatomic,retain) ReportModel * reportModel;
 @property (nonatomic,retain) NSArray *soundStirngAr;
 @property (nonatomic,retain) UIScrollView *scrollView;
 @property (nonatomic,retain) AVAudioPlayer *player;

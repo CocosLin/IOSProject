@@ -14,6 +14,7 @@
 @interface ShowStaffInfomationVC (){
     BOOL switchAlerDelegate;
     BOOL moveStaffToOtherOrg;
+    BOOL readerSwitchOn;//是否开启消息通知
 }
 
 @end
@@ -34,13 +35,32 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    //获得员工数据
     GetCommonDataModel;
     HBServerKit *hbKit = [[HBServerKit alloc]init];
     [hbKit findReportsWithOrganizationId:comData.organization.organizationId Refresh:NO GotArrReports:^(NSArray *arrDicReports, WError *myError) {
         self.orgNameArr = arrDicReports;
     }];
     NSLog(@"orgNameArr.count == %d",self.orgNameArr.count);
+
+    //获得消息通知数据（开启、关闭）
+    [hbKit reportReaderWithReader:comData.userModel.username GetReportNSDictionary:^(NSDictionary *readerDic) {
+        NSLog(@"MenuVC readerDic  == %@",[readerDic objectForKey:@"users"]);
+        NSRange rg = [[readerDic objectForKey:@"users"] rangeOfString:self.memberIfo.username];
+        if (rg.location != NSNotFound ) {
+            NSLog(@"readerSwitchOn = YES");
+            readerSwitchOn = YES;
+        }else{
+            NSLog(@"readerSwitchOn = NO");
+            readerSwitchOn = NO;
+        }
+        
+        //接收消息开关
+        if (comData.organization.roleId == 1|comData.organization.orgunitId == [self.memberIfo.orgunitId integerValue])         
+        [self creatReceiveSwitch];
+    }];
+    [hbKit release];
+    
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(0, 0, 50, 44);
     [btn setBackgroundImage:[UIImage imageNamed:@"btnBackFromNavigationBar_On"] forState:UIControlStateNormal];
@@ -52,7 +72,6 @@
     [self.navigationItem setLeftBarButtonItem:backItem];
     [backItem release];
     
-    // Do any additional setup after loading the view from its nib.
     //创建基本信息栏
     [self creatBaseInformationViews];
     //头像
@@ -213,6 +232,7 @@
     
     [tempPhoneNumber release];
     
+    
 }
 
 #pragma mark -- 调用电话
@@ -366,8 +386,46 @@
         roleStr = @"员工";
     }
     [self creatLablesOfDetialTitle:@"职位" andLabelFrame:CGRectMake(5, 196, 40, 25) andLinkFrame:CGRectMake(5, 194, 310, 2) andDetileInformation:roleStr andInfoFrame:CGRectMake(55, 196, 260, 25)];
-    
     [roleStr release];
+    
+    
+}
+
+- (void) creatReceiveSwitch{
+    UIView *link = [[UIView alloc]initWithFrame:CGRectMake(5, 221, 310, 2)];
+    link.backgroundColor = [UIColor colorWithRed:176/255.0 green:196/255.0 blue:222/255.0 alpha:1];
+    [self.view addSubview:link];
+    [link release];
+    
+    UILabel *userId = [[UILabel alloc]initWithFrame:CGRectMake(5, 223, 80, 25)];
+    userId.backgroundColor = [UIColor clearColor];
+    userId.text = @"提交汇报通知";
+    userId.font = [UIFont systemFontOfSize:13];
+    [self.view addSubview:userId];
+    [userId release];
+    
+    UISwitch *noticSwitch = [[UISwitch alloc]initWithFrame:CGRectMake(Screen_Width-90, 225, 60, 10)];
+    [self.view addSubview:noticSwitch];
+    noticSwitch.onTintColor = [UIColor greenColor];
+    NSLog(@"readerSwitchOn == %c",readerSwitchOn);
+    //noticSwitch.on = YES;
+    noticSwitch.on = readerSwitchOn;
+    [noticSwitch addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
+    [noticSwitch release];
+}
+
+- (void)switchAction:(UISwitch *)sender{
+    BOOL onStaute = sender.on;
+    HBServerKit *hbKit = [[HBServerKit alloc]init];
+    GetCommonDataModel;
+    if (onStaute) {
+        NSLog(@"switch on");
+        [hbKit saveReportReaderWithReader:comData.userModel.username andUsernae:self.memberIfo.username];
+    }else{
+        NSLog(@"switch off");
+        [hbKit removeReportReaderWithReader:comData.userModel.username andUsernae:self.memberIfo.username];
+    }
+    [hbKit release];
 }
 
 

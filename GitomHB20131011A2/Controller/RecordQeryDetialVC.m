@@ -324,7 +324,8 @@
             HBServerKit *hbServer = [[HBServerKit alloc]init];
             [hbServer findReportsWithOrganizationId:comData.organization.organizationId
                                           OrgunitId:[orgMod.orgunitId integerValue]
-                                           Username:orgMod.username ReportType:@"REPORT_TYPE_DAY_REPORT"
+                                           Username:orgMod.username
+                                         ReportType:@"REPORT_TYPE_DAY_REPORT"
                                        BeginDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]] - ((long long int)(componets.month)*30*24*60*60*1000)
                                          EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]
                                   FirstReportRecord:0
@@ -337,8 +338,6 @@
                      for (NSDictionary * dicReports in arrDicReports)
                      {
                          NSLog(@"RecordQeryDetial realname == %@",dicReports);
-                         
-                         NSLog(@"RecordQeryDetial 444name == %@",[dicReports objectForKey:@"name"]);
                          ReportModel *repMod = [[ReportModel alloc]init];
                          repMod.imageUrl = [dicReports objectForKey:@"imageUrl"];
                          repMod.latitude = [[dicReports objectForKey:@"latitude"]floatValue];

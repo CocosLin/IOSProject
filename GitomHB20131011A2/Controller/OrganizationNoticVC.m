@@ -20,6 +20,7 @@
 #import "HBServerKit.h"
 #import "WTool.h"
 #import "RecordQeryReportsVcCellForios5.h"
+#import "DetailQeryViewController.h"
 
 @interface OrganizationNoticVC (){
     NSMutableArray *_urls;
@@ -48,9 +49,10 @@
         [hbKit getNotcFromMemberOrgId:comData.organization.organizationId orgunitId:comData.organization.orgunitId andUserName:comData.userModel.username andBeginTime:@"1279865600000" andFirst:0 andMax:10 getQueryMessageArray:^(NSArray *messageArray) {
             tableArray = messageArray;
             for (QueryMessageModel *messageMod in messageArray) {
-                NSLog(@"Menu meassageMod nst =  /%@ / %@ / %@ / %@ / %@ /%@",messageMod.username,messageMod.readUser,messageMod.messageId,messageMod.organizationId,messageMod.dtx,messageMod.senderReadname);
+                NSLog(@"Menu meassageMod nst =  /%@ / %@ / %@ / %@ / %@ /%@",messageMod.sender,messageMod.readUser,messageMod.messageId,messageMod.organizationId,messageMod.dtx,messageMod.senderReadname);
                 NSLog(@"tableArray.count == %d",tableArray.count);
                 massageTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, Screen_Width, Screen_Height-65)];
+                massageTableView.separatorStyle = UITableViewCellSeparatorStyleNone;
                 massageTableView.delegate = self;
                 massageTableView.dataSource = self;
                 [self.view addSubview:massageTableView];
@@ -180,6 +182,24 @@
     [browser show];
 }
 
+#pragma mark -- 移除对应通知
+- (void)removeNotesAction:(UIButton *)sender{
+    GetCommonDataModel;
+    NSLog(@"(UIButton *)sender == %d",sender.tag);
+    QueryMessageModel *mesMod = [tableArray objectAtIndex:sender.tag];
+    
+    //移除对应通知
+    HBServerKit *hbKit = [[HBServerKit alloc]init];
+    [hbKit setMsgReadStatusOrgId:[mesMod.organizationId integerValue]orgunitId:[mesMod.orgunitId integerValue] andMessageId:mesMod.messageId andUsername:comData.userModel.username];
+
+    //刷新界面
+    [hbKit getNotcFromMemberOrgId:comData.organization.organizationId orgunitId:comData.organization.orgunitId andUserName:comData.userModel.username andBeginTime:@"1279865600000" andFirst:0 andMax:10 getQueryMessageArray:^(NSArray *messageArray) {
+        tableArray = messageArray;
+        [massageTableView reloadData];
+    }];
+    [hbKit release];
+}
+
 #pragma mark -- UITableViewDelegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section;
 {
@@ -198,18 +218,45 @@
     QueryMessageModel *messageMod = [[QueryMessageModel alloc]init];
     messageMod = [tableArray objectAtIndex:indexPath.row];
     
-    cell.nameLabel.text = [NSString stringWithFormat:@"%@(%@)",messageMod.senderReadname,messageMod.username];
+    cell.nameLabel.text = [NSString stringWithFormat:@"%@(%@)",messageMod.senderReadname,messageMod.sender];
     cell.timeLabel.text = [WTool getStrDateTimeWithDateTimeMS:[messageMod.createDate doubleValue] DateTimeStyle:@"yyyy-MM-dd HH:mm:ss"];
-    cell.addressLabel.text = messageMod.dtx;
-
+    if ([messageMod.dtx isEqualToString:@"reort"]) {
+        cell.addressLabel.text = @"提交了新的汇报";
+    }else{
+        cell.addressLabel.text = @"新的点评";
+    }
     UIImageView *tempBackgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]];
     cell.backgroundView = tempBackgroundView;
     [tempBackgroundView release];
     UIImageView *selectedBackgroundView =[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]];
     cell.selectedBackgroundView = selectedBackgroundView;
     [selectedBackgroundView release];
+    
+    UIButton *removeBut = [UIButton buttonWithType:UIButtonTypeCustom];
+    removeBut.tag = indexPath.row;
+    [removeBut setBackgroundImage:[UIImage imageNamed:@"ad_close_icon.png"] forState:UIControlStateNormal];
+    [removeBut addTarget:self action:@selector(removeNotesAction:) forControlEvents:UIControlEventTouchUpInside];
+    removeBut.frame = CGRectMake(Screen_Width-60, 5, 50, 50);
+    [cell addSubview:removeBut];
     return cell;
 
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 60;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    NSLog(@" indexPath.row == %d",indexPath.row);
+    QueryMessageModel *messageMod = [[QueryMessageModel alloc]init];
+    messageMod = [tableArray objectAtIndex:indexPath.row];
+    HBServerKit *hbKit = [[HBServerKit alloc]init];
+    [hbKit findReportWithOrganizationId:[messageMod.organizationId integerValue] OrgunitId:[messageMod.orgunitId integerValue] andReportId:messageMod.extend getReportMod:^(ReportModel *reportMod) {
+        DetailQeryViewController *detailQeryView = [[DetailQeryViewController alloc]init];
+        detailQeryView.reportModel = reportMod;
+        [self.navigationController pushViewController:detailQeryView animated:YES];
+        [detailQeryView release];
+    }];
     
 }
 

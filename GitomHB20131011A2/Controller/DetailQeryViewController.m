@@ -41,8 +41,6 @@
     
     NSMutableArray *values = [NSMutableArray array];
     [values addObject:[NSValue valueWithCATransform3D:CATransform3DMakeScale(0.1, 0.1, 1.0)]];
-    //    [values addObject:[NSValue valueWithCATransform3D:CATransform3DMakeScale(1.2, 1.2, 1.0)]];
-    //    [values addObject:[NSValue valueWithCATransform3D:CATransform3DMakeScale(0.9, 0.9, 1.0)]];
     [values addObject:[NSValue valueWithCATransform3D:CATransform3DMakeScale(1.0, 1.0, 1.0)]];
     animation.values = values;
     [aView.layer addAnimation:animation forKey:nil];
@@ -59,18 +57,10 @@
     [soundProgressView release];
     soundProgressView = nil;
     [soundProgress release];
-    //player = nil;
     [super dealloc];
 }
 
--(void)suoxiao
-{
-    NSLog(@"移除");
-    UIView *anView = (UIView *)[self.view viewWithTag:1001];
-    [anView removeFromSuperview];
-    [self.background removeFromSuperview];
-    //[self.background removeFromSuperview];
-}
+
 
 #pragma mark -- 播放声音
 - (void)showSound:(UIButton *)sender{

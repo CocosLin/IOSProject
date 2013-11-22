@@ -178,11 +178,9 @@
    
     [_lblDistanceRange setBackgroundColor:[UIColor clearColor]];
     [_lblDistanceRange setFont:[UIFont systemFontOfSize:14]];
-    //self.rangeAtten2Org = -1;//初始化提示文字
     [_lblDistanceRange setTextColor:[UIColor whiteColor]];
     [viewDistanceRange addSubview:_lblDistanceRange];
    
-    
     [viewDistance addSubview:viewDistanceRange];
     [viewDistanceRange release];
     

@@ -76,7 +76,7 @@
     [rbarButtonItem release];
     
     NSArray *textNameAr = @[@" 帐号",@" 原密码",@" 新密码",@" 新密码"];
-    NSArray *placeholderAr = @[@"请输入帐号",@"输入原来密码",@"输入密码",@"再次熟人就新密码"];
+    NSArray *placeholderAr = @[@"请输入帐号",@"输入原来密码",@"输入密码",@"再次输入新密码"];
     for (int i = 0; i<4; i++) {
         //修改
         UILabel * leftViewLb = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 50, 40)];

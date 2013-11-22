@@ -17,7 +17,7 @@
 
 #import "FTWCache.h"
 #import "NSString+MD5.h"
-
+#import "ReportModel.h"
 
 @interface HBServerKit : BaseService
 @property(nonatomic,retain)ServerBaseModel * serverBaseMessage;
@@ -214,6 +214,12 @@ typedef  void(^WbReportSave)(BOOL isReportOk,WError * myError);
                                      MaxReportRecord:(NSInteger)maxCountReportRecord
                                          RefreshData:(BOOL)refshOrNot
                                        GotArrReports:(WbReportJsonArr)callback;
+#pragma mark -- 获取单个记录
+- (void)findReportWithOrganizationId:(NSInteger)organizationId
+                           OrgunitId:(NSInteger)orgunitId
+                         andReportId:(NSString *)reportId
+                        getReportMod:(void(^)(ReportModel *reportMod))callBack;
+
 #pragma mark -- 获得汇报记录(单个员工)
 -(void)findReportsWithOrganizationId:(NSInteger)organizationId
                            OrgunitId:(NSInteger)orgunitId
@@ -242,6 +248,19 @@ typedef  void(^WbReportSave)(BOOL isReportOk,WError * myError);
                                   orgunitId:(NSInteger)orgunitId
                               GotArrReports:(WbReportJsonArr)callback;
 
+//http://hb.m.gitom.com/3.0/report/reportReader?reader=58200&cookie=5533098A-43F1-4AFC-8641-E64875461345
+#pragma mark -- 获取设置读取通知的帐号
+- (void)reportReaderWithReader:(NSString *)reader
+         GetReportNSDictionary:(void(^)(NSDictionary *readerDic))callBack;
+
+#pragma mark -- 添加对应帐号消息通知
+- (void)saveReportReaderWithReader:(NSString *)reader
+                        andUsernae:(NSString *)username;
+
+#pragma mark -- 取消对应帐号消息通知
+- (void)removeReportReaderWithReader:(NSString *)reader
+                          andUsernae:(NSString *)username;
+
 #pragma mark -- 获取消息通知
 - (void)getNotcFromMemberOrgId:(NSInteger)organizationId
                      orgunitId:(NSInteger)orgunitId
@@ -251,7 +270,13 @@ typedef  void(^WbReportSave)(BOOL isReportOk,WError * myError);
                         andMax:(int)max
           getQueryMessageArray:(void(^)(NSArray *messageArray))callBack;
 
-#pragma mark - 获取考勤配置
+#pragma mark -- 设置消息已读状态
+- (void)setMsgReadStatusOrgId:(NSInteger)organizationId
+                    orgunitId:(NSInteger)orgunitId
+                 andMessageId:(NSString *)messageId
+                  andUsername:(NSString *)username;
+
+#pragma mark -- 获取考勤配置
 -(void)getAttendanceConfigWithOrganizationId:(NSInteger)organizationId
                                    orgunitId:(NSInteger)orgunitId
                                      Refresh:(BOOL)refresh

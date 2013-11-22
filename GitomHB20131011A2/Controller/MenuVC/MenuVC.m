@@ -202,13 +202,7 @@ typedef NS_ENUM(NSInteger, TagFlag)
              NSLog(@"error");
          }
      }];
-    /*
-    [hbServerKit getNotcFromMemberOrgId:204 orgunitId:1 andUserName:@"58200" andBeginTime:@"1279865600000" andFirst:0 andMax:100 getQueryMessageArray:^(NSArray *messageArray) {
-        for (QueryMessageModel *messageMod in messageArray) {
-            NSLog(@"Menu meassageMod nst =  /%@ / %@ / %@ / %@ / %@ /%@",messageMod.username,messageMod.readUser,messageMod.messageId,messageMod.organizationId,messageMod.dtx,messageMod.senderReadname);
-        }
-        
-    }];*/
+    
 }
 
 - (void)didReceiveMemoryWarning
