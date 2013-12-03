@@ -23,7 +23,7 @@
 @property(nonatomic,assign)NSInteger organizationId;
 @property(nonatomic,assign)NSInteger orgunitId;
 @property(nonatomic,assign)RoleId roleId;
-@property(nonatomic,retain)NSArray * userPrivileges;
+@property(nonatomic,copy)NSString * operations;//公司主管权限
 @end
 
 @interface  UserPrivilege  : WBaseModel

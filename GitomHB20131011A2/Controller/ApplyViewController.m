@@ -39,6 +39,7 @@
         RecordQeryReportsVcCellForios5 *myCell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (myCell == nil) {
             myCell = [[RecordQeryReportsVcCellForios5 alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+            myCell.removeBut.hidden = YES;
         }
         applyMod = [self.arrData objectAtIndex:indexPath.row];
         myCell.nameLabel.text = [NSString stringWithFormat:@"%@(%@)申请加入[%@]",applyMod.realname,applyMod.createUserId,applyMod.orgunitName];
@@ -135,7 +136,6 @@
     [_lblRecordPromptUserInfo setFont:[UIFont systemFontOfSize:26]];
     
     NSString *recordType = [[NSString alloc]init];
-    GetCommonDataModel;
     _lblRecordPromptUserInfo.text = @"加入申请";
     _lblRecordPromptUserInfo.font = [UIFont systemFontOfSize:18];
     [recordType release];

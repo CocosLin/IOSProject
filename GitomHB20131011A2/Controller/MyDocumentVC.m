@@ -12,6 +12,7 @@
 #import "UserManager.h"
 #import "HBServerKit.h"
 #define kMyPhotoName @"headImg.jpg"
+#define NUMBERS @"0123456789\n"
 @interface MyDocumentVC ()
 @end
 
@@ -135,14 +136,28 @@
     
     //头像
     [self loadImage];
-//    UIButton *aBut = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-//    aBut.frame = CGRectMake(10, 10, 60, 60);
-//    [aBut addTarget:self action:@selector(chooseHeadPhoto) forControlEvents:UIControlEventTouchUpInside];
-//    [self.view addSubview:aBut];
     
     //详细信息
     [self creatDetileInformationViews];
     [tapHideKey release];
+}
+
+#pragma mark -- TextField Delegate
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    
+    //限制只能输入数字
+    NSCharacterSet *cs;
+    cs = [[NSCharacterSet characterSetWithCharactersInString:NUMBERS]invertedSet];
+    NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs]componentsJoinedByString:@""];
+    BOOL canChange = [string isEqualToString:filtered];
+    
+    //限制字符串11个为上限
+    int MAX_CHARS = 11;
+    NSMutableString *newtxt = [NSMutableString stringWithString:textField.text];
+    [newtxt replaceCharactersInRange:range withString:string];
+    
+    return ([newtxt length] <= MAX_CHARS);
+    return canChange;
 }
 
 #pragma mark - 更改用户信息
@@ -155,26 +170,14 @@
     [self tapHideKeyBoard];
     [hbKit release];
 }
+
 //连接图片
 - (void)loadImage
 {
-    //获得头像信息
-    /*
-    GetCommonDataModel;
-    HBServerKit *hbKit = [[HBServerKit alloc]init];
-    
-    NSString *imgUrl = comData.userModel.photo;
-    //if (imgUrl != nil) {
-        [hbKit getUserPhotoImageWithStrUserPhotoUrl:imgUrl GotResult:^(UIImage *imgUserPhoto, WError *myError) {
-            
-            self.headImage.image = imgUserPhoto;
-        }];
-    //}*/
     if (self.imgdata != nil) {
         self.headImage.image = self.imgdata;
     }
-    
-        
+
 }
 
 //基本信息
@@ -227,7 +230,7 @@
     //可编辑名字
     _name = [[UITextField alloc]initWithFrame:CGRectMake(140, 10, 130, 25)];
     _name.enabled= YES;
-    _name.delegate = self;
+    //_name.delegate = self;
     [baseInformaton addSubview:self.name];
     _name.backgroundColor = [UIColor clearColor];
     GetCommonDataModel;
@@ -258,6 +261,7 @@
     [_name resignFirstResponder];
     [_phoneNumber resignFirstResponder];
 }
+
 //获得详细信息
 - (void) creatDetileInformationViews
 {

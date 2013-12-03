@@ -18,18 +18,18 @@
     
     //声明sql语句对象
     sqlite3_stmt *st;
-    
+    NSLog(@"sql语句");
     //给sql语句对象赋值
     //第三项 -1，指取第二项字符串的全部长度。第四项 可以写回调函数
     int p= sqlite3_prepare_v2(sql3, "select *from userinfo", -1, &st , nil);
     
     if (p==SQLITE_OK) {//判断sql语法正确性
         userIfomationArray=[[NSMutableArray alloc]init];
-        
+        NSLog(@"sql语句1");
         while (sqlite3_step(st)==SQLITE_ROW) {//是否查询到记录
             UserInformationsManager *userInfo=[[UserInformationsManager alloc]init];
-            userInfo.userName = sqlite3_column_int(st, 0);
-            userInfo.userPassWord = [NSString stringWithCString:(char *)sqlite3_column_text(st, 1) encoding:NSUTF8StringEncoding];
+            userInfo.userName = [NSString stringWithCString:(char *)sqlite3_column_text(st, 1) encoding:NSUTF8StringEncoding];
+            userInfo.userPassWord = [NSString stringWithCString:(char *)sqlite3_column_text(st, 2) encoding:NSUTF8StringEncoding];
             [userIfomationArray addObject:userInfo];
             [userInfo release];
         }
@@ -41,7 +41,7 @@
 }
 
 #pragma mark - 插入
-+ (void)insertWithUserName:(int)userName andUserPassWord:(NSString *)passWord{
++ (void)insertWithUserName:(NSString *)userName andUserPassWord:(NSString *)passWord{
         sqlite3 *sql3=[ConnectDataBase createDB];
         
 //        NSString *sql=@"insert into userinfo (userid,userName,userPassWord) values (?,?,?)";
@@ -50,7 +50,7 @@
         sqlite3_stmt *st;
         if (sqlite3_prepare_v2(sql3, [sql UTF8String], -1, &st, nil)==SQLITE_OK) {
             //sqlite3_bind_int(st, 1, userId);
-            sqlite3_bind_int(st, 1, userName);
+            sqlite3_bind_text(st, 1, [userName UTF8String], -1, SQLITE_STATIC);
             sqlite3_bind_text(st, 2, [passWord UTF8String], -1, SQLITE_STATIC);
             
             if (sqlite3_step(st)==SQLITE_ERROR) {
@@ -115,10 +115,10 @@
     
 }
 */
-+ (void)deleteWithId:(int)userName{
++ (void)deleteWithId:(NSString *)userName{
     sqlite3 *sql3=[ConnectDataBase createDB];//类似单例 的指针型
     
-    NSString *sql=[NSString stringWithFormat:@"delete from userinfo where userName=%d",userName];
+    NSString *sql=[NSString stringWithFormat:@"delete from userinfo where userName=%@",userName];
     
     sqlite3_stmt *st;
     if (sqlite3_prepare_v2(sql3, [sql UTF8String], -1, &st, nil)==SQLITE_OK) {

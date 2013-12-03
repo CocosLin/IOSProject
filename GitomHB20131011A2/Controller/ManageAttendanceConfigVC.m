@@ -72,9 +72,9 @@
     self.navigationController.title = @"修改考勤配置";
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(0, 0, 50, 44);
-    [btn setBackgroundImage:[UIImage imageNamed:@"btnBackFromNavigationBar_On"] forState:UIControlStateNormal];
+    [btn setBackgroundImage:[UIImage imageNamed:@"btn_title_back_default.png"] forState:UIControlStateNormal];
     // 高亮
-    [btn  setBackgroundImage:[UIImage imageNamed:@"btnBackFromNavigationBar_Off"] forState:UIControlStateHighlighted];
+    [btn  setBackgroundImage:[UIImage imageNamed:@"btn_title_back_pressed.png"] forState:UIControlStateHighlighted];
     [btn addTarget:self action:@selector(btnBack:) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc]initWithCustomView:btn];
@@ -192,7 +192,7 @@
 }
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     UIView *sectionView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.bounds.size.width, 30)];
-    //[sectionView setBackgroundColor:BlueColor];
+
     [sectionView setBackgroundColor:[UIColor clearColor]];
     //增加UILabel
     UILabel *text = [[UILabel alloc] initWithFrame:CGRectMake(10, 6, 320, 18)];

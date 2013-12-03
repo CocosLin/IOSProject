@@ -195,7 +195,7 @@
     NSInteger intS = [orgIdStr intValue];
     [hbKit findOrgunitMembersWithOrganizationId:comData.organization.organizationId
                                       orgunitId:intS
-                                        Refresh:NO
+                                        Refresh:YES
                                   GotArrReports:^(NSArray *arrDicReports, WError *myError)
      {
          if (arrDicReports.count) {

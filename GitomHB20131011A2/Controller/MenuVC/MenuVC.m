@@ -24,8 +24,6 @@
 #import "HBServerKit.h"
 #import "CommonDataModel.h"//存储用户数据的类
 #import "ReportManager.h"//管理来自服务器数据的类
-//#import <ShareSDK/ShareSDK.h>
-#import <ShareSDK/ShareSDK.h>
 #import "ASIHTTPRequest.h"
 #import "SVProgressHUD.h"
 #import "OrganizationsModel.h"//存放公司部门信息类
@@ -35,7 +33,9 @@
 #import "WTool.h"
 #import "UserLoggingInfo.h"
 #import "CreaterUserManageDeparmentVC.h"
-//#import "QueryMessageModel.h"
+#import "UMSocial.h"
+#import "UserManager.h"
+#import "UserLoggingInfo.h"
 
 typedef NS_ENUM(NSInteger, TagFlag)
 {
@@ -115,8 +115,8 @@ typedef NS_ENUM(NSInteger, TagFlag)
 
 #pragma mark -- 刷新部分数据
 - (void)refreshAction{
+    //获得新的配置信息
     [self loadConfingSitting];
-    //[SVProgressHUD showWithStatus:@"刷新公告…"];
     [self refreshNews];
     GetCommonDataModel;
     
@@ -127,8 +127,30 @@ typedef NS_ENUM(NSInteger, TagFlag)
                        GotArrReports:^(NSArray *arrDicReports, WError *myError) {
                            nil;
                        }];
-    //[SVProgressHUD showSuccessWithStatus:@"完成"];
     [hbKit release];
+    
+    //重新获得登入信息
+    NSLog(@"MenuVC userManager ifo == %@",comData.userlogingInfo);
+    UserManager *um = [[UserManager alloc]init];
+    [um loggingWithLoggingInfo:comData.userlogingInfo WbLoggedInfo:^(UserLoggedInfo *loggedInfo, BOOL isLoggedOk) {
+        if (isLoggedOk) {
+            
+            //这边要得到用户信息。。。
+            comData.cookie = loggedInfo.cookie;//将登入时候获得的cookie
+            UserModel * user = [[UserModel alloc] initForAllJsonDataTypeWithDicFromJson:loggedInfo.user];//传入loggedInfo中的user字典，用过UserModel的initForAllJsonDataTypeWithDicFromJson:方法获得字典中的所有内容。
+            comData.userModel = user;//使用单例的userModel属性获得user中转换好的用户信息：头像url、账号等等
+            
+            Organization * organizationInfo = [[[Organization alloc]initForAllJsonDataTypeWithDicFromJson:[loggedInfo.organizations lastObject]]autorelease];
+            comData.organization = organizationInfo;//使用单例的获得解析到的用户信息            
+            [user release];
+        }
+    }];
+    
+    self.userPhotoAddress = comData.userModel.photo;
+//    //刷新用户信息
+//    [self initWithRoleId:comData.organization.roleId
+//               UserModel:comData.userModel
+//        OrganizationName:comData.organization.name];
 }
 
 - (void)refreshUserInfomations{
@@ -246,13 +268,14 @@ typedef NS_ENUM(NSInteger, TagFlag)
     UIView * viewUserInfo = [[[UIView alloc]initWithFrame:CGRectMake(0, 0, Screen_Width, 50)] autorelease];
     [viewUserInfo setBackgroundColor:[UIColor whiteColor]];
     [viewUserInfo setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"user_control_top2.png"]]];
+    
     //头像imageView
     _imgViewUserPhoto = [[UIImageView alloc]initWithFrame:CGRectMake(5, 5, 40, 40)];
     _imgViewUserPhoto.image = [UIImage imageNamed:@"user_control_user.png"];
     [viewUserInfo addSubview:_imgViewUserPhoto];
     
     //公司信息
-    _lblOrganizationInfoInNavigation = [[UILabel alloc]initWithFrame:CGRectMake(50, 2, Width_Screen - 50 -40, 25)];
+    _lblOrganizationInfoInNavigation = [[UILabel alloc]initWithFrame:CGRectMake(50, 2, Width_Screen - 160, 25)];
     [_lblOrganizationInfoInNavigation setFont:[UIFont systemFontOfSize:14]];
     [_lblOrganizationInfoInNavigation setBackgroundColor:[UIColor clearColor]];
     _lblOrganizationInfoInNavigation.text = self.organizationName;
@@ -648,14 +671,14 @@ typedef NS_ENUM(NSInteger, TagFlag)
                      }];
                     
                 }else{
-                    NSLog(@"%@",@"管理部门");
+                    NSLog(@"管理部门");
                     OrganizationsModel *orgMod = [[OrganizationsModel alloc]init];
-                    orgMod.orgunitName = comData.userModel.unitName;
+                    orgMod.orgunitName = comData.organization.name;
                     orgMod.orgunitId = [NSString stringWithFormat:@"%ld",(long)comData.organization.orgunitId];
                     
                     ManageDepartmentVC *manageDepartment = [[ManageDepartmentVC alloc]init];
                     manageDepartment.orgMod = orgMod;
-                    NSLog(@"manageDepartment.orgMod.orgunitName = comData.userModel.unitName = %@ - %@   %@",comData.userModel.unitName,manageDepartment.orgMod.orgunitName,manageDepartment.orgMod.orgunitId);
+                    NSLog(@"manageDepartment.orgMod.orgunitName = comData.userModel.unitName = %@ - %@   %@",comData.organization.name,manageDepartment.orgMod.orgunitName,manageDepartment.orgMod.orgunitId);
                     manageDepartment.title = @"管理部门";
                     UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:manageDepartment];
                     self.sidePanelController.centerPanel = nav;
@@ -681,6 +704,16 @@ typedef NS_ENUM(NSInteger, TagFlag)
             {
                 if (indexPath.row==0)//分享应用
                 {
+                    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeApp;
+                    //分享图文样式到微信朋友圈显示字数比较少，只显示分享标题
+                    [UMSocialData defaultData].extConfig.title = @"朋友圈分享内容";
+                    [UMSocialSnsService presentSnsController:self
+                                                         appKey:@"507fcab25270157b37000010"
+                                                      shareText:@"正在使用网即通移动版http://app.gitom.com/mobileapp/list/12"
+                                                     shareImage:[UIImage imageNamed:@"icon.png"]
+                                                shareToSnsNames:[NSArray arrayWithObjects:UMShareToSina,UMShareToTencent,UMShareToRenren,UMShareToDouban,UMShareToWechatSession,UMShareToQzone,UMShareToWechatTimeline,UMShareToEmail,UMShareToQQ,UMShareToSms,UMShareToTwitter,UMShareToFacebook, nil]
+                                                       delegate:nil];
+                    /*
                     NSString *imagePath = [[NSBundle mainBundle] pathForResource:@"Icon" ofType:@"png"];
                     //构造分享内容
                     id<ISSContent> publishContent=[ShareSDK content:@"我在使用网即通-移动汇报http://app.gitom.com/mobileapp/list/10"
@@ -690,6 +723,7 @@ typedef NS_ENUM(NSInteger, TagFlag)
                                                                 url:@"http://app.gitom.com"
                                                         description:@"移动汇报标准版提供公告、移动考勤、日常汇报、出差汇报、外出汇报、汇报点评、汇报记录、记录导出、员工管理等功能，移动汇报支持文字、图片、语音等多形式汇报方式，操作简洁方便，可谓是有图有真相，是移动互联网时代一款不可多得的企业管理助手。"
                                                           mediaType:SSPublishContentMediaTypeNews];
+
                     [ShareSDK showShareActionSheet:nil
                                          shareList:nil
                                            content:publishContent
@@ -707,6 +741,7 @@ typedef NS_ENUM(NSInteger, TagFlag)
                              NSLog(@"分享失败,错误码:%d,错误描述:%@", [error errorCode],[error errorDescription]);
                          }
                      }];
+                    */
                     
                 }else if (indexPath.row==1)//关于
                 {

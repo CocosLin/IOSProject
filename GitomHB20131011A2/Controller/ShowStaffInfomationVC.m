@@ -43,29 +43,35 @@
     }];
     NSLog(@"orgNameArr.count == %d",self.orgNameArr.count);
 
+    
     //获得消息通知数据（开启、关闭）
-    [hbKit reportReaderWithReader:comData.userModel.username GetReportNSDictionary:^(NSDictionary *readerDic) {
-        NSLog(@"MenuVC readerDic  == %@",[readerDic objectForKey:@"users"]);
-        NSRange rg = [[readerDic objectForKey:@"users"] rangeOfString:self.memberIfo.username];
-        if (rg.location != NSNotFound ) {
-            NSLog(@"readerSwitchOn = YES");
-            readerSwitchOn = YES;
-        }else{
-            NSLog(@"readerSwitchOn = NO");
-            readerSwitchOn = NO;
-        }
-        
-        //接收消息开关
-        if (comData.organization.roleId == 1|comData.organization.orgunitId == [self.memberIfo.orgunitId integerValue])         
-        [self creatReceiveSwitch];
-    }];
-    [hbKit release];
+    //接收消息开关,自己无法看到消息开关
+    if (![comData.userModel.username isEqualToString:self.memberIfo.username]) {
+        [hbKit reportReaderWithReader:comData.userModel.username GetReportNSDictionary:^(NSDictionary *readerDic) {
+            NSLog(@"MenuVC readerDic  == %@",[readerDic objectForKey:@"users"]);
+            NSRange rg = [[readerDic objectForKey:@"users"] rangeOfString:self.memberIfo.username];
+            if (rg.location != NSNotFound ) {
+                NSLog(@"readerSwitchOn = YES");
+                readerSwitchOn = YES;
+            }else{
+                NSLog(@"readerSwitchOn = NO");
+                readerSwitchOn = NO;
+            }
+            
+            
+            if (comData.organization.roleId == 1|comData.organization.orgunitId == [self.memberIfo.orgunitId integerValue])
+                [self creatReceiveSwitch];
+            
+        }];
+        [hbKit release];
+    }
+    
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(0, 0, 50, 44);
-    [btn setBackgroundImage:[UIImage imageNamed:@"btnBackFromNavigationBar_On"] forState:UIControlStateNormal];
+    [btn setBackgroundImage:[UIImage imageNamed:@"btn_title_back_default.png"] forState:UIControlStateNormal];
     // 高亮
-    [btn  setBackgroundImage:[UIImage imageNamed:@"btnBackFromNavigationBar_Off"] forState:UIControlStateHighlighted];
+    [btn  setBackgroundImage:[UIImage imageNamed:@"btn_title_back_pressed.png"] forState:UIControlStateHighlighted];
     [btn addTarget:self action:@selector(btnBack:) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc]initWithCustomView:btn];
@@ -84,23 +90,19 @@
     
     //职位变更
     UIButton *changRoldBut = [UIButton buttonWithType:0];
-    [changRoldBut addTarget:self action:@selector(changRoleId) forControlEvents:UIControlEventTouchUpInside];
     [changRoldBut setFrame:CGRectMake((Screen_Width-270)/4, Screen_Height-110, 90, 40)];
-    
     [changRoldBut setTitle:@"职位变更" forState:UIControlStateNormal];
     [self.view addSubview:changRoldBut];
+    
     //转移部门
     UIButton *changUnitBtu = [UIButton buttonWithType:0];
-    [changUnitBtu addTarget:self action:@selector(moveToOtherOrgunit) forControlEvents:UIControlEventTouchUpInside];
     [changUnitBtu setFrame:CGRectMake((Screen_Width-270)/4+102, Screen_Height-110, 90, 40)];
-    
     [changUnitBtu setTitle:@"转移部门" forState:UIControlStateNormal];
     [self.view addSubview:changUnitBtu];
+    
     //删除员工
     UIButton *deletBtu = [UIButton buttonWithType:0];
-    [deletBtu addTarget:self action:@selector(deleteOrgunitUser) forControlEvents:UIControlEventTouchUpInside];
     [deletBtu setFrame:CGRectMake((Screen_Width-270)/2+192, Screen_Height-110, 90, 40)];
-    
     [deletBtu setTitle:@"删除员工" forState:UIControlStateNormal];
     [self.view addSubview:deletBtu];
     
@@ -110,30 +112,76 @@
     }else if (comData.organization.roleId == 4){
         roleString = @"普通员工";
     }
-    if (comData.organization.roleId  >=[self.memberIfo.roleId intValue] &&comData.organization.roleId!=1) {
+    
+    //职位变更、转移部门、删除员工操作的权限 operation: 8  13  4
+    NSLog(@"comData = %d memberIfo = %d",comData.organization.roleId, [self.memberIfo.roleId integerValue]);
+    if (comData.organization.roleId  >=[self.memberIfo.roleId intValue]||(comData.organization.roleId !=1 && comData.organization.orgunitId != [self.memberIfo.orgunitId intValue])||comData.userModel.username == self.memberIfo.username) {
+        
         UITextView *alerLB = [[UITextView alloc]initWithFrame:CGRectMake(0, Screen_Height-170, Screen_Width, 60)];
         alerLB.textColor = [UIColor grayColor];
         alerLB.font = [UIFont systemFontOfSize:15];
         alerLB.editable = NO;
         alerLB.backgroundColor = [UIColor clearColor];
+        
+        
         if (comData.organization.orgunitId != [self.memberIfo.orgunitId intValue]){
             alerLB.text = [NSString stringWithFormat:@"您是%@\n但是不能对其他部门进行以下操作",roleString];
+        }else if([comData.userModel.username isEqualToString:self.memberIfo.username]){
+            alerLB.text = [NSString stringWithFormat:@"对不起\n不能对自己进行操作"];
         }else{
             alerLB.text = [NSString stringWithFormat:@"您是%@\n不能对其他主管和创建者进行以下操作",roleString];
         }
-        [self.view addSubview:alerLB];
         alerLB.textAlignment = NSTextAlignmentCenter;
+        [self.view addSubview:alerLB];
+        
+        
+        
         deletBtu.backgroundColor = [UIColor lightGrayColor];
         changRoldBut.backgroundColor = [UIColor lightGrayColor];
         changUnitBtu.backgroundColor = [UIColor lightGrayColor];
         [alerLB release];
-    }else{
-        [deletBtu setBackgroundImage:[[UIImage imageNamed:@"commit_btn_normal"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
-        [deletBtu  setBackgroundImage:[[UIImage imageNamed:@"commit_btn_highlighted"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateHighlighted];
-        [changUnitBtu setBackgroundImage:[[UIImage imageNamed:@"commit_btn_normal"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
-        [changUnitBtu  setBackgroundImage:[[UIImage imageNamed:@"commit_btn_highlighted"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateHighlighted];
-        [changRoldBut setBackgroundImage:[[UIImage imageNamed:@"commit_btn_normal"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
-        [changRoldBut  setBackgroundImage:[[UIImage imageNamed:@"commit_btn_highlighted"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateHighlighted];
+        
+    }else{//判断部门主管是否有权限
+        
+        NSRange deletoperation = [comData.organization.operations rangeOfString:@"4"];
+        if (comData.organization.roleId !=1 &&deletoperation.location == NSNotFound) {
+            deletBtu.backgroundColor = [UIColor lightGrayColor];
+        }else{
+            [deletBtu setBackgroundImage:[[UIImage imageNamed:@"commit_btn_normal"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
+            [deletBtu  setBackgroundImage:[[UIImage imageNamed:@"commit_btn_highlighted"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateHighlighted];
+            [deletBtu addTarget:self action:@selector(deleteOrgunitUser) forControlEvents:UIControlEventTouchUpInside];
+        }
+        
+        NSRange changUnitoperation = [comData.organization.operations rangeOfString:@"13"];
+        if (comData.organization.roleId !=1 &&changUnitoperation.location == NSNotFound){
+            changRoldBut.backgroundColor = [UIColor lightGrayColor];
+        }else{
+            [changUnitBtu setBackgroundImage:[[UIImage imageNamed:@"commit_btn_normal"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
+            [changUnitBtu  setBackgroundImage:[[UIImage imageNamed:@"commit_btn_highlighted"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateHighlighted];
+            [changUnitBtu addTarget:self action:@selector(moveToOtherOrgunit) forControlEvents:UIControlEventTouchUpInside];
+        }
+        
+        NSRange changRoldoperation = [comData.organization.operations rangeOfString:@"8"];
+        if (comData.organization.roleId !=1 &&changRoldoperation.location == NSNotFound){
+            changUnitBtu.backgroundColor = [UIColor lightGrayColor];
+        }else{
+            [changRoldBut setBackgroundImage:[[UIImage imageNamed:@"commit_btn_normal"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateNormal];
+            [changRoldBut  setBackgroundImage:[[UIImage imageNamed:@"commit_btn_highlighted"]stretchableImageWithLeftCapWidth:10 topCapHeight:10] forState:UIControlStateHighlighted];
+            [changRoldBut addTarget:self action:@selector(changRoleId) forControlEvents:UIControlEventTouchUpInside];
+        }
+        
+        if (deletoperation.location == NSNotFound | changRoldoperation.location == NSNotFound | changUnitoperation.location == NSNotFound) {
+            UITextView *alerLB = [[UITextView alloc]initWithFrame:CGRectMake(0, Screen_Height-170, Screen_Width, 60)];
+            alerLB.textColor = [UIColor grayColor];
+            alerLB.font = [UIFont systemFontOfSize:15];
+            alerLB.editable = NO;
+            alerLB.backgroundColor = [UIColor clearColor];
+            alerLB.textAlignment = NSTextAlignmentCenter;
+            alerLB.text = @"您是部门主管\n部分操作被禁用";
+            [self.view addSubview:alerLB];
+            [alerLB release];
+        }
+        
     }
     [roleString release];
 }
@@ -268,9 +316,17 @@
         nil;
     }else{
         switchAlerDelegate = YES;
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"职位变更" message:[NSString stringWithFormat:@"使%@成为主管？",self.memberIfo.realName] delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定",@"取消", nil];
-        [alert show];
-        [alert release];
+        if ([self.memberIfo.roleId integerValue] == 2) {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"职位变更" message:[NSString stringWithFormat:@"使%@降职为员工？",self.memberIfo.realName] delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定",@"取消", nil];
+            alert.tag = 2222;
+            [alert show];
+            [alert release];
+        }else{
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"职位变更" message:[NSString stringWithFormat:@"使%@成为主管？",self.memberIfo.realName] delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定",@"取消", nil];
+            [alert show];
+            [alert release];
+        }
+        
     }
     
 }
@@ -283,15 +339,29 @@
         {
             GetCommonDataModel;
             if (switchAlerDelegate == YES) {
-                NSString *changeRoleUrlStr = [NSString stringWithFormat:@"http://hb.m.gitom.com/3.0/organization/updateOrgunitUser?organizationId=%ld&orgunitId=%@&roleId=%@&username=%@&updateUser=%@&cookie=%@&operations=8",(long)comData.organization.organizationId,self.memberIfo.orgunitId,@"2",self.memberIfo.username,comData.userModel.username,comData.cookie];
-                NSLog(@"ReleaseAnnounceVC UrlStr %@",changeRoleUrlStr);
-                NSURL *releaseUrl = [NSURL URLWithString:changeRoleUrlStr];
-                NSURLRequest *req = [NSURLRequest requestWithURL:releaseUrl];
-                [NSURLConnection sendAsynchronousRequest:req queue:nil completionHandler:nil];
-                [SVProgressHUD showSuccessWithStatus:@"成功修改权限"];
-                [self.navigationController popToRootViewControllerAnimated:YES];
-                //[self alerAction];
-                NSLog(@"alerAction");
+                
+                if (alertView.tag == 2222) {
+                    NSString *changeRoleUrlStr = [NSString stringWithFormat:@"http://hb.m.gitom.com/3.0/organization/updateOrgunitUser?organizationId=%ld&orgunitId=%@&roleId=%@&username=%@&updateUser=%@&cookie=%@&operations=8",(long)comData.organization.organizationId,self.memberIfo.orgunitId,@"4",self.memberIfo.username,comData.userModel.username,comData.cookie];
+                    NSLog(@"ReleaseAnnounceVC UrlStr %@",changeRoleUrlStr);
+                    NSURL *releaseUrl = [NSURL URLWithString:changeRoleUrlStr];
+                    NSURLRequest *req = [NSURLRequest requestWithURL:releaseUrl];
+                    [NSURLConnection sendAsynchronousRequest:req queue:nil completionHandler:nil];
+                    [SVProgressHUD showSuccessWithStatus:@"成功修改权限"];
+                    [self.navigationController popToRootViewControllerAnimated:YES];
+                    //[self alerAction];
+                    NSLog(@"alerAction");
+                }else{
+                    NSString *changeRoleUrlStr = [NSString stringWithFormat:@"http://hb.m.gitom.com/3.0/organization/updateOrgunitUser?organizationId=%ld&orgunitId=%@&roleId=%@&username=%@&updateUser=%@&cookie=%@&operations=8",(long)comData.organization.organizationId,self.memberIfo.orgunitId,@"2",self.memberIfo.username,comData.userModel.username,comData.cookie];
+                    NSLog(@"ReleaseAnnounceVC UrlStr %@",changeRoleUrlStr);
+                    NSURL *releaseUrl = [NSURL URLWithString:changeRoleUrlStr];
+                    NSURLRequest *req = [NSURLRequest requestWithURL:releaseUrl];
+                    [NSURLConnection sendAsynchronousRequest:req queue:nil completionHandler:nil];
+                    [SVProgressHUD showSuccessWithStatus:@"成功修改权限"];
+                    [self.navigationController popToRootViewControllerAnimated:YES];
+                    //[self alerAction];
+                    NSLog(@"alerAction");
+                }
+                
             }else{
                 if (comData.organization.roleId!=1 && comData.organization.orgunitId!=[self.memberIfo.orgunitId integerValue]) {
                     [SVProgressHUD showErrorWithStatus:@"您不能对非本部门的员工进行删除操作！" duration:0.8];

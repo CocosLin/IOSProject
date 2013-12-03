@@ -62,7 +62,7 @@
         RecordQeryReportsVcCellForios5 *myCell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (myCell == nil) {
             myCell = [[RecordQeryReportsVcCellForios5 alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-            
+            myCell.removeBut.hidden = YES;
         }
         if (!self.typeRecord) {
             NSLog(@"打卡情况");
@@ -348,9 +348,9 @@
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(0, 0, 50, 44);
-    [btn setBackgroundImage:[UIImage imageNamed:@"btnBackFromNavigationBar_On"] forState:UIControlStateNormal];
+    [btn setBackgroundImage:[UIImage imageNamed:@"btn_title_back_default.png"] forState:UIControlStateNormal];
     // 高亮
-    [btn  setBackgroundImage:[UIImage imageNamed:@"btnBackFromNavigationBar_Off"] forState:UIControlStateHighlighted];
+    [btn  setBackgroundImage:[UIImage imageNamed:@"btn_title_back_pressed.png"] forState:UIControlStateHighlighted];
     [btn addTarget:self action:@selector(btnBack:) forControlEvents:UIControlEventTouchUpInside];
     
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc]initWithCustomView:btn];
@@ -388,7 +388,7 @@
                                                      EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]
                                               FirstReportRecord:0
                                                 MaxReportRecord:10
-                                                    RefreshData:NO
+                                                    RefreshData:YES
                                                   GotArrReports:^(NSArray *arrDicReports, WError *myError) {
              if (arrDicReports.count) {
                  self.arrData = arrDicReports;
@@ -433,7 +433,7 @@
                                EndDateLli:[WTool getEndDateTimeMsWithNSDate:[NSDate date]]
                         FirstReportRecord:0
                           MaxReportRecord:10
-                                   Refrsh:NO
+                                   Refrsh:YES
                             GotArrReports:^(NSArray *arrReports, BOOL isOk)
          {
              if (arrReports.count) {

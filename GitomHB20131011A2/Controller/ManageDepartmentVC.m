@@ -12,6 +12,9 @@
 #import "HBServerKit.h"
 #import "WTool.h"
 #import "RolePrivilegeVC.h"
+#import "SetRolePritvilegeVC.h"
+
+#define NUMBERS @"0123456789\n"
 
 @interface ManageDepartmentVC (){
     UITableView *_settingTableView;
@@ -112,6 +115,27 @@
         }else{
             return YES;
         }
+    }else if (indexPath.row == 0){
+        NSRange rage = [comData.organization.operations rangeOfString:@"12"];
+        if (comData.organization.roleId !=1 &&rage.location == NSNotFound){
+            return NO;
+        }else{
+            return YES;
+        }
+    }else if (indexPath.row == 1){
+        NSRange rage = [comData.organization.operations rangeOfString:@"6"];
+        if (comData.organization.roleId !=1 &&rage.location == NSNotFound){
+            return NO;
+        }else{
+            return YES;
+        }
+    }else if (indexPath.row == 2){
+        NSRange rage = [comData.organization.operations rangeOfString:@"1"];
+        if (comData.organization.roleId !=1 &&rage.location == NSNotFound){
+            return NO;
+        }else{
+            return YES;
+        }
     }else{
         return YES;
     }
@@ -141,6 +165,7 @@
     
     cell.textLabel.backgroundColor = [UIColor clearColor];
     GetCommonDataModel;
+    
     if (indexPath.row==4 || indexPath.row == 5) {
         if (comData.organization.roleId!=1) {
             cell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
@@ -150,7 +175,40 @@
             cell.textLabel.text = [self.arrSet objectAtIndex:indexPath.row];
             cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
         }
-    }else{
+    }else if (indexPath.row == 0){
+        NSRange rage = [comData.organization.operations rangeOfString:@"12"];
+        if (comData.organization.roleId !=1 &&rage.location == NSNotFound) {
+            cell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
+            cell.textLabel.text = [NSString stringWithFormat:@"%@(禁用)",[self.arrSet objectAtIndex:indexPath.row]];
+            
+        }else{
+            cell.textLabel.text = [self.arrSet objectAtIndex:indexPath.row];
+            cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
+        }
+
+    }else if (indexPath.row ==1){
+        NSRange rage = [comData.organization.operations rangeOfString:@"6"];
+        if (comData.organization.roleId !=1 &&rage.location == NSNotFound) {
+            cell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
+            cell.textLabel.text = [NSString stringWithFormat:@"%@(禁用)",[self.arrSet objectAtIndex:indexPath.row]];
+            
+        }else{
+            cell.textLabel.text = [self.arrSet objectAtIndex:indexPath.row];
+            cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
+        }
+    }
+    else if (indexPath.row == 2) {
+        NSRange rage = [comData.organization.operations rangeOfString:@"1"];
+        if (comData.organization.roleId !=1 &&rage.location == NSNotFound) {
+            cell.backgroundView = [[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
+            cell.textLabel.text = [NSString stringWithFormat:@"%@(禁用)",[self.arrSet objectAtIndex:indexPath.row]];
+            
+        }else{
+            cell.textLabel.text = [self.arrSet objectAtIndex:indexPath.row];
+            cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
+        }
+    }
+    else{
         cell.textLabel.text = [self.arrSet objectAtIndex:indexPath.row];
         cell.selectedBackgroundView=[[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]]autorelease];
     }
@@ -159,44 +217,17 @@
     return cell;
 }
 
-/*
- // Override to support conditional editing of the table view.
- - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the specified item to be editable.
- return YES;
- }
- */
 
-/*
- // Override to support editing the table view.
- - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
- {
- if (editingStyle == UITableViewCellEditingStyleDelete) {
- // Delete the row from the data source
- [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
- }
- else if (editingStyle == UITableViewCellEditingStyleInsert) {
- // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
- }
- }
- */
-
-/*
- // Override to support rearranging the table view.
- - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
- {
- }
- */
-
-/*
- // Override to support conditional rearranging of the table view.
- - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the item to be re-orderable.
- return YES;
- }
- */
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    NSCharacterSet *cs;
+    cs = [[NSCharacterSet characterSetWithCharactersInString:NUMBERS]invertedSet];
+    
+    NSString *filtered = [[string componentsSeparatedByCharactersInSet:cs]componentsJoinedByString:@""];
+    
+    BOOL canChange = [string isEqualToString:filtered];
+    
+    return canChange;
+}
 
 #pragma mark - Table view delegate
 
@@ -205,6 +236,10 @@
     GetCommonDataModel;
     HBServerKit *hbKit = [[HBServerKit alloc]init];
     if (indexPath.row == 0) {
+        NSRange rage = [comData.organization.operations rangeOfString:@"12"];
+        if (comData.organization.roleId !=1 && rage.location == NSNotFound){
+            return;
+        }
         NSLog(@"修改部门名称");
         configType = 0;
         //http://hb.m.gitom.com/3.0/organization/updateOrgunit?organizationId=204&orgunitId=16&username=58200&name=WTO&cookie=5533098A-43F1-4AFC-8641-E64875461345
@@ -217,6 +252,10 @@
         
         [changeOrgNameAler release];
     }if (indexPath.row ==1) {
+        NSRange rage = [comData.organization.operations rangeOfString:@"6"];
+        if (comData.organization.roleId !=1 && rage.location == NSNotFound){
+            return;
+        }
         NSLog(@"修改考勤配置");
         GetCommonDataModel;
         GetGitomSingal;
@@ -258,6 +297,10 @@
         [self.navigationController pushViewController:manageVC animated:YES];
         [manageVC release];
     }if (indexPath.row == 2) {
+        NSRange rage = [comData.organization.operations rangeOfString:@"1"];
+        if (comData.organization.roleId !=1 && rage.location == NSNotFound){
+            return;
+        }
         NSLog(@"修改验证方式");
         [SVProgressHUD showErrorWithStatus:@"无该功能,期待下一版本"];
     }if (indexPath.row ==3) {
@@ -269,8 +312,11 @@
         [changeOrgNameAler release];
     }if (indexPath.row == 4) {
         if (comData.organization.roleId == 1) {
+            /*
             RolePrivilegeVC *nv = [[RolePrivilegeVC alloc]init];
-            [self.navigationController pushViewController:nv animated:YES];
+            [self.navigationController pushViewController:nv animated:YES];*/
+            SetRolePritvilegeVC *vc = [[SetRolePritvilegeVC alloc]init];
+            [self.navigationController pushViewController:vc animated:YES];
         }
         
     }if (indexPath.row == 5) {
@@ -293,11 +339,15 @@
     GetCommonDataModel;
     HBServerKit *hbKit = [[HBServerKit alloc]init];
     UITextField *tf = [[UITextField alloc]init];
+    tf.delegate = self;
     if (configType == 5) {
         nil;
+    }else if(configType == 3){
+        tf = [alertView textFieldAtIndex:0];
+        tf.tag = 3301;
     }else{
-        //得到输入框
-        tf=[alertView textFieldAtIndex:0];
+        tf = [alertView textFieldAtIndex:0];
+        tf.tag = 3302;
     }
     
     NSString * orgNameString = (NSString *)CFURLCreateStringByAddingPercentEscapes( kCFAllocatorDefault, (CFStringRef)tf.text, NULL, NULL,  kCFStringEncodingUTF8 );

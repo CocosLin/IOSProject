@@ -38,17 +38,12 @@
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc]initWithCustomView:btn];
     [self.navigationItem setLeftBarButtonItem:backItem];
     [backItem release];
- 
-    
-    
-    DLStarRatingControl *customNumberOfStars = [[DLStarRatingControl alloc] initWithFrame:CGRectMake(0, 40, Screen_Width, 70) andStars:5 isFractional:YES];
-    customNumberOfStars.delegate = self;
-	customNumberOfStars.backgroundColor = [UIColor clearColor];
-	customNumberOfStars.autoresizingMask =  UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
-	customNumberOfStars.rating = 0.0;
-	[self.view addSubview:customNumberOfStars];
-    [customNumberOfStars release];
 
+    RSTapRateView *tapRateView = [[RSTapRateView alloc] initWithFrame:CGRectMake(0, 20, Screen_Width, 70)];
+    tapRateView.backgroundColor = [UIColor clearColor];
+    tapRateView.delegate = self;
+    [self.view addSubview:tapRateView];
+    
     self.stars = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, Screen_Width, 40)];
     self.stars.textAlignment = NSTextAlignmentCenter;
     self.stars.backgroundColor = [UIColor clearColor];
@@ -86,7 +81,7 @@
                                       Score:self.stars.text
                                  CreateUser:comData.userModel.username
                                    Username:self.reportMod.userName];
-        [self.navigationController popToRootViewControllerAnimated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
     }else{
         [SVProgressHUD showErrorWithStatus:@"评价内容不能为空！" duration:0.6];
     }
@@ -99,10 +94,11 @@
     [self.commentView resignFirstResponder];
 }
 
-#pragma mark Delegate implementation of NIB instatiated DLStarRatingControl
+#pragma mark RSTapRateViewDelegate
 
--(void)newRating:(DLStarRatingControl *)control :(float)rating {
-	self.stars.text = [NSString stringWithFormat:@"%.1f",rating*2];
+- (void)tapDidRateView:(RSTapRateView*)view rating:(NSInteger)rating {
+    NSLog(@"Current rating: %i", rating);
+    self.stars.text = [NSString stringWithFormat:@"%.1d",rating*2];
 }
 
 - (void)didReceiveMemoryWarning

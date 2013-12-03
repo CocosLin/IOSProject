@@ -290,8 +290,8 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
         return myCell;
     }else if (tableView.tag == Tag_Tbv_LoginHistory){
         _userIfo = [_userIfoAr objectAtIndex:indexPath.row];
-        NSLog(@"——userIfo =,%d ,%@",_userIfo.userName,_userIfo.userPassWord);
-        myCell.textLabel.text = [NSString stringWithFormat:@"%d",_userIfo.userName];
+        NSLog(@"——userIfo =,%@ ,%@",_userIfo.userName,_userIfo.userPassWord);
+        myCell.textLabel.text = [NSString stringWithFormat:@"%@",_userIfo.userName];
         UIButton *removeBut = [UIButton buttonWithType:UIButtonTypeCustom];
         removeBut.tag = indexPath.row+100;
         [removeBut setBackgroundImage:[UIImage imageNamed:@"ad_close_icon.png"] forState:UIControlStateNormal];
@@ -313,7 +313,7 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
 {
     if (tableView.tag == Tag_Tbv_LoginHistory) {
         _userIfo = [_userIfoAr objectAtIndex:indexPath.row];
-        _tfUsername.text = [NSString stringWithFormat:@"%d",_userIfo.userName];
+        _tfUsername.text = _userIfo.userName;
         _tfPassword.text = _userIfo.userPassWord;
         tableView.hidden = YES;
         UIButton *btnHistoryUsername = (UIButton *)[self.view viewWithTag:Tag_BtnHistoryUsername];
@@ -523,49 +523,50 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
 #pragma mark -- 登入
 -(void)btnAction:(UIButton *)btn
 {
+    GetCommonDataModel;
     NSLog(@"开始登入");
-        NSString * username = _tfUsername.text;
-        NSString * password = _tfPassword.text;
-        //登录参数
-        UserLoggingInfo * loggingInfo = [[UserLoggingInfo alloc]init];
-        //以下为测试的时候用
-        if (![username length] && ![password length]) {
-            NSLog(@"空的用户名、密码");
-        }else
-        {
-            //将登入时填写的信息存储进LoggingInfo中
-            loggingInfo.username = username;
-            loggingInfo.password = password;
-        }
+    NSString * username = _tfUsername.text;
+    NSString * password = _tfPassword.text;
+    //登录参数
+    UserLoggingInfo * loggingInfo = [[UserLoggingInfo alloc]init];
+    
+    //以下为测试的时候用
+    if (![username length] && ![password length]) {
+        NSLog(@"空的用户名、密码");
+    }else
+    {
+        //将登入时填写的信息存储进LoggingInfo中
+        loggingInfo.username = username;
+        loggingInfo.password = password;
+    }
         
-        //用户业务管理
-        UserManager * um = [UserManager sharedUserManager];
-        //用户登录方法
-        [um loggingWithLoggingInfo:loggingInfo
-                      WbLoggedInfo:^( UserLoggedInfo *loggedInfo,BOOL isLoggedOk)
+    //用户业务管理
+    UserManager * um = [UserManager sharedUserManager];
+    comData.userlogingInfo = loggingInfo;
+    //用户登录方法
+    [um loggingWithLoggingInfo:loggingInfo
+                    WbLoggedInfo:^( UserLoggedInfo *loggedInfo,BOOL isLoggedOk)
         {
             if (isLoggedOk) {
-                GetCommonDataModel;
+                
                 comData.isLogged = YES;
                 comData.serverDate = loggedInfo.serverDate;
                 
                 /*存储成功登入的用户、密码*/
                 [accountDefaults setObject:username forKey:kMinZi];
-                    [accountDefaults setObject:password forKey:kMiMa];
-                    NSLog(@"aaccountDefaults objectForKey%@ %@",[accountDefaults objectForKey:kMinZi],[accountDefaults objectForKey:kMiMa]);
-                    [accountDefaults synchronize];
+                [accountDefaults setObject:password forKey:kMiMa];
+                NSLog(@"aaccountDefaults objectForKey%@ %@",[accountDefaults objectForKey:kMinZi],[accountDefaults objectForKey:kMiMa]);
+                [accountDefaults synchronize];
                 
                 if ([[accountDefaults objectForKey:kRemberPassWord] isEqualToString:kPassWord]){
                     /*将成功登入的密码存进数据库*/
                     //查询数据库，判断表中是否存在相同的数据
                     //UserInformationsManager *manager = [[UserInformationsManager alloc]init];
                     //[UserInformationsManager insertWithUserName:loggingInfo.username andUserPassWord:loggingInfo.password andUserId:_userIfoAr.count+1];
-                    [UserInformationsManager insertWithUserName:[loggingInfo.username integerValue] andUserPassWord:loggingInfo.password];
+                    [UserInformationsManager insertWithUserName:loggingInfo.username andUserPassWord:loggingInfo.password];
                     NSLog(@"LoginVC 插入的数据 == %@,%@,%d",loggingInfo.username,loggingInfo.password,_userIfoAr.count+1);
                 }
-                
-                
-                
+
                 /*
                  这边要得到用户信息。。。
                  */
@@ -575,8 +576,9 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
                 
                 Organization * organizationInfo = [[[Organization alloc]initForAllJsonDataTypeWithDicFromJson:[loggedInfo.organizations lastObject]]autorelease];
                 comData.organization = organizationInfo;//使用单例的获得解析到的用户信息
-                [user release];
+                //comData.operations =
                 
+                [user release];
                 //成功跳转
                 if (organizationInfo.roleId) {
                     _sideViewController = [[[JASidePanelController alloc]init]autorelease];

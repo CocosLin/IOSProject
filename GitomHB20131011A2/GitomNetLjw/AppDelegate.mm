@@ -9,12 +9,17 @@
 #import "AppDelegate.h"
 #import "MyNavigationController.h"
 
-#import <ShareSDK/ShareSDK.h>
-#import "WXApi.h"
-#import "WBApi.h"
-#import <TencentOpenAPI/QQApi.h>
-#import <TencentOpenAPI/QQApiInterface.h>
-#import <TencentOpenAPI/TencentOAuth.h>
+//#import <ShareSDK/ShareSDK.h>
+//#import "WXApi.h"
+//#import "WBApi.h"
+//#import <TencentOpenAPI/QQApi.h>
+//#import <TencentOpenAPI/QQApiInterface.h>
+//#import <TencentOpenAPI/TencentOAuth.h>
+
+#import "UMSocial.h"
+//#import "MobClick.h"
+#define UmengAppkey @"5211818556240bc9ee01db2f"
+
 #import "Reachability.h"
 
 //百度地图-移动汇报Key
@@ -32,6 +37,41 @@
     [_window release];
     [super dealloc];
 }
+
+#pragma mark -- 初始化社交平台
+- (void)initializePlat
+{
+    //打开调试log的开关
+    [UMSocialData openLog:YES];
+    
+    //如果你要支持不同的屏幕方向，需要这样设置，否则在iPhone只支持一个竖屏方向
+    [UMSocialConfig setSupportedInterfaceOrientations:UIInterfaceOrientationMaskAll];
+    
+    //设置友盟社会化组件appkey
+    [UMSocialData setAppKey:UmengAppkey];
+    
+    //设置微信AppId
+    [UMSocialConfig setWXAppId:@"wxd9a39c7122aa6516" url:nil];
+    ;
+    [UMSocialData defaultData].extConfig.wxMessageType = UMSocialWXMessageTypeApp;
+    //分享图文样式到微信朋友圈显示字数比较少，只显示分享标题
+    [UMSocialData defaultData].extConfig.title = @"朋友圈分享内容";
+    
+    //打开新浪微博的SSO开关
+    [UMSocialConfig setSupportSinaSSO:YES];
+    
+    //设置手机QQ的AppId，url传自己的网址，若传nil将使用友盟的网址
+    [UMSocialConfig setQQAppId:@"100424468" url:[NSURL URLWithString:@"http://app.gitom.com/mobileapp/list/12"] importClasses:@[[QQApiInterface class],[TencentOAuth class]]];
+    
+    //使用友盟统计
+    //[MobClick startWithAppkey:UmengAppkey];
+    
+    [UMSocialConfig setSupportTencentSSO:YES importClass:[WBApi class]];
+    
+    
+    
+}
+
 #pragma mark -- 版本更新检测
 -(void)checkUpdate
 {
@@ -96,7 +136,10 @@
     */
     //更新检测
     [self checkUpdate];
-     
+    
+    //社交分享平台
+    [self initializePlat];
+    
 //    NewsManager *manger = [[NewsManager alloc]init];
 //    [manger getNewsOforganizationId:114 andOrgunitId:1 andCookie:@"5533098A-43F1-4AFC-8641-E64875461345"];
 //    [manger release];
@@ -132,7 +175,7 @@
         [myalert release];
     }
     
-    
+    /*
     //社交分享功能
     [ShareSDK registerApp:@"520520test"];
     [self initializePlat];
@@ -140,7 +183,7 @@
                            wechatCls:[WXApi class]];
     //添加QQ应用
     [ShareSDK connectQQWithAppId:@"QQ0F0A941E" qqApiCls:[QQApi class]];
-    
+    */
     
     //百度地图管理器启动
     _mapManager = [[BMKMapManager alloc]init];
@@ -189,7 +232,7 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
-
+/*
 #pragma mark --分享--
 - (void)initializePlat
 {
@@ -256,5 +299,5 @@
     
     //导入微信需要的外部库类型，如果不需要微信分享可以不调用此方法
     [ShareSDK importWeChatClass:[WXApi class]];
-}
+}*/
 @end

@@ -313,7 +313,7 @@ static int pickerImgFlag;
         NSLog(@"sound nil");
     }
     
-    [self.navigationController popViewControllerAnimated:YES];
+    //[self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - 表格代理方法
@@ -748,7 +748,7 @@ static int pickerImgFlag;
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    UIImageView *imgViewSound = (UIImageView *)[self.view viewWithTag:4010];
+    //UIImageView *imgViewSound = (UIImageView *)[self.view viewWithTag:4010];
     /*
     GitomSingal *singal = [GitomSingal getInstance];
     if (singal.recordedSound) {

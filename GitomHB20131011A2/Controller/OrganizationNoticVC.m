@@ -43,10 +43,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    if (self.querMessage == YES) {
+    if (self.querMessage == YES) {  //消息
         GetCommonDataModel;
         HBServerKit *hbKit = [[HBServerKit alloc]init];
-        [hbKit getNotcFromMemberOrgId:comData.organization.organizationId orgunitId:comData.organization.orgunitId andUserName:comData.userModel.username andBeginTime:@"1279865600000" andFirst:0 andMax:10 getQueryMessageArray:^(NSArray *messageArray) {
+        [hbKit getNotcFromMemberOrgId:comData.organization.organizationId orgunitId:comData.organization.orgunitId andUserName:comData.userModel.username andBeginTime:@"1279865600000" andFirst:0 andMax:1000 getQueryMessageArray:^(NSArray *messageArray) {
             tableArray = messageArray;
             for (QueryMessageModel *messageMod in messageArray) {
                 NSLog(@"Menu meassageMod nst =  /%@ / %@ / %@ / %@ / %@ /%@",messageMod.sender,messageMod.readUser,messageMod.messageId,messageMod.organizationId,messageMod.dtx,messageMod.senderReadname);
@@ -60,7 +60,7 @@
             }
         }];
         
-    }else{
+    }else{                          //公告
         [self creatNewsView];
     }
 }
@@ -71,7 +71,8 @@
     UILabel *titleLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, Screen_Width-20, 40)];
     titleLabel.backgroundColor = [UIColor clearColor];
     NSCharacterSet *set = [NSCharacterSet characterSetWithCharactersInString:@"@／：；（）¥「」＂、[]{}#%-*+=_\\|~＜＞$€^•'@#$%^&*()_+'\""]; //过滤字符串
-    titleLabel.text = [self.textTitle stringByTrimmingCharactersInSet:set];
+//    titleLabel.text = [self.textTitle stringByTrimmingCharactersInSet:set];
+    titleLabel.text = self.textTitle;
     titleLabel.font = [UIFont systemFontOfSize:30.0];
     [self.view addSubview:titleLabel];
     [titleLabel release];
@@ -182,28 +183,11 @@
     [browser show];
 }
 
-#pragma mark -- 移除对应通知
-- (void)removeNotesAction:(UIButton *)sender{
-    GetCommonDataModel;
-    NSLog(@"(UIButton *)sender == %d",sender.tag);
-    QueryMessageModel *mesMod = [tableArray objectAtIndex:sender.tag];
-    
-    //移除对应通知
-    HBServerKit *hbKit = [[HBServerKit alloc]init];
-    [hbKit setMsgReadStatusOrgId:[mesMod.organizationId integerValue]orgunitId:[mesMod.orgunitId integerValue] andMessageId:mesMod.messageId andUsername:comData.userModel.username];
-
-    //刷新界面
-    [hbKit getNotcFromMemberOrgId:comData.organization.organizationId orgunitId:comData.organization.orgunitId andUserName:comData.userModel.username andBeginTime:@"1279865600000" andFirst:0 andMax:10 getQueryMessageArray:^(NSArray *messageArray) {
-        tableArray = messageArray;
-        [massageTableView reloadData];
-    }];
-    [hbKit release];
-}
 
 #pragma mark -- UITableViewDelegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section;
 {
-    NSLog(@"%d",tableArray.count);
+    NSLog(@"OrganizationNoticVC tableArray.count ==%d",tableArray.count);
     return tableArray.count;
 }
 
@@ -211,8 +195,13 @@
     NSLog(@"tableArray.count %d",tableArray.count);
     static NSString *CellIdentifier = @"Cell";
     RecordQeryReportsVcCellForios5 *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
+    
     if (cell == nil) {
         cell = [[RecordQeryReportsVcCellForios5 alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell.delegate = self;
+        cell.removeBut.tag = indexPath.row;
+        NSLog(@"OrganizationNoticVC indexPath.row == %d , %d",cell.removeBut.tag,indexPath.row);
     }
     
     QueryMessageModel *messageMod = [[QueryMessageModel alloc]init];
@@ -220,7 +209,7 @@
     
     cell.nameLabel.text = [NSString stringWithFormat:@"%@(%@)",messageMod.senderReadname,messageMod.sender];
     cell.timeLabel.text = [WTool getStrDateTimeWithDateTimeMS:[messageMod.createDate doubleValue] DateTimeStyle:@"yyyy-MM-dd HH:mm:ss"];
-    if ([messageMod.dtx isEqualToString:@"reort"]) {
+    if ([messageMod.dtx isEqualToString:@"report"]) {
         cell.addressLabel.text = @"提交了新的汇报";
     }else{
         cell.addressLabel.text = @"新的点评";
@@ -231,15 +220,26 @@
     UIImageView *selectedBackgroundView =[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]];
     cell.selectedBackgroundView = selectedBackgroundView;
     [selectedBackgroundView release];
-    
-    UIButton *removeBut = [UIButton buttonWithType:UIButtonTypeCustom];
-    removeBut.tag = indexPath.row;
-    [removeBut setBackgroundImage:[UIImage imageNamed:@"ad_close_icon.png"] forState:UIControlStateNormal];
-    [removeBut addTarget:self action:@selector(removeNotesAction:) forControlEvents:UIControlEventTouchUpInside];
-    removeBut.frame = CGRectMake(Screen_Width-60, 5, 50, 50);
-    [cell addSubview:removeBut];
-    return cell;
 
+    return cell;
+}
+
+#pragma mark -- 移除对应通知
+- (void)cellButtonClick:(UIButton *)sender{
+    GetCommonDataModel;
+    NSLog(@"(UIButton *)sender == %d",sender.tag);
+    QueryMessageModel *mesMod = [tableArray objectAtIndex:sender.tag];
+    
+    //移除对应通知
+    HBServerKit *hbKit = [[HBServerKit alloc]init];
+    [hbKit setMsgReadStatusOrgId:[mesMod.organizationId integerValue]orgunitId:[mesMod.orgunitId integerValue] andMessageId:mesMod.messageId andUsername:comData.userModel.username];
+    
+    //刷新界面
+    [hbKit getNotcFromMemberOrgId:comData.organization.organizationId orgunitId:comData.organization.orgunitId andUserName:comData.userModel.username andBeginTime:@"1279865600000" andFirst:0 andMax:10 getQueryMessageArray:^(NSArray *messageArray) {
+        tableArray = messageArray;
+        [massageTableView reloadData];
+    }];
+    [hbKit release];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{

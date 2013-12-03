@@ -50,37 +50,6 @@
 -(void)getUserPhotoImageWithStrUserPhotoUrl:(NSString *)strUserPhotoUrl
                                   GotResult:(void(^)(UIImage *imgUserPhoto, WError * myError))callback
 {
-    /*
-    if (strUserPhotoUrl.length <1) {
-        return;
-    }
-    NSArray *getImgNameAr = [strUserPhotoUrl componentsSeparatedByString:@"/"];
-    NSString *key = [[NSString alloc]init];
-    if (getImgNameAr.count<7){
-        key = [getImgNameAr lastObject];
-    }else{
-        key = [getImgNameAr objectAtIndex:7];
-    }
-        
-    NSLog(@"getImgName = %@",key);
-    NSData *data = [FTWCache objectForKey:key];
-	if (data) {
-		UIImage *image = [UIImage imageWithData:data];
-        callback(image,nil);
-	} else {
-        ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:strUserPhotoUrl]];
-        [req setCompletionBlock:^{
-            NSData *adata = [req responseData];
-            [FTWCache setObject:adata forKey:key];
-            UIImage *image = [UIImage imageWithData:adata];
-            callback (image,nil);
-        }];
-    }
-    [key release];*/
-
-        
-	
-    
     WDataService * wds = [WDataService sharedWDataService];
     [wds wPostRequestWithIsAsynchronous:YES
                                     Url:[NSURL URLWithString:strUserPhotoUrl]
@@ -207,8 +176,6 @@
      {
          if (!errorRequest){
              [self getIsServerNoErrorWithHead:[self getHeadWithDataResponse:dataResponse]];
-//             NSString *responseStrFromDic = [[NSString alloc]initWithData:dataResponse encoding:NSUTF8StringEncoding];
-//             NSLog(@"HBServerKit 来自服务器的完整数据 strOfdataResponse == %@",responseStrFromDic);
              Body * body = [self getBodyWithDataResponse:dataResponse];
              if (body.success)//如果登录成功
              {
@@ -1285,7 +1252,7 @@
     if (username) [dicParams setObject:username forKey:@"username"];
     if (reportType) [dicParams setObject:reportType forKey:@"reportType"];
     if (address) [dicParams setObject:address forKey:@"address"];
-    if (note) [dicParams setObject:note forKey:@"note"];
+    if (note) [dicParams setObject:[note stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] forKey:@"note"];
     
     if (!imgUrl ){
         NSLog(@"imgeUrl nil");
@@ -1485,8 +1452,8 @@
     [dicParams setObject:[NSNumber numberWithInteger:organizationId] forKey:@"organizationId"];
     [dicParams setObject:[NSNumber numberWithInteger:orgunitId] forKey:@"orgunitId"];
     if (username) [dicParams setObject:username forKey:@"username"];
-    if (title) [dicParams setObject:title forKey:@"title"];
-    if (content) [dicParams setObject:content forKey:@"content"];
+    if (title) [dicParams setObject:[title stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] forKey:@"title"];
+    if (content) [dicParams setObject:[content stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding] forKey:@"content"];
     [dicParams setObject:_cookie forKey:@"cookie"];
     
     WDataService * wds = [WDataService sharedWDataService];
@@ -1607,15 +1574,12 @@
     [req setCompletionBlock:^{
         Body * body = [self getBodyWithDataResponse:[req responseData]];
         NSLog(@"HBServerKit 修改密码 %@",body);
-        if (body.success)//如果查汇报成功
+        if (body.success)
         {
             [SVProgressHUD showSuccessWithStatus:@"完成修改"];
-        }else//如果查汇报不成功
+        }else
         {
-            WError * error = [[WError alloc]initWithWErrorType:WErrorType_Logic wErrorDescription:body.warning];
-            Mark_Custom;
-            [SVProgressHUD showErrorWithStatus:[NSString stringWithFormat:@"%@",error]];
-            [error release];
+            [SVProgressHUD showErrorWithStatus:@"用户名密码错误"];
         }
     }];
     [req setFailedBlock:^{
@@ -1807,10 +1771,10 @@
                     [orgIdArray release];
                     [orgNameArray release];
                     [orgPropsArray release];
-                }
+                }/*
                 OrganizationsModel *orgMod = [[OrganizationsModel alloc]init];
                 orgMod = [companyArr objectAtIndex:9];
-                NSLog(@"HBServerKit orgPropsArray ALL ARR == %@  index9 = %@",companyArr,orgMod.orgunitPropsArray);
+                NSLog(@"HBServerKit orgPropsArray ALL ARR == %@  index9 = %@",companyArr,orgMod.orgunitPropsArray);*/
                 callBack(companyArr);
             }else{
                 callBack(nil);
@@ -1829,8 +1793,7 @@
     [req startAsynchronous];
 }
 
-#pragma mark -- 添加点评http://hb.m.gitom.com/3.0/report/saveReportComment?organizationId=114&orgunitId=1&reportId=1383292928438&content=123&score=10&createUser=90261&username=90261&cookie=5533098A-43F1-4AFC-8641-E64875461345&temp=13838947994114
-
+#pragma mark -- 添加点评
 - (void) addCommentWithOrganizationId:(NSInteger)organizationId
                             OrgunitId:(NSInteger)orgunitId
                              ReportId:(NSString *)reportId
@@ -1839,7 +1802,7 @@
                            CreateUser:(NSString *)createUser
                              Username:(NSString *)username{
     int temp = arc4random()%1000;
-    NSString *urlStr = [NSString stringWithFormat:@"%@/report/saveReportComment?organizationId=%d&orgunitId=%d&reportId=%@&content=%@&score=%@&createUser=%@&username=%@&cookie=%@&temp=%d",self.strBaseUrl,organizationId,orgunitId,reportId,content,score,createUser,username,_cookie,temp];
+    NSString *urlStr = [NSString stringWithFormat:@"%@/report/saveReportComment?organizationId=%d&orgunitId=%d&reportId=%@&content=%@&score=%@&createUser=%@&username=%@&cookie=%@&temp=%d",self.strBaseUrl,organizationId,orgunitId,reportId,[content stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],score,createUser,username,_cookie,temp];
     NSLog(@"HBServerKit comment == %@",urlStr);
     NSURL *url = [NSURL URLWithString:urlStr];
     ASIHTTPRequest *req = [ASIHTTPRequest requestWithURL:url];

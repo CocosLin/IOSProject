@@ -17,6 +17,7 @@
 @interface ReleaseAnnounceVC (){
     UILabel *thanks;
     UIView *addToBaseView;
+    BOOL organizationNews;//是否为公司公告
 }
 
 @end
@@ -36,6 +37,9 @@
 {
     [super viewDidLoad];
     
+    
+    
+    
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     [btn setTitle:@"发布" forState:UIControlStateNormal];
     [btn setTitleColor:[UIColor colorWithRed:103.0/255.0 green:154.0/255.0 blue:233.0/255.0 alpha:1] forState:UIControlStateNormal];
@@ -53,6 +57,49 @@
     _baseView.backgroundColor = [UIColor clearColor];
     //_baseView.backgroundColor = [UIColor greenColor];
     [self.view addSubview:_baseView];
+    
+    //公告类型
+    GetCommonDataModel;
+    if (comData.organization.roleId!=1) {
+        
+        UIImageView *imgView = [[UIImageView alloc]initWithFrame:CGRectMake(Screen_Width/2, 10,25, 25)];
+        [imgView setImage:[UIImage imageNamed:@"checkbox_checked"]];
+        [_baseView addSubview:imgView];
+        [imgView release];
+        UILabel *styleLb = [[UILabel alloc]initWithFrame:CGRectMake(Screen_Width/2+40, 3, 80, 40)];
+        styleLb.backgroundColor = [UIColor clearColor];
+        [_baseView addSubview:styleLb];
+        styleLb.text= @"部门公告";
+        [styleLb release];
+        
+    }else{
+        
+        UIButton *lfButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [lfButton setImage:[UIImage imageNamed:@"checkbox_normal.png"] forState:UIControlStateNormal];
+        [lfButton addTarget:self action:@selector(lfButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        lfButton.tag = 2201;
+        lfButton.frame = CGRectMake(20, 10, 25, 25);
+        UILabel *lfStyleLb = [[UILabel alloc]initWithFrame:CGRectMake(50, 1, 80, 40)];
+        lfStyleLb.text = @"公司公告";
+        lfStyleLb.backgroundColor = [UIColor clearColor];
+        [self.view addSubview:lfButton];
+        [_baseView addSubview:lfStyleLb];
+        [lfStyleLb release];
+        
+        UIButton *rtButton = [UIButton buttonWithType:0];
+        [rtButton setImage:[UIImage imageNamed:@"checkbox_checked"] forState:UIControlStateNormal];
+        [rtButton addTarget:self action:@selector(rtButtonAction:) forControlEvents:UIControlEventTouchUpInside];
+        rtButton.tag = 2202;
+        rtButton.frame = CGRectMake(Screen_Width/2+20, 10, 25, 25);
+        [self.view addSubview:rtButton];
+ 
+        UILabel *rtStyleLb = [[UILabel alloc]initWithFrame:CGRectMake(Screen_Width/2+50, 1, 80, 40)];
+        rtStyleLb.backgroundColor = [UIColor clearColor];
+        [_baseView addSubview:rtStyleLb];
+        rtStyleLb.text= @"部门公告";
+        [rtStyleLb release];
+        
+    }
     
     //与隐藏键盘相关
     addToBaseView = [[UIView alloc]initWithFrame:_baseView.frame];
@@ -83,6 +130,24 @@
     [addToBaseView addGestureRecognizer:tap];
 }
 
+#pragma mark -- 选择发布公告类型
+- (void)lfButtonAction:(UIButton *)sender{
+    [sender setImage:[UIImage imageNamed:@"checkbox_checked"] forState:UIControlStateNormal];
+    UIButton *rtButton = (UIButton *)[self.view viewWithTag:2202];
+    [rtButton setImage:[UIImage imageNamed:@"checkbox_normal.png"] forState:UIControlStateNormal];
+    NSLog(@"选择发布公告类型 == gs");
+    organizationNews = YES;
+}
+
+- (void)rtButtonAction:(UIButton *)sender{
+    [sender setImage:[UIImage imageNamed:@"checkbox_checked"] forState:UIControlStateNormal];
+    UIButton *rtButton = (UIButton *)[self.view viewWithTag:2201];
+    [rtButton setImage:[UIImage imageNamed:@"checkbox_normal"] forState:UIControlStateNormal];
+    NSLog(@"选择发布公告类型 == bm");
+    organizationNews = NO;
+}
+
+#pragma mark -- 上传图片相关方法
 - (void)initReleaseImageViews{
     
     UIButton * btnMakePicture = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -135,32 +200,44 @@
 #pragma mark -- 发布公告
 //http://hb.m.gitom.com/3.0/organization/saveNews?organizationId=114&orgunitId=1&title=ddddd&content=dddddd&username=90261&newsType=1&cookie=5533098A-43F1-4AFC-8641-E64875461345
 - (void)announceAction{
+    
     [self performSelectorOnMainThread:@selector(sendFileToServe) withObject:nil waitUntilDone:YES];
-    //[self sendFileToServe];
     
     GetCommonDataModel;
     if (self.textTitle.text.length >0 && self.announceContent.text.length > 0) {
         NSString *tempStr = [NSString stringWithFormat:@"%@",self.textTitle.text];
         NSString *temp = [self URLEncodedString:tempStr];
-        NSLog(@"temp == %@",temp);
+        NSLog(@"temp == %@ self.releaseImgUrlStr == %@",temp,self.releaseImgUrlStr);
         NSString *announceTemp = [[NSString alloc]init];
         if (self.releaseImgUrlStr) {//\n[附加图片]
             announceTemp = [self URLEncodedString:[NSString stringWithFormat:@"%@\n[附加图片]%@",[self URLEncodedString:self.announceContent.text],[self URLEncodedString:self.releaseImgUrlStr]]];
+             NSLog(@"ReleaseAnnounceVC announceTemp == %@",announceTemp);
+//            NSString *str = [NSString stringWithFormat:@"%@\n[附加图片]%@",self.announceContent.text,self.releaseImgUrlStr];
+//            announceTemp = [str stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+//            NSLog(@"ReleaseAnnounceVC announceTemp == %@",announceTemp);
         }else{
-            announceTemp = [self URLEncodedString:self.announceContent.text ];
+            announceTemp = [[self URLEncodedString:self.announceContent.text ]stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
         }
         
         NSLog(@"announceTemp == %@",announceTemp);
+        NSString *releaseUrlStr;
+        if (organizationNews) {
+            releaseUrlStr = [NSString stringWithFormat:@"http://hb.m.gitom.com/3.0/organization/saveNews?organizationId=%d&orgunitId=0&title=%@&content=%@&username=%@&newsType=1&cookie=%@",comData.organization.organizationId,temp,announceTemp,comData.userModel.username,comData.cookie];
+        }else{
+            releaseUrlStr = [NSString stringWithFormat:@"http://hb.m.gitom.com/3.0/organization/saveNews?organizationId=%d&orgunitId=1&title=%@&content=%@&username=%@&newsType=1&cookie=%@",comData.organization.organizationId,[temp stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],announceTemp,comData.userModel.username,comData.cookie];
+        }
         
-        NSString *releaseUrlStr = [NSString stringWithFormat:@"http://hb.m.gitom.com/3.0/organization/saveNews?organizationId=%d&orgunitId=1&title=%@&content=%@&username=%@&newsType=1&cookie=%@",comData.organization.organizationId,temp,announceTemp,comData.userModel.username,comData.cookie];
         NSLog(@"ReleaseAnnounceVC UrlStr %@",releaseUrlStr);
         NSURL *releaseUrl = [NSURL URLWithString:releaseUrlStr];
         NSURLRequest *req = [NSURLRequest requestWithURL:releaseUrl];
         [NSURLConnection sendAsynchronousRequest:req queue:nil completionHandler:nil];
         NSLog(@"ReleaseAnnounceVC release announce");
         [SVProgressHUD showSuccessWithStatus:@"发布成功"];
+        
     }else{
-        [SVProgressHUD showErrorWithStatus:@"请填写发布内容"]; 
+        
+        [SVProgressHUD showErrorWithStatus:@"请填写发布内容"];
+        
     }
     
 }
@@ -177,20 +254,14 @@
     return result;
 }
 
-//- (void)textFieldDidBeginEditing:(UITextField *)textField
-//{
-//    [textField resignFirstResponder];
-//    _baseView.frame = CGRectMake(0, 0, Screen_Width, Screen_Height-190);
-//    _baseView.contentSize = self.view.frame.size;
-//}
-
+#pragma mark -- UITextViewDelegate
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
-    //self.hideKeyBoardView.hidden = NO;
     _baseView.frame = CGRectMake(0, 0, Screen_Width, Screen_Height-190);
     _baseView.contentSize = self.view.frame.size;
     
 }
+
 #pragma mark -- 点击任意位置收起键盘
 - (void)tpeToDismissAction{
     [self.textTitle resignFirstResponder];
@@ -199,6 +270,8 @@
     _baseView.contentSize = self.view.frame.size;
     //self.hideKeyBoardView.hidden = YES;
 }
+
+#pragma mark -- 隐藏键盘
 - (void)hideKeyBoardAciton{
     [self tpeToDismissAction];
 }
@@ -216,6 +289,7 @@
     [aler show];
     [aler release];
 }
+
 #pragma mark -- UIAlerViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     switch (buttonIndex) {

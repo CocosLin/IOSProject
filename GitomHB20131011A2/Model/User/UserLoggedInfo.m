@@ -60,7 +60,7 @@
         self.organizationId = [[dicFromJson objectForKey:@"organizationId"] integerValue];
         self.orgunitId = [[dicFromJson objectForKey:@"orgunitId"] integerValue];
         self.roleId = [[dicFromJson objectForKey:@"roleId"] integerValue];
-        self.userPrivileges = [dicFromJson objectForKey:@"userPrivileges"];
+        self.operations = [[[dicFromJson objectForKey:@"userPrivileges"]objectAtIndex:1]objectForKey:@"operations"];
     }return self;
 }
 -(NSDictionary *)getDicJsonForAllJsonDataType
@@ -72,14 +72,14 @@
      [dicJsonForModel setObject:[NSNumber numberWithInteger:self.roleId] forKey:@"roleId"];
     if (self.creator) [dicJsonForModel setObject:self.creator forKey:@"creator"];
     if (self.name) [dicJsonForModel setObject:self.name forKey:@"name"];
-    if (self.userPrivileges) [dicJsonForModel setObject:self.userPrivileges forKey:@"userPrivileges"];
+
     return dicJsonForModel;
 }
 - (void)dealloc
 {
     [_creator release];
     [_name release];
-    [_userPrivileges release];
+    //[_userPrivileges release];
     [super dealloc];
 }
 @end

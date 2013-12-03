@@ -1,0 +1,45 @@
+#import <Availability.h>
+
+#ifndef __IPHONE_3_0
+#warning "This project uses features only available in iOS SDK 3.0 and later."
+#endif
+
+#ifdef __OBJC__
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import "AppDelegate.h"
+#import "GitomSingal.h"
+#endif
+//安全释放
+#define Release_Safe(x) [x release];x=nil
+
+//打卡类型:上班打卡，下班打卡
+#define kOnPunch @"onPunch"
+#define kOffPunch @"offPunch"
+
+//验证方式
+#define ALWAYS_ACCEPT @"ALWAYS_ACCEPT"
+#define NEED_VERIFY @"NEED_VERIFY"
+#define NEED_QUESTION @"NEED_QUESTION"
+#define ALWAYS_DECLINE @"ALWAYS_DECLINE"
+
+//用到的单例
+/*获得用户基本信息*/
+#define GetCommonDataModel CommonDataModel * comData = [(AppDelegate *)[UIApplication sharedApplication].delegate comData]
+/*获得公司考勤配置*/
+#define GetGitomSingal GitomSingal *singal = [GitomSingal getInstance];
+
+#define imageName_checkBox_off @"checkbox_normal"
+#define imageName_checkBox_on @"checkbox_checked"
+
+//屏幕宽高
+#define Screen_Height [[UIScreen mainScreen] bounds].size.height
+#define Screen_Width  [[UIScreen mainScreen] bounds].size.width
+#define BlueColor [UIColor colorWithRed:194.0/255.0 green:214.0/255.0 blue:243.0/255.0 alpha:1]
+
+/*在项目的prefix.pch文件里加入下面一段代码，加入后，NSLog就只在Debug下有输出，Release下不输出了。*/
+#ifndef __OPTIMIZE__
+#define NSLog(...) NSLog(__VA_ARGS__)
+#else
+#define NSLog(...) {}
+#endif

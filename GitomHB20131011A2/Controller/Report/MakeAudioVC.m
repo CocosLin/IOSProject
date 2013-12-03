@@ -70,49 +70,6 @@ static double endRecordTime=0;
     return self;
 }
 
-/*
-#pragma mark -- 获得服务器存放声音路径
-- (void)sendSoundFileToServe{
-    NSLog(@"获得服务器存放声音路径");
-    NSString *soundPath = [NSString stringWithFormat:@"%@",[[NSTemporaryDirectory() stringByAppendingPathComponent:@"coverToAMR"]stringByAppendingPathExtension:@"amr"]];
-    HBServerKit *hbKit = [[HBServerKit alloc]init];
-    [hbKit saveSoundReportsOfMembersWithData:soundPath GotArrReports:^(NSArray *arrDicReports, WError *myError) {
-        NSLog(@"arrDicReports == %@",arrDicReports);
-        NSString *group = [[[NSString alloc]init]autorelease];
-        NSString *filename = [[[NSString alloc]init]autorelease];
-        NSString *server = [[[NSString alloc]init]autorelease];
-        group = [[arrDicReports objectAtIndex:0]objectForKey:@"group"];
-        filename = [[arrDicReports objectAtIndex:0]objectForKey:@"filename"];
-        server = [[arrDicReports objectAtIndex:0]objectForKey:@"server"];
-        
-        NSLog(@"server soundgeUrl == %@",[NSString stringWithFormat:@"http://%@/%@/%@",server,group,filename]);
-        NSString *urlOfSound = [NSString stringWithFormat:@"http://%@/%@/%@",server,group,filename];
-        //\"soundUrl\":\"{\\\"soundUrl\\\":[{\\\"id\\\":\\\"\\\",\\\"url\\\":\\\"http:\\\\/\\\\/imgcdn1.gitom.com\\\\/group1\\\\/M00\\\\/01\\\\/D2\\\\/OzkPqFJotsuAR8XkAAAaQGPB3Uo279.amr\\\"}]}
-        //\"imageUrl\":\"{\\\"imageUrl\\\":[{\\\"id\\\":\\\"\\\",\\\"thumb\\\":\\\"http:\\\\/\\\\/imgcdn1.gitom.com\\\\/group1\\\\/M00\\\\/01\\\\/D2\\\\/OzkPqFJotsuAZ0fRAAAJOerCkhQ453.jpg\\\",\\\"url\\\":\\\"http:\\\\/\\\\/imgcdn1.gitom.com\\\\/group1\\\\/M00\\\\/01\\\\/D2\\\\/OzkPqFJotsuAQtHMAATkKcDlssg600.jpg\\\"}]}\"
-        NSMutableDictionary *dic1 = [[NSMutableDictionary alloc]init];
-        [dic1 setObject:@" " forKey:@"id"];
-        [dic1 setObject:urlOfSound forKey:@"url"];
-        
-        NSArray *imgArr = [NSArray arrayWithObject:dic1];
-        
-        NSMutableDictionary *soundDic = [[NSMutableDictionary alloc]init];
-        [soundDic setObject:imgArr forKey:@"soundUrl"];
-        
-        
-        NSLog(@"soundDic == %@",soundDic);
-        
-        //self.imgUrlStr = imgDic;
-        
-        NSData *getData = [NSJSONSerialization dataWithJSONObject:soundDic
-                                                          options:kNilOptions
-                                                            error:nil];
-        NSString *getStr = [[NSString alloc]initWithData:getData encoding:NSUTF8StringEncoding];
-        NSLog(@"MakeAudioVC getStr == %@",getStr);
-        ReportVC *reportVC = [[ReportVC alloc]init];
-        reportVC.soundUrlStr = getStr;
-    }];
-}
-*/
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -143,7 +100,7 @@ static double endRecordTime=0;
 -(void)initCustomView
 {
     _lblShowTime = [[UILabel alloc]initWithFrame:CGRectMake(0, 100, 320, 30)];
-    _lblShowTime.text = @"00:00:00";
+    _lblShowTime.text = @"0:0";
     _lblShowTime.textColor = [UIColor whiteColor];
     _lblShowTime.backgroundColor = [UIColor clearColor];
     _lblShowTime.textAlignment = NSTextAlignmentCenter;
@@ -196,15 +153,15 @@ static double endRecordTime=0;
     NSURL *url = [recordAudio stopRecord];
     
     endRecordTime -= startRecordTime;
-    if (endRecordTime<2.00f) {
+    if (endRecordTime<1.00f) {
         NSLog(@"录音时间过短");
         [SVProgressHUD showErrorWithStatus:@"录音过短"];
         return;
-    } else if (endRecordTime>30.00f){
+    }/* else if (endRecordTime>30.00f){
         NSLog(@"录音时间过长,应小于30秒");
         [SVProgressHUD showErrorWithStatus:@"录音应少于30秒"];
         return;
-    }
+    }*/
     
     
     if (url != nil) {
@@ -369,7 +326,7 @@ static int m = 0;
 static int ss = 0;
 - (void)timerUpdate
 {
-    _lblShowTime.text = [NSString stringWithFormat:@"%d:%d:%d",m,s,ss];
+    _lblShowTime.text = [NSString stringWithFormat:@"%d:%d",m,s];
     ss++;
     if (ss>60) {
         s++;

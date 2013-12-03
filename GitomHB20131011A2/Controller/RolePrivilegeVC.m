@@ -18,8 +18,9 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+
         self.appindStr = [[NSMutableString alloc]init];
+        self.title = @"权限编辑";
     }
     return self;
 }
@@ -35,31 +36,30 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    //后退
 	UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = CGRectMake(0, 0, 50, 44);
     [btn setBackgroundImage:[UIImage imageNamed:@"btnBackFromNavigationBar_On"] forState:UIControlStateNormal];
-    // 高亮
     [btn  setBackgroundImage:[UIImage imageNamed:@"btnBackFromNavigationBar_Off"] forState:UIControlStateHighlighted];
     [btn addTarget:self action:@selector(btnBack:) forControlEvents:UIControlEventTouchUpInside];
-    
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc]initWithCustomView:btn];
     [self.navigationItem setLeftBarButtonItem:backItem];
     [backItem release];
     
-    
+    //保存
     UIButton *rbtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [rbtn setTitle:@"保存" forState:UIControlStateNormal];
     [rbtn setTitleColor:[UIColor colorWithRed:103.0/255.0 green:154.0/255.0 blue:233.0/255.0 alpha:1] forState:UIControlStateNormal];
     rbtn.frame = CGRectMake(0, 0, 50, 44);
     [rbtn setBackgroundImage:[UIImage imageNamed:@"btn_title_text_default"] forState:UIControlStateNormal];
-    // 高亮
     [rbtn  setBackgroundImage:[UIImage imageNamed:@"btn_title_text_pressed"] forState:UIControlStateHighlighted];
     [rbtn addTarget:self action:@selector(saveAction) forControlEvents:UIControlEventTouchUpInside];
-    
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc]initWithCustomView:rbtn];
     self.navigationItem.rightBarButtonItem = barButtonItem;
     [barButtonItem release];
     
+    //列表
     self.configTableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, Screen_Width, Screen_Height-60) style:UITableViewStylePlain];
     self.configTableView.delegate = self;
     self.configTableView.dataSource = self;
@@ -179,45 +179,6 @@
     return 30;
 }
 
-/*
- // Override to support conditional editing of the table view.
- - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the specified item to be editable.
- return YES;
- }
- */
-
-/*
- // Override to support editing the table view.
- - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
- {
- if (editingStyle == UITableViewCellEditingStyleDelete) {
- // Delete the row from the data source
- [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
- }
- else if (editingStyle == UITableViewCellEditingStyleInsert) {
- // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
- }
- }
- */
-
-/*
- // Override to support rearranging the table view.
- - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
- {
- }
- */
-
-/*
- // Override to support conditional rearranging of the table view.
- - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the item to be re-orderable.
- return YES;
- }
- */
-
 #pragma mark - Table view delegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -231,6 +192,12 @@
                        nil];
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    if ((cell.accessoryType = UITableViewCellEditingStyleNone)) {
+        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+    }else{
+        cell.accessoryType = UITableViewCellEditingStyleNone;
+    }
+    
     NSLog(@"sectionDataNumStr == %@",[[sectionDataNumStr objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]);
     [self.appindStr appendFormat:@"%@,",[[sectionDataNumStr objectAtIndex:indexPath.section]objectAtIndex:indexPath.row]];
     NSLog(@"appindStr == %@",self.appindStr);
