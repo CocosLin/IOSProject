@@ -20,6 +20,7 @@
 #import "AttendanceModel.h"
 
 #import "KxMenu.h"
+#import "SearcgMemberVC.h"
 
 @interface RecordQeryVC ()
 
@@ -40,14 +41,14 @@
 {
     [super viewDidLoad];
     UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btn1 setTitle:@"刷新" forState:UIControlStateNormal];
+    [btn1 setTitle:nil forState:UIControlStateNormal];
     [btn1 setTitleColor:[UIColor colorWithRed:103.0/255.0 green:154.0/255.0 blue:233.0/255.0 alpha:1] forState:UIControlStateNormal];
     btn1.frame = CGRectMake(0, 0, 50, 44);
-    /*
+    
     [btn1 setBackgroundImage:[UIImage imageNamed:@"btnMoreFromNavigationBar_On.png"] forState:UIControlStateNormal];
-    [btn1  setBackgroundImage:[UIImage imageNamed:@"btnMoreFromNavigationBar_Off.png"] forState:UIControlStateHighlighted];*/
-    [btn1 setBackgroundImage:[UIImage imageNamed:@"btn_title_text_default"] forState:UIControlStateNormal];
-    [btn1  setBackgroundImage:[UIImage imageNamed:@"btn_title_text_pressed"] forState:UIControlStateHighlighted];
+    [btn1  setBackgroundImage:[UIImage imageNamed:@"btnMoreFromNavigationBar_Off.png"] forState:UIControlStateHighlighted];
+    /*[btn1 setBackgroundImage:[UIImage imageNamed:@"btn_title_text_default"] forState:UIControlStateNormal];
+    [btn1  setBackgroundImage:[UIImage imageNamed:@"btn_title_text_pressed"] forState:UIControlStateHighlighted];*/
     [btn1 addTarget:self action:@selector(refreshAction:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *barButtonItem = [[UIBarButtonItem alloc]initWithCustomView:btn1];
     self.navigationItem.rightBarButtonItem = barButtonItem;
@@ -72,7 +73,7 @@
 
 #pragma mark - 刷新
 - (void)refreshAction:(UIButton *)sender{
-    
+    /*
     NSLog(@"refreshAction - 刷新");
     HBServerKit *hbKit = [[HBServerKit alloc]init];
     GetCommonDataModel;
@@ -98,8 +99,8 @@
         {
             [SVProgressHUD showErrorWithStatus:@"无部门"];
         }
-    }];
-    /*为AppStore准备
+    }];*/
+//    为AppStore准备
     NSArray *menuItems =
     @[
       
@@ -123,7 +124,7 @@
     
     [KxMenu showMenuInView:self.view
                   fromRect:CGRectMake(sender.frame.origin.x, sender.frame.origin.y-40, sender.frame.size.width, sender.frame.size.height)
-                 menuItems:menuItems];*/
+                 menuItems:menuItems];
 }
 
 
@@ -131,6 +132,9 @@
 - (void) pushMenuItem:(KxMenuItem *)sender
 {
     NSLog(@"%@", sender.title);
+    GetCommonDataModel;
+    NSString *docPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *plistStr = [NSString stringWithFormat:@"%@/Members%@.plist",docPath,comData.userModel.username];
     
     if ([sender.title isEqualToString:@"刷新列表"]) {
         
@@ -165,52 +169,56 @@
     }else if ([sender.title isEqualToString:@"加载员工"]){
         
         NSLog(@"加载员工");
-        NSArray *doc = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        GetCommonDataModel;
         
-        NSString *docPath = [ doc objectAtIndex:0 ];
-        
-        if( [[NSFileManager defaultManager] fileExistsAtPath:[docPath stringByAppendingPathComponent:@"OrgunitMembers.plist"]]==NO ) {
+        if( [[NSFileManager defaultManager] fileExistsAtPath:plistStr]==NO ) {
             
-            GetCommonDataModel;
+            
             HBServerKit *hbKit = [[HBServerKit alloc]init];
             [hbKit findOrgunitMembersWithOrganizationId:comData.organization.organizationId
                                               orgunitId:comData.organization.orgunitId
-                                                Refresh:NO
+                                                Refresh:YES
                                           GotArrReports:^(NSArray *arrDicReports, WError *myError)
              {
+                 
                  if (arrDicReports.count) {
                      NSLog(@"RecordQeryVC 数组循环次数 ==  %d",arrDicReports.count);
                      NSMutableArray * mArrReports = [NSMutableArray arrayWithCapacity:arrDicReports.count];
                      for (NSDictionary * dicReports in arrDicReports)
                      {
-                         MemberOrgModel *memberIfo = [[MemberOrgModel alloc]init];
-                         memberIfo.realName = [dicReports objectForKey:@"realname"];
-                         memberIfo.username = [dicReports objectForKey:@"username"];
-                         memberIfo.roleId = [dicReports objectForKey:@"roleId"];
-                         memberIfo.photoUrl = [dicReports objectForKey:@"photo"];
-                         memberIfo.orgunitId = [dicReports objectForKey:@"orgunitId"];
-                         [mArrReports addObject:memberIfo];
+
+                         [mArrReports addObject:dicReports];
                      }
+
+                     [[NSFileManager defaultManager] createFileAtPath:[docPath stringByAppendingPathComponent:plistStr] contents:nil attributes:nil];
                      
-                     NSArray *doc = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-                     
-                     NSString *docPath = [ doc objectAtIndex:0 ];
-                     
-                     [mArrReports writeToFile:[docPath stringByAppendingPathComponent:@"OrgunitMembers.plist"] atomically:YES ];
+                     [mArrReports writeToFile:plistStr atomically:YES ];
                      NSLog(@"membersIfo.plist path == %@",docPath);
                  }
              }];
-           
             
+        }else{
             
-            
-            
+            [SVProgressHUD showSuccessWithStatus:@"已加载"];
+        
         }
+            
         
         
     }else if ([sender.title isEqualToString:@"搜索员工"]){
         
         NSLog(@"搜索员工");
+        
+        NSLog(@"RecordQeryVC path = %@",plistStr);
+        if ([[NSFileManager defaultManager] fileExistsAtPath:plistStr]== NO) {
+            
+            [SVProgressHUD showErrorWithStatus:@"请先加载员工" duration:0.7];
+            
+        }else{
+            
+            [self.navigationController pushViewController:[[SearcgMemberVC alloc]init] animated:YES];
+            
+        }
         
     }
     

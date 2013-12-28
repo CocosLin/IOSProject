@@ -650,7 +650,7 @@
         }
 
     }else{
-        [SVProgressHUD showWithStatus:@"加载考勤…"];
+//        [SVProgressHUD showWithStatus:@"加载考勤…"];
         [req setCompletionBlock:^{
             NSLog(@"整个部门、个人:打卡没有缓存");
             NSData *dataResponse = [req responseData];
@@ -667,7 +667,7 @@
                 NSArray * arrReportsGot = [wdp wGetArrJsonWithStringJson:body.data];
                 NSLog(@"HBServerKit 从body取得data 部门汇报(整个部门打卡)== %@",arrReportsGot);
                 callback(arrReportsGot,nil);
-                [SVProgressHUD showSuccessWithStatus:@"完成"];
+//                [SVProgressHUD showSuccessWithStatus:@"完成"];
             }else//如果查汇报不成功
             {
                 WError * error = [[WError alloc]initWithWErrorType:WErrorType_Logic wErrorDescription:body.warning];

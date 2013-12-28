@@ -50,7 +50,7 @@ static bool readerSwitchOn = NO;//是否开启消息通知
     //接收消息开关,自己无法看到消息开关
     if (![comData.userModel.username isEqualToString:self.memberIfo.username]) {
         [hbKit reportReaderWithReader:comData.userModel.username GetReportNSDictionary:^(NSDictionary *readerDic) {
-            NSLog(@"MenuVC readerDic  == %@",[readerDic objectForKey:@"users"]);
+            NSLog(@"MenuVC readerDic  == %@ , userName == %@",[readerDic objectForKey:@"users"],self.memberIfo.username);
             NSRange rg = [[readerDic objectForKey:@"users"] rangeOfString:self.memberIfo.username];
             if (rg.location != NSNotFound ) {
                 NSLog(@"readerSwitchOn = YES");

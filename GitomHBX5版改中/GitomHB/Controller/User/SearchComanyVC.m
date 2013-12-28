@@ -134,7 +134,6 @@
     return self.searchAr.count;
 }
 
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     NSLog(@"cell");
     static NSString *cellId = @"cellId";

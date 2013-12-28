@@ -73,12 +73,12 @@
 #pragma mark - 新增部门
 - (void)addOrgunitAction:(id)sender
 {
+    
     UIAlertView *addOrgNameAler = [[UIAlertView alloc]initWithTitle:@"部门名称" message:nil delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定",@"取消", nil];
     addOrgNameAler.alertViewStyle = UIAlertViewStylePlainTextInput;
     UITextField *nameText = [addOrgNameAler textFieldAtIndex:0];
     nameText.placeholder = @"为您的部门命名";
     [addOrgNameAler show];
-    //NSLog(@"allOrgunitNames == %@",allOrgunitNames);
 
 }
 
@@ -129,9 +129,12 @@
 
 - (void)refreshAction{
     HBServerKit *hbKit = [[HBServerKit alloc]init];
+    
     GetCommonDataModel;
     [hbKit findReportsWithOrganizationId:comData.organization.organizationId Refresh:YES GotArrReports:^(NSArray *arrDicReports, WError *myError) {
+        
         if (arrDicReports.count) {
+            
             NSMutableArray * mArrReports = [NSMutableArray arrayWithCapacity:arrDicReports.count];
             for (NSDictionary * dicReports in arrDicReports)
             {
@@ -151,31 +154,6 @@
     }];
 
 }
-/*
-- (void)showTableViews{
-    HBServerKit *hbKit = [[HBServerKit alloc]init];
-    GetCommonDataModel;
-    [hbKit findReportsWithOrganizationId:comData.organization.organizationId Refresh:YES GotArrReports:^(NSArray *arrDicReports, WError *myError) {
-        if (arrDicReports.count) {
-            NSMutableArray * mArrReports = [NSMutableArray arrayWithCapacity:arrDicReports.count];
-            for (NSDictionary * dicReports in arrDicReports)
-            {
-                OrganizationsModel *orgIfo = [[OrganizationsModel alloc]init];
-                orgIfo.organizationName = [dicReports objectForKey:@"name"];
-                orgIfo.orgunitId = [dicReports objectForKey:@"orgunitId"];
-                orgIfo.organizationId = [dicReports objectForKey:@"organizationId"];
-
-                [mArrReports addObject:orgIfo];
-            }
-            self.orgArray = mArrReports;
-            [self.manageTableView reloadData];
-            
-        }else
-        {
-            [SVProgressHUD showErrorWithStatus:@"无部门"];
-        }
-    }];
-}*/
 
 #pragma mark - Table view data source
 
@@ -203,23 +181,7 @@
     cell.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]];
     cell.selectedBackgroundView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]];
     return cell;
-    /*if ([[[UIDevice currentDevice] systemVersion] floatValue]<6.0) {*/
-    
-        /*
-    }else{
-        static NSString *CellIdentifier = @"ManageStaffCell";
-        ManageStaffCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            NSArray *nib = [[NSBundle mainBundle]loadNibNamed:@"ManageStaffCell" owner:self options:nil];
-            cell = [nib objectAtIndex:0];
-        }
-        cell.orgName.text = [[self.orgArray objectAtIndex:indexPath.row] orgunitName];
-        cell.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]];
-        cell.selectedBackgroundView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]];
-        return cell;
-    }
-         */
-    
+
 }
 
 #pragma mark - Table view delegate
@@ -237,7 +199,6 @@
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end

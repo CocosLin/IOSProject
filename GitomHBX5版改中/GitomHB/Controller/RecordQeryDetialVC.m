@@ -138,7 +138,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
-        
+        cell.detailTextLabel.font = [UIFont systemFontOfSize:10];
     }
     
     MemberOrgModel *memberInfo = [[MemberOrgModel alloc]init];
@@ -161,76 +161,8 @@
     cell.selectedBackgroundView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
-//    if ([[[UIDevice currentDevice]systemVersion]floatValue] <6.0) {
-    
-    /*}else{
-        static NSString *CellIdentifier = @"RecordQeryDetialCell";
-        RecordQeryDetialCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-        if (cell == nil) {
-            NSArray *nib = [[NSBundle mainBundle]loadNibNamed:@"RecordQeryDetialCell" owner:self options:nil];
-            cell = [nib objectAtIndex:0];
-        }
-        MemberOrgModel *memberInfo = [[MemberOrgModel alloc]init];
-        memberInfo = [self.orgArray objectAtIndex:indexPath.row];
-        NSString *nameS = [NSString stringWithFormat:@"%@(%@)",memberInfo.realName,memberInfo.username];
-        cell.name.text = nameS;
-        
-        NSString *roleIdStr = [NSString stringWithFormat:@"%@",memberInfo.roleId];
-        if ([roleIdStr isEqualToString:@"1"]) {
-            cell.roleId.text = @"创建者";
-        }else if ([roleIdStr isEqualToString:@"2"] ){
-            cell.roleId.text = @"部门主管";
-        }else{
-            cell.roleId.text = @"员工";
-        }
-        
-        [cell.headImg setImageWithURL:[NSURL URLWithString:memberInfo.photoUrl] placeholderImage:[UIImage imageNamed:@"icon_avatar_user.png"]];
-        cell.backgroundView = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg.png"]];
-        cell.selectedBackgroundView=[[UIImageView alloc]initWithImage:[UIImage imageNamed:@"cell_bg_press.png"]];
-        cell.reportButton.hidden = YES;
-        return cell;
-    }*/
     
 }
-
-/*
- // Override to support conditional editing of the table view.
- - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the specified item to be editable.
- return YES;
- }
- */
-
-/*
- // Override to support editing the table view.
- - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
- {
- if (editingStyle == UITableViewCellEditingStyleDelete) {
- // Delete the row from the data source
- [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
- }
- else if (editingStyle == UITableViewCellEditingStyleInsert) {
- // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
- }
- }
- */
-
-/*
- // Override to support rearranging the table view.
- - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
- {
- }
- */
-
-/*
- // Override to support conditional rearranging of the table view.
- - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
- {
- // Return NO if you do not want the item to be re-orderable.
- return YES;
- }
- */
 
 #pragma mark - Table view delegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

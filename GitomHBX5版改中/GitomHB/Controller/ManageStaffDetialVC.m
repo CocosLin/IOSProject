@@ -236,6 +236,7 @@
 #pragma mark - Table view delegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
      ShowStaffInfomationVC *detailViewController = [[ShowStaffInfomationVC alloc] initWithNibName:@"ShowStaffInfomationVC" bundle:nil];
     MemberOrgModel *memberIfo = [[MemberOrgModel alloc]init];
     memberIfo = [self.orgArray objectAtIndex:indexPath.row];

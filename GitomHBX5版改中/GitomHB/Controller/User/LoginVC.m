@@ -445,15 +445,15 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
     
     //注册用户
     registerButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    /*registerButton.hidden = YES;AppStor审核用
+    registerButton.hidden = YES;//AppStor审核用
      [registerButton setBackgroundImage:[[UIImage imageNamed:@"03.png"]stretchableImageWithLeftCapWidth:10 topCapHeight:5]  forState:UIControlStateNormal];
      [registerButton setBackgroundImage:[[UIImage imageNamed:@"04.png"]stretchableImageWithLeftCapWidth:10 topCapHeight:5] forState:UIControlStateHighlighted];
-     */
-    registerButton.backgroundColor = [UIColor clearColor];
-    [registerButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     
+//    registerButton.backgroundColor = [UIColor clearColor];
+//    [registerButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+//    
     [registerButton setTitle:@"注册" forState:UIControlStateNormal];
-    [registerButton setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
+//    [registerButton setTitleColor:[UIColor redColor] forState:UIControlStateHighlighted];
     registerButton.titleLabel.font = [UIFont systemFontOfSize:13];
     registerButton.titleLabel.textAlignment = UITextAlignmentRight;
     [registerButton addTarget:self action:@selector(registerAction) forControlEvents:UIControlEventTouchUpInside];
@@ -559,13 +559,13 @@ typedef NS_ENUM(NSInteger, TagValue)//标记不同视图主键要用的标记
     NSString * username = _tfUsername.text;
     NSString * password = _tfPassword.text;
     
-    /*AppStore审核用
+    /*AppStore审核用*/
     if ([username isEqualToString:@"注册"]){
         registerButton.hidden = NO;
         [SVProgressHUD showErrorWithStatus:@"通过下方的‘注册’按钮注册"];
         [_tfUsername resignFirstResponder];
         return;
-    }*/
+    }
     
     //登录参数
     UserLoggingInfo * loggingInfo = [[UserLoggingInfo alloc]init];

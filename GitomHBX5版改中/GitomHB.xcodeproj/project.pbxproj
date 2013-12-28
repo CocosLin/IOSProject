@@ -302,6 +302,8 @@
 		975918651862AD5500751D09 /* report_tel.png in Resources */ = {isa = PBXBuildFile; fileRef = 975918641862AD5500751D09 /* report_tel.png */; };
 		975918671862AD5E00751D09 /* report_mail.png in Resources */ = {isa = PBXBuildFile; fileRef = 975918661862AD5E00751D09 /* report_mail.png */; };
 		975A7ED41855753200377861 /* UserPositionModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 975A7ED31855753200377861 /* UserPositionModel.m */; };
+		976B7678186C0A570043CE58 /* SearcgMemberVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 976B7677186C0A570043CE58 /* SearcgMemberVC.m */; };
+		976B767B186C2B820043CE58 /* SearchStaffVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 976B767A186C2B820043CE58 /* SearchStaffVC.m */; };
 		976F93FA1869568300CE349C /* KxMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 976F93F91869568300CE349C /* KxMenu.m */; };
 		976F94011869615B00CE349C /* action_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 976F93FB1869615B00CE349C /* action_icon.png */; };
 		976F94021869615B00CE349C /* action_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 976F93FC1869615B00CE349C /* action_icon@2x.png */; };
@@ -807,6 +809,10 @@
 		975918661862AD5E00751D09 /* report_mail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = report_mail.png; sourceTree = "<group>"; };
 		975A7ED21855753200377861 /* UserPositionModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserPositionModel.h; sourceTree = "<group>"; };
 		975A7ED31855753200377861 /* UserPositionModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserPositionModel.m; sourceTree = "<group>"; };
+		976B7676186C0A570043CE58 /* SearcgMemberVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearcgMemberVC.h; sourceTree = "<group>"; };
+		976B7677186C0A570043CE58 /* SearcgMemberVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearcgMemberVC.m; sourceTree = "<group>"; };
+		976B7679186C2B820043CE58 /* SearchStaffVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchStaffVC.h; sourceTree = "<group>"; };
+		976B767A186C2B820043CE58 /* SearchStaffVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchStaffVC.m; sourceTree = "<group>"; };
 		976F93F81869568300CE349C /* KxMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KxMenu.h; sourceTree = "<group>"; };
 		976F93F91869568300CE349C /* KxMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KxMenu.m; sourceTree = "<group>"; };
 		976F93FB1869615B00CE349C /* action_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = action_icon.png; sourceTree = "<group>"; };
@@ -2011,6 +2017,10 @@
 				970DE7481848317200560120 /* ShowStaffInfomationVC.h */,
 				970DE7491848317200560120 /* ShowStaffInfomationVC.m */,
 				970DE74A1848317200560120 /* ShowStaffInfomationVC.xib */,
+				976B7676186C0A570043CE58 /* SearcgMemberVC.h */,
+				976B7677186C0A570043CE58 /* SearcgMemberVC.m */,
+				976B7679186C2B820043CE58 /* SearchStaffVC.h */,
+				976B767A186C2B820043CE58 /* SearchStaffVC.m */,
 			);
 			name = ManagerFunction;
 			path = BaseViewController;
@@ -2247,6 +2257,7 @@
 				970DE55F1848309000560120 /* MJPhotoProgressView.m in Sources */,
 				970DE5601848309000560120 /* MJPhotoToolbar.m in Sources */,
 				970DE5611848309000560120 /* MJPhotoView.m in Sources */,
+				976B7678186C0A570043CE58 /* SearcgMemberVC.m in Sources */,
 				970DE5621848309000560120 /* MKAnnotationView+WebCache.m in Sources */,
 				970DE5631848309000560120 /* NSData+GIF.m in Sources */,
 				970DE5641848309000560120 /* SDImageCache.m in Sources */,
@@ -2338,6 +2349,7 @@
 				970DE77D1848317200560120 /* SetMapPositionVC.m in Sources */,
 				970DE77E1848317200560120 /* SetRolePritvilegeVC.m in Sources */,
 				970DE77F1848317200560120 /* ShowStaffInfomationVC.m in Sources */,
+				976B767B186C2B820043CE58 /* SearchStaffVC.m in Sources */,
 				970DE7811848317200560120 /* ApplyForCompany.m in Sources */,
 				970DE7821848317200560120 /* ApplyNotesVC.m in Sources */,
 				970DE7831848317200560120 /* ChangePassWordVC.m in Sources */,
@@ -2398,8 +2410,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Jinjiangshi Wangjitong Network Technology Co., Ltd.";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Jinjiangshi Wangjitong Network Technology Co., Ltd.";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Jinjiangshi Wangjitong Network Technology Co., Ltd. (UZET6V2BC9)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Jinjiangshi Wangjitong Network Technology Co., Ltd. (UZET6V2BC9)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -2414,8 +2426,8 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PROVISIONING_PROFILE = "A1A60096-2B76-4EFA-A856-7627C8DDC5B2";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A1A60096-2B76-4EFA-A856-7627C8DDC5B2";
+				PROVISIONING_PROFILE = "C6E68A20-8483-4E2E-95BB-FA97E7197AC8";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "C6E68A20-8483-4E2E-95BB-FA97E7197AC8";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -2432,8 +2444,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Jinjiangshi Wangjitong Network Technology Co., Ltd.";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Jinjiangshi Wangjitong Network Technology Co., Ltd.";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Jinjiangshi Wangjitong Network Technology Co., Ltd. (UZET6V2BC9)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Jinjiangshi Wangjitong Network Technology Co., Ltd. (UZET6V2BC9)";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -2442,8 +2454,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "A1A60096-2B76-4EFA-A856-7627C8DDC5B2";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A1A60096-2B76-4EFA-A856-7627C8DDC5B2";
+				PROVISIONING_PROFILE = "C6E68A20-8483-4E2E-95BB-FA97E7197AC8";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "C6E68A20-8483-4E2E-95BB-FA97E7197AC8";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -2452,8 +2464,8 @@
 		970DE42D18482FC100560120 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Jinjiangshi Wangjitong Network Technology Co., Ltd.";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Jinjiangshi Wangjitong Network Technology Co., Ltd.";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Jinjiangshi Wangjitong Network Technology Co., Ltd. (UZET6V2BC9)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Jinjiangshi Wangjitong Network Technology Co., Ltd. (UZET6V2BC9)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/GitomHB/Lib/UMSocial_Sdk_3.0/frameworks/TencentOpenAPI\"",
@@ -2462,7 +2474,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GitomHB/GitomHB-Prefix.pch";
 				INFOPLIST_FILE = "GitomHB/GitomHB-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/GitomHB/Lib/arm/lib\"",
@@ -2479,8 +2491,8 @@
 					"-Objc",
 				);
 				PRODUCT_NAME = "移动汇报";
-				PROVISIONING_PROFILE = "A1A60096-2B76-4EFA-A856-7627C8DDC5B2";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A1A60096-2B76-4EFA-A856-7627C8DDC5B2";
+				PROVISIONING_PROFILE = "C6E68A20-8483-4E2E-95BB-FA97E7197AC8";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "C6E68A20-8483-4E2E-95BB-FA97E7197AC8";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -2489,8 +2501,8 @@
 		970DE42E18482FC100560120 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Distribution: Jinjiangshi Wangjitong Network Technology Co., Ltd.";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Jinjiangshi Wangjitong Network Technology Co., Ltd.";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Jinjiangshi Wangjitong Network Technology Co., Ltd. (UZET6V2BC9)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Jinjiangshi Wangjitong Network Technology Co., Ltd. (UZET6V2BC9)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/GitomHB/Lib/UMSocial_Sdk_3.0/frameworks/TencentOpenAPI\"",
@@ -2500,7 +2512,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "GitomHB/GitomHB-Prefix.pch";
 				INFOPLIST_FILE = "GitomHB/GitomHB-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/GitomHB/Lib/arm/lib\"",
@@ -2517,8 +2529,8 @@
 					"-Objc",
 				);
 				PRODUCT_NAME = "移动汇报";
-				PROVISIONING_PROFILE = "A1A60096-2B76-4EFA-A856-7627C8DDC5B2";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A1A60096-2B76-4EFA-A856-7627C8DDC5B2";
+				PROVISIONING_PROFILE = "C6E68A20-8483-4E2E-95BB-FA97E7197AC8";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "C6E68A20-8483-4E2E-95BB-FA97E7197AC8";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
